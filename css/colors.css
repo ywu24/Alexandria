@@ -1,0 +1,33 @@
+:root{
+    --text: #232323;
+    --background: #f2f2f2;
+    --titolo: #b30600;
+    --darkerbackground: #d5d5d5;
+    --sectiontext: #202020;
+    --articletext: #888;
+    --button: #3e3e3f;
+    --button-hover: #565657;
+    --white:#ffff;
+    --border:#aaaaaa;
+    --editaction:#08c;
+    --editaction-hover:(#002952);
+    --lightgrey:(#eee);
+    --greyhome:(#e1e1e1);
+  }
+  
+  *
+  {
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  
+  
+body{
+    background: #f6f6f6;
+    color: #232323;
+}
+
+.body2{
+  background: #f6f6f6;
+  color: #232323;
+}

@@ -1,0 +1,7 @@
+# Prevent access to files starting with "." (dot)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Disable directory listing (prevents users from seeing file structure)
+Options -Indexes

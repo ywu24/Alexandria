@@ -1,0 +1,255 @@
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  background: url("../img/auth_wallpaper.jpg");
+  background-repeat: no-repeat;
+  background-position: right top;
+}
+
+.container {
+  height: 650px;
+  width: 900px;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -325px;
+  margin-left: -450px;
+  background-color: white;
+  position: absolute;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 10px;
+}
+
+.container:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
+}
+
+.left {
+  background: url("../img/auth_wallpaper.jpg");
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 50%;
+  background-position: right top;
+  background-size: cover;
+  border-radius: 10px 0px 0px 10px;
+}
+
+.right {
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  right: 0%;
+  top: 0%;
+}
+
+.right-content {
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  right: -1.8%;
+  top: 2.5%;
+  padding-top: 5%;
+  padding-bottom: 25%;
+}
+
+h1 {
+  font-size: 27px;
+  margin-bottom: 50px;
+  max-width: 80%;
+  font-weight: 800;
+}
+
+h2 {
+  margin: 0;
+  padding: 0;
+  font-size: medium;
+  color: #2ac32d;
+  font-weight: normal;
+  max-width: 80%;
+}
+
+h3 {
+  font-size: medium;
+  color: rgb(100, 100, 100);
+  max-width: 80%;
+  font-weight: 700;
+}
+
+h4 {
+  padding-top: 0;
+  margin-top: 10px;
+  font-size: 0.75em;
+  font-weight: normal;
+  font-style: italic;
+  color: rgb(70, 70, 70);
+  max-width: 80%;
+}
+
+.privacy {
+  bottom: 14%;
+  width: 83%;
+  position: absolute;
+}
+
+a {
+  font-size: medium;
+  text-decoration: none;
+  color: #4b4b4b;
+  font-weight: bold;
+}
+
+input {
+  width: 83%;
+  outline: 0;
+  border-width: 0 0 1.5px;
+  border-color: rgb(200, 200, 200);
+  border-radius: 3px;
+  padding: 7px;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.submit {
+  appearance: none;
+  background-color: gray;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 6px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  margin-bottom: 30px;
+  margin-top: 15px;
+}
+
+.submit:hover {
+  background-color: #595959;
+}
+
+.submit:focus {
+  box-shadow: rgba(108, 108, 108, 0.7) 0 0 0 2px;
+  outline: none;
+}
+
+.submit:active {
+  background-color: #4b4b4b;
+  box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
+}
+
+.submit:focus:not(:focus-visible):not(.focus-visible) {
+  box-shadow: none;
+  outline: none;
+}
+
+@media screen and (max-width: 900px) {
+  .left {
+    width: 0%;
+  }
+
+  .container {
+    width: 450px;
+    margin-left: -225px;
+    display: contents;
+  }
+
+  .right {
+    width: 100%;
+  }
+
+  .right-content {
+    width: 55%;
+    height: 32rem;
+    position: absolute;
+    right: -1.8%;
+    padding-top: 8%;
+    background-color: white;
+    padding-bottom: 5%;
+    padding-left: 2pc;
+    margin-right: 22vw;
+    border-radius: 7px;
+    text-align: start;
+    margin-top: 4vw;
+}
+
+.privacy {
+  bottom: 3%;
+  width: 80%;
+  position: absolute;
+}
+
+}
+
+@media screen and (max-width: 600px){
+
+  .right-content {
+    width: 73%;
+    height: 32rem;
+    position: absolute;
+    right: -1.8%;
+    padding-top: 8%;
+    background-color: white;
+    padding-bottom: 5%;
+    padding-left: 2pc;
+    margin-right: 11vw;
+    border-radius: 7px;
+    text-align: start;
+    margin-top: 10vw;
+}
+
+.privacy {
+  bottom: 3%;
+  width: 77%;
+  position: absolute;
+}
+}
+
+@media screen and (max-width: 300px){
+
+  .right-content {
+    width: 74%;
+    height: 32rem;
+    position: absolute;
+    right: -1.8%;
+    padding-top: 8%;
+    background-color: white;
+    padding-bottom: 5%;
+    padding-left: 2pc;
+    margin-right: 9vw;
+    border-radius: 7px;
+    text-align: start;
+    margin-top: 14vw;
+}
+
+.privacy {
+  bottom: 3%;
+  width: 73%;
+  position: absolute;
+}
+
+}
+
+/**
+
+https://dribbble.com/shots/13938759-Register-Page-Website/attachments/5549893?mode=media
+
+https://www.google.com/search?q=books+t+background+minimalistic&tbm=isch&ved=2ahUKEwi49LPwmoH7AhUipycCHY8yBsAQ2-cCegQIABAA&oq=books+t+background+minimalistic&gs_lcp=CgNpbWcQAzoECCMQJ1C_FVi_FWCtGGgAcAB4AIABZIgBpwGSAQMxLjGYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=0uRaY7jDHqLOnsEPj-WYgAw&bih=748&biw=771&client=firefox-b-d#imgrc=oJV7QUsdYSzw5M
+
+**/
