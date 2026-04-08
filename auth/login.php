@@ -78,7 +78,7 @@ $conn->close();
 
     <div class="right">
       <div class="right-content">
-        <form action="Login.php" method="POST">
+        <form action="login.php" method="POST">
           <h1>Accedi</h1>
           <div class="inputs">
             <div class="field">
