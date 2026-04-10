@@ -41,9 +41,7 @@ if (isset($_POST['logout'])) {
 <?php
 
 if (isset($_SESSION['email'])) {
-
     $email = $_SESSION['email'];
-
     if ($q = $conn->prepare('SELECT * FROM Utente WHERE Email=?')) {
         $q->bind_param('s', $email);
         $q->execute();
@@ -71,9 +69,21 @@ if (isset($_SESSION['email'])) {
                     <h3>" . $utente["Nome"] . " " . $utente["Cognome"] . "</h3>
                 </div>
 
+                <a href='/prenotazione/prenotazione.php' class='sub-menu-link'>
+                    <img src='/img/booking.png' alt=''>
+                    <p>Prenotazioni</p>
+                    <span>></span>
+                </a>
+
                 <a href='/lista/lista.php' class='sub-menu-link'>
                     <img src='/img/library-icon.svg'>
                     <p>Library</p>
+                    <span>></span>
+                </a>
+
+                <a href='/edit_profile/edit_profile.php' class='sub-menu-link'>
+                    <img src='/img/edit-profile.png' alt=''>
+                    <p>Edit Profile</p>
                     <span>></span>
                 </a>
     ";

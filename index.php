@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once("auth/cookies.php");
-
+require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +16,7 @@ require_once("auth/cookies.php");
 
 <body>
 
-    <?php require_once("nav/nav.php"); ?>
+    <?php require_once($_SERVER['DOCUMENT_ROOT'] . "/nav/nav.php"); ?>
 
     <div style="padding:20px;">
 
