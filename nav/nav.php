@@ -4,7 +4,7 @@ if (isset($_POST['logout'])) {
     setcookie("password", "", time() - 1, '/');
     session_start();
     session_destroy();
-    header("Location: auth/login.php");
+    header("Location: /auth/login.php");
     exit();
 }
 ?>
@@ -14,26 +14,26 @@ if (isset($_POST['logout'])) {
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="/css/nav.css">
 </head>
 
 <body style="background:#ffffff !important;">
 
 <nav class="nav1">
 
-    <a href="index.php">
+    <a href="/index.php">
         <img src="/img/logo.png" class="logo">
     </a>
 
     <?php
-    require_once("utils/connect.php");
-    require_once("auth/cookies.php");
+    require_once($_SERVER['DOCUMENT_ROOT'] . "/utils/connect.php");
+    require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
 
     echo "
     <form method='post' action='index.php' class='search-form'>
         <input type='search' name='search' placeholder='Search...'>
         <button type='submit' name='search_btn'>
-            <img src='img/search-icon.png' alt='Search' class='search-icon'>
+            <img src='/img/search-icon.png' alt='Search' class='search-icon'>
         </button>
     </form>";
     ?>
@@ -54,13 +54,13 @@ if (isset($_SESSION['email'])) {
     echo "
     <ul>
         <li class='li-icon'>
-            <a href='lista.php'>
-                <img src='img/library-icon.svg' class='icon svg'>
+            <a href='/lista/lista.php'>
+                <img src='/img/library-icon.svg' class='icon svg'>
             </a>
         </li>
 
         <li>
-            <img src='img/account.png' class='icon' onclick='toggleMenu()'>
+            <img src='/img/account.png' class='icon' onclick='toggleMenu()'>
         </li>
 
         <div class='sub-menu-wrap' id='subMenu'>
@@ -71,8 +71,8 @@ if (isset($_SESSION['email'])) {
                     <h3>" . $utente["Nome"] . " " . $utente["Cognome"] . "</h3>
                 </div>
 
-                <a href='lista.php' class='sub-menu-link'>
-                    <img src='img/library-icon.svg'>
+                <a href='/lista/lista.php' class='sub-menu-link'>
+                    <img src='/img/library-icon.svg'>
                     <p>Library</p>
                     <span>></span>
                 </a>
@@ -80,8 +80,8 @@ if (isset($_SESSION['email'])) {
 
     if ($utente["Utenza"] == 1 || $utente["Utenza"] == 2) {
         echo "
-        <a href='index.php' class='sub-menu-link'>
-            <img src='img/dashboard.png'>
+        <a href='/index.php' class='sub-menu-link'>
+            <img src='/img/dashboard.png'>
             <p>Dashboard</p>
             <span>></span>
         </a>";
@@ -91,7 +91,7 @@ if (isset($_SESSION['email'])) {
                 <a href='/auth/login.php' class='sub-menu-link'>
                     <form method='POST'>
                         <button name='logout'>
-                            <img src='img/logout.png'>
+                            <img src='/img/logout.png'>
                             <p class='logoutform'>Logout</p>
                             <span>></span>
                         </button>
@@ -109,26 +109,26 @@ if (isset($_SESSION['email'])) {
     <ul>
 
         <li class='li-icon'>
-            <a href='lista.php'>
-                <img src='img/library-icon.svg' class='icon'>
+            <a href='/lista/lista.php'>
+                <img src='/img/library-icon.svg' class='icon'>
             </a>
         </li>
 
         <li>
-            <img src='img/account.png' class='icon' onclick='toggleMenu()'>
+            <img src='/img/account.png' class='icon' onclick='toggleMenu()'>
         </li>
 
         <div class='sub-menu-wrap' id='subMenu'>
             <div class='sub-menu'>
 
-                <a href='login.php' class='sub-menu-link'>
-                    <img src='img/login.png'>
+                <a href='/auth/login.php' class='sub-menu-link'>
+                    <img src='/img/login.png'>
                     <p>Login</p>
                     <span>></span>
                 </a>
 
-                <a href='register.php' class='sub-menu-link'>
-                    <img src='img/register.png'>
+                <a href='/auth/registrazione.php' class='sub-menu-link'>
+                    <img src='/img/register.png'>
                     <p>Register</p>
                     <span>></span>
                 </a>
