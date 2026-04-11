@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once($_SERVER['DOCUMENT_ROOT'] . "/utils/connect.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
+require_once("../utils/connect.php");
+$root = '..';
+require_once("../auth/cookies.php");
 ?>
 
 <!DOCTYPE html>
@@ -14,10 +15,10 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
     <meta name="viewport" content="width=device-width, user-scalable=no,
     initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <title>Alexandria's Library</title>
-    <link rel="stylesheet" href="/css/prenotazione.css">
-    <link rel="stylesheet" href="/css/popup.css">
-    <link rel="stylesheet" href="/css/nav.css">
-    <link rel="stylesheet" href="/css/colors.css">
+    <link rel="stylesheet" href="../css/prenotazione.css">
+    <link rel="stylesheet" href="../css/popup.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/colors.css">
 
     <!--script per importare parti di codice-->
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
@@ -26,7 +27,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
 <body>
 
     <div id="nav-placeholder">
-        <?php require_once($_SERVER['DOCUMENT_ROOT'] . "/nav/nav.php"); ?>    
+        <?php 
+        require_once("../nav/nav.php"); ?>    
     </div>
 
     <center>
@@ -37,7 +39,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
 
         if (isset($_SESSION['email'])) {
         }else{
-            header("Location: /index.php");
+            header("Location: ../index.php");
         }
         $table = "Prenotazione";
         $table1 = "copiaLibro";
@@ -76,7 +78,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
             echo
             "<div class='book-container'>
             <div class='book-link'>
-                <img src='".$row['Copertina']."' alt=''  class='book-cover' width='160px'>
+                <img src='" . $root . $row['Copertina']."' alt=''  class='book-cover' width='160px'>
                 <div class='book-section'>
                     <h3>" . $row['Nome']. "</h3>
                     <div class='info-release'><h5>" . $row['Autore'] . "</h5> <span>|</span> <h5>" . $row['CasaEditrice'] . "</h5> <span>|</span> <h5>Stato:</h5> <h5 class='status' style='color:$color'>" . $stato . "</h5></div>
@@ -84,11 +86,11 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
                     <form action=''><span>fine prenotazione:</span><span>" . $row['Fine'] . "</span></form>
                     ";
                 if($row['Stato'] == 0){
-                    echo "<form action='/prenotazione/prenotazione.php?id=".$row['idPrenotazione']."' method='post'><button class='delete-button' name='delete'><img src='../immagini/trash-bin.png' alt='' class='icon1' style='position: relative' width='24px'></button></form><br>";
+                    echo "<form action='prenotazione.php?id=".$row['idPrenotazione']."' method='post'><button class='delete-button' name='delete'><img src='../img/trash-bin.png' alt='' class='icon1' style='position: relative' width='24px'></button></form><br>";
                 }
                 if($row['Stato'] == 1){
                     echo "
-                    <form class='form' action='/prenotazione/prenotazione.php?id=".$row['idPrenotazione']."' method='post'><button name='termina' width='24px'>Termina Prenotazione</button>
+                    <form class='form' action='prenotazione.php?id=".$row['idPrenotazione']."' method='post'><button name='termina' width='24px'>Termina Prenotazione</button>
                     ";
             }
             echo "

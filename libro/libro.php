@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once($_SERVER['DOCUMENT_ROOT'] . "/utils/connect.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
+require_once("../utils/connect.php");
+$root = '..';
+require_once("../auth/cookies.php");
 ?>
 
 
@@ -15,10 +16,10 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
     <meta name="viewport" content="width=device-width, user-scalable=no,
     initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <title>Alexandria's Library </title>
-    <link rel="stylesheet" href="/css/libro.css">
-    <link rel="stylesheet" href="/css/nav.css">
-    <link rel="stylesheet" href="/css/colors.css">
-    <link rel="stylesheet" href="/css/popup.css">
+    <link rel="stylesheet" href="../css/libro.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/colors.css">
+    <link rel="stylesheet" href="../css/popup.css">
 
     <!--script per importare parti di codice-->
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
@@ -28,7 +29,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
     <div class="safe-area spaced-column">
 
         <div id="nav-placeholder">
-            <?php require_once($_SERVER['DOCUMENT_ROOT'] . "/nav/nav.php"); ?>
+            <?php 
+            require_once("../nav/nav.php"); ?>
         </div>
 
         <?php
@@ -52,7 +54,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
         if (isset($_POST["prenota"])) {
 
             if($_SESSION['utenza'] == 3){
-                for($i = 1; $i <= $maxCopie; $i++){
+                $nPrenotazioni = $_POST['sliderino'];
+                for($i = 0; $i < $nPrenotazioni; $i++){
                 if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
                     $q2->bind_param('i', $book_id);
                     $q2->execute();
@@ -94,20 +97,24 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
         if (isset($_GET['id'])) {
 
             try {
-                foreach ($conn->query("SELECT Nome, Autore, Copertina, CasaEditrice, ISBN, Descrizione FROM $table WHERE id = $book_id") as $row)
-                    ; {
+                    $stmt = $conn->prepare("SELECT Nome, Autore, Copertina, CasaEditrice, ISBN, Descrizione FROM Opera WHERE id = ?");
+                    $stmt->bind_param('i', $book_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $book = $result->fetch_assoc();
+                
                     echo "<main>
                <div class='container'>
                    <div class='left-column'>
-                       <img src='" . $row['Copertina'] . "' alt='Copertina Libro' >
+                       <img src='" . $root . $book['Copertina'] . "' alt='Copertina Libro' >
                    </div>
                    <div class='right-column'>
                        <div class='info'>
-                           <div class='info-title'><h1 class='trunctitle'>" . $row['Nome'] . "</h1> <h6>ISBN: " . $row['ISBN'] . "</h6></div>
-                           <div class='info-release'><h5>" . $row['Autore'] . "</h5> <span> | </span> <h5>" . $row['CasaEditrice'] . "</h5> <div class='status-container'> <h5>Stato:</h5>  <h5 class='status' style='color: $color'>" . $disponibilita . "</h5> </div></div>
+                           <div class='info-title'><h1 class='trunctitle'>" . $book['Nome'] . "</h1> <h6>ISBN: " . $book['ISBN'] . "</h6></div>
+                           <div class='info-release'><h5>" . $book['Autore'] . "</h5> <span> | </span> <h5>" . $book['CasaEditrice'] . "</h5> <div class='status-container'> <h5>Stato:</h5>  <h5 class='status' style='color: $color'>" . $disponibilita . "</h5> </div></div>
                        </div>
                        <div class='desc'>
-                           <p class='truncdesc'>" . $row['Descrizione'] . "</p>
+                           <p class='truncdesc'>" . $book['Descrizione'] . "</p>
                        </div>";
                     if (isset($_SESSION['email']) && ($_SESSION['utenza'] == 3 || $_SESSION['utenza'] == 4) && $qty['qty'] >= 1) {
                         if ($numeroPrenotazioni < 3 || $_SESSION['utenza'] == 3) {
@@ -122,7 +129,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
                         "</div>
                </div>
            </main>";
-                }
+                
 
 
 
@@ -153,26 +160,13 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
                 $copieMax = mysqli_fetch_assoc($result_disp);
 
                 echo "
-                <span>" . $row['Nome'] . "</span>
-                <span>" . $row['ISBN'] . "</span>
+                <span>" . $book['Nome'] . "</span>
+                <span>" . $book['ISBN'] . "</span>
                 <span>Durata prenotazione: " . $giorniPrenotazione . " giorni</span>
-                <form class='form' action='libro.php?id=" . $book_id . "' method='post'>";
+                <form class='form' action='libro.php?id=" . $book_id . "' method='post'>"; #form inviato dai bottoni "si e no" del popup
                 if ($_SESSION['utenza'] == 3) {
-                echo "<div class='qty-selector'>
-                        <button type='button' id='minus'>−</button>
-
-                        <input 
-                            type='number' 
-                            name='slider' 
-                            id='slider' 
-                            value='1' 
-                            min='1' 
-                            max='{$copieMax['copieMax']}'
-                            readonly
-                        >
-
-                        <button type='button' id='plus'>+</button>
-                    </div>";
+                echo "<input name='sliderino' type='range' value=1 min=1 max=" . $copieMax['copieMax'] . " id='slider'>
+                <center><span id='sliderValue'>1</span></center>";
                 }
                 ?>
             </div>

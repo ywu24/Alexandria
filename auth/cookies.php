@@ -3,7 +3,7 @@ if (!isset($_SESSION['email'])) {
 
     if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
         
-        require_once("../utils/connect.php");
+        require_once($root . "/utils/connect.php");
         if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
             $stmt->bind_param('s', $_COOKIE['email']);
             $stmt->execute();
@@ -12,7 +12,7 @@ if (!isset($_SESSION['email'])) {
                 $user = $result->fetch_assoc();
 
                 if (!($_COOKIE['password'] === $user['Password'])) {
-                    header('Location: login.php');
+                    header('Location: ' . $root . '/auth/login.php');
                 } else {
                     $_SESSION['email'] = $user['Email'];
                     $_SESSION['nome'] = $user['Nome'];
@@ -21,7 +21,7 @@ if (!isset($_SESSION['email'])) {
                 }
 
             } else {
-                header('Location: login.php');
+                header('Location: ' . $root . '/auth/login.php');
             }
         }
     }

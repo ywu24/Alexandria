@@ -19,6 +19,7 @@ require_once("../utils/connect.php");
 
 // check if there is a user already logged in, if so redirect them 
 session_start();
+$root = '..';
 require_once("cookies.php");
 if (isset($_SESSION['email'])) {
   header("Location: ../index.php");

@@ -51,6 +51,7 @@
 
           <?php
           require_once("../utils/connect.php");
+          $root = '..';
           require_once("cookies.php");
 
           // check to see if there is a user already logged in, if so redirect them 
@@ -74,7 +75,7 @@
                     if ($password === $_POST['passwordAgain']) {
                       if ($stmt1 = $conn->prepare('INSERT INTO Utente (Email,Nome,Cognome,Password,Utenza) VALUES(?,?,?,?,?)')) {
                         $password = password_hash($password, PASSWORD_BCRYPT);
-                        $utenza = 3;
+                        $utenza = 4;
                         $stmt1->bind_param('ssssi', $email, $_POST['nome'], $_POST['cognome'], $password, $utenza);
                         $stmt1->execute();
                         echo '<h2>Account creato, puoi ora <a style="color: #2ac32d;" href="login.php">Accedere</a></h2>';

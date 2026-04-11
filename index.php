@@ -1,6 +1,8 @@
 <?php
 session_start();
-require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
+$root = '.';
+require_once("auth/cookies.php");
+require_once("utils/connect.php");
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +18,9 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
 
 <body>
 
-    <?php require_once($_SERVER['DOCUMENT_ROOT'] . "/nav/nav.php"); ?>
+    <?php 
+    $root = '.';
+    require_once("nav/nav.php"); ?>
 
     <div style="padding:20px;">
 
@@ -30,7 +34,8 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
 
         if ($_SESSION['utenza'] === 1) echo ' (admin)</h4>';
         else if ($_SESSION['utenza'] === 2) echo ' (bibliotecario)</h4>';
-        else if ($_SESSION['utenza'] === 3) echo ' (standard user)</h4>';
+        else if ($_SESSION['utenza'] === 3) echo ' (premium user)</h4>';
+        else if ($_SESSION['utenza'] === 4) echo ' (standard user)</h4>';
 
         echo '<br><a href="auth/logout.php">Logout</a>';
     }

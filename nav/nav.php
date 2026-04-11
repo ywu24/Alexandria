@@ -4,7 +4,7 @@ if (isset($_POST['logout'])) {
     setcookie("password", "", time() - 1, '/');
     session_start();
     session_destroy();
-    header("Location: /auth/login.php");
+    header("Location: " . $root . "/index.php");
     exit();
 }
 ?>
@@ -14,26 +14,23 @@ if (isset($_POST['logout'])) {
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="<?php echo $root; ?>/css/nav.css">
 </head>
 
 <body style="background:#ffffff !important;">
 
 <nav class="nav1">
 
-    <a href="/index.php">
-        <img src="/img/logo.png" class="logo">
+    <a href="<?php echo $root; ?>/index.php">
+        <img src="<?php echo $root; ?>/img/logo.png" class="logo">
     </a>
 
-    <?php
-    require_once($_SERVER['DOCUMENT_ROOT'] . "/utils/connect.php");
-    require_once($_SERVER['DOCUMENT_ROOT'] . "/auth/cookies.php");
+    <?php  
 
     echo "
-    <form method='post' action='index.php' class='search-form'>
+    <form method='post' action='" . $root . "/lista/lista.php' class='search-form'>
         <input type='search' name='search' placeholder='Search...'>
         <button type='submit' name='search_btn'>
-            <img src='/img/search-icon.png' alt='Search' class='search-icon'>
         </button>
     </form>";
     ?>
@@ -52,56 +49,63 @@ if (isset($_SESSION['email'])) {
     echo "
     <ul>
         <li class='li-icon'>
-            <a href='/lista/lista.php'>
-                <img src='/img/library-icon.svg' class='icon svg'>
+            <a href='" . $root . "/lista/lista.php'>
+                <img src='" . $root . "/img/library-icon.svg' class='icon svg'>
             </a>
         </li>
 
         <li>
-            <img src='/img/account.png' class='icon' onclick='toggleMenu()'>
+            <img src='" . $root . "/img/account.png' class='icon' onclick='toggleMenu()'>
         </li>
 
         <div class='sub-menu-wrap' id='subMenu'>
             <div class='sub-menu'>
 
                 <div class='user-info'>
-                    <img src='" . $utente["propic"] . "'>
+                    <img src='" . $root . $utente["propic"] . "'>
                     <h3>" . $utente["Nome"] . " " . $utente["Cognome"] . "</h3>
                 </div>
 
-                <a href='/prenotazione/prenotazione.php' class='sub-menu-link'>
-                    <img src='/img/booking.png' alt=''>
+                <a href='" . $root . "/prenotazione/prenotazione.php' class='sub-menu-link'>
+                    <img src='" . $root . "/img/booking.png' alt=''>
                     <p>Prenotazioni</p>
                     <span>></span>
                 </a>
 
-                <a href='/lista/lista.php' class='sub-menu-link'>
-                    <img src='/img/library-icon.svg'>
-                    <p>Library</p>
+                <a href='" . $root . "/lista/lista.php' class='sub-menu-link'>
+                    <img src='" . $root . "/img/library-icon.svg'>
+                    <p>Lista Libri</p>
                     <span>></span>
                 </a>
 
-                <a href='/edit_profile/edit_profile.php' class='sub-menu-link'>
-                    <img src='/img/edit-profile.png' alt=''>
-                    <p>Edit Profile</p>
+                <a href='" . $root . "/edit_profile/edit_profile.php' class='sub-menu-link'>
+                    <img src='" . $root . "/img/edit-profile.png' alt=''>
+                    <p>Edit Profile (da implementare)</p>
                     <span>></span>
                 </a>
     ";
 
     if ($utente["Utenza"] == 1 || $utente["Utenza"] == 2) {
         echo "
-        <a href='/index.php' class='sub-menu-link'>
-            <img src='/img/dashboard.png'>
+        <a href='" . $root . "/index.php' class='sub-menu-link'>
+            <img src='" . $root . "/img/dashboard.png'>
             <p>Dashboard</p>
             <span>></span>
         </a>";
     }
-
+    
+    if ($utente["Utenza"] == 3 || $utente["Utenza"] == 4) {
+                echo "<a href='" . $root . "/segnalazione/segnalazione.html' class='sub-menu-link'>
+                <img src='" . $root . "/img/feedbackFavicon.png' alt=''>
+                <p>Segnalazione (da implementare)</p>
+                <span>></span>
+            </a>";
+            }
     echo "
-                <a href='/auth/login.php' class='sub-menu-link'>
+                <a href='#' class='sub-menu-link'>
                     <form method='POST'>
-                        <button name='logout'>
-                            <img src='/img/logout.png'>
+                        <button name='logout' action='" . $root . "/nav/nav.php'>
+                            <img src='" . $root . "/img/logout.png'>
                             <p class='logoutform'>Logout</p>
                             <span>></span>
                         </button>
@@ -119,26 +123,26 @@ if (isset($_SESSION['email'])) {
     <ul>
 
         <li class='li-icon'>
-            <a href='/lista/lista.php'>
-                <img src='/img/library-icon.svg' class='icon'>
+            <a href='" . $root . "/lista/lista.php'>
+                <img src='" . $root . "/img/library-icon.svg' class='icon'>
             </a>
         </li>
 
         <li>
-            <img src='/img/account.png' class='icon' onclick='toggleMenu()'>
+            <img src='" . $root . "/img/account.png' class='icon' onclick='toggleMenu()'>
         </li>
 
         <div class='sub-menu-wrap' id='subMenu'>
             <div class='sub-menu'>
 
-                <a href='/auth/login.php' class='sub-menu-link'>
-                    <img src='/img/login.png'>
+                <a href='" . $root . "/auth/login.php' class='sub-menu-link'>
+                    <img src='" . $root . "/img/login.png'>
                     <p>Login</p>
                     <span>></span>
                 </a>
 
-                <a href='/auth/registrazione.php' class='sub-menu-link'>
-                    <img src='/img/register.png'>
+                <a href='" . $root . "/auth/registrazione.php' class='sub-menu-link'>
+                    <img src='" . $root . "/img/register.png'>
                     <p>Register</p>
                     <span>></span>
                 </a>
