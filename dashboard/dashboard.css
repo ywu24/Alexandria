@@ -1,0 +1,61 @@
+@import"things/colors.css";
+
+html{
+  font-family: 'Poppins',sans-serif;
+}
+
+
+.container{
+    width: 100vw;
+    height: 50vh;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.container .card-container{
+    width: 45vmin;
+    height: 40vmin;
+    border:0px solid var(--border);
+    color: white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 15px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: 0.5s;
+}
+
+.container a:hover div{
+    /* background: var(--border); */
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    scale: 0.99;
+}
+
+
+.container a{
+    margin: auto 0;
+    text-decoration: none;
+}
+
+
+.card-container img{
+    aspect-ratio: 1/1;
+    height: 50%;
+    padding: 10px;
+    margin: auto;
+}
+
+.card-container h4{
+    color: black;
+    padding: 20px;
+    text-align: center;
+}
+@media(max-width:768px){
+
+}

@@ -45,15 +45,14 @@ if (isset($_POST['submit'])) {
         setcookie('email', $user['Email'], time()+60*60*24*90, '/', $domain);
         setcookie('password', $user['Password'], time()+60*60*24*90, '/', $domain);
         // $message = '<h2>Accesso effettuato, puoi ora <a style="color: #2ac32d;" href="index.php">Navigare</a></h2>';
-        /*
+       
         if ($user['Utenza'] == 1) {
-          //se utente admin, portare alla pagina dashboard da implementare
+          //se utente admin, portare alla pagina dashboard
           header("Location: ../dashboard/dashboard.php");
         }else{
           header("Location: ../index.php");
         }
-        */
-        header("Location: ../index.php");
+        
       } else {
         $error = 1;
         $err_message = "Incorrect password";

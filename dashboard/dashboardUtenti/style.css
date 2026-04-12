@@ -1,0 +1,49 @@
+:any-link {
+	color: white;
+	text-decoration: none;
+}
+
+:any-link:hover {
+	color: white;
+	text-decoration: none;	
+}
+
+.container-fluid {
+	width: 93% !important;
+}
+
+/* table {
+	margin-top: 20px;
+} */
+
+.searchbar {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 0rem !important;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 0rem !important;
+}
+
+.sort_btn {
+	color: white;
+	background-color: transparent;
+	border: none;
+	/* text-decoration: bold; */
+}
+
+.btn_adduser {
+	/* margin-left: 20px !important; */
+	float: right !important;
+}
+
+.btn_actions {
+	margin: 0 auto !important;
+	width: 169px !important;
+}
