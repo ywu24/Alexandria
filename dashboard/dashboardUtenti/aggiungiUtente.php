@@ -23,6 +23,12 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
+	<div id="nav-placeholder">
+		 <?php 
+		 	$root = "../../";
+			require_once '../../nav/nav.php';
+				 ?>
+	</div>
 	<div class="container mt-5">
 		<h1>Aggiungi utente</h1>
 		<form action="insert.php" method="post">

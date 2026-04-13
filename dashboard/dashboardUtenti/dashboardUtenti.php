@@ -25,6 +25,9 @@ if (isset($_GET['aggiunto'])){
 if (isset($_GET['rimosso'])){ 
 		echo '<p class= "successo">Utente rimosso con successo!</p>';
 }
+if (isset($_GET['aggiornato'])){ 
+		echo '<p class= "successo">Utente aggiornato con successo!</p>';
+}
 //errori
 if (isset($_GET['errore'])){
 		if($_GET['errore']==1){
