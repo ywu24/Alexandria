@@ -33,6 +33,9 @@ if (isset($_GET['errore'])){
 		if($_GET['errore']==1){
 			echo '<p class= "errore">Eliminazione utente non riuscita!</p>';
 		}
+		elseif($_GET['errore']==2){
+			echo '<p class= "errore">Non puoi eliminare il tuo account da qui!</p>';
+		}
 		else {
 			echo '<p class= "errore">ERRORE</p>';
 		}
@@ -52,7 +55,7 @@ if (isset($_GET['errore'])){
 	<title>Dashboard </title>
 	<!-- Collegamento ai file CSS di Bootstrap -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="../../css/style.css">
 	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/colors.css">
 	<link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">

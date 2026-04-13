@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once("../utils/connect.php");
 $root = '..';
+require_once("../utils/connect.php");
+
 require_once("../auth/cookies.php");
 
 $table = "Opera";
