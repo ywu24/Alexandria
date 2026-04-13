@@ -1,4 +1,4 @@
-@import"things/colors.css";
+@import "../css/colors.css";
 
 html{
   font-family: 'Poppins',sans-serif;

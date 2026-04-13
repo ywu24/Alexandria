@@ -15,6 +15,25 @@ if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
 } else {
 	header("Location: ../../index.php");
 }
+//gestiamo le scritte di conferma e di errore
+
+//utenti aggiunti correttamente
+if (isset($_GET['aggiunto'])){ 
+		echo '<p class= "successo">Utente aggiunto con successo!</p>';
+}
+//utenti rimossi correttamente
+if (isset($_GET['rimosso'])){ 
+		echo '<p class= "successo">Utente rimosso con successo!</p>';
+}
+//errori
+if (isset($_GET['errore'])){
+		if($_GET['errore']==1){
+			echo '<p class= "errore">Eliminazione utente non riuscita!</p>';
+		}
+		else {
+			echo '<p class= "errore">ERRORE</p>';
+		}
+}
 
 ?>
 
@@ -33,7 +52,7 @@ if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
 	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/colors.css">
-	<link rel="shortcut icon" href="../../img/userDashFavicon.png" type="image/x-icon">
+	<link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">
 	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>
 </head>
 
@@ -234,7 +253,7 @@ if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
 					} else if ($row['Utenza'] == 3) {
 						$desc_utenza = "Docente";
 					} else if ($row['Utenza'] == 4) {
-						$desc_utenza = "Studente";
+						$desc_utenza = "Cittadino";
 					}
 					echo "<tr>
                     <th scope='row'>" . $row['id'] . "</th>
