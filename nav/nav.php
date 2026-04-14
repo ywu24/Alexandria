@@ -104,7 +104,7 @@ if (isset($_SESSION['email'])) {
 
     if ($utente["Utenza"] == 1 || $utente["Utenza"] == 2) {
         echo "
-        <a href='" . $root . "/index.php' class='sub-menu-link'>
+        <a href='" . $root . "/dashboard/dashboard.php' class='sub-menu-link'>
             <img src='" . $root . "/img/dashboard.png'>
             <p>Dashboard</p>
             <span>></span>
