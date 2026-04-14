@@ -4,6 +4,12 @@ require_once("../utils/connect.php");
 $root = '..';
 require_once("../auth/cookies.php");
 ?>
+<?php
+//LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -55,9 +61,9 @@ require_once("../auth/cookies.php");
             $idprenotazione = $_GET["id"];
             $conn->query("UPDATE `Prenotazione` SET `Stato` = '3' WHERE `Prenotazione`.`idPrenotazione` = $idprenotazione AND Prenotazione.idPrenotazione <> 4");
         }
-        
+        $numero_prenotazioni = 0;
         foreach ($conn->query("SELECT idPrenotazione, Copertina, $table.idCopia, Inizio, Fine, Autore, Nome, CasaEditrice, $table.Stato FROM $table, $table1, $table2 WHERE $table1.idCopia = $table.idCopia AND $table2.ISBN = $table1.ISBN and $table.Email = '$email' and $table.Stato <> 5 ORDER BY $table.idPrenotazione DESC") as $row) {
-
+            $numero_prenotazioni++;
             if ($row['Stato'] == 0) {
                 $stato = "Prenotato";
                 $color = "#ff7600";
@@ -75,7 +81,7 @@ require_once("../auth/cookies.php");
                 $color = "#686868";
             }
 
-            echo
+            echo "<h1>" . $numero_prenotazioni . "</h1>" .
             "<div class='book-container'>
             <div class='book-link'>
                 <img src='" . $root . $row['Copertina']."' alt=''  class='book-cover' width='160px'>
@@ -98,6 +104,10 @@ require_once("../auth/cookies.php");
             </div>
             </div>";
             
+            }
+        if($numero_prenotazioni==0){
+            header("Location: ../lista/lista.php?errore=1");
+            exit();
         }
 
         ?>

@@ -60,6 +60,7 @@ if (isset($_GET['errore'])){
 	<link rel="stylesheet" href="../../css/styleDashboard.css">
 	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/colors.css">
+	<link rel="stylesheet" href= "../../css/messaggi.css">
 	<link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">
 	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>
 </head>
@@ -67,7 +68,7 @@ if (isset($_GET['errore'])){
 <body>
 	<div id="nav-placeholder">
 		 <?php 
-		 	$root = "../../";
+		 	$root = "../..";
 			require_once '../../nav/nav.php';
 				 ?>
 	</div>

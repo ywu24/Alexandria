@@ -5,6 +5,7 @@ require_once("../utils/connect.php");
 
 require_once("../auth/cookies.php");
 
+
 $table = "Opera";
 $maxPerPage = 10;
 $paginationCtrls = '';
@@ -111,6 +112,7 @@ $queryResult = mysqli_query($conn, $finalQuery);
     <link rel="stylesheet" href="../css/lista.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
+    <link rel="stylesheet" href="../css/messaggi.css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -122,7 +124,14 @@ $queryResult = mysqli_query($conn, $finalQuery);
             <?php 
             require_once( "../nav/nav.php"); ?>
         </div>
-
+    <?php
+        if(isset($_GET["errore"])){
+            if($_GET["errore"]==1){  
+                echo "<p class= 'errore'> Nessuna prenotazione trovata </p>";
+            } else{
+                echo "<p class= 'errore'> errore generico.  </p>";
+            }
+        } ?>
         <div class="container" data-user-book-container>
             <h6 class="home-list">‎</h6>
 

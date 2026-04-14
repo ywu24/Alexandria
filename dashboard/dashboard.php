@@ -18,6 +18,7 @@ error_reporting(E_ALL);
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href= "../../css/messaggi.css">
     <link rel="shortcut icon" href="../img/dashboard.png" type="image/x-icon">
         <!--script per importare parti di codice-->
         <script src="https://code.jquery.com/jquery-1.12.2.js"></script>

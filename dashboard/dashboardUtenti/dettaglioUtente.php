@@ -21,6 +21,7 @@ error_reporting(E_ALL);
 	<link rel="stylesheet" href="../../css/colors.css">
 	<link rel="stylesheet" href="../../css/prenotazione.css">
 	<link rel="stylesheet" href="../../css/nav.css">
+	<link rel="stylesheet" href= "../../css/messaggi.css">
 
 	<!--script per importare parti di codice-->
 	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>

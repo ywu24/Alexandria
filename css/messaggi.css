@@ -1,0 +1,16 @@
+p.errore{
+    color: rgb(192, 81, 81); 
+    font-weight: bold; 
+    background: #fee; 
+    padding: 10px; 
+    border: 1px solid rgb(192, 81, 81);
+
+}
+p.successo{
+	color: rgb(88, 192, 81); 
+    font-weight: bold; 
+    background: rgba(212, 245, 212, 0.699); 
+    padding: 10px; 
+    border: 1px solid rgb(88, 192, 81); 
+
+}
