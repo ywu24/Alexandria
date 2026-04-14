@@ -1,0 +1,241 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+ul { list-style: none; }
+a { text-decoration: none; }
+
+.blur {
+  filter: blur(6px);
+}
+
+.safe-area {
+  width: 85vw;
+  margin: auto;
+}
+
+.container {
+  margin: 35px auto 0;
+  display: flex;
+}
+
+.edit-section {
+  width: 200px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  margin-right: 15px;
+  height: 85vh;
+}
+
+.edit-section ul li:first-child {
+  margin-top: 40px;
+}
+
+.edit-section ul li:not(:last-child) {
+  border-bottom: 1px solid var(--darkerbackground);
+}
+
+.edit-section .section {
+  padding: 18px 20px;
+  text-align: center;
+}
+
+.edit-section span {
+  font-size: 0.9rem;
+  color: var(--sectiontext);
+}
+
+.settings {
+  width: 70vw;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.settings-section {
+  width: 90%;
+  margin: auto;
+  border-bottom: 1px solid var(--darkerbackground);
+}
+
+.settings-profile-info {
+  padding: 25px 15px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.data-profile-info {
+  text-align: center;
+}
+
+.data-profile-info span {
+  font-size: 0.95rem;
+}
+
+.data-profile-info p {
+  font-size: 0.75rem;
+  font-style: oblique;
+  opacity: 0.7;
+}
+
+.edit-profile-parameter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.edit-profile-parameter img {
+  width: 80px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.edit-action {
+  color: var(--editaction);
+  font-weight: 600;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.edit-action:hover {
+  color: var(--editaction-hover);
+}
+
+.edit-phone-parameter,
+.edit-personal-parameter {
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.edit-phone-parameter p,
+.edit-personal-parameter p {
+  font-style: oblique;
+  opacity: 0.75;
+}
+
+.phone-number {
+  font-weight: 600;
+}
+
+.password-reset {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.password-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.password {
+  border: 1.5px solid var(--text);
+  border-radius: 20px;
+  padding: 5px 10px;
+  width: 250px;
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.section-title1 {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.radio-section {
+  width: 100%;
+}
+
+.radio-option {
+  margin-top: 15px;
+}
+
+.radio-option label {
+  display: block;
+  padding: 5px 0;
+  font-weight: 600;
+}
+
+.section-explain {
+  font-size: 0.65rem;
+  padding: 10px 20px;
+  opacity: 0.7;
+}
+
+.settings::-webkit-scrollbar {
+  width: 8px;
+}
+
+.settings::-webkit-scrollbar-thumb {
+  background: rgba(0,0,50,0.4);
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+
+  .safe-area {
+    width: 100vw;
+  }
+
+  .container {
+    flex-direction: column;
+    width: 95vw;
+  }
+
+  .edit-section {
+    display: none;
+  }
+
+  .settings {
+    width: 100%;
+  }
+
+  .settings-profile-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .edit-profile-parameter img {
+    width: 70px;
+  }
+
+  .password-block {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .password {
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  form input,
+  form button {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .section-explain {
+    text-align: center;
+  }
+}
+
+.error-msg {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
