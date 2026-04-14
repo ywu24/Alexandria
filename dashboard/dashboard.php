@@ -29,7 +29,6 @@ error_reporting(E_ALL);
     <?php $root = "..";
     require_once '../nav/nav.php'; ?>
   </div>
-
     <div class="container">
         <a href="dashboardUtenti/dashboardUtenti.php">
           <div class="card-container">
@@ -37,7 +36,7 @@ error_reporting(E_ALL);
             <h4>Dashboard Utenti</h4>
           </div>
         </a>
-        <a href="#">//"dashboardLibri/dashboardLibri.php">
+        <a href="dashboardLibri/dashboardLibri.php">
           <div class="card-container">
             <img src="../img/list.png" alt="">
             <h4>Dashboard Libri</h4>

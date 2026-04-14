@@ -11,12 +11,11 @@ session_start();
 require_once("../../utils/connect.php");
 require_once("../../auth/cookies.php");
 if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
-
+	
 } else {
 	header("Location: ../../index.php");
 }
 //gestiamo le scritte di conferma e di errore
-
 //utenti aggiunti correttamente
 if (isset($_GET['aggiunto'])){ 
 		echo '<p class= "successo">Utente aggiunto con successo!</p>';
@@ -35,6 +34,9 @@ if (isset($_GET['errore'])){
 		}
 		elseif($_GET['errore']==2){
 			echo '<p class= "errore">Non puoi eliminare il tuo account da qui!</p>';
+		}
+		elseif($_GET['errore']==3){
+			echo '<p class= "errore">utente non trovato, prova ad aggiornare la pagina o contatta assistenza</p>';
 		}
 		else {
 			echo '<p class= "errore">ERRORE</p>';
@@ -55,7 +57,7 @@ if (isset($_GET['errore'])){
 	<title>Dashboard </title>
 	<!-- Collegamento ai file CSS di Bootstrap -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../../css/style.css">
+	<link rel="stylesheet" href="../../css/styleDashboard.css">
 	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/colors.css">
 	<link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">

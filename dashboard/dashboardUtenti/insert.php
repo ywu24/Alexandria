@@ -12,7 +12,7 @@
         $cognome = $_POST['cognome'];
         $email = $_POST['email'];
         $ruolo = '4';
-        if(empty($_POST['ruolo']))
+        if(!empty($_POST['ruolo']))
             $ruolo = $_POST['ruolo'];
         $password = $_POST['password'];
         $password = password_hash($password, PASSWORD_BCRYPT);

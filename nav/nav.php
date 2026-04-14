@@ -1,8 +1,10 @@
 <?php
+require_once("../utils/connect.php");
+ session_start();
 if (isset($_POST['logout'])) {
     setcookie("email", "", time() - 1, '/');
     setcookie("password", "", time() - 1, '/');
-    session_start();
+   
     session_destroy();
     header("Location: " . $root . "/index.php");
     exit();
@@ -52,9 +54,21 @@ if (isset($_SESSION['email'])) {
             <a href='" . $root . "/lista/lista.php'>
                 <img src='" . $root . "/img/library-icon.svg' class='icon svg'>
             </a>
-        </li>
+        </li>";
+        if(isset($_SESSION['utenza'])){
+            if($_SESSION['utenza']==1 ||$_SESSION['utenza']==2 ){
+                echo "
+                    <li class ='li-icon'>
+                        <a href='" . $root . "/dashboard/dashboard.php'>
+                        <img src='" . $root . "/img/dashboard.svg' class='icon svg'>
+                    </li>
 
-        <li>
+                ";
+            }
+        }
+        echo "
+        <li class ='li-icon'>
+            <a href='#'></a>
             <img src='" . $root . "/img/account.png' class='icon' onclick='toggleMenu()'>
         </li>
 
@@ -62,7 +76,7 @@ if (isset($_SESSION['email'])) {
             <div class='sub-menu'>
 
                 <div class='user-info'>
-                    <img src='" . $root . $utente["propic"] . "'>
+                    <img src='" . $root ."/img/users/". $utente["propic"] . "'>
                     <h3>" . $utente["Nome"] . " " . $utente["Cognome"] . "</h3>
                 </div>
 

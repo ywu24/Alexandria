@@ -1,0 +1,68 @@
+.user-details{
+    display:flex;
+    flex-direction: row;
+	/* align-items: center; */
+}
+
+.user-details img{
+    aspect-ratio: 1/1;
+    width: 100px;
+    margin-right: 15px;
+    border-radius: 10%;
+    border: 1px solid var(--border);
+}
+
+.user-status{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.user-status h3, .user-status h2{
+    margin: 0 !important;
+}
+
+.user-status h3{
+    padding-left: 5px;
+}
+
+.book-container span{
+    font-size: 16px !important;
+}
+
+.book-link form button {
+    height: 30px ;
+    width: 70px;
+    background: var(--button);
+    color: var(--white); 
+    border: none;
+    border-radius: 5px;
+
+}
+
+.book-link form button:hover{
+    background: var(--button-hover);
+    
+}
+
+.book-link form{
+    padding: 5px !important;
+}
+
+div.user-details{
+    margin-top: 40px;
+    justify-content: center;
+}
+
+.book-section h3{
+    margin-bottom: 0;
+}
+
+.info-release{
+    padding: 5px 0px ;
+}
+
+
+nav h3.truncname{
+    font-size: 16px !important;
+}
