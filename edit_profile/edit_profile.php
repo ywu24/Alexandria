@@ -1,8 +1,8 @@
 <?php
 session_start();
 $root = '..';
-require_once("../utils/connect.php");
-require_once("../auth/cookies.php");
+require_once($root. "/utils/connect.php");
+require_once($root. "/auth/cookies.php");
 $email = $_SESSION['email'];
 $message = "no";
 
@@ -23,9 +23,9 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../css/edit_profile.css">
-    <link rel="stylesheet" href="../css/colors.css">
-    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="<?php echo $root; ?>/css/edit_profile.css">
+    <link rel="stylesheet" href="<?php echo $root; ?>/css/colors.css">
+    <link rel="stylesheet" href="<?php echo $root; ?>/css/nav.css">
 </head>
 
 <body>
@@ -33,7 +33,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     <div class="safe-area spaced-column">
             <div id="nav-placeholder">
                 <?php 
-                require_once( "../nav/nav.php"); ?>
+                require_once($root. "/nav/nav.php"); ?>
             </div>
     </div>
 
@@ -47,18 +47,6 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                     <li><a href="#password-reset">
                             <div class="section"><span>Change Password</span></div>
                         </a></li>
-
-                    <!--
-                    <li><a href="#email-noti" class="blur">
-                            <div class="section"><span>Email Notification</span></div>
-                        </a></li>
-                    <li><a href="#push-noti" class="blur">
-                            <div class="section"><span>Push Notification</span></div>
-                        </a></li>
-                    <li><a href="#privacy-settings" class="blur">
-                            <div class="section"><span>Privacy</span></div>
-                        </a></li>
-                    -->
                 </ul>
             </div>
             <div class="settings">
@@ -97,27 +85,6 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                             unset($_SESSION['error_msg']);
                         }
                         ?>
-
-
-                    <!--
-                        <div class="edit-phone-parameter">
-                            <span>Phone Number</span>
-                            <p class="phone-number">+39 111 111 1111</p>
-                            <a href="" class="edit-action">edit</a>
-                        </div>
-                        <div class="personal-parameter">
-                            <div class="edit-personal-parameter">
-                                <span>Gender</span>
-                                <p>male/female</p>
-                            </div>
-
-                            <div class="edit-personal-parameter">
-                                <span>Birth Date</span>
-                                <p>mm/dd/yy</p>
-                            </div>
-                        </div>
-
-                        -->
 
                     </div>
                 </div>
@@ -191,107 +158,6 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                         </div>
                     </div>
                 </div>
-
-            <!--
-                <div class="settings-section blur" id="email-noti">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">FeedBack Emails</span>
-                            <div class="radio-option">
-                                <label><input type="radio" name="Feedback" value="On">On</label>
-                                <label><input type="radio" name="Feedback" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti email per aggiornarti sulle
-                        azioni relative al tuo account?</p>
-                </div>
-
-                <div class="settings-section blur">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">Reminder Emails</span>
-                            <div class="radio-option">
-                                <label><input type="radio" name="Reminder" value="On">On</label>
-                                <label><input type="radio" name="Reminder" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a "Biblioteca Alexandria di inviarti email riguardanti promemoria
-                        relativi al tuo account?</p>
-                </div>
-
-                <div class="settings-section blur">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">News Emails</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="News" value="On">On</label>
-                                <label for=""><input type="radio" name="News" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti email riguardanti nuove
-                        aggiunte all interno della libereria della tua scuola?</p>
-                </div>
-
-                <div class="settings-section blur" id="push-noti">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">FeedBack Notification</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="Feedback-noti" value="On">On</label>
-                                <label for=""><input type="radio" name="Feedback-noti" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti notifiche per aggiornarti
-                        sulle azioni relative al tuo account?</p>
-                </div>
-
-                <div class="settings-section blur">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">Reminder Notification</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="Reminder-noti" value="On">On</label>
-                                <label for=""><input type="radio" name="Reminder-noti" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti notifiche riguardanti
-                        promemoria relativi al tuo account?</p>
-                </div>
-
-                <div class="settings-section blur">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">News Notification</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="News-noti" value="On">On</label>
-                                <label for=""><input type="radio" name="News-noti" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti notifiche riguardanti nuove
-                        aggiunte all interno della libereria della tua scuola?</p>
-                </div>
-
-                <div class="settings-section blur" id="privacy-settings">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">Private Account</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="Privacy" value="On">On</label>
-                                <label for=""><input type="radio" name="Privacy" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di vedere le tue informazioni personali
-                        durante la revisione delle segnalazioni</p>
-                </div>
-            -->
-
             </div>
         </div>
     </div>

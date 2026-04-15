@@ -112,7 +112,7 @@ if (isset($_SESSION['email'])) {
     }
     
     if ($utente["Utenza"] == 3 || $utente["Utenza"] == 4) {
-                echo "<a href='" . $root . "/segnalazione/segnalazione.html' class='sub-menu-link'>
+                echo "<a href='" . $root . "/segnalazione/segnalazione.php' class='sub-menu-link'>
                 <img src='" . $root . "/img/feedbackFavicon.png' alt=''>
                 <p>Segnalazione (da implementare)</p>
                 <span>></span>

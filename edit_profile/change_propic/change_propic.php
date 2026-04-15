@@ -1,8 +1,8 @@
 <?php
 session_start();
 $root = '../..';
-require_once("../../utils/connect.php");
-require_once("../../auth/cookies.php");
+require_once($root. "/utils/connect.php");
+require_once($root. "/auth/cookies.php");
 $email = $_SESSION['email'];
 
 
@@ -32,7 +32,7 @@ if (isset($_POST['propicIns'])) {
     $file_name_new = uniqid() . '.' . $file_ext;
 
     // Specifica la directory di destinazione per il file
-    $file_destination = '../../img/users/' . $file_name_new;
+    $file_destination = $root. '/img/users/' . $file_name_new;
 
     // Controlla se ci sono errori durante il caricamento del file
     if ($file_error === 0) {
