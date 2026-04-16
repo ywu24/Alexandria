@@ -356,6 +356,62 @@ require_once("utils/connect.php");
 
     }
 
+    $querys = "SELECT Nome, Cognome, propic FROM Utente WHERE Email = '$email'";
+    $results = mysqli_query($conn, $querys);
+    $utente = mysqli_fetch_assoc($results);
+
+    if ($utenza != 1 && $utenza != 2) {
+        $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = '$email' AND Stato <> 5";
+        $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = '$email' AND Stato <> 4 AND Stato <> 5 AND Stato <> 0";
+        $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = '$email' AND Stato = 4";
+
+    } else {
+
+        $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione";
+        $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Stato <> 4 AND Stato <> 5 AND Stato <> 0";
+        $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Stato = 4";
+    }
+
+    $resultTotali = mysqli_query($conn, $totali);
+    $pTotali = mysqli_fetch_assoc($resultTotali);
+
+    $result_inCorso = mysqli_query($conn, $inCorso);
+    $p_inCorso = mysqli_fetch_assoc($result_inCorso);
+
+    $result_riconsegnate = mysqli_query($conn, $riconsegnate);
+    $p_riconsegnate = mysqli_fetch_assoc($result_riconsegnate);
+
+
+    echo "
+
+        <a " . $href . ">
+            <div class='" . $class . "'>
+            <div class='account-status-acc'>
+            <span>Bentornato</span>
+            <h2>" . $utente['Nome'] . " " . $utente['Cognome'] . "</h2>
+            <img src='./img/users/" . $utente['propic'] . "' alt=''>
+            <span>" . $email . "</span>
+            <span>---------- Prenotazioni ----------</span>
+        </div>
+
+        </a>
+        <div class='account-status-prenotazioni'>
+            <div class='numero-prenotazioni'>
+                <h3>Totali</h3>
+                <span>" . $pTotali['totali'] . "</span>
+            </div>
+
+            <div class='numero-prenotazioni'>
+                <h3>In corso</h3>
+                <span>" . $p_inCorso['incorso'] . "</span>
+            </div>
+
+            <div class='numero-prenotazioni'>
+                <h3>Riconsegnate</h3>
+                <span>" . $p_riconsegnate['riconsegnate'] . "</span>
+            </div>
+        </div>
+    </div>";
     ?>
     </div>
     </div>
