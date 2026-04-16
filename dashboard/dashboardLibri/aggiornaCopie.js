@@ -1,7 +1,7 @@
 document.addEventListener("click", async(e) =>{ 
     
-    if (e.target.classList.contains("save")){
-
+    if (e.target.classList.contains("save")){   //pulsante per Salva
+        
         const button = e.target;
 
         // trovo la riga (td)
@@ -38,14 +38,42 @@ document.addEventListener("click", async(e) =>{
             }
             else if(result.includes("ok")){
                 showMessage(result.slice(2));
+
             }
           
             else{
                  showMessage(result, "errore");
             }
         }
-    }   
+    } 
+    else if(e.target.classList.contains("delete")) { //pulsante per Elimina (elimina_copie)
+        
+        const button = e.target;
+        const row  = button.closest("tr");
+        const id =row.dataset.id;
+        const formData = new FormData();
+        formData.append("id", id);
+        console.log(id);
+        const response = await fetch("elimina_copia.php", {
+            method: "POST",
+            body: formData
+        });
+        const result = await response.text();
+        console.log(result)
+            if(result.includes("ignora")){
+               
+            }
+            else if(result.includes("ok")){
+                showMessage(result.slice(2));
+                row.remove();
+            }
+          
+            else{
+                 showMessage(result, "errore");
+            }
+    } 
 });
+
 function showMessage(text, type = "successo") {
     const div = document.getElementById("messages");
 
@@ -61,6 +89,7 @@ function showMessage(text, type = "successo") {
         p.remove();
     }, 5000);
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     // Rendiamo la funzione di callback 'async' per poter usare 'await'
     document.querySelector('table').addEventListener('click', async function(e) {
@@ -137,33 +166,34 @@ for (let copia of copie) {
     let statoTesto = 'Non Disponibile';
     let badgeClass = 'badge-danger';
     let btnClass = 'btn-outline-secondary';
-    let action = "";
+    let action = "eliminaLibo.php?"+copia.idCopia;
+    let dettagli = ""
 
     if (copia.Stato == '1') {
         // Caso: DISPONIBILE (Può essere eliminato)
         badgeClass = 'badge-success';
         statoTesto = 'Disponibile';
-        btnClass = 'btn-outline-danger';
-        // Qui inserisci la tua funzione reale per eliminare
-        action = "eliminaCopia(" + copia.idCopia + ")"; 
+        btnClass = 'btn-outline-danger  delete';
+        action = "";
+        dettagli = '<button class="btn btn-sm btn-warning" onclick=>' +
+                        '<i class="fas fa-exclamation-triangle"></i> Prenotazione' +
+                    '</button> ';
     } else {
         // Caso: IN PRESTITO (Mostra errore al click)
         
         action = "showMessage('Non puoi eliminare libri attualmente in prestito!', 'errore')";
+        dettagli = "";
     }
 
     // Costruiamo la riga
-    html += '<tr>' +
+    html += '<tr data-id="' + copia.idCopia+'" >' +
                 '<td><strong>#' + copia.idCopia + '</strong></td>' +
                 '<td><span class="badge ' + badgeClass + '">' + statoTesto + '</span></td>' +
                 '<td class="text-right">' +
                     // Pulsante Segnala (Giallo)
-                    '<button class="btn btn-sm btn-warning" onclick="segnalaCopia(' + copia.idCopia + ')">' +
-                        '<i class="fas fa-exclamation-triangle"></i> Segnala' +
-                    '</button> ' +
+                    dettagli+
                     // Pulsante Elimina (Dinamico)
-                    // NOTA: aggiungi uno spazio prima di btnClass per sicurezza
-                    '<button class="btn btn-sm ' + btnClass + '" onclick="' + action + '">' +
+                    '<button class="btn btn-sm  ' + btnClass + '" onclick="' + action + '">' +
                         '<i class="fas fa-trash"></i> Elimina' +
                     '</button>' +
                 '</td>' +
