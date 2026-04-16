@@ -356,30 +356,37 @@ require_once("utils/connect.php");
 
     }
 
-    $querys = "SELECT Nome, Cognome, propic FROM Utente WHERE Email = '$email'";
-    $results = mysqli_query($conn, $querys);
-    $utente = mysqli_fetch_assoc($results);
+    if (isset($_SESSION['email'])) {
+        $querys = "SELECT Nome, Cognome, propic FROM Utente WHERE Email = '$email'";
+        $results = mysqli_query($conn, $querys);
+        $utente = mysqli_fetch_assoc($results);
 
-    if ($utenza != 1 && $utenza != 2) {
-        $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = '$email' AND Stato <> 5";
-        $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = '$email' AND Stato <> 4 AND Stato <> 5 AND Stato <> 0";
-        $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = '$email' AND Stato = 4";
+        if ($utenza != 1 && $utenza != 2) {
+            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = '$email' AND Stato <> 5";
+            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = '$email' AND Stato <> 4 AND Stato <> 5 AND Stato <> 0";
+            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = '$email' AND Stato = 4";
 
+        } else {
+            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione";
+            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Stato <> 4 AND Stato <> 5 AND Stato <> 0";
+            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Stato = 4";
+        }
+
+        $resultTotali = mysqli_query($conn, $totali);
+        $pTotali = mysqli_fetch_assoc($resultTotali);
+
+        $result_inCorso = mysqli_query($conn, $inCorso);
+        $p_inCorso = mysqli_fetch_assoc($result_inCorso);
+
+        $result_riconsegnate = mysqli_query($conn, $riconsegnate);
+        $p_riconsegnate = mysqli_fetch_assoc($result_riconsegnate);
     } else {
-
-        $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione";
-        $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Stato <> 4 AND Stato <> 5 AND Stato <> 0";
-        $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Stato = 4";
+        $utente = ['Nome' => '', 'Cognome' => '', 'propic' => 'userDashFavicon.png'];
+        $email = 'eg@example.com';
+        $pTotali = ['totali' => 0];
+        $p_inCorso = ['incorso'=> 0];
+        $p_riconsegnate = ['riconsegnate'=> 0];
     }
-
-    $resultTotali = mysqli_query($conn, $totali);
-    $pTotali = mysqli_fetch_assoc($resultTotali);
-
-    $result_inCorso = mysqli_query($conn, $inCorso);
-    $p_inCorso = mysqli_fetch_assoc($result_inCorso);
-
-    $result_riconsegnate = mysqli_query($conn, $riconsegnate);
-    $p_riconsegnate = mysqli_fetch_assoc($result_riconsegnate);
 
 
     echo "
