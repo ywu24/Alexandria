@@ -1,13 +1,11 @@
 <?php
-require_once( $root. "/utils/connect.php");
-if(!isset($_SESSION["email"])){
-    session_start();
-}
-    
+require_once( $root . "/utils/connect.php");
+require_once($root . "/auth/cookies.php");
+
 if (isset($_POST['logout'])) {
     setcookie("email", "", time() - 1, '/');
     setcookie("password", "", time() - 1, '/');
-   
+    session_start();
     session_destroy();
     header("Location: " . $root . "/index.php");
     exit();
