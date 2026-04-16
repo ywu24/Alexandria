@@ -7,6 +7,10 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+	<div id="nav-placeholder"><?php
+			$root = "../..";
+			require_once("../../nav/nav.php");
+		?></div>
 	<div class="container">
 		<h2>Modifica libro</h2>
 		<?php
