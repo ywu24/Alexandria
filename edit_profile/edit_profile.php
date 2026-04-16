@@ -1,8 +1,8 @@
 <?php
 session_start();
 $root = '..';
-require_once($root. "/utils/connect.php");
-require_once($root. "/auth/cookies.php");
+require_once("../utils/connect.php");
+require_once("../auth/cookies.php");
 $email = $_SESSION['email'];
 $message = "no";
 
@@ -23,9 +23,9 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="<?php echo $root; ?>/css/edit_profile.css">
-    <link rel="stylesheet" href="<?php echo $root; ?>/css/colors.css">
-    <link rel="stylesheet" href="<?php echo $root; ?>/css/nav.css">
+    <link rel="stylesheet" href="../css/edit_profile.css">
+    <link rel="stylesheet" href="../css/colors.css">
+    <link rel="stylesheet" href="../css/nav.css">
 </head>
 
 <body>
@@ -33,7 +33,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     <div class="safe-area spaced-column">
             <div id="nav-placeholder">
                 <?php 
-                require_once($root. "/nav/nav.php"); ?>
+                require_once("../nav/nav.php"); ?>
             </div>
     </div>
 
@@ -71,7 +71,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
 
                         echo "
                         <div class='edit-profile-parameter'>
-                            <img src='" . $root ."/img/users/" . $propics["propic"] . "' alt=''>
+                            <img src='""../img/users/" . $propics["propic"] . "' alt=''>
                             <span class='edit-action'>Cambia Immagine</span>
                             <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data'>
                                 <input type='file' name='image'>

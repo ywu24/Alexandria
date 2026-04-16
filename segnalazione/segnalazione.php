@@ -1,7 +1,7 @@
 <?php
     session_start();
     $root = '..';
-    require_once($root. "/utils/connect.php");
+    require_once("../utils/connect.php");
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -27,7 +27,7 @@
         $file_name_new = preg_replace('/\s+/', '', $base) . uniqid() . '.' . $file_ext;
 
         // Specifica la directory di destinazione per il file
-        $file_destination = $root. '/img/segnalazioni/' . $file_name_new;
+        $file_destination = '../img/segnalazioni/' . $file_name_new;
 
         
         // Controlla se ci sono errori durante il caricamento del file
@@ -39,7 +39,7 @@
                 if ($file_size <= 5000000) {
                     // Carica il file
                     move_uploaded_file($file_tmp, $file_destination);
-                    $imgSegn = $root. "/img/segnalazioni/" . $file_name_new; 
+                    $imgSegn = "../img/segnalazioni/" . $file_name_new; 
                     $sql = "INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio, imgSegn) VALUES ('$user_email', '$oggetto', '$messaggio', '$imgSegn')";
                     mysqli_query($conn,$sql);
                     echo '<center><h1 style="color: green; font-weight:bold">Segnalazione e screenshot inviati con successo</h1></center>';
@@ -71,17 +71,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="<?php echo $root; ?>/nav/nav.css">
+  <link rel="stylesheet" href="../nav/nav.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="icon" type="image/x-icon" href="<?php echo $root; ?>/img/feedbackFavicon.png">
-  <link rel="stylesheet" href="<?php echo $root; ?>/css/segnalazione.css">
+  <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
+  <link rel="stylesheet" href="../css/segnalazione.css">
   <title>Feedback Utente</title>
 </head>
 <body>
 
     <div id="nav-placeholder">
         <?php 
-        require_once($root. "/nav/nav.php"); ?>
+        require_once("../nav/nav.php"); ?>
     </div>
 
   <div class="centered-form">
