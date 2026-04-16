@@ -19,10 +19,10 @@ if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
 
 if (isset($_POST['createDummy'])) {
 	$isbnDummy = rand(1000000000000,9999999999999);
-	$sql = "INSERT INTO Opera (`$table1.ISBN`, `Nome`, `Autore`, `Genere`, `Descrizione`, `Copertina`, `CasaEditrice`, `AnnoPubblicazione`)
+	$sql = "INSERT INTO Opera (`ISBN`, `Nome`, `Autore`, `Genere`, `Descrizione`, `Copertina`, `CasaEditrice`, `AnnoPubblicazione`)
 		VALUES ($isbnDummy, 'Dummy', 'Dummy', 'Umoristico', 'DummyDummyDummy',  '../../../img/books/default.jpg', 'Dummy', 1984)";
 
-	$sql2 = "INSERT INTO copiaLibro (`$table1.ISBN`, `Stato`) VALUES ($isbnDummy, '1')";
+	$sql2 = "INSERT INTO copiaLibro (`ISBN`, `Stato`) VALUES ($isbnDummy, '1')";
 
 	if ($conn->query($sql) === TRUE) {
 		$conn->query($sql2);
@@ -104,7 +104,7 @@ if (isset($_POST['createDummy'])) {
 			<thead class="thead-dark">
 				<form action="dashboardLibri.php" method="post">
 					<tr>
-						<th scope="col" name="test">$table1.ISBN<button class="sort_btn" name="sort_isbn">&ensp;
+						<th scope="col" name="test">ISBN<button class="sort_btn" name="sort_isbn">&ensp;
 								&#x25B2;</button></th>
 						<th scope="col">Titolo<button class="sort_btn" name="sort_nome">&ensp; &#x25B2;</button></th>
 						<th scope="col">Autore<button class="sort_btn" name="sort_autore">&ensp; &#x25B2;</button></th>
@@ -264,24 +264,37 @@ if (isset($_POST['createDummy'])) {
 
 				function printLibri(&$row)
 				{
-					echo "<tr data-isbn='". $row['ISBN'] ."'>
-						<th scope='row'>" . $row['ISBN'] . "</th>
+					$isbn = $row['ISBN'];
+					echo "
+					<tr data-isbn='$isbn'>
+						<th scope='row'>
+							<button class='btn btn-sm btn-info btn-espandi' type='button' data-isbn='$isbn'>
+								+
+							</button> 
+							$isbn
+						</th>
 						<td>" . $row['Nome'] . "</td>
 						<td>" . $row['Autore'] . "</td>
 						<td>" . $row['Genere'] . "</td>
 						<td>" . $row['AnnoPubblicazione'] . "</td>
 						<td>" . $row['CasaEditrice'] . "</td>
-						<td>" ."
-						
-						<input type='number'min = 0 max = 50 value =" . $row['copie'] . ">
-						<button class='btn btn-primary save'>Salva</button>
-						 </td>
 						<td>
-							<a class='btn btn-primary' href='modificaLibro.php?id=" . $row['ISBN'] . "'>Modifica</a>
-							<a class='btn btn-danger' href='eliminaLibro.php?id=" . $row['ISBN'] . "'>Elimina</a>
+							<input type='number' value='" . $row['copie'] . "' class='form-control-sm' style='width:60px'>
+							<button class='btn btn-outline-info btn-sm save'>Salva</button>
 						</td>
-						</tr>";
+						<td>
+							<a class='btn btn-primary btn-sm' href='modificaLibro.php?id=$isbn'>Modifica</a>
+						</td>
+					</tr>
+					<tr id='row-details-$isbn' style='display:none;' class='bg-light'>
+						<td colspan='8'>
+							<div id='content-$isbn' class='p-3'>
+								Caricamento in corso...
+							</div>
+						</td>
+					</tr>";
 				}
+				
 				?>
 			</tbody>
 		</table>
