@@ -6,20 +6,23 @@ error_reporting(E_ALL);
 
 session_start();
 $root= "../..";
+$table1 = "Opera";
 require_once("../../auth/cookies.php");
 require_once("../../utils/connect.php");
 if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
+
 
 } else {
 	header("Location: ../../index.php");
 }
 
+
 if (isset($_POST['createDummy'])) {
 	$isbnDummy = rand(1000000000000,9999999999999);
-	$sql = "INSERT INTO Opera (`ISBN`, `Nome`, `Autore`, `Genere`, `Descrizione`, `Copertina`, `CasaEditrice`, `AnnoPubblicazione`)
+	$sql = "INSERT INTO Opera (`$table1.ISBN`, `Nome`, `Autore`, `Genere`, `Descrizione`, `Copertina`, `CasaEditrice`, `AnnoPubblicazione`)
 		VALUES ($isbnDummy, 'Dummy', 'Dummy', 'Umoristico', 'DummyDummyDummy',  '../../../img/books/default.jpg', 'Dummy', 1984)";
 
-	$sql2 = "INSERT INTO copiaLibro (`ISBN`, `Stato`) VALUES ($isbnDummy, '1')";
+	$sql2 = "INSERT INTO copiaLibro (`$table1.ISBN`, `Stato`) VALUES ($isbnDummy, '1')";
 
 	if ($conn->query($sql) === TRUE) {
 		$conn->query($sql2);
@@ -47,6 +50,7 @@ if (isset($_POST['createDummy'])) {
 	<!-- Collegamento ai file CSS di Bootstrap -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/styleDashboard.css">
+	<script src="aggiornaCopie.js"></script>
 	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/colors.css">
 	<link rel="stylesheet" href="../../css/popup.css">
@@ -59,7 +63,7 @@ if (isset($_POST['createDummy'])) {
 			
 			require_once("../../nav/nav.php");
 		?></div>
-		
+	<div id = "messages">
 	<?php
 			if (isset($_SESSION['success_msg'])) {
 				echo '<p class= "successo">'. $_SESSION["success_msg"] . '</p>';
@@ -68,7 +72,14 @@ if (isset($_POST['createDummy'])) {
 				echo '<p class="errore">' . $_SESSION["error_msg"] . '</p>';
 				unset($_SESSION['error_msg']);
 			}
+
+			if(isset($_GET['errore'])){
+				if($_GET['errore']==1){
+					echo "<p class= 'errore'> Errore nell'update</p>";
+				}
+			}
 			?>
+	</div>
 	<div class="container-fluid">
 		<h1 class="text-center" style="font-size:4rem !important;">&#128218;</h1>
 		<br>
@@ -93,7 +104,7 @@ if (isset($_POST['createDummy'])) {
 			<thead class="thead-dark">
 				<form action="dashboardLibri.php" method="post">
 					<tr>
-						<th scope="col" name="test">ISBN<button class="sort_btn" name="sort_isbn">&ensp;
+						<th scope="col" name="test">$table1.ISBN<button class="sort_btn" name="sort_isbn">&ensp;
 								&#x25B2;</button></th>
 						<th scope="col">Titolo<button class="sort_btn" name="sort_nome">&ensp; &#x25B2;</button></th>
 						<th scope="col">Autore<button class="sort_btn" name="sort_autore">&ensp; &#x25B2;</button></th>
@@ -101,6 +112,7 @@ if (isset($_POST['createDummy'])) {
 						<th scope="col">Anno<button class="sort_btn" name="sort_anno">&ensp; &#x25B2;</button></th>
 						<th scope="col">Casa Editrice<button class="sort_btn" name="sort_casaeditrice">&ensp;
 								&#x25B2;</button></th>
+						<th scope="col">Copie<button class="sort_btn" name="sort_copies">&ensp; &#x25B2;</button></th>
 						<th scope="col">Azioni <div class="btn_adduser"><a href="aggiungiLibro.php"
 									class="btn btn-success ml-auto">Aggiungi libro</a></div>
 						</th>
@@ -110,13 +122,13 @@ if (isset($_POST['createDummy'])) {
 			<tbody>
 				<?php
 				
-				$table = "Opera";
-
+				
+				$table2 = "copiaLibro";
 				switch (true) {
 					case isset($_POST['search_btn']):
 						$search_text = $_POST['search'];
 						try {
-							foreach ($conn->query("SELECT ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice FROM $table WHERE Nome LIKE '%$search_text%' OR Autore LIKE '%$search_text%' OR Genere LIKE '%$search_text%' OR AnnoPubblicazione LIKE '%$search_text%' OR CasaEditrice LIKE '%$search_text%' OR ISBN LIKE '%$search_text%'") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN WHERE Nome LIKE '%$search_text%' OR Autore LIKE '%$search_text%' OR Genere LIKE '%$search_text%' OR AnnoPubblicazione LIKE '%$search_text%' OR CasaEditrice LIKE '%$search_text%' OR $table1.ISBN LIKE '%$search_text%' GROUP BY $table1.ISBN") as $row) {
 								printLibri($row);
 							}
 							
@@ -131,7 +143,7 @@ if (isset($_POST['createDummy'])) {
 
 					case isset($_POST['sort_isbn']):
 						try {
-							foreach ($conn->query("SELECT ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice FROM $table ORDER BY ISBN") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN ORDER BY $table1.ISBN") as $row) {
 								printLibri($row);
 							}
 							
@@ -144,9 +156,25 @@ if (isset($_POST['createDummy'])) {
 						}
 						break;
 
+					case isset($_POST['sort_copies']):
+						try {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN=$table2.ISBN GROUP BY $table1.ISBN ORDER BY copie") as $row) {
+								printLibri($row);
+							}
+							
+						} catch (PDOException $e) {
+							print "Error!: " . $e->getMessage() . "<br/>";
+							die();
+						}
+						finally{
+							$conn->close();
+						}
+						break;
+
+					
 					case isset($_POST['sort_nome']):
 						try {
-							foreach ($conn->query("SELECT ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice FROM $table ORDER BY Nome") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Nome") as $row) {
 								printLibri($row);
 							}
 							
@@ -161,7 +189,7 @@ if (isset($_POST['createDummy'])) {
 
 					case isset($_POST['sort_autore']):
 						try {
-							foreach ($conn->query("SELECT ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice FROM $table ORDER BY Autore") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Autore") as $row) {
 								printLibri($row);
 								
 							}
@@ -176,9 +204,9 @@ if (isset($_POST['createDummy'])) {
 
 					case isset($_POST['sort_genere']):
 						try {
-							foreach ($conn->query("SELECT ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice FROM $table ORDER BY Genere") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Genere") as $row) {
 								printLibri($row);
-								$conn->close();
+								
 							}
 						} catch (PDOException $e) {
 							print "Error!: " . $e->getMessage() . "<br/>";
@@ -191,7 +219,7 @@ if (isset($_POST['createDummy'])) {
 
 					case isset($_POST['sort_anno']):
 						try {
-							foreach ($conn->query("SELECT ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice FROM $table ORDER BY AnnoPubblicazione") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY AnnoPubblicazione") as $row) {
 								printLibri($row);
 								
 							}
@@ -205,7 +233,7 @@ if (isset($_POST['createDummy'])) {
 
 					case isset($_POST['sort_casaeditrice']):
 						try {
-							foreach ($conn->query("SELECT ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice FROM $table ORDER BY CasaEditrice") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY CasaEditrice") as $row) {
 								printLibri($row);
 								
 							}
@@ -220,7 +248,7 @@ if (isset($_POST['createDummy'])) {
 
 					default:
 						try {
-							foreach ($conn->query("SELECT ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice FROM $table") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN ") as $row) {
 								printLibri($row);
 								
 							}
@@ -236,13 +264,18 @@ if (isset($_POST['createDummy'])) {
 
 				function printLibri(&$row)
 				{
-					echo "<tr>
+					echo "<tr data-isbn='". $row['ISBN'] ."'>
 						<th scope='row'>" . $row['ISBN'] . "</th>
 						<td>" . $row['Nome'] . "</td>
 						<td>" . $row['Autore'] . "</td>
 						<td>" . $row['Genere'] . "</td>
 						<td>" . $row['AnnoPubblicazione'] . "</td>
 						<td>" . $row['CasaEditrice'] . "</td>
+						<td>" ."
+						
+						<input type='number'min = 0 max = 50 value =" . $row['copie'] . ">
+						<button class='btn btn-primary save'>Salva</button>
+						 </td>
 						<td>
 							<a class='btn btn-primary' href='modificaLibro.php?id=" . $row['ISBN'] . "'>Modifica</a>
 							<a class='btn btn-danger' href='eliminaLibro.php?id=" . $row['ISBN'] . "'>Elimina</a>
