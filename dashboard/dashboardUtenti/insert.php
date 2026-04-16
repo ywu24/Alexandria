@@ -1,4 +1,10 @@
 <?php 
+
+    /*
+    NOTA: al momento questo metodo è insicuro: chiunque potrebbe fare richiesta ad insert.php con post per aggiungere utenti.
+    Controllare se l'utente che è loggato è autorizzato a farlo (utenza == 1)
+    */
+    
     $table = "Utente";
     require_once("../../utils/connect.php");
     if(empty($_POST['nome']) || empty($_POST['cognome'])|| empty($_POST['email'])|| empty($_POST['email'])|| empty($_POST['password'])){

@@ -1,5 +1,7 @@
 
 <?php
+session_start(); //non togliere
+
 //LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
