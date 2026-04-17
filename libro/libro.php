@@ -20,6 +20,7 @@ require_once("../auth/cookies.php");
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/popup.css">
+    <link rel="stylesheet" href="../css/messaggi.css">
 
     <!--script per importare parti di codice-->
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
@@ -29,7 +30,7 @@ require_once("../auth/cookies.php");
     <div class="safe-area spaced-column">
 
         <div id="nav-placeholder">
-            <?php 
+            <?php
             require_once("../nav/nav.php"); ?>
         </div>
 
@@ -38,48 +39,69 @@ require_once("../auth/cookies.php");
         $date = date('Y/m/d', time());
         $table = "Opera";
 
-
+        if (!isset($_GET['id'])) {
+            header("Location: ../lista/lista.php?errore=2");
+            exit();
+        }
         $book_id = $_GET['id'];
-        $email = $_SESSION['email'];
 
-        $query = $conn->prepare('SELECT count(*) FROM Utente, Prenotazione WHERE Utente.email = Prenotazione.email AND Utente.email = ? AND Stato >= 0 AND Stato <= 3');
-        $query->bind_param('s', $email);
-        $query->execute();
-        $r = $query->get_result();
-        $numeroPrenotazioni = $r->fetch_assoc();
-        $numeroPrenotazioni = $numeroPrenotazioni['count(*)'];
+        //controllo se il libro è presente nel database
+        $disp = "SELECT count(idCopia) as qty FROM copiaLibro, Opera WHERE id = $book_id and Opera.ISBN = copiaLibro.ISBN";
+        $result_disp = mysqli_query($conn, $disp);
+        $qty = mysqli_fetch_assoc($result_disp);
 
-        $giorniPrenotazione = 30;
+        if ($qty['qty'] == 0) {
+            header("Location: ../lista/lista.php?errore=2");
+            exit();
+        }
 
-        if (isset($_POST["prenota"])) {
+        if (isset($_SESSION['email'])) {
+            $email = $_SESSION['email'];
+        } else {
+            $email = null;
+        }
 
-            if($_SESSION['utenza'] == 3){
-                $nPrenotazioni = $_POST['sliderino'];
-                for($i = 0; $i < $nPrenotazioni; $i++){
-                if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
-                    $q2->bind_param('i', $book_id);
-                    $q2->execute();
-                    $result = $q2->get_result();
-                    $copiaPrenotata = $result->fetch_assoc();
+        if (isset($email)) {
+            $query = $conn->prepare('SELECT count(*) FROM Utente, Prenotazione WHERE Utente.email = Prenotazione.email AND Utente.email = ? AND Stato >= 0 AND Stato <= 3');
+            $query->bind_param('s', $email);
+            $query->execute();
+            $r = $query->get_result();
+            $numeroPrenotazioni = $r->fetch_assoc();
+            $numeroPrenotazioni = $numeroPrenotazioni['count(*)'];
+
+            $giorniPrenotazione = 30;
+
+            if (isset($_POST["prenota"])) {
+
+                if ($_SESSION['utenza'] == 3) {
+                    $nPrenotazioni = $_POST['sliderino'];
+                    for ($i = 0; $i < $nPrenotazioni; $i++) {
+                        if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
+                            $q2->bind_param('i', $book_id);
+                            $q2->execute();
+                            $result = $q2->get_result();
+                            $copiaPrenotata = $result->fetch_assoc();
+                        }
+                        $id = $copiaPrenotata['id'];
+                        $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
+                        $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
+                    }
+                } else if ($_SESSION['utenza'] == 4) {
+                    if ($numeroPrenotazioni < 3) {
+                        if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
+                            $q2->bind_param('i', $book_id);
+                            $q2->execute();
+                            $result = $q2->get_result();
+                            $copiaPrenotata = $result->fetch_assoc();
+                        }
+                        $id = $copiaPrenotata['id'];
+                        $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
+                        $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
+                    }
                 }
-                $id = $copiaPrenotata['id'];
-                $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
-                $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
-            }
-            }else if($_SESSION['utenza'] == 4){
-            if ($numeroPrenotazioni < 3) {
-                if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
-                    $q2->bind_param('i', $book_id);
-                    $q2->execute();
-                    $result = $q2->get_result();
-                    $copiaPrenotata = $result->fetch_assoc();
-                }
-                $id = $copiaPrenotata['id'];
-                $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
-                $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
             }
         }
-        }
+
 
         $disp = "SELECT count(idCopia) as qty FROM copiaLibro, Opera WHERE copiaLibro.Stato = 1 and id = $book_id and Opera.ISBN = copiaLibro.ISBN";
         $result_disp = mysqli_query($conn, $disp);
@@ -94,16 +116,14 @@ require_once("../auth/cookies.php");
         }
 
 
-        if (isset($_GET['id'])) {
+        try {
+            $stmt = $conn->prepare("SELECT Nome, Autore, Copertina, CasaEditrice, ISBN, Descrizione FROM Opera WHERE id = ?");
+            $stmt->bind_param('i', $book_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $book = $result->fetch_assoc();
 
-            try {
-                    $stmt = $conn->prepare("SELECT Nome, Autore, Copertina, CasaEditrice, ISBN, Descrizione FROM Opera WHERE id = ?");
-                    $stmt->bind_param('i', $book_id);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    $book = $result->fetch_assoc();
-                
-                    echo "<main>
+            echo "<main>
                <div class='container'>
                    <div class='left-column'>
                        <img src='" . $root . $book['Copertina'] . "' alt='Copertina Libro' >
@@ -116,29 +136,23 @@ require_once("../auth/cookies.php");
                        <div class='desc'>
                            <p class='truncdesc'>" . $book['Descrizione'] . "</p>
                        </div>";
-                    if (isset($_SESSION['email']) && ($_SESSION['utenza'] == 3 || $_SESSION['utenza'] == 4) && $qty['qty'] >= 1) {
-                        if ($numeroPrenotazioni < 3 || $_SESSION['utenza'] == 3) {
-                            echo "<div class='div-button'><button class='prenotazione open-button' name='prenota'>PRENOTA</button></div>";
+            if (isset($_SESSION['email']) && ($_SESSION['utenza'] == 3 || $_SESSION['utenza'] == 4) && $qty['qty'] >= 1) {
+                if ($numeroPrenotazioni < 3 || $_SESSION['utenza'] == 3) {
+                    echo "<div class='div-button'><button class='prenotazione open-button' name='prenota'>PRENOTA</button></div>";
 
-                        } else {
-                            echo "<div class='div-button'><button class='prenotazioneDisabled'>PRENOTA</button></div>";
-                            echo "<h6 class='nmax'> Numero massimo di prenotazioni raggiunto </h6>";
-                        }
-                    }
-                    echo
-                        "</div>
+                } else {
+                    echo "<div class='div-button'><button class='prenotazioneDisabled'>PRENOTA</button></div>";
+                    echo "<h6 class='nmax'> Numero massimo di prenotazioni raggiunto </h6>";
+                }
+            }
+            echo
+                "</div>
                </div>
            </main>";
-                
 
-
-
-            } catch (PDOException $e) {
-                print "Error!: " . $e->getMessage() . "<br/>";
-                die();
-            }
-
-
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            die();
         }
         ?>
 
@@ -165,7 +179,7 @@ require_once("../auth/cookies.php");
                 <span>Durata prenotazione: " . $giorniPrenotazione . " giorni</span>
                 <form class='form' action='libro.php?id=" . $book_id . "' method='post'>"; #form inviato dai bottoni "si e no" del popup
                 if ($_SESSION['utenza'] == 3) {
-                echo "<input name='sliderino' type='range' value=1 min=1 max=" . $copieMax['copieMax'] . " id='slider'>
+                    echo "<input name='sliderino' type='range' value=1 min=1 max=" . $copieMax['copieMax'] . " id='slider'>
                 <center><span id='sliderValue'>1</span></center>";
                 }
                 ?>
@@ -178,15 +192,15 @@ require_once("../auth/cookies.php");
 
         <script>
             <?php
-                if($_SESSION['utenza'] == 3){
-                    echo "const slider = document.getElementById('slider');
+            if ($_SESSION['utenza'] == 3) {
+                echo "const slider = document.getElementById('slider');
                     const sliderValue = document.getElementById('sliderValue');
         
                     slider.addEventListener('input', function () {
                         sliderValue.textContent = slider.value;
                     }); ";
-                }
-            ?>  
+            }
+            ?>
 
             const modal = document.querySelector("#modal");
             const openModal = document.querySelector(".open-button");
