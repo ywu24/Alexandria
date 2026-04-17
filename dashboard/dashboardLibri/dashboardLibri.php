@@ -158,7 +158,7 @@ if (isset($_POST['createDummy'])) {
 
 					case isset($_POST['sort_copies']):
 						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN=$table2.ISBN GROUP BY $table1.ISBN ORDER BY copie") as $row) {
+							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN=$table2.ISBN GROUP BY $table1.ISBN ORDER BY copie DESC") as $row) {
 								printLibri($row);
 							}
 							

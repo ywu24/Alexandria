@@ -38,7 +38,11 @@ document.addEventListener("click", async(e) =>{
             }
             else if(result.includes("ok")){
                 showMessage(result.slice(2));
-
+                const btnEspandi = document.querySelector(`.btn-espandi[data-isbn="${isbn}"]`);
+                if(btnEspandi) {
+                    btnEspandi.click();
+                    btnEspandi.click();
+                }
             }
           
             else{
@@ -65,7 +69,11 @@ document.addEventListener("click", async(e) =>{
             }
             else if(result.includes("ok")){
                 showMessage(result.slice(2));
-                row.remove();
+                const btnEspandi = document.querySelector(`.btn-espandi[data-isbn="${isbn}"]`);
+                if(btnEspandi) {
+                    btnEspandi.click();
+                    btnEspandi.click();
+                }
             }
           
             else{
@@ -87,12 +95,12 @@ function showMessage(text, type = "successo") {
     // sparisce dopo 5 secondi 
     setTimeout(() => {
         p.remove();
-    }, 5000);
+    }, 4000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     // Rendiamo la funzione di callback 'async' per poter usare 'await'
-    document.querySelector('table').addEventListener('click', async function(e) {
+    document.querySelector('table').addEventListener('click', async function eventHandler(e) {
         
         if (e.target && e.target.classList.contains('btn-espandi')) {
             const btn = e.target;
@@ -124,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     console.log(data); //////////////////////
                     // Passiamo sia il contenitore che i dati
-                    renderCopie(contentDiv, data);
+                    renderCopie(contentDiv, data, e);
                     
                     targetRow.style.display = 'table-row';
                     btn.textContent = '-';
@@ -138,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }); // Chiusura corretta dell'EventListener
 });
-function renderCopie(container, copie) {
+function renderCopie(container, copie, e) {
     // Svuotiamo il contenitore dal testo "Caricamento..."
     container.innerHTML = "";
 
@@ -168,6 +176,7 @@ for (let copia of copie) {
     let btnClass = 'btn-outline-secondary';
     let action = "eliminaLibo.php?"+copia.idCopia;
     let dettagli = ""
+    let disabled = "";
 
     if (copia.Stato == '1') {
         // Caso: DISPONIBILE (Può essere eliminato)
@@ -175,14 +184,16 @@ for (let copia of copie) {
         statoTesto = 'Disponibile';
         btnClass = 'btn-outline-danger  delete';
         action = "";
-        dettagli = '<button class="btn btn-sm btn-warning" onclick=>' +
-                        '<i class="fas fa-exclamation-triangle"></i> Prenotazione' +
-                    '</button> ';
+         
+        
     } else {
         // Caso: IN PRESTITO (Mostra errore al click)
-        
-        action = "showMessage('Non puoi eliminare libri attualmente in prestito!', 'errore')";
-        dettagli = "";
+        disabled = "disabled";
+        action = "showMessage('Non puoi eliminare libri attualmente in prestito!', 'errore'); eventHandler(e);";
+       
+        dettagli = '<button class="btn btn-sm btn-warning" onclick=>' +
+                        '<i class="fas fa-exclamation-triangle"></i> Dettagli' +
+                    '</button> ';
     }
 
     // Costruiamo la riga
@@ -193,7 +204,7 @@ for (let copia of copie) {
                     // Pulsante Segnala (Giallo)
                     dettagli+
                     // Pulsante Elimina (Dinamico)
-                    '<button class="btn btn-sm  ' + btnClass + '" onclick="' + action + '">' +
+                    '<button class="btn btn-sm  ' + btnClass + '" ' + disabled +'  onclick="' + action + '">' +
                         '<i class="fas fa-trash"></i> Elimina' +
                     '</button>' +
                 '</td>' +

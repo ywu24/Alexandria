@@ -12,7 +12,7 @@ if(isset($_POST['id'])){
    
     $id =(int) $_POST['id'];
     try{
-        $sql = "DELETE FROM copiaLibro WHERE idCopia= $id;";
+        $sql = "DELETE FROM copiaLibro WHERE idCopia= $id AND Stato=1";
         $result = $conn->query($sql);
         if ($conn->affected_rows <= 0) {
              echo "Errore nell'eliminazione del libro con id ".$id;
