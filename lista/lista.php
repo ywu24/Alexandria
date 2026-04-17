@@ -10,10 +10,11 @@ $table = "Opera";
 $maxPerPage = 10;
 $paginationCtrls = '';
 
-function paginator($where, $additionalParams = "") {
+function paginator($where, $additionalParams = "")
+{
     global $conn, $table, $maxPerPage, $paginationCtrls;
     $pageTo = "lista.php";
-    
+
     $countQuery = "SELECT count(*) as tot FROM $table $where";
     $result = mysqli_query($conn, $countQuery);
     $row = $result->fetch_assoc();
@@ -21,11 +22,13 @@ function paginator($where, $additionalParams = "") {
 
     if ($rowCount > 0) {
         $p = isset($_GET['page']) ? $_GET['page'] : 1;
-        $page = (int)preg_replace('#[^0-9]#', '', $p);
+        $page = (int) preg_replace('#[^0-9]#', '', $p);
         $lastPage = ceil($rowCount / $maxPerPage);
 
-        if ($page < 1) $page = 1;
-        elseif ($page > $lastPage) $page = $lastPage;
+        if ($page < 1)
+            $page = 1;
+        elseif ($page > $lastPage)
+            $page = $lastPage;
 
         $limit = 'LIMIT ' . $maxPerPage . ' OFFSET ' . ($page - 1) * $maxPerPage;
 
@@ -38,36 +41,40 @@ function paginator($where, $additionalParams = "") {
                 generate links to the first page, and to the previous pages.
             */
             $baseUrl = $pageTo . "?" . ltrim($additionalParams, '&');
-            if ($additionalParams != "") $baseUrl .= "&";
-            else $baseUrl .= "?";
+            if ($additionalParams != "")
+                $baseUrl .= "&";
+            else
+                $baseUrl .= "?";
 
             if ($page > 1) {
                 $previous = $page - 1;
                 // Concatenate the link to the variable
-                $paginationCtrls .= '<a href="'.$baseUrl.'page='.$previous.'">&laquo;</a>';
+                $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $previous . '">&laquo;</a>';
             }
-            
+
             // Render clickable number links that should appear on the left of the target (current) page number
             for ($i = $page - 4; $i < $page; $i++) {
-                if ($i > 0) $paginationCtrls .= '<a href="'.$baseUrl.'page='.$i.'">'.$i.'</a>';
+                if ($i > 0)
+                    $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $i . '">' . $i . '</a>';
             }
 
             // Render the target (current) page number, but without it being a clickable link
             // Concatenate the link to the variable
-            $paginationCtrls .= '<a class="active">'.$page.'</a>';
+            $paginationCtrls .= '<a class="active">' . $page . '</a>';
 
             // Render clickable number links that should appear on the right of the target (current) page number
             for ($i = $page + 1; $i <= $lastPage; $i++) {
                 // Concatenate the link to the variable
-                $paginationCtrls .= '<a href="'.$baseUrl.'page='.$i.'">'.$i.'</a>';
-                if ($i >= $page + 4) break;
+                $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $i . '">' . $i . '</a>';
+                if ($i >= $page + 4)
+                    break;
             }
 
             // Same as above, only checking if we are on the last page, if not then generating the "Next"
             if ($page != $lastPage) {
                 $next = $page + 1;
                 // Concatenate the link to the variable
-                $paginationCtrls .= '<a href="'.$baseUrl.'page='.$next.'">&raquo;</a>';
+                $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $next . '">&raquo;</a>';
             }
         }
         return $limit;
@@ -81,9 +88,7 @@ $orderBy = "ORDER BY Nome ASC";
 if (isset($_POST["search_btn"]) || isset($_POST["search"])) {
     $search_text = mysqli_real_escape_string($conn, $_POST["search"]);
     $whereClause = "WHERE Nome LIKE '%$search_text%' OR Autore LIKE '%$search_text%' OR ISBN LIKE '%$search_text%' OR CasaEditrice LIKE '%$search_text%'";
-} 
-
-elseif (isset($_POST['genere_btn'])) {
+} elseif (isset($_POST['genere_btn'])) {
     $genere = mysqli_real_escape_string($conn, $_POST['genere_btn']);
     $whereClause = "WHERE Genere = '$genere'";
 }
@@ -119,17 +124,19 @@ $queryResult = mysqli_query($conn, $finalQuery);
 
 <body>
     <div class="safe-area spaced-column">
-        
+
         <div id="nav-placeholder">
-            <?php 
-            require_once( "../nav/nav.php"); ?>
+            <?php
+            require_once("../nav/nav.php"); ?>
         </div>
-    <?php
-        if(isset($_GET["errore"])){
-            if($_GET["errore"]==1){  
+        <?php
+        if (isset($_GET["errore"])) {
+            if ($_GET["errore"] == 1) {
                 echo "<p class= 'errore'> Nessuna prenotazione trovata </p>";
-            } else{
-                echo "<p class= 'errore'> errore generico.  </p>";
+            } else if ($_GET["errore"] == 2) {
+                echo "<p class= 'errore'> Nessun libro con questo ID </p>";
+            } else {
+                echo "<p class= 'errore'> Errore generico </p>";
             }
         } ?>
         <div class="container" data-user-book-container>
@@ -142,9 +149,10 @@ $queryResult = mysqli_query($conn, $finalQuery);
                         <img src="../img/arrow.png" alt="" class="icon-small">
                         <h5>Filtra</h5>
                     </div>
-                    
+
                     <div class="left-container" id="left-container">
-                        <a href="lista.php?sort=titolo" class="filter-item" style="text-decoration: none; color: inherit;">
+                        <a href="lista.php?sort=titolo" class="filter-item"
+                            style="text-decoration: none; color: inherit;">
                             <img src="../img/title.png" alt="" class="icon1">
                             <h5 class="titolo">Titolo</h5>
                         </a>
@@ -157,7 +165,7 @@ $queryResult = mysqli_query($conn, $finalQuery);
 
                         <div class="genere-subwrap" id="genere-subwrap" style="display:none;">
                             <form action="lista.php" method="post">
-                                <?php 
+                                <?php
                                 $generi = ["Romanzo Storico", "Giallo", "Biografia", "Avventura", "Azione", "Fantascienza", "Horror", "Umoristico", "Distopia"];
                                 foreach ($generi as $g) {
                                     echo "
@@ -169,7 +177,8 @@ $queryResult = mysqli_query($conn, $finalQuery);
                             </form>
                         </div>
 
-                        <a href="lista.php?sort=anno" class="filter-item" style="text-decoration: none; color: inherit;">
+                        <a href="lista.php?sort=anno" class="filter-item"
+                            style="text-decoration: none; color: inherit;">
                             <img src="../img/calendar.png" alt="" class="icon1">
                             <h5 style="margin:0">Anno</h5>
                         </a>
@@ -181,12 +190,12 @@ $queryResult = mysqli_query($conn, $finalQuery);
                     if (mysqli_num_rows($queryResult) > 0) {
                         while ($row = mysqli_fetch_assoc($queryResult)) {
                             $id = $row['id'];
-                            
+
                             // Controllo disponibilità in tempo reale
                             $dispQuery = "SELECT count(idCopia) as qty FROM copiaLibro WHERE Stato = 1 AND ISBN = '{$row['ISBN']}'";
                             $resDisp = mysqli_query($conn, $dispQuery);
                             $qtyRow = mysqli_fetch_assoc($resDisp);
-                            
+
                             if ($qtyRow['qty'] >= 1) {
                                 $disponibilita = "Disponibile";
                                 $color = "green";

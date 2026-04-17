@@ -20,6 +20,7 @@ require_once("../auth/cookies.php");
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/popup.css">
+    <link rel="stylesheet" href="../css/messaggi.css">
 
     <!--script per importare parti di codice-->
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
@@ -34,21 +35,12 @@ require_once("../auth/cookies.php");
         </div>
 
         <?php
-
-        if (isset($_GET["errore"])) {
-            if ($_GET["errore"] == 1) {
-                echo "<p class= 'errore'> Nessun Libro con questo ID </p>";
-            } else {
-                echo "<p class= 'errore'> errore generico.  </p>";
-            }
-        }
-
         $maxCopie = isset($_POST['slider']) ? $_POST['slider'] : 2;
         $date = date('Y/m/d', time());
         $table = "Opera";
 
         if (!isset($_GET['id'])) {
-            header("Location: libro.php?errore=1");
+            header("Location: ../lista/lista.php?errore=2");
             exit();
         }
         $book_id = $_GET['id'];
@@ -59,7 +51,7 @@ require_once("../auth/cookies.php");
         $qty = mysqli_fetch_assoc($result_disp);
 
         if ($qty['qty'] == 0) {
-            header("Location: libro.php?errore=1");
+            header("Location: ../lista/lista.php?errore=2");
             exit();
         }
 
