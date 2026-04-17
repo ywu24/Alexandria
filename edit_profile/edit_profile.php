@@ -26,6 +26,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     <link rel="stylesheet" href="../css/edit_profile.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/popup.css">
 </head>
 
 <body>
@@ -71,7 +72,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
 
                         echo "
                         <div class='edit-profile-parameter'>
-                            <img src='""../img/users/" . $propics["propic"] . "' alt=''>
+                            <img src='../img/users/" . $propics["propic"] . "' alt=''>
                             <span class='edit-action'>Cambia Immagine</span>
                             <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data'>
                                 <input type='file' name='image'>
