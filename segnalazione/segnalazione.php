@@ -42,21 +42,25 @@
                     $imgSegn = "../img/segnalazioni/" . $file_name_new; 
                     $sql = "INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio, imgSegn) VALUES ('$user_email', '$oggetto', '$messaggio', '$imgSegn')";
                     mysqli_query($conn,$sql);
-                    echo '<center><h1 style="color: green; font-weight:bold">Segnalazione e screenshot inviati con successo</h1></center>';
-                    echo "<meta http-equiv='refresh' content='2;url=../index.php'>";
+                    $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
+                    header("Location: ../index.php");
+                    exit();
                 } else {
-                    echo '<center><h1 style="color: red; font-weight:bold">Il file è troppo grande dimensione massima 5MB</h1></center>';
-                    echo "<meta http-equiv='refresh' content='2;url=segnalazione.php'>";
+                    $_SESSION['error_msg'] = "Il file è troppo grande (max 5MB)";
+                    header("Location: segnalazione.php");
+                    exit();
                 }
             } else {
-                    echo '<center><h1 style="color: red; font-weight:bold">Il file non è supportato caricare solo file di formato: jpg, jpeg o png</h1></center>';
-                    echo "<meta http-equiv='refresh' content='2;url=segnalazione.php'>";
+                    $_SESSION['error_msg'] = "Formato non supportato (solo jpg, jpeg, png)";
+                    header("Location: segnalazione.php");
+                    exit();
             }
         } else {
             $sql = "INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio) VALUES ('$user_email', '$oggetto', '$messaggio')";
             mysqli_query($conn,$sql);
-            echo '<center><h1 style="color: green; font-weight:bold">Segnalazione inviata con successo</h1></center>';
-            echo "<meta http-equiv='refresh' content='2;url=../index.php'>";
+            $_SESSION['success_msg'] = "Segnalazione inviata con successo";
+            header("Location: segnalazione.php");
+            exit();
         }
 
         }
@@ -72,9 +76,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="../nav/nav.css">
+  <link rel="stylesheet" href="../css/segnalazione.css">
+  <link rel="stylesheet" href="../css/messaggi.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
-  <link rel="stylesheet" href="../css/segnalazione.css">
   <title>Feedback Utente</title>
 </head>
 <body>
@@ -84,11 +89,17 @@
         require_once("../nav/nav.php"); ?>
     </div>
     <div id = "messages">
+      <?php
+        if (isset($_SESSION['success_msg'])) {
+            echo '<p class="successo">' . $_SESSION['success_msg'] . '</p>';
+            unset($_SESSION['success_msg']);
+        }
 
-
-
-
-    
+        if (isset($_SESSION['error_msg'])) {
+            echo '<p class="errore">' . $_SESSION['error_msg'] . '</p>';
+            unset($_SESSION['error_msg']);
+        }
+      ?>
     </div>
 
 
