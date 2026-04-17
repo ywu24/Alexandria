@@ -20,6 +20,7 @@ error_reporting(E_ALL);
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/dettaglioUtenti.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="dettaglioUtente.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../../css/colors.css">
 	<link rel="stylesheet" href="../../css/prenotazione.css">
@@ -34,7 +35,7 @@ error_reporting(E_ALL);
 
 	<div id="nav-placeholder"></div>
 	<?php
-	$root = "../../";
+	$root = "../..";
 	require_once("../../nav/nav.php");
 	?>
 
@@ -62,15 +63,17 @@ error_reporting(E_ALL);
 			$propic = $row["propic"];
 		} else {
 			header("Location: dashboardUtenti.php?errore=3");
+			die();
 		}
 		if(empty($propic)){
 			$propic = "userDashFavicon.png";
 		}
 		echo "
+		
 		<div class='user-details'>
 			<img src='../../img/users/" . $propic . "'>
 			<div class='user-status'>
-			<h2>" . $nome . " " . $cognome . "</h2>
+			<h2> Prenotazioni di " . $nome . " " . $cognome . "</h2>
 			<br>
 			<h3>" . $email . " • " . " • Punti: " . $row['punteggio'] . "</h3>
 			</div>
@@ -84,10 +87,20 @@ error_reporting(E_ALL);
 			$result = $q->get_result();
 			$email = $result->fetch_assoc();
 		}
-		foreach ($conn->query("SELECT idPrenotazione, Copertina, $table.idCopia, Inizio, Fine, Autore, Nome, CasaEditrice, $table.Stato FROM $table, $table1, $table2 WHERE $table1.idCopia = $table.idCopia AND $table2.ISBN = $table1.ISBN and $table.Email = '$email[Email]' ORDER BY $table.idPrenotazione DESC") as $row) {
+		
+		$query_base = "SELECT idPrenotazione, Copertina, $table.idCopia, Inizio, Fine, Autore, Nome, CasaEditrice, $table.Stato 
+		FROM $table, $table1, $table2 
+		WHERE $table1.idCopia = $table.idCopia 
+		AND $table2.ISBN = $table1.ISBN 
+		AND $table.Email = '$email[Email]' 
+		AND $table.Stato != 4 
+		ORDER BY $table.idPrenotazione DESC";
+
+		foreach ($conn->query($query_base) as $row) {
+    
 			if ($row["Stato"] == 0) {
-				$stato = "In Prenotazione";
-				$color = "#ff7600";
+					$stato = "In Prenotazione";
+					$color = "#ff7600";
 			} else if($row["Stato"] == 1){
 				$stato = "Prenotato";
 				$color = "green";
@@ -103,9 +116,7 @@ error_reporting(E_ALL);
 			}else if($row['Stato'] == 5){
 				$stato = "Eliminata";
 				$color = "red";
-			}
-
-
+			}	
 			echo
 				"<div class='book-container'>
             <div class='book-link'>
@@ -118,9 +129,16 @@ error_reporting(E_ALL);
                     <form action='dettaglioPrenotazione.php?id=" . $row['idPrenotazione'] . "' method='post'><button name='apri-dettaglio' style='margin-top: 20px; width: 20vh;'>Gestisci</button></form>
 				</div>
             </div>
+				
             </div>";
 
 		}
+		echo '<hr>
+				<div id="terminate-container">
+						<button id="load-terminated" class="btn btn-secondary" data-id-utente=' . $id . '>
+							Mostra prenotazioni terminate
+						</button>
+				</div>';
 		?>
 
 
