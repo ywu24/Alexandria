@@ -111,11 +111,6 @@ a { text-decoration: none; }
   pointer-events: none;
 }
 
-/*
-.edit-action:hover {
-  color: var(--editaction-hover);
-}
-  */
 
 .edit-phone-parameter,
 .edit-personal-parameter {
@@ -241,12 +236,14 @@ input[type="file"]::file-selector-button:hover {
 @media (max-width: 768px) {
 
   .safe-area {
-    width: 100vw;
+    width: 100%;
   }
 
   .container {
     flex-direction: column;
     width: 95vw;
+    margin: 20px auto 0 auto;
+    align-items: center;
   }
 
   .edit-section {
@@ -260,6 +257,7 @@ input[type="file"]::file-selector-button:hover {
   .settings-profile-info {
     flex-direction: column;
     text-align: center;
+    align-items: center;
   }
 
   .edit-profile-parameter img {
@@ -285,10 +283,4 @@ input[type="file"]::file-selector-button:hover {
   .section-explain {
     text-align: center;
   }
-}
-
-.error-msg {
-    color: red;
-    font-size: 0.85rem;
-    margin-top: 8px;
 }

@@ -68,7 +68,7 @@ if (isset($_SESSION['email'])) {
             }
         }
         echo "
-        <li class ='li-icon'>
+        <li class ='li-icon acc'>
             <a href='#'></a>
             <img src='" . $root . "/img/account.png' class='icon' onclick='toggleMenu()'>
         </li>
