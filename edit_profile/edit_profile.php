@@ -4,7 +4,7 @@ $root = '..';
 require_once("../utils/connect.php");
 require_once("../auth/cookies.php");
 $email = $_SESSION['email'];
-$message = "no";
+//$message = "no";
 
 if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     $q->bind_param('s', $email);
@@ -13,6 +13,57 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     $propics = $result->fetch_assoc();
 }
 
+if (isset($_POST['change_password'])) {
+    if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        if (password_verify($_POST['current_password'], $user['Password'])) {
+
+            $password = $_POST['new_password'];
+            $password_again = $_POST['confirm_password'];
+
+            if (strlen($password) >= 8 && strpbrk($password, "!#$.,:;()")) {
+
+                if (strlen($password) <= 50) {
+
+                    if ($password === $password_again) {
+
+                        if ($stmt1 = $conn->prepare('UPDATE Utente SET Password = ? WHERE Email = ?')) {
+
+                            $password = password_hash($password, PASSWORD_BCRYPT);
+                            $stmt1->bind_param('ss', $password, $email);
+                            $stmt1->execute();
+
+                            $_SESSION['success_msg'] = "Password cambiata con successo";
+                            header("Location: edit_profile.php");
+                            exit;
+
+                        } else {
+                            $_SESSION['error_msg'] = "Errore durante l'aggiornamento";
+                        }
+
+                    } else {
+                        $_SESSION['error_msg'] = "Le password non corrispondono";
+                    }
+
+                } else {
+                    $_SESSION['error_msg'] = "Password troppo lunga";
+                }
+
+            } else {
+                $_SESSION['error_msg'] = "Password non sicura";
+            }
+
+        } else {
+            $_SESSION['error_msg'] = "Password attuale errata";
+        }
+
+    }
+}
+                       
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +77,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     <link rel="stylesheet" href="../css/edit_profile.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/messaggi.css">
 </head>
 
 <body>
@@ -33,8 +85,21 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     <div class="safe-area spaced-column">
             <div id="nav-placeholder">
                 <?php 
-                require_once( "../nav/nav.php"); ?>
+                require_once("../nav/nav.php"); ?>
             </div>
+    </div>
+    <div id = "messages">
+    <?php
+        if (isset($_SESSION['success_msg'])) {
+            echo '<p class="successo">' . $_SESSION['success_msg'] . '</p>';
+            unset($_SESSION['success_msg']);
+        }
+
+        if (isset($_SESSION['error_msg'])) {
+            echo '<p class="errore">' . $_SESSION['error_msg'] . '</p>';
+            unset($_SESSION['error_msg']);
+        }
+    ?>
     </div>
 
      <div class="safe-area">
@@ -47,18 +112,6 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                     <li><a href="#password-reset">
                             <div class="section"><span>Change Password</span></div>
                         </a></li>
-
-                    <!--
-                    <li><a href="#email-noti" class="blur">
-                            <div class="section"><span>Email Notification</span></div>
-                        </a></li>
-                    <li><a href="#push-noti" class="blur">
-                            <div class="section"><span>Push Notification</span></div>
-                        </a></li>
-                    <li><a href="#privacy-settings" class="blur">
-                            <div class="section"><span>Privacy</span></div>
-                        </a></li>
-                    -->
                 </ul>
             </div>
             <div class="settings">
@@ -83,7 +136,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
 
                         echo "
                         <div class='edit-profile-parameter'>
-                            <img src='" . $root ."/img/users/" . $propics["propic"] . "' alt=''>
+                            <img src='../img/users/" . $propics["propic"] . "' alt=''>
                             <span class='edit-action'>Cambia Immagine</span>
                             <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data'>
                                 <input type='file' name='image'>
@@ -91,78 +144,10 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                             </form>
                         </div>";
                         ?>
-                        <?php
-                        if (isset($_SESSION['error_msg'])) {
-                            echo "<p style='color:red'>" . $_SESSION['error_msg'] . "</p>";
-                            unset($_SESSION['error_msg']);
-                        }
-                        ?>
-
-
-                    <!--
-                        <div class="edit-phone-parameter">
-                            <span>Phone Number</span>
-                            <p class="phone-number">+39 111 111 1111</p>
-                            <a href="" class="edit-action">edit</a>
-                        </div>
-                        <div class="personal-parameter">
-                            <div class="edit-personal-parameter">
-                                <span>Gender</span>
-                                <p>male/female</p>
-                            </div>
-
-                            <div class="edit-personal-parameter">
-                                <span>Birth Date</span>
-                                <p>mm/dd/yy</p>
-                            </div>
-                        </div>
-
-                        -->
+                    
 
                     </div>
-                </div>
-                <?php
-                if (isset($_POST['change_password'])) {
-                    if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
-                        $stmt->bind_param('s', $email);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-                        $user = $result->fetch_assoc();
-
-                        if (password_verify($_POST['current_password'], $user['Password'])) {
-                            $password = $_POST['new_password'];
-                            $password_again = $_POST['confirm_password'];
-
-                            if (strlen($password) >= 8 && strpbrk($password, "!#$.,:;()")) {
-                                if (strlen($password) <= 50) {
-                                    if ($password === $password_again) {
-                                        if ($stmt1 = $conn->prepare('UPDATE Utente SET Password = ? where Email = ?')) {
-                                            $password = password_hash($password, PASSWORD_BCRYPT);
-                                            $stmt1->bind_param('ss', $password, $email);
-                                            $stmt1->execute();
-                                            $message = '<h2 style="color: #2ac32d;">Password cambiata!</h2>';
-                                        } else {
-                                            $message = '<h2 style="color: red;">Errore, operazione fallita</h2>';
-                                        }
-                                    } else {
-                                        $message = '<h2 style="color: red;">Le password non corrispondono, si prega di riprovare</h2>';
-                                    }
-                                } else {
-                                    $message = '<h2 style="color: red;">La password supera il limite di lunghezza</h2>';
-                                }
-                            } else {
-                                $message = '<h2 style="color: red;">La password non soddisfa i requisiti minimi di sicurezza</h2>';
-                            }
-                        } else {
-                            $message = '<h2 style="color: red;">Incorrect password</h2>';
-                        }
-
-                        $stmt->close();
-                    } else {
-                        $message = '<h2 style="color: red;">Errore, operazione fallita</h2>';
-                    }
-                }
-                ?>
+                </div>                
 
                 <div class="settings-section" id="password-reset">
                     <div class="settings-profile-info">
@@ -182,116 +167,11 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                                     <input type="password" name="confirm_password" class="password">
                                 </div>
                                 <input type="submit" name="change_password" value="Confirm">
-                                <?php
-                                if ($message != "no") {
-                                    echo $message;
-                                }
-                                ?>
+                                
                             </form>
                         </div>
                     </div>
                 </div>
-
-            <!--
-                <div class="settings-section blur" id="email-noti">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">FeedBack Emails</span>
-                            <div class="radio-option">
-                                <label><input type="radio" name="Feedback" value="On">On</label>
-                                <label><input type="radio" name="Feedback" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti email per aggiornarti sulle
-                        azioni relative al tuo account?</p>
-                </div>
-
-                <div class="settings-section blur">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">Reminder Emails</span>
-                            <div class="radio-option">
-                                <label><input type="radio" name="Reminder" value="On">On</label>
-                                <label><input type="radio" name="Reminder" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a "Biblioteca Alexandria di inviarti email riguardanti promemoria
-                        relativi al tuo account?</p>
-                </div>
-
-                <div class="settings-section blur">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">News Emails</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="News" value="On">On</label>
-                                <label for=""><input type="radio" name="News" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti email riguardanti nuove
-                        aggiunte all interno della libereria della tua scuola?</p>
-                </div>
-
-                <div class="settings-section blur" id="push-noti">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">FeedBack Notification</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="Feedback-noti" value="On">On</label>
-                                <label for=""><input type="radio" name="Feedback-noti" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti notifiche per aggiornarti
-                        sulle azioni relative al tuo account?</p>
-                </div>
-
-                <div class="settings-section blur">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">Reminder Notification</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="Reminder-noti" value="On">On</label>
-                                <label for=""><input type="radio" name="Reminder-noti" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti notifiche riguardanti
-                        promemoria relativi al tuo account?</p>
-                </div>
-
-                <div class="settings-section blur">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">News Notification</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="News-noti" value="On">On</label>
-                                <label for=""><input type="radio" name="News-noti" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di inviarti notifiche riguardanti nuove
-                        aggiunte all interno della libereria della tua scuola?</p>
-                </div>
-
-                <div class="settings-section blur" id="privacy-settings">
-                    <div class="settings-profile-info">
-                        <div class="radio-section">
-                            <span class="section-title">Private Account</span>
-                            <div class="radio-option">
-                                <label for=""><input type="radio" name="Privacy" value="On">On</label>
-                                <label for=""><input type="radio" name="Privacy" value="Off">Off</label>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="section-explain">Consenti a Biblioteca Alexandria di vedere le tue informazioni personali
-                        durante la revisione delle segnalazioni</p>
-                </div>
-            -->
-
             </div>
         </div>
     </div>

@@ -16,20 +16,21 @@ a { text-decoration: none; }
 }
 
 .safe-area {
-  width: 85vw;
+  width: 100%;
   margin: auto;
 }
 
 .container {
-  margin: 35px auto 0;
+  margin: 35px 0 0;
   display: flex;
+  gap: 15px;
+  padding: 0 30px;
 }
 
 .edit-section {
-  width: 200px;
+  flex: 0 0 20%;
   border: 1px solid var(--border);
   border-radius: 7px;
-  margin-right: 15px;
   height: 85vh;
 }
 
@@ -52,7 +53,7 @@ a { text-decoration: none; }
 }
 
 .settings {
-  width: 70vw;
+  flex: 1;
   border: 1px solid var(--border);
   border-radius: 7px;
   display: flex;
@@ -92,24 +93,29 @@ a { text-decoration: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 12px;
+  width: 100%;
 }
 
 .edit-profile-parameter img {
   width: 80px;
   border-radius: 50%;
   margin-bottom: 8px;
+  margin-top: -20px;
 }
 
 .edit-action {
-  color: var(--editaction);
+  color: var(--text);
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 1.10rem;
   pointer-events: none;
 }
 
+/*
 .edit-action:hover {
   color: var(--editaction-hover);
 }
+  */
 
 .edit-phone-parameter,
 .edit-personal-parameter {
@@ -183,6 +189,53 @@ a { text-decoration: none; }
 .settings::-webkit-scrollbar-thumb {
   background: rgba(0,0,50,0.4);
   border-radius: 10px;
+}
+
+
+
+button[type="submit"], input[type="submit"] {
+  background-color: var(--editaction);
+  border: none;
+  border-radius: 25px; 
+  padding: 10px 24px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
+}
+
+button[type="submit"]:hover, input[type="submit"]:hover {
+  background-color: var(--editaction-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button[type="submit"]:active, input[type="submit"]:active {
+  transform: translateY(0);
+}
+
+input[type="file"] {
+  font-size: 0.8rem;
+  color: var(--sectiontext);
+  max-width: 220px;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+  background-color: transparent;
+  color: var(--text, #333);
+  border: 1px solid var(--border, #ccc);
+  border-radius: 15px;
+  padding: 6px 12px;
+  margin-right: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: var(--darkerbackground);
 }
 
 @media (max-width: 768px) {
