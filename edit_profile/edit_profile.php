@@ -4,7 +4,7 @@ $root = '..';
 require_once("../utils/connect.php");
 require_once("../auth/cookies.php");
 $email = $_SESSION['email'];
-$message = "no";
+//$message = "no";
 
 if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     $q->bind_param('s', $email);
@@ -13,6 +13,57 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     $propics = $result->fetch_assoc();
 }
 
+if (isset($_POST['change_password'])) {
+    if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        if (password_verify($_POST['current_password'], $user['Password'])) {
+
+            $password = $_POST['new_password'];
+            $password_again = $_POST['confirm_password'];
+
+            if (strlen($password) >= 8 && strpbrk($password, "!#$.,:;()")) {
+
+                if (strlen($password) <= 50) {
+
+                    if ($password === $password_again) {
+
+                        if ($stmt1 = $conn->prepare('UPDATE Utente SET Password = ? WHERE Email = ?')) {
+
+                            $password = password_hash($password, PASSWORD_BCRYPT);
+                            $stmt1->bind_param('ss', $password, $email);
+                            $stmt1->execute();
+
+                            $_SESSION['success_msg'] = "Password cambiata con successo";
+                            header("Location: edit_profile.php");
+                            exit;
+
+                        } else {
+                            $_SESSION['error_msg'] = "Errore durante l'aggiornamento";
+                        }
+
+                    } else {
+                        $_SESSION['error_msg'] = "Le password non corrispondono";
+                    }
+
+                } else {
+                    $_SESSION['error_msg'] = "Password troppo lunga";
+                }
+
+            } else {
+                $_SESSION['error_msg'] = "Password non sicura";
+            }
+
+        } else {
+            $_SESSION['error_msg'] = "Password attuale errata";
+        }
+
+    }
+}
+                       
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +77,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
     <link rel="stylesheet" href="../css/edit_profile.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/nav.css">
-    <link rel="stylesheet" href="../css/popup.css">
+    <link rel="stylesheet" href="../css/messaggi.css">
 </head>
 
 <body>
@@ -36,6 +87,19 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                 <?php 
                 require_once("../nav/nav.php"); ?>
             </div>
+    </div>
+    <div id = "messages">
+    <?php
+        if (isset($_SESSION['success_msg'])) {
+            echo '<p class="successo">' . $_SESSION['success_msg'] . '</p>';
+            unset($_SESSION['success_msg']);
+        }
+
+        if (isset($_SESSION['error_msg'])) {
+            echo '<p class="errore">' . $_SESSION['error_msg'] . '</p>';
+            unset($_SESSION['error_msg']);
+        }
+    ?>
     </div>
 
      <div class="safe-area">
@@ -80,57 +144,10 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                             </form>
                         </div>";
                         ?>
-                        <?php
-                        if (isset($_SESSION['error_msg'])) {
-                            echo "<p style='color:red'>" . $_SESSION['error_msg'] . "</p>";
-                            unset($_SESSION['error_msg']);
-                        }
-                        ?>
+                    
 
                     </div>
-                </div>
-                <?php
-                if (isset($_POST['change_password'])) {
-                    if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
-                        $stmt->bind_param('s', $email);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-                        $user = $result->fetch_assoc();
-
-                        if (password_verify($_POST['current_password'], $user['Password'])) {
-                            $password = $_POST['new_password'];
-                            $password_again = $_POST['confirm_password'];
-
-                            if (strlen($password) >= 8 && strpbrk($password, "!#$.,:;()")) {
-                                if (strlen($password) <= 50) {
-                                    if ($password === $password_again) {
-                                        if ($stmt1 = $conn->prepare('UPDATE Utente SET Password = ? where Email = ?')) {
-                                            $password = password_hash($password, PASSWORD_BCRYPT);
-                                            $stmt1->bind_param('ss', $password, $email);
-                                            $stmt1->execute();
-                                            $message = '<h2 style="color: #2ac32d;">Password cambiata!</h2>';
-                                        } else {
-                                            $message = '<h2 style="color: red;">Errore, operazione fallita</h2>';
-                                        }
-                                    } else {
-                                        $message = '<h2 style="color: red;">Le password non corrispondono, si prega di riprovare</h2>';
-                                    }
-                                } else {
-                                    $message = '<h2 style="color: red;">La password supera il limite di lunghezza</h2>';
-                                }
-                            } else {
-                                $message = '<h2 style="color: red;">La password non soddisfa i requisiti minimi di sicurezza</h2>';
-                            }
-                        } else {
-                            $message = '<h2 style="color: red;">Incorrect password</h2>';
-                        }
-
-                        $stmt->close();
-                    } else {
-                        $message = '<h2 style="color: red;">Errore, operazione fallita</h2>';
-                    }
-                }
-                ?>
+                </div>                
 
                 <div class="settings-section" id="password-reset">
                     <div class="settings-profile-info">
@@ -150,11 +167,7 @@ if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
                                     <input type="password" name="confirm_password" class="password">
                                 </div>
                                 <input type="submit" name="change_password" value="Confirm">
-                                <?php
-                                if ($message != "no") {
-                                    echo $message;
-                                }
-                                ?>
+                                
                             </form>
                         </div>
                     </div>

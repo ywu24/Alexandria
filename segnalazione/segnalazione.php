@@ -83,6 +83,14 @@
         <?php 
         require_once("../nav/nav.php"); ?>
     </div>
+    <div id = "messages">
+
+
+
+
+    
+    </div>
+
 
   <div class="centered-form">
     <div class="form-container mt-5">
