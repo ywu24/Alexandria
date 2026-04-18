@@ -33,18 +33,18 @@ error_reporting(E_ALL);
 <body>
 
     <div id="nav-placeholder">
-        <?php 
-        require_once("../nav/nav.php"); ?>    
+        <?php
+        require_once("../nav/nav.php"); ?>
     </div>
 
     <center>
         <h1>Prenotazione Libro</h1>
     </center>
     <div class="container">
-    <?php
+        <?php
 
         if (isset($_SESSION['email'])) {
-        }else{
+        } else {
             header("Location: ../index.php");
         }
         $table = "Prenotazione";
@@ -67,45 +67,45 @@ error_reporting(E_ALL);
             if ($row['Stato'] == 0) {
                 $stato = "Prenotato";
                 $color = "#ff7600";
-            }else if($row['Stato'] == 1){
+            } else if ($row['Stato'] == 1) {
                 $stato = "In Prestito";
                 $color = "green";
-            }else if($row['Stato'] == 2){
+            } else if ($row['Stato'] == 2) {
                 $stato = "In ritardo";
                 $color = "red";
-            }else if($row['Stato'] == 3){
+            } else if ($row['Stato'] == 3) {
                 $stato = "Riconsegnare";
                 $color = "#ff7600";
-            }else if($row['Stato'] == 4){
+            } else if ($row['Stato'] == 4) {
                 $stato = "Riconsegnato";
                 $color = "#686868";
             }
 
             echo "<h1>" . $numero_prenotazioni . "</h1>" .
-            "<div class='book-container'>
+                "<div class='book-container'>
             <div class='book-link'>
-                <img src='" . $root . $row['Copertina']."' alt=''  class='book-cover' width='160px'>
+                <img src='" . $root . $row['Copertina'] . "' alt=''  class='book-cover' width='160px'>
                 <div class='book-section'>
-                    <h3>" . $row['Nome']. "</h3>
+                    <h3>" . $row['Nome'] . "</h3>
                     <div class='info-release'><h5>" . $row['Autore'] . "</h5> <span>|</span> <h5>" . $row['CasaEditrice'] . "</h5> <span>|</span> <h5>Stato:</h5> <h5 class='status' style='color:$color'>" . $stato . "</h5></div>
                     <form action=''><span>inizio prenotazione:</span><span>" . $row['Inizio'] . "</span></form>
                     <form action=''><span>fine prenotazione:</span><span>" . $row['Fine'] . "</span></form>
                     ";
-                if($row['Stato'] == 0){
-                    echo "<form action='prenotazione.php?id=".$row['idPrenotazione']."' method='post'><button class='delete-button' name='delete'><img src='../img/trash-bin.png' alt='' class='icon1' style='position: relative' width='24px'></button></form><br>";
-                }
-                if($row['Stato'] == 1){
-                    echo "
-                    <form class='form' action='prenotazione.php?id=".$row['idPrenotazione']."' method='post'><button name='termina' width='24px'>Termina Prenotazione</button>
+            if ($row['Stato'] == 0) {
+                echo "<form action='prenotazione.php?id=" . $row['idPrenotazione'] . "' method='post'><button class='delete-button' name='delete'><img src='../img/trash-bin.png' alt='' class='icon1' style='position: relative' width='24px'></button></form><br>";
+            }
+            if ($row['Stato'] == 1) {
+                echo "
+                    <form class='form' action='prenotazione.php?id=" . $row['idPrenotazione'] . "' method='post'><button name='termina' width='24px'>Termina Prenotazione</button>
                     ";
             }
             echo "
                 </div>
             </div>
             </div>";
-            
-            }
-        if($numero_prenotazioni==0){
+
+        }
+        if ($numero_prenotazioni == 0) {
             header("Location: ../lista/lista.php?errore=1");
             exit();
         }

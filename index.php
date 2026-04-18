@@ -384,8 +384,8 @@ require_once("utils/connect.php");
         $utente = ['Nome' => '', 'Cognome' => '', 'propic' => 'userDashFavicon.png'];
         $email = 'eg@example.com';
         $pTotali = ['totali' => 0];
-        $p_inCorso = ['incorso'=> 0];
-        $p_riconsegnate = ['riconsegnate'=> 0];
+        $p_inCorso = ['incorso' => 0];
+        $p_riconsegnate = ['riconsegnate' => 0];
     }
 
 

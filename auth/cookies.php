@@ -2,7 +2,7 @@
 if (!isset($_SESSION['email'])) {
 
     if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
-        
+
         require_once($root . "/utils/connect.php");
         if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
             $stmt->bind_param('s', $_COOKIE['email']);

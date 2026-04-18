@@ -63,7 +63,7 @@ if (isset($_POST['change_password'])) {
 
     }
 }
-                       
+
 ?>
 
 <!DOCTYPE html>
@@ -83,13 +83,13 @@ if (isset($_POST['change_password'])) {
 <body>
 
     <div class="safe-area spaced-column">
-            <div id="nav-placeholder">
-                <?php 
-                require_once("../nav/nav.php"); ?>
-            </div>
+        <div id="nav-placeholder">
+            <?php
+            require_once("../nav/nav.php"); ?>
+        </div>
     </div>
-    <div id = "messages">
-    <?php
+    <div id="messages">
+        <?php
         if (isset($_SESSION['success_msg'])) {
             echo '<p class="successo">' . $_SESSION['success_msg'] . '</p>';
             unset($_SESSION['success_msg']);
@@ -99,10 +99,10 @@ if (isset($_POST['change_password'])) {
             echo '<p class="errore">' . $_SESSION['error_msg'] . '</p>';
             unset($_SESSION['error_msg']);
         }
-    ?>
+        ?>
     </div>
 
-     <div class="safe-area">
+    <div class="safe-area">
         <div class="container">
             <div class="edit-section">
                 <ul>
@@ -144,10 +144,10 @@ if (isset($_POST['change_password'])) {
                             </form>
                         </div>";
                         ?>
-                    
+
 
                     </div>
-                </div>                
+                </div>
 
                 <div class="settings-section" id="password-reset">
                     <div class="settings-profile-info">
@@ -167,7 +167,7 @@ if (isset($_POST['change_password'])) {
                                     <input type="password" name="confirm_password" class="password">
                                 </div>
                                 <input type="submit" name="change_password" value="Confirm">
-                                
+
                             </form>
                         </div>
                     </div>
@@ -176,7 +176,7 @@ if (isset($_POST['change_password'])) {
         </div>
     </div>
 
-    
+
 </body>
 
 </html>

@@ -5,8 +5,7 @@ if (file_exists(__DIR__ . '/../.env')) {
     foreach ($env as $key => $value) {
         putenv("$key=$value");
     }
-}
-else {
+} else {
     exit('Error: .env file not found');
 }
 

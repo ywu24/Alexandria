@@ -70,7 +70,7 @@
                 echo '<h2 style="color: red;">Utente già registrato. <a style="color: #2ac32d;" href="login.php">Accedi</a></h2>';
               } else {
                 $password = $_POST['password'];
-                if (strlen($password) >= 8 && strpbrk($password, "!#$.,:;()")) {  
+                if (strlen($password) >= 8 && strpbrk($password, "!#$.,:;()")) {
                   if (strlen($password) <= 50) {
                     if ($password === $_POST['passwordAgain']) {
                       if ($stmt1 = $conn->prepare('INSERT INTO Utente (Email,Nome,Cognome,Password,Utenza) VALUES(?,?,?,?,?)')) {

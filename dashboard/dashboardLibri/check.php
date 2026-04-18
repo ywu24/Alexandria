@@ -7,7 +7,7 @@ if (isset($_POST['check'])) {
     $isbn = $_POST['isbn-check'];
 
     // Controllo se il libro esiste già nel database
-    try{
+    try {
         if ($stmt = $conn->prepare('SELECT * FROM Opera WHERE ISBN = ?')) {
             $stmt->bind_param('s', $isbn);
             $stmt->execute();
@@ -22,11 +22,10 @@ if (isset($_POST['check'])) {
         } else {
             echo "Errore durante controllo: " . $conn->error;
         }
-    } catch(PDOException $e){
+    } catch (PDOException $e) {
         echo "Errore durante controllo: " . $conn->error;
-    }
-    finally{
-    // Chiudo la connessione al database
+    } finally {
+        // Chiudo la connessione al database
         $conn->close();
     }
 }
