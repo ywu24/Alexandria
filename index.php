@@ -298,7 +298,7 @@ require_once("utils/connect.php");
 
             if ($count != 0) {
                 $prenotazione = mysqli_fetch_assoc($result2);
-                $idPrenotazione = $prenotazione2['idPrenotazione'];
+                $idPrenotazione = $prenotazione['idPrenotazione'];
                 if ($prenotazione['Stato'] == 0) {
                     $stato = "Prenotato";
                     $color = "#ff7600";
