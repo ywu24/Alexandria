@@ -20,7 +20,7 @@ if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
 if (isset($_POST['createDummy'])) {
 	$isbnDummy = rand(1000000000000, 9999999999999);
 	$sql = "INSERT INTO Opera (`ISBN`, `Nome`, `Autore`, `Genere`, `Descrizione`, `Copertina`, `CasaEditrice`, `AnnoPubblicazione`)
-		VALUES ($isbnDummy, 'Dummy', 'Dummy', 'Umoristico', 'DummyDummyDummy',  '/img/books/default.jpg', 'Dummy', 1984)";
+		VALUES ($isbnDummy, 'Dummy', 'Dummy', 'Umoristico', 'DummyDummyDummy',  'default.jpg', 'Dummy', 1984)";
 
 	$sql2 = "INSERT INTO copiaLibro (`ISBN`, `Stato`) VALUES ($isbnDummy, '1')";
 
