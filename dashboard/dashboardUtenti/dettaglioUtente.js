@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     html += `
                     <div class='book-container' '>
                         <div class='book-link'>
-                            <img src='../../${row.Copertina}' class='book-cover' width='160px'>
+                            <img src='../../img/books/${row.Copertina}' class='book-cover' width='160px'>
                             <div class='book-section'>
                                 <h3>${row.Nome}</h3>
                                 <div class='info-release'>

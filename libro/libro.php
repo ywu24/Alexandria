@@ -126,7 +126,7 @@ require_once("../auth/cookies.php");
             echo "<main>
                <div class='container'>
                    <div class='left-column'>
-                       <img src='" . $root . $book['Copertina'] . "' alt='Copertina Libro' >
+                       <img src='../img/books/" . $book['Copertina'] . "' alt='Copertina Libro' >
                    </div>
                    <div class='right-column'>
                        <div class='info'>

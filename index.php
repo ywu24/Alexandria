@@ -67,7 +67,7 @@ require_once("utils/connect.php");
                                 <div class='slider__item-content'>
                                 <div class='left-column'>
                                 <a href='libro/libro.php?id=" . $row['id'] . "'>
-                                    <img src='" . $root . $row['Copertina'] . "' alt='' class='cover'>
+                                    <img src='./img/books/" . $row['Copertina'] . "' alt='' class='cover'>
                                 </a>
                                 </div>
 
@@ -119,7 +119,7 @@ require_once("utils/connect.php");
                             <div class='slider__item-content'>
                             <div class='left-column'>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
-                                <img src='" . $root . $row['Copertina'] . "' alt='' class='cover'>
+                                <img src='./img/books/" . $row['Copertina'] . "' alt='' class='cover'>
                             </a>
                             </div>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
@@ -171,7 +171,7 @@ require_once("utils/connect.php");
                             <div class='slider__item-content'>
                             <div class='left-column'>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
-                                <img src='" . $root . $row['Copertina'] . "' alt='' class='cover'>
+                                <img src='./img/books/" . $row['Copertina'] . "' alt='' class='cover'>
                                 </a>
                             </div>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
@@ -266,7 +266,7 @@ require_once("utils/connect.php");
                     <div class='info-prenotazioni'>
                     <h2 class='ultime-prenotazioni'>Ultime Prenotazioni</h2>
                         <div class='book-prenotation'>
-                            <img src='" . $root . $prenotazione['Copertina'] . "' alt='' class='cover'>
+                            <img src='./img/books/" . $prenotazione['Copertina'] . "' alt='' class='cover'>
 
                             <div class='book-right-column'>
                                 <h4>" . $prenotazione['Nome'] . "</h4>
@@ -318,7 +318,7 @@ require_once("utils/connect.php");
 
                 echo "
                             <div class='book-prenotation'>
-                                <img src='" . $root . $prenotazione['Copertina'] . "' alt='' class='cover'>
+                                <img src='./img/books/" . $prenotazione['Copertina'] . "' alt='' class='cover'>
                                 <div class='book-right-column'>
                                     <h4>" . $prenotazione['Nome'] . "</h4>
                                     <span>" . $prenotazione['Autore'] . "</span>
