@@ -1,7 +1,7 @@
-document.addEventListener("click", async(e) =>{ 
-    
-    if (e.target.classList.contains("save")){   //pulsante per Salva
-        
+document.addEventListener("click", async (e) => {
+
+    if (e.target.classList.contains("save")) {   //pulsante per Salva
+
         const button = e.target;
 
         // trovo la riga (td)
@@ -10,10 +10,10 @@ document.addEventListener("click", async(e) =>{
 
         // prendo input dentro la stessa riga
         const inputs = cell.getElementsByTagName("input");
-        for (input of inputs){
+        for (input of inputs) {
 
             let copie = input.value;
-            if(copie<0){
+            if (copie < 0) {
                 //showMessage("ERRORE: il numero inserito deve essere positivo o al più uguale zero!", "errore");
                 //return;
             }
@@ -33,28 +33,28 @@ document.addEventListener("click", async(e) =>{
             const result = await response.text();
 
             console.log(result)
-            if(result.includes("ignora")){
-               
+            if (result.includes("ignora")) {
+
             }
-            else if(result.includes("ok")){
+            else if (result.includes("ok")) {
                 showMessage(result.slice(2));
                 const btnEspandi = document.querySelector(`.btn-espandi[data-isbn="${isbn}"]`);
-                if(btnEspandi) {
+                if (btnEspandi) {
                     btnEspandi.click();
                     btnEspandi.click();
                 }
             }
-          
-            else{
-                 showMessage(result, "errore");
+
+            else {
+                showMessage(result, "errore");
             }
         }
-    } 
-    else if(e.target.classList.contains("delete")) { //pulsante per Elimina (elimina_copie)
-        
+    }
+    else if (e.target.classList.contains("delete")) { //pulsante per Elimina (elimina_copie)
+
         const button = e.target;
-        const row  = button.closest("tr");
-        const id =row.dataset.id;
+        const row = button.closest("tr");
+        const id = row.dataset.id;
         const formData = new FormData();
         formData.append("id", id);
         console.log(id);
@@ -64,22 +64,22 @@ document.addEventListener("click", async(e) =>{
         });
         const result = await response.text();
         console.log(result)
-            if(result.includes("ignora")){
-               
+        if (result.includes("ignora")) {
+
+        }
+        else if (result.includes("ok")) {
+            showMessage(result.slice(2));
+            const btnEspandi = document.querySelector(`.btn-espandi[data-isbn="${isbn}"]`);
+            if (btnEspandi) {
+                btnEspandi.click();
+                btnEspandi.click();
             }
-            else if(result.includes("ok")){
-                showMessage(result.slice(2));
-                const btnEspandi = document.querySelector(`.btn-espandi[data-isbn="${isbn}"]`);
-                if(btnEspandi) {
-                    btnEspandi.click();
-                    btnEspandi.click();
-                }
-            }
-          
-            else{
-                 showMessage(result, "errore");
-            }
-    } 
+        }
+
+        else {
+            showMessage(result, "errore");
+        }
+    }
 });
 
 function showMessage(text, type = "successo") {
@@ -101,7 +101,7 @@ function showMessage(text, type = "successo") {
 document.addEventListener('DOMContentLoaded', () => {
     // Rendiamo la funzione di callback 'async' per poter usare 'await'
     document.querySelector('table').addEventListener('click', async function eventHandler(e) {
-        
+
         if (e.target && e.target.classList.contains('btn-espandi')) {
             const btn = e.target;
             const isbn = btn.getAttribute('data-isbn');
@@ -115,11 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.replace('btn-danger', 'btn-info');
             } else {
                 btn.textContent = '...';
-                
+
                 try {
                     const formData = new FormData();
                     formData.append("isbn", isbn);
-               
+
                     // Chiamata Fetch con metodo POST
                     const response = await fetch(`get_copie.php`, {
                         method: "POST",
@@ -128,12 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (!response.ok) throw new Error("Errore di rete");
 
-                    const data = await response.json(); 
+                    const data = await response.json();
 
                     console.log(data); //////////////////////
                     // Passiamo sia il contenitore che i dati
                     renderCopie(contentDiv, data, e);
-                    
+
                     targetRow.style.display = 'table-row';
                     btn.textContent = '-';
                     btn.classList.replace('btn-info', 'btn-danger');
@@ -168,49 +168,49 @@ function renderCopie(container, copie, e) {
             <tbody>`;
 
 
-for (let copia of copie) {
-    console.log("copia : [" + copia.idCopia + " " + copia.Stato + "]");
-    
-    let statoTesto = 'Non Disponibile';
-    let badgeClass = 'badge-danger';
-    let btnClass = 'btn-outline-secondary';
-    let action = "eliminaLibo.php?"+copia.idCopia;
-    let dettagli = ""
-    let disabled = "";
+    for (let copia of copie) {
+        console.log("copia : [" + copia.idCopia + " " + copia.Stato + "]");
 
-    if (copia.Stato == '1') {
-        // Caso: DISPONIBILE (Può essere eliminato)
-        badgeClass = 'badge-success';
-        statoTesto = 'Disponibile';
-        btnClass = 'btn-outline-danger  delete';
-        action = "";
-         
-        
-    } else {
-        // Caso: IN PRESTITO (Mostra errore al click)
-        disabled = "disabled";
-        action = "showMessage('Non puoi eliminare libri attualmente in prestito!', 'errore'); eventHandler(e);";
-       
-        dettagli = '<button class="btn btn-sm btn-warning" onclick=>' +
-                        '<i class="fas fa-exclamation-triangle"></i> Dettagli' +
-                    '</button> ';
+        let statoTesto = 'Non Disponibile';
+        let badgeClass = 'badge-danger';
+        let btnClass = 'btn-outline-secondary';
+        let action = "eliminaLibo.php?" + copia.idCopia;
+        let dettagli = ""
+        let disabled = "";
+
+        if (copia.Stato == '1') {
+            // Caso: DISPONIBILE (Può essere eliminato)
+            badgeClass = 'badge-success';
+            statoTesto = 'Disponibile';
+            btnClass = 'btn-outline-danger  delete';
+            action = "";
+
+
+        } else {
+            // Caso: IN PRESTITO (Mostra errore al click)
+            disabled = "disabled";
+            action = "showMessage('Non puoi eliminare libri attualmente in prestito!', 'errore'); eventHandler(e);";
+
+            dettagli = '<button class="btn btn-sm btn-warning" onclick=>' +
+                '<i class="fas fa-exclamation-triangle"></i> Dettagli' +
+                '</button> ';
+        }
+
+        // Costruiamo la riga
+        html += '<tr data-id="' + copia.idCopia + '" >' +
+            '<td><strong>#' + copia.idCopia + '</strong></td>' +
+            '<td><span class="badge ' + badgeClass + '">' + statoTesto + '</span></td>' +
+            '<td class="text-right">' +
+            // Pulsante Segnala (Giallo)
+            dettagli +
+            // Pulsante Elimina (Dinamico)
+            '<button class="btn btn-sm  ' + btnClass + '" ' + disabled + '  onclick="' + action + '">' +
+            '<i class="fas fa-trash"></i> Elimina' +
+            '</button>' +
+            '</td>' +
+            '</tr>';
     }
 
-    // Costruiamo la riga
-    html += '<tr data-id="' + copia.idCopia+'" >' +
-                '<td><strong>#' + copia.idCopia + '</strong></td>' +
-                '<td><span class="badge ' + badgeClass + '">' + statoTesto + '</span></td>' +
-                '<td class="text-right">' +
-                    // Pulsante Segnala (Giallo)
-                    dettagli+
-                    // Pulsante Elimina (Dinamico)
-                    '<button class="btn btn-sm  ' + btnClass + '" ' + disabled +'  onclick="' + action + '">' +
-                        '<i class="fas fa-trash"></i> Elimina' +
-                    '</button>' +
-                '</td>' +
-            '</tr>';
-}
-
-html += '</tbody></table>';
-container.innerHTML = html;
+    html += '</tbody></table>';
+    container.innerHTML = html;
 };

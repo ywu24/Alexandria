@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-$root= "../..";
+$root = "../..";
 $table1 = "Opera";
 require_once("../../auth/cookies.php");
 require_once("../../utils/connect.php");
@@ -18,7 +18,7 @@ if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
 
 
 if (isset($_POST['createDummy'])) {
-	$isbnDummy = rand(1000000000000,9999999999999);
+	$isbnDummy = rand(1000000000000, 9999999999999);
 	$sql = "INSERT INTO Opera (`ISBN`, `Nome`, `Autore`, `Genere`, `Descrizione`, `Copertina`, `CasaEditrice`, `AnnoPubblicazione`)
 		VALUES ($isbnDummy, 'Dummy', 'Dummy', 'Umoristico', 'DummyDummyDummy',  '/img/books/default.jpg', 'Dummy', 1984)";
 
@@ -26,16 +26,16 @@ if (isset($_POST['createDummy'])) {
 
 	if ($conn->query($sql) === TRUE) {
 		$conn->query($sql2);
-		
+
 		$_SESSION['success_msg'] = "Dummy aggiunto al database";
 		header("Location: dashboardLibri.php");
-		die(); 
+		die();
 	} else {
 		echo "<p class = 'errore'> Errore: " . $sql . "<br>" . $conn->error . "</p>";
 		header("Location: ../dashboard.php");
 	}
 }
-			?>
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,38 +60,38 @@ if (isset($_POST['createDummy'])) {
 
 <body>
 	<div id="nav-placeholder"><?php
-			
-			require_once("../../nav/nav.php");
-		?></div>
-	<div id = "messages">
-	<?php
-			if (isset($_SESSION['success_msg'])) {
-				echo '<p class= "successo">'. $_SESSION["success_msg"] . '</p>';
-				unset($_SESSION['success_msg']);
-			} else if (isset($_SESSION['error_msg'])) {
-				echo '<p class="errore">' . $_SESSION["error_msg"] . '</p>';
-				unset($_SESSION['error_msg']);
-			}
 
-			if(isset($_GET['errore'])){
-				if($_GET['errore']==1){
-					echo "<p class= 'errore'> Errore nell'update</p>";
-				}
+	require_once("../../nav/nav.php");
+	?></div>
+	<div id="messages">
+		<?php
+		if (isset($_SESSION['success_msg'])) {
+			echo '<p class= "successo">' . $_SESSION["success_msg"] . '</p>';
+			unset($_SESSION['success_msg']);
+		} else if (isset($_SESSION['error_msg'])) {
+			echo '<p class="errore">' . $_SESSION["error_msg"] . '</p>';
+			unset($_SESSION['error_msg']);
+		}
+
+		if (isset($_GET['errore'])) {
+			if ($_GET['errore'] == 1) {
+				echo "<p class= 'errore'> Errore nell'update</p>";
 			}
-			?>
+		}
+		?>
 	</div>
 	<div class="container-fluid">
 		<h1 class="text-center" style="font-size:4rem !important;">&#128218;</h1>
 		<br>
 		<center>
 			<!-- INSERT DI LIBRO RANDOM -->
-	
+
 			<form action="dashboardLibri.php" method='POST'>
 				<button class='btn btn-secondary' type='submit' name='createDummy'>CREA LIBRO RANDOM</button>
 			</form>
-			
 
-			
+
+
 		</center>
 
 		<form class="form-inline mx-auto" style="width: 300px;" action="dashboardLibri.php" method="post">
@@ -100,172 +100,169 @@ if (isset($_POST['createDummy'])) {
 			<input class="btn btn-outline-info my-2 my-sm-0" name="search_btn" type="submit" value="Cerca">
 		</form>
 		<div class="table-responsive">
-		<table class="table table-striped table-hover">
-			<thead class="thead-dark">
-				<form action="dashboardLibri.php" method="post">
-					<tr>
-						<th scope="col" name="test">ISBN<button class="sort_btn" name="sort_isbn">&ensp;
-								&#x25B2;</button></th>
-						<th scope="col">Titolo<button class="sort_btn" name="sort_nome">&ensp; &#x25B2;</button></th>
-						<th scope="col">Autore<button class="sort_btn" name="sort_autore">&ensp; &#x25B2;</button></th>
-						<th scope="col">Genere<button class="sort_btn" name="sort_genere">&ensp; &#x25B2;</button></th>
-						<th scope="col">Anno<button class="sort_btn" name="sort_anno">&ensp; &#x25B2;</button></th>
-						<th scope="col">Casa Editrice<button class="sort_btn" name="sort_casaeditrice">&ensp;
-								&#x25B2;</button></th>
-						<th scope="col">Copie<button class="sort_btn" name="sort_copies">&ensp; &#x25B2;</button></th>
-						<th scope="col">Azioni <div class="btn_adduser"><a href="aggiungiLibro.php"
-									class="btn btn-success ml-auto">Aggiungi libro</a></div>
-						</th>
-					</tr>
-				</form>
-			</thead>
-			<tbody>
-				<?php
-				
-				
-				$table2 = "copiaLibro";
-				switch (true) {
-					case isset($_POST['search_btn']):
-						$search_text = $_POST['search'];
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN WHERE Nome LIKE '%$search_text%' OR Autore LIKE '%$search_text%' OR Genere LIKE '%$search_text%' OR AnnoPubblicazione LIKE '%$search_text%' OR CasaEditrice LIKE '%$search_text%' OR $table1.ISBN LIKE '%$search_text%' GROUP BY $table1.ISBN") as $row) {
-								printLibri($row);
-							}
-							
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{
-							$conn->close();
-						}
-						break;
+			<table class="table table-striped table-hover">
+				<thead class="thead-dark">
+					<form action="dashboardLibri.php" method="post">
+						<tr>
+							<th scope="col" name="test">ISBN<button class="sort_btn" name="sort_isbn">&ensp;
+									&#x25B2;</button></th>
+							<th scope="col">Titolo<button class="sort_btn" name="sort_nome">&ensp; &#x25B2;</button>
+							</th>
+							<th scope="col">Autore<button class="sort_btn" name="sort_autore">&ensp; &#x25B2;</button>
+							</th>
+							<th scope="col">Genere<button class="sort_btn" name="sort_genere">&ensp; &#x25B2;</button>
+							</th>
+							<th scope="col">Anno<button class="sort_btn" name="sort_anno">&ensp; &#x25B2;</button></th>
+							<th scope="col">Casa Editrice<button class="sort_btn" name="sort_casaeditrice">&ensp;
+									&#x25B2;</button></th>
+							<th scope="col">Copie<button class="sort_btn" name="sort_copies">&ensp; &#x25B2;</button>
+							</th>
+							<th scope="col">Azioni <div class="btn_adduser"><a href="aggiungiLibro.php"
+										class="btn btn-success ml-auto">Aggiungi libro</a></div>
+							</th>
+						</tr>
+					</form>
+				</thead>
+				<tbody>
+					<?php
 
-					case isset($_POST['sort_isbn']):
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN ORDER BY $table1.ISBN") as $row) {
-								printLibri($row);
-							}
-							
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{
-							$conn->close();
-						}
-						break;
 
-					case isset($_POST['sort_copies']):
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN=$table2.ISBN GROUP BY $table1.ISBN ORDER BY copie DESC") as $row) {
-								printLibri($row);
-							}
-							
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{
-							$conn->close();
-						}
-						break;
+					$table2 = "copiaLibro";
+					switch (true) {
+						case isset($_POST['search_btn']):
+							$search_text = $_POST['search'];
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN WHERE Nome LIKE '%$search_text%' OR Autore LIKE '%$search_text%' OR Genere LIKE '%$search_text%' OR AnnoPubblicazione LIKE '%$search_text%' OR CasaEditrice LIKE '%$search_text%' OR $table1.ISBN LIKE '%$search_text%' GROUP BY $table1.ISBN") as $row) {
+									printLibri($row);
+								}
 
-					
-					case isset($_POST['sort_nome']):
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Nome") as $row) {
-								printLibri($row);
-							}
-							
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{
-							$conn->close();
-						}
-						break;
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
 
-					case isset($_POST['sort_autore']):
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Autore") as $row) {
-								printLibri($row);
-								
+							} finally {
+								$conn->close();
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{
-							$conn->close();
-						}
-						break;
+							break;
 
-					case isset($_POST['sort_genere']):
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Genere") as $row) {
-								printLibri($row);
-								
+						case isset($_POST['sort_isbn']):
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN ORDER BY $table1.ISBN") as $row) {
+									printLibri($row);
+								}
+
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+
+							} finally {
+								$conn->close();
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{
-							$conn->close();
-						}
-						break;
+							break;
 
-					case isset($_POST['sort_anno']):
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY AnnoPubblicazione") as $row) {
-								printLibri($row);
-								
+						case isset($_POST['sort_copies']):
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN=$table2.ISBN GROUP BY $table1.ISBN ORDER BY copie DESC") as $row) {
+									printLibri($row);
+								}
+
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+
+							} finally {
+								$conn->close();
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{$conn->close();}
-						
-						break;
+							break;
 
-					case isset($_POST['sort_casaeditrice']):
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY CasaEditrice") as $row) {
-								printLibri($row);
-								
+
+						case isset($_POST['sort_nome']):
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Nome") as $row) {
+									printLibri($row);
+								}
+
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+
+							} finally {
+								$conn->close();
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{
-							$conn->close();
-						}
-						break;
+							break;
 
-					default:
-						try {
-							foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN ") as $row) {
-								printLibri($row);
-								
+						case isset($_POST['sort_autore']):
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Autore") as $row) {
+									printLibri($row);
+
+								}
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+
+							} finally {
+								$conn->close();
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							
-						}
-						finally{
-							$conn->close();
-						}
-						break;
-				}
+							break;
 
-				function printLibri(&$row)
-				{
-					$isbn = $row['ISBN'];
-					echo "
+						case isset($_POST['sort_genere']):
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY Genere") as $row) {
+									printLibri($row);
+
+								}
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+
+							} finally {
+								$conn->close();
+							}
+							break;
+
+						case isset($_POST['sort_anno']):
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY AnnoPubblicazione") as $row) {
+									printLibri($row);
+
+								}
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+
+							} finally {
+								$conn->close();
+							}
+
+							break;
+
+						case isset($_POST['sort_casaeditrice']):
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN  ORDER BY CasaEditrice") as $row) {
+									printLibri($row);
+
+								}
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+
+							} finally {
+								$conn->close();
+							}
+							break;
+
+						default:
+							try {
+								foreach ($conn->query("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice, COUNT(idCopia) as copie FROM $table1 LEFT JOIN $table2 on $table1.ISBN = $table2.ISBN GROUP BY $table1.ISBN ") as $row) {
+									printLibri($row);
+
+								}
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+
+							} finally {
+								$conn->close();
+							}
+							break;
+					}
+
+					function printLibri(&$row)
+					{
+						$isbn = $row['ISBN'];
+						echo "
 					<tr data-isbn='$isbn'>
 						<th scope='row'>
 							<button class='btn btn-sm btn-info btn-espandi' type='button' data-isbn='$isbn'>
@@ -293,11 +290,11 @@ if (isset($_POST['createDummy'])) {
 							</div>
 						</td>
 					</tr>";
-				}
-				
-				?>
-			</tbody>
-		</table>
+					}
+
+					?>
+				</tbody>
+			</table>
 		</div>
 	</div>
 

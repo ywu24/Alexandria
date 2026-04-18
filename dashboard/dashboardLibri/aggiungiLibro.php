@@ -1,5 +1,5 @@
 <?php
-$root= "../..";
+$root = "../..";
 session_start();
 if (!isset($_SESSION['copia'])) {
 	$_SESSION['copia'] = false;
@@ -51,11 +51,11 @@ if (isset($_SESSION['libroEsiste'])) {
 
 <body>
 
-    <div id="nav-placeholder">
-        <?php 
-        require_once("../../nav/nav.php");
-		echo $msg; ?>    
-    </div>
+	<div id="nav-placeholder">
+		<?php
+		require_once("../../nav/nav.php");
+		echo $msg; ?>
+	</div>
 	<div class="container mt-5">
 
 		<h1>Aggiungi libro</h1>
@@ -74,7 +74,7 @@ if (isset($_SESSION['libroEsiste'])) {
 
 		<?php
 
-		
+
 
 		if ($_SESSION['copia']) {
 			echo '<form action="aggiungiLibro.php" method="post">

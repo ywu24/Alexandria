@@ -16,7 +16,7 @@ if (isset($_POST['propicIns'])) {
         header("Location: ../edit_profile.php");
         exit();
     }
-    
+
     //Recupera i dati del file inviato
     $file = $_FILES['image'];
     $file_name = $file['name'];
