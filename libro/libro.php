@@ -74,29 +74,42 @@ require_once("../auth/cookies.php");
             if (isset($_POST["prenota"])) {
 
                 if ($_SESSION['utenza'] == 3) {
-                    $nPrenotazioni = $_POST['sliderino'];
-                    for ($i = 0; $i < $nPrenotazioni; $i++) {
-                        if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
-                            $q2->bind_param('i', $book_id);
-                            $q2->execute();
-                            $result = $q2->get_result();
-                            $copiaPrenotata = $result->fetch_assoc();
+                    try {
+                        $nPrenotazioni = $_POST['sliderino'];
+                        for ($i = 0; $i < $nPrenotazioni; $i++) {
+                            if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
+                                $q2->bind_param('i', $book_id);
+                                $q2->execute();
+                                $result = $q2->get_result();
+                                $copiaPrenotata = $result->fetch_assoc();
+                            }
+                            $id = $copiaPrenotata['id'];
+                            $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
+                            $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
+                            echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
                         }
-                        $id = $copiaPrenotata['id'];
-                        $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
-                        $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
+                    }   catch (Exception $e) {
+                        echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
                     }
+                    
                 } else if ($_SESSION['utenza'] == 4) {
-                    if ($numeroPrenotazioni < 3) {
-                        if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
-                            $q2->bind_param('i', $book_id);
-                            $q2->execute();
-                            $result = $q2->get_result();
-                            $copiaPrenotata = $result->fetch_assoc();
+                    try {
+                        if ($numeroPrenotazioni < 3) {
+                            if ($q2 = $conn->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera WHERE Stato = 1 and id=? and Opera.ISBN = copiaLibro.ISBN')) {
+                                $q2->bind_param('i', $book_id);
+                                $q2->execute();
+                                $result = $q2->get_result();
+                                $copiaPrenotata = $result->fetch_assoc();
+                            }
+                            $id = $copiaPrenotata['id'];
+                            $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
+                            $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
+                            echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
+                        } else {
+                            echo "<p class= 'errore'> Numero massimo di prenotazioni raggiunto </p>";
                         }
-                        $id = $copiaPrenotata['id'];
-                        $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
-                        $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
+                    }  catch (Exception $e) {
+                        echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
                     }
                 }
             }
