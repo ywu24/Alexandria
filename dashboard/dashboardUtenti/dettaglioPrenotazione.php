@@ -98,7 +98,7 @@ error_reporting(E_ALL); ?>
                         echo "<main>
                         <div class='container'>
                             <div class='left-column'>
-                                <img src='../../" . $row['Copertina'] . "' alt='Copertina Libro' >
+                                <img src='../../img/books/" . $row['Copertina'] . "' alt='Copertina Libro' >
                             </div>
                             <div class='right-column'>
                                 <div class='info'>
@@ -128,7 +128,7 @@ error_reporting(E_ALL); ?>
                         echo "<main>
                         <div class='container'>
                             <div class='left-column'>
-                                <img src='../../" . $row['Copertina'] . "' alt='Copertina Libro' >
+                                <img src='../../img/books/" . $row['Copertina'] . "' alt='Copertina Libro' >
                             </div>
                             <div class='right-column'>
                                 <div class='info'>
