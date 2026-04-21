@@ -62,13 +62,15 @@ require_once("../auth/cookies.php");
         }
 
         if (isset($email)) {
-            $query = $conn->prepare('SELECT count(*) FROM Utente, Prenotazione WHERE Utente.email = Prenotazione.email AND Utente.email = ? AND Stato >= 0 AND Stato <= 3');
+            $query = $conn->prepare('SELECT count(*) FROM Utente, Prenotazione WHERE Utente.email = Prenotazione.email  AND Utente.email = ? AND((FinePrestito IS NULL AND FinePrenotazione >= CURDATE()) OR (FinePrestito IS NULL AND InizioPrestito IS NOT NULL))');
             $query->bind_param('s', $email);
             $query->execute();
             $r = $query->get_result();
             $numeroPrenotazioni = $r->fetch_assoc();
             $numeroPrenotazioni = $numeroPrenotazioni['count(*)'];
 
+            
+            
             $giorniPrenotazione = 30;
 
             if (isset($_POST["prenota"])) {
@@ -84,7 +86,7 @@ require_once("../auth/cookies.php");
                         }
                         $id = $copiaPrenotata['id'];
                         $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
-                        $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
+                        $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `InizioPrenotazione`, `FinePrenotazione`) VALUES ('$email', $id, CURDATE(), ADDDATE(CURDATE(), INTERVAL $giorniPrenotazione DAY))");
                     }
                 } else if ($_SESSION['utenza'] == 4) {
                     if ($numeroPrenotazioni < 3) {
@@ -96,7 +98,7 @@ require_once("../auth/cookies.php");
                         }
                         $id = $copiaPrenotata['id'];
                         $conn->query("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = $id");
-                        $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) VALUES ('$email', $id, NOW(), ADDDATE(NOW(), INTERVAL $giorniPrenotazione DAY))");
+                        $conn->query("INSERT INTO Prenotazione (`Email`, `idCopia`, `InizioPrenotazione`, `FinePrenotazione`) VALUES ('$email', $id, CURDATE(), ADDDATE(CURDATE(), INTERVAL $giorniPrenotazione DAY))");
                     }
                 }
             }

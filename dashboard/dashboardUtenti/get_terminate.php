@@ -1,21 +1,28 @@
 <?php
 require_once("../../utils/connect.php");
+if(!isset($_POST['idUtente']) && !isset($_POST['email'])){
+    die();
+}
+$email = "";
+if(isset($_POST['idUtente'])){
+    $idUtente = $_POST['idUtente'];
 
-$idUtente = $_POST['idUtente'];
-
-// Recupero l'email dell'utente
-$q = $conn->prepare('SELECT Email FROM Utente WHERE id=?');
-$q->bind_param('i', $idUtente);
-$q->execute();
-$email = $q->get_result()->fetch_assoc()['Email'];
-
-// Query solo per lo stato 4 (Terminata)
-$sql = "SELECT idPrenotazione, Copertina, Prenotazione.idCopia, Inizio, Fine, Autore, Nome, CasaEditrice, Prenotazione.Stato 
+    // Recupero l'email dell'utente
+    $q = $conn->prepare('SELECT Email FROM Utente WHERE id=?');
+    $q->bind_param('i', $idUtente);
+    $q->execute();
+    $email = $q->get_result()->fetch_assoc()['Email'];
+}
+else{
+    $email = $_POST['email'];
+}
+// Query solo per Prenotazioni Terminate
+$sql = "SELECT idPrenotazione, InizioPrestito, FinePrestito, FineAttesa 
         FROM Prenotazione, copiaLibro, Opera 
         WHERE copiaLibro.idCopia = Prenotazione.idCopia 
         AND Opera.ISBN = copiaLibro.ISBN 
         AND Prenotazione.Email = ? 
-        AND Prenotazione.Stato = 4 
+        AND FinePrestito IS NOT NULL
         ORDER BY Prenotazione.idPrenotazione DESC";
 
 $stmt = $conn->prepare($sql);
@@ -27,6 +34,5 @@ $terminate = [];
 while ($row = $result->fetch_assoc()) {
     $terminate[] = $row;
 }
-
-header('Content-Type: application/json');
 echo json_encode($terminate);
+?>

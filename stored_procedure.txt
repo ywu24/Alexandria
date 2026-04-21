@@ -1,0 +1,8 @@
+SET GLOBAL event_scheduler = ON;
+CREATE EVENT IF NOT EXISTS `pulisci_prenotazioni_scadute`
+ON SCHEDULE EVERY 1 DAY
+STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 DAY)
+DO
+  DELETE FROM Prenotazione 
+  WHERE InizioPrestito IS NULL 
+  AND FinePrenotazione < CURDATE();
