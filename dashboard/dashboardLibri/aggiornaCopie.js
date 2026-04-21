@@ -69,7 +69,7 @@ document.addEventListener("click", async (e) => {
         }
         else if (result.includes("ok")) {
             showMessage(result.slice(2));
-            const btnEspandi = document.querySelector(`.btn-espandi[data-isbn="${isbn}"]`);
+            const btnEspandi = document.querySelector(`.btn-espandi`);
             if (btnEspandi) {
                 btnEspandi.click();
                 btnEspandi.click();
