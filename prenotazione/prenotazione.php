@@ -92,7 +92,7 @@ error_reporting(E_ALL);
                 echo "
                 <div class='book-container'>
                     <div class='book-link'>
-                        <img src='../../" . $row['Copertina'] . "' alt='' class='book-cover' width='160px'>
+                        <img src='../img/books/" . $row['Copertina'] . "' alt='' class='book-cover' width='160px'>
                         <div class='book-section'>
                             <h3>" . $row['Nome'] . "</h3>
                             <div class='info-release'>
