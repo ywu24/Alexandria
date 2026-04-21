@@ -83,16 +83,15 @@ if (isset($_POST['createDummy'])) {
 	<div class="container-fluid">
 		<h1 class="text-center" style="font-size:4rem !important;">&#128218;</h1>
 		<br>
-		<center>
+		
 			<!-- INSERT DI LIBRO RANDOM -->
 
 			<form action="dashboardLibri.php" method='POST'>
 				<button class='btn btn-secondary' type='submit' name='createDummy'>CREA LIBRO RANDOM</button>
 			</form>
 
-
-
-		</center>
+			
+		
 
 		<form class="form-inline mx-auto" style="width: 300px;" action="dashboardLibri.php" method="post">
 			<input class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Ricerca un libro..."

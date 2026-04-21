@@ -207,7 +207,7 @@ $queryResult = mysqli_query($conn, $finalQuery);
                             echo "
                             <a href='../libro/libro.php?id=$id'>
                                 <div class='book-list hvr-float data-single-book'>
-                                    <img src='../img/books/" . $row['Copertina'] . "' width='113' height='171' class='book-img' style='object-fit: cover;'>
+                                    <img src='" . "../img/books/" . $row['Copertina'] . "' width='113' height='171' class='book-img' style='object-fit: cover;'>
                                     <div class='container-book'>
                                         <span class='book-link trunctitle' style='font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 5px;'>" . $row['Nome'] . "</span>
                                         <p class='book-authors'>" . $row['Autore'] . " | " . $row['CasaEditrice'] . " | " . $row['ISBN'] . " | " . $row['Genere'] . "</p>

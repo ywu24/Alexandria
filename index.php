@@ -1,4 +1,11 @@
 <?php
+//LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+
+<?php
 session_start();
 $root = '.';
 require_once("auth/cookies.php");
@@ -60,14 +67,14 @@ require_once("utils/connect.php");
                                 'Descrizione' => ''
                             ] : $row);
                             //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
-                            
+
                             $idLibro = $row['id'];
 
                             echo "   
                                 <div class='slider__item-content'>
                                 <div class='left-column'>
                                 <a href='libro/libro.php?id=" . $row['id'] . "'>
-                                    <img src='./img/books/" . $row['Copertina'] . "' alt='' class='cover'>
+                                    <img src='img/books/" . $row['Copertina'] . "' alt='' class='cover'>
                                 </a>
                                 </div>
 
@@ -112,14 +119,14 @@ require_once("utils/connect.php");
                             'Descrizione' => ''
                         ] : $row);
                         //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
-                        
+
                         $idLibro = $row['id'];
 
                         echo "
                             <div class='slider__item-content'>
                             <div class='left-column'>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
-                                <img src='./img/books/" . $row['Copertina'] . "' alt='' class='cover'>
+                                <img src='img/books/" . $row['Copertina'] . "' alt='' class='cover'>
                             </a>
                             </div>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
@@ -164,14 +171,14 @@ require_once("utils/connect.php");
                     'Descrizione' => ''
                 ] : $row);
                 //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
-                
+
                 $idLibro = $row['id'];
 
                 echo "
                             <div class='slider__item-content'>
                             <div class='left-column'>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
-                                <img src='./img/books/" . $row['Copertina'] . "' alt='' class='cover'>
+                                <img src='img/books/" . $row['Copertina'] . "' alt='' class='cover'>
                                 </a>
                             </div>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
@@ -220,7 +227,7 @@ require_once("utils/connect.php");
         $class = "account-status";
 
         //1
-        $query2 = "SELECT Nome, Autore, Copertina, Prenotazione.Stato as Stato, idPrenotazione, Inizio, Fine 
+        $query2 = "SELECT Nome, Autore, Copertina, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa, idPrenotazione, Inizioprestito, FineAttesa 
 
                     FROM Prenotazione, Opera, copiaLibro 
 
@@ -228,7 +235,7 @@ require_once("utils/connect.php");
 
                     AND copiaLibro.ISBN = Opera.ISBN 
 
-                    AND idPrenotazione = (SELECT MAX(idPrenotazione) FROM Prenotazione  WHERE Stato <> 5 AND Email = '$email')";
+                    AND idPrenotazione = (SELECT MAX(idPrenotazione) FROM Prenotazione  WHERE InizioPrestito IS NOT NULL AND Email = '$email')";
 
 
         $result2 = mysqli_query($conn, $query2);
@@ -238,107 +245,111 @@ require_once("utils/connect.php");
             $prenotazione = mysqli_fetch_assoc($result2);
             $idPrenotazione = $prenotazione['idPrenotazione'];
 
-            if ($prenotazione['Stato'] == 0) {
+            if (($prenotazione['InizioPrestito'] == NULL) && (strtotime($prenotazione['FinePrenotazione']) > time())) {
                 $stato = "Prenotato";
                 $color = "#ff7600";
-
-            } else if ($prenotazione['Stato'] == 1) {
+            } else if (strtotime($prenotazione['FinePrenotazione']) <= time()) {
+                //ELIMINA DAL DB
+            } else if ($prenotazione['InizioPrestito'] != NULL && $prenotazione['FinePrestito'] == NULL && strtotime($prenotazione['FineAttesa']) >= time()) {
                 $stato = "In Prestito";
                 $color = "green";
-
-            } else if ($prenotazione['Stato'] == 2) {
+            } else if ($prenotazione['InizioPrestito'] != NULL && $prenotazione['FinePrestito'] == NULL && strtotime($prenotazione['FineAttesa']) < time()) {
                 $stato = "In ritardo";
                 $color = "red";
-
-            } else if ($prenotazione['Stato'] == 3) {
-                $stato = "Riconsegnare";
-                $color = "#ff7600";
-
-            } else if ($prenotazione['Stato'] == 4) {
-                $stato = "Riconsegnato";
-                $color = "#686868";
-
-            }
-
-            echo "
-                <div class='info-account'>
-                <a href='prenotazione/prenotazione.php'>
-                    <div class='info-prenotazioni'>
-                    <h2 class='ultime-prenotazioni'>Ultime Prenotazioni</h2>
-                        <div class='book-prenotation'>
-                            <img src='./img/books/" . $prenotazione['Copertina'] . "' alt='' class='cover'>
-
-                            <div class='book-right-column'>
-                                <h4>" . $prenotazione['Nome'] . "</h4>
-                                <span>" . $prenotazione['Autore'] . "</span>
-                                <span style='font-weight: bold; margin-top: 9px; color: $color'>" . $stato . "</span>
-                                <div class='inizio-fine'>
-                                    <span>Inizio Prenotazione</span>
-                                    <span>" . $prenotazione['Inizio'] . "</span>
-                                </div>
-                                
-                                <div class='inizio-fine'>
-                                    <span>Fine Prenotazione</span>
-                                    <span>" . $prenotazione['Fine'] . "</span>
-                                </div>
-                            </div>
-
-                        </div>";
-
-            //2
-    
-            $query2 = "SELECT Nome, Autore, Copertina, Prenotazione.Stato as Stato, idPrenotazione, Inizio, Fine 
-                            FROM Prenotazione, Opera, copiaLibro 
-                            WHERE copiaLibro.idCopia = Prenotazione.idCopia 
-                            AND copiaLibro.ISBN = Opera.ISBN 
-                            AND idPrenotazione = (SELECT MAX(idPrenotazione) FROM Prenotazione WHERE Stato <> 5 AND idPrenotazione < $idPrenotazione AND Email = '$email')";
-
-            $result2 = mysqli_query($conn, $query2);
-            $count = $result2->num_rows;
-
-            if ($count != 0) {
-                $prenotazione = mysqli_fetch_assoc($result2);
-                $idPrenotazione = $prenotazione['idPrenotazione'];
-                if ($prenotazione['Stato'] == 0) {
-                    $stato = "Prenotato";
-                    $color = "#ff7600";
-                } else if ($prenotazione['Stato'] == 1) {
-                    $stato = "In Prestito";
-                    $color = "green";
-                } else if ($prenotazione['Stato'] == 2) {
-                    $stato = "In ritardo";
-                    $color = "red";
+                /*
                 } else if ($prenotazione['Stato'] == 3) {
                     $stato = "Riconsegnare";
                     $color = "#ff7600";
-                } else if ($prenotazione['Stato'] == 4) {
-                    $stato = "Riconsegnato";
-                    $color = "#686868";
-                }
+                    NON HO SAPUTO DECIFRARE CHE SIGNIFICA... non l'ho tradotto nel nuovo sistema.
+                */
+            } else if ($prenotazione['InizioPrestito'] != NULL && $prenotazione['FinePrestito'] != NULL) {
+                $stato = "Riconsegnato";
+                $color = "#686868";
+            }
 
-                echo "
+            echo "
+                    <div class='info-account'>
+                    <a href='prenotazione/prenotazione.php'>
+                        <div class='info-prenotazioni'>
+                        <h2 class='ultime-prenotazioni'>Ultime Prenotazioni</h2>
                             <div class='book-prenotation'>
-                                <img src='./img/books/" . $prenotazione['Copertina'] . "' alt='' class='cover'>
+                                <img src='img/books/" .  $prenotazione['Copertina'] . "' alt='' class='cover'>
+
                                 <div class='book-right-column'>
                                     <h4>" . $prenotazione['Nome'] . "</h4>
                                     <span>" . $prenotazione['Autore'] . "</span>
                                     <span style='font-weight: bold; margin-top: 9px; color: $color'>" . $stato . "</span>
                                     <div class='inizio-fine'>
                                         <span>Inizio Prenotazione</span>
-                                        <span>" . $prenotazione['Inizio'] . "</span>
+                                        <span>" . $prenotazione['InizioPrenotazione'] . "</span>
                                     </div>
-
+                                    
                                     <div class='inizio-fine'>
                                         <span>Fine Prenotazione</span>
-                                        <span>" . $prenotazione['Fine'] . "</span>
-                                    </div>                  
+                                        <span>" . $prenotazione['FinePrenotazione'] . "</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>";
+
+                            </div>";
+
+            //2
+
+            $query2 = "SELECT Nome, Autore, Copertina,  idPrenotazione, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa
+                                FROM Prenotazione, Opera, copiaLibro 
+                                WHERE copiaLibro.idCopia = Prenotazione.idCopia 
+                                AND copiaLibro.ISBN = Opera.ISBN 
+                                AND idPrenotazione = (SELECT MAX(idPrenotazione) FROM Prenotazione WHERE FinePrestito!=NULL AND idPrenotazione < $idPrenotazione AND Email = '$email')";
+
+            $result2 = mysqli_query($conn, $query2);
+            $count = $result2->num_rows;
+
+            if ($count != 0) {
+                $prenotazione = mysqli_fetch_assoc($result2);
+                $idPrenotazione = $prenotazione2['idPrenotazione'];
+                if (($prenotazione['InizioPrestito'] == NULL) && (strtotime($prenotazione['FinePrenotazione']) > time())) {
+                    $stato = "Prenotato";
+                    $color = "#ff7600";
+                } else if (strtotime($prenotazione['FinePrenotazione']) <= time()) {
+                    //ELIMINA DAL DB
+                } else if ($prenotazione['InizioPrestito'] != NULL && $prenotazione['FinePrestito'] == NULL && strtotime($prenotazione['FineAttesa']) >= time()) {
+                    $stato = "In Prestito";
+                    $color = "green";
+                } else if ($prenotazione['InizioPrestito'] != NULL && $prenotazione['FinePrestito'] == NULL && strtotime($prenotazione['FineAttesa']) < time()) {
+                    $stato = "In ritardo";
+                    $color = "red";
+                    /*
+                } else if ($prenotazione['Stato'] == 3) {
+                    $stato = "Riconsegnare";
+                    $color = "#ff7600";
+                    NON HO SAPUTO DECIFRARE CHE SIGNIFICA... non l'ho tradotto nel nuovo sistema.
+                */
+                } else if ($prenotazione['InizioPrestito'] != NULL && $prenotazione['FinePrestito'] != NULL) {
+                    $stato = "Riconsegnato";
+                    $color = "#686868";
+                }
+
+                echo "
+                                <div class='book-prenotation'>
+                                    <img src='img/books/" . $prenotazione['Copertina'] . "' alt='' class='cover'>
+                                    <div class='book-right-column'>
+                                        <h4>" . $prenotazione['Nome'] . "</h4>
+                                        <span>" . $prenotazione['Autore'] . "</span>
+                                        <span style='font-weight: bold; margin-top: 9px; color: $color'>" . $stato . "</span>
+                                        <div class='inizio-fine'>
+                                            <span>Inizio Prenotazione</span>
+                                            <span>" . $prenotazione['InizioPrenotazione'] . "</span>
+                                        </div>
+
+                                        <div class='inizio-fine'>
+                                            <span>Fine Prenotazione</span>
+                                            <span>" . $prenotazione['FinePrenotazione'] . "</span>
+                                        </div>                  
+                                    </div>
+                                </div>
+                            </div>";
             } else {
                 echo "</div>";
             }
-
         } else {
 
             echo "
@@ -353,7 +364,6 @@ require_once("utils/connect.php");
                                 </div>
                             </div>";
         }
-
     }
 
     if (isset($_SESSION['email'])) {
@@ -362,14 +372,15 @@ require_once("utils/connect.php");
         $utente = mysqli_fetch_assoc($results);
 
         if ($utenza != 1 && $utenza != 2) {
-            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = '$email' AND Stato <> 5";
-            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = '$email' AND Stato <> 4 AND Stato <> 5 AND Stato <> 0";
-            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = '$email' AND Stato = 4";
-
+            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NULL";
+            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NULL";
+            $prenotazioni = "SELECT count(idPrenotazione) as prenotati FROM Prenotazione WHERE Email = '$email' AND InizioPrestito IS NULL";
+            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NOT NULL";
         } else {
-            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione";
-            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Stato <> 4 AND Stato <> 5 AND Stato <> 0";
-            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Stato = 4";
+            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = '$email'";
+            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NULL";
+            $prenotazioni = "SELECT count(idPrenotazione) as prenotati FROM Prenotazione WHERE Email = '$email' AND InizioPrestito IS NULL";
+            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NOT NULL";
         }
 
         $resultTotali = mysqli_query($conn, $totali);
@@ -380,12 +391,16 @@ require_once("utils/connect.php");
 
         $result_riconsegnate = mysqli_query($conn, $riconsegnate);
         $p_riconsegnate = mysqli_fetch_assoc($result_riconsegnate);
+
+        $result_prenotati = mysqli_query($conn, $prenotazioni);
+        $p_prenotati = mysqli_fetch_assoc($result_prenotati);
     } else {
         $utente = ['Nome' => '', 'Cognome' => '', 'propic' => 'userDashFavicon.png'];
         $email = 'eg@example.com';
         $pTotali = ['totali' => 0];
         $p_inCorso = ['incorso' => 0];
         $p_riconsegnate = ['riconsegnate' => 0];
+        $p_prenotati = ['prenotati' => 0];
     }
 
 
@@ -409,13 +424,17 @@ require_once("utils/connect.php");
             </div>
 
             <div class='numero-prenotazioni'>
-                <h3>In corso</h3>
+                <h3> Prestiti In corso</h3>
                 <span>" . $p_inCorso['incorso'] . "</span>
             </div>
 
             <div class='numero-prenotazioni'>
-                <h3>Riconsegnate</h3>
+                <h3> Prestiti Riconsegnati</h3>
                 <span>" . $p_riconsegnate['riconsegnate'] . "</span>
+            </div>
+            <div class='numero-prenotazioni'>
+                <h3>Prenotazioni </h3>
+                <span>" . $p_prenotati['prenotati'] . "</span>
             </div>
         </div>
     </div>";

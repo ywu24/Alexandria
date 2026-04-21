@@ -7,7 +7,10 @@ session_start(); //non togliere
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+if($_SESSION['utenza']!=1 && $_SESSION['utenza']!=2){
+    header("Location: ../../lista/lista.php");
+    die();
+}
 
 ?>
 
@@ -36,13 +39,20 @@ error_reporting(E_ALL);
 	<div id="nav-placeholder"></div>
 	<?php
 	$root = "../..";
+	require_once("../../utils/connect.php");
 	require_once("../../nav/nav.php");
 	?>
-
+	<div id = "messages">
+    <?php
+    if(isset($_GET['eliminato'])){
+        echo "<p class= 'successo'> Prenotazione eliminata con successo</p>";
+        }
+    ?>
+    </div>
 	<div class="container">
 		<?php
 		// Connessione al database
-		require_once("../../utils/connect.php");
+		
 		$table = "Prenotazione";
         $table1 = "copiaLibro";
         $table2 = "Opera";
@@ -88,51 +98,65 @@ error_reporting(E_ALL);
 			$email = $result->fetch_assoc();
 		}
 		
-		$query_base = "SELECT idPrenotazione, Copertina, $table.idCopia, Inizio, Fine, Autore, Nome, CasaEditrice, $table.Stato 
+		$query_base = "SELECT idPrenotazione, Copertina, $table.idCopia, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa, Autore, Nome, CasaEditrice 
 		FROM $table, $table1, $table2 
 		WHERE $table1.idCopia = $table.idCopia 
 		AND $table2.ISBN = $table1.ISBN 
 		AND $table.Email = '$email[Email]' 
-		AND $table.Stato != 4 
+		AND finePrestito IS NULL
 		ORDER BY $table.idPrenotazione DESC";
 
 		foreach ($conn->query($query_base) as $row) {
-    
-			if ($row["Stato"] == 0) {
-					$stato = "In Prenotazione";
-					$color = "#ff7600";
-			} else if($row["Stato"] == 1){
-				$stato = "Prenotato";
-				$color = "green";
-			}else if($row["Stato"] == 2){
-				$stato = "In ritardo";
-				$color = "red";
-			}else if($row['Stato'] == 3){
-				$stato = "In consegna";
-				$color = "#ff7600";
-			}else if($row['Stato'] == 4){
-				$stato = "Terminata";
-				$color = "#686868";
-			}else if($row['Stato'] == 5){
-				$stato = "Eliminata";
-				$color = "red";
-			}	
+			$inizio="";
+			$fine ="";
+			if ($row["InizioPrestito"] ==NULL) {
+					if(strtotime($row['FinePrenotazione'])< time()){
+						###BISOGNA FARE LA DELETE DELLA PRENOTAZIONE DAL DB
+					}
+					else{
+						$stato = "Prenotato";
+						$color = "green";#"#ff7600";
+						$inizio = $row["InizioPrenotazione"];
+						$fine = $row["FinePrenotazione"];
+					}
+			} else {
+				if($row['FinePrestito']==NULL){
+					if(time()>strtotime($row['FineAttesa'])){
+						$stato="In Ritardo";
+						$color = "red";
+						$inizio = $row["InizioPrestito"];
+						$fine = "attesa = ". $row["FinePrenotazione"];
+					}
+					else{
+						$stato="In Prestito";
+						$color = "orange";
+						$inizio = $row["InizioPrestito"];
+						$fine = "attesa = ". $row["FinePrenotazione"];
+				}
+				} else{
+					$stato = "Terminato";
+				}
+				
+			}
+						
+			
 			echo
-				"<div class='book-container'>
-            <div class='book-link'>
-                <img src='../../img/books/" . $row['Copertina'] . "' alt=''  class='book-cover' width='160px'>
+				"<div class='book-container'>" .
+            "<div class='book-link'>
+                <img src='../../" . $row['Copertina'] . "' alt=''  class='book-cover' width='160px'>
                 <div class='book-section'>
                     <h3>" . $row['Nome'] . "</h3>
                     <div class='info-release'><h5>" . $row['Autore'] . "</h5>  <h5>" . $row['CasaEditrice'] . "</h5>  <h5>Stato:</h5> <h5 class='status' style='color: $color'>" . $stato . "</h5></div>
-                    <form action=''><span>inizio prenotazione:</span><span>" . $row['Inizio'] . "</span></form>
-                    <form action=''><span>fine prenotazione:</span><span>" . $row['Fine'] . "</span></form>
+                    <span>inizio prenotazione:</span><span>" . $inizio . "</span>
+                    <span>fine prenotazione:</span><span>" . $fine . "</span>
                     <form action='dettaglioPrenotazione.php?id=" . $row['idPrenotazione'] . "' method='post'><button name='apri-dettaglio' style='margin-top: 20px; width: 20vh;'>Gestisci</button></form>
 				</div>
             </div>
 				
             </div>";
-
 		}
+
+		
 		echo '<hr>
 				<div id="terminate-container">
 						<button id="load-terminated" class="btn btn-secondary" data-id-utente=' . $id . '>

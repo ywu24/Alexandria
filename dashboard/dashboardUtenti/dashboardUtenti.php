@@ -39,7 +39,7 @@ if (isset($_GET['errore'])){
 			echo '<p class= "errore">utente non trovato, prova ad aggiornare la pagina o contatta assistenza</p>';
 		}
 		else {
-			echo '<p class= "errore">ERRORE</p>';
+			echo '<p class= "errore">ERRORE' . $_GET['errore'] . '</p>';
 		}
 }
 
