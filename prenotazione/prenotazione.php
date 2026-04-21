@@ -82,7 +82,7 @@ error_reporting(E_ALL);
                         $stato="In Prestito"; $color = "orange";
                     }
                     $inizio = $row["InizioPrestito"];
-                    $fine = "attesa = ". $row["FinePrenotazione"];
+                    $fine = "Da riconsegnare entro = ". $row["FinePrenotazione"];
                 } else { $stato = "Terminato"; }
             }
 

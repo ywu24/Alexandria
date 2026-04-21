@@ -55,14 +55,15 @@ if(!isset($_GET['id'])){
         
         $id = $_GET['id'];
     try{
-        if ($q2 = $conn->prepare('SELECT Opera.id FROM Opera, Prenotazione, copiaLibro WHERE Prenotazione.idPrenotazione=? AND Prenotazione.idCopia = copiaLibro.idCopia AND Opera.ISBN = copiaLibro.ISBN')) {
+        if ($q2 = $conn->prepare('SELECT Opera.id, Prenotazione.Email as Email FROM Opera, Prenotazione, copiaLibro WHERE Prenotazione.idPrenotazione=? AND Prenotazione.idCopia = copiaLibro.idCopia AND Opera.ISBN = copiaLibro.ISBN')) {
             $q2->bind_param('i', $id);
             $q2->execute();
             $result2 = $q2->get_result();
             $opera = $result2->fetch_assoc();
             $book_id = $opera['id'];
+            $email = $opera['Email'];
         }
-
+        echo "<h3> Prenotazione di " . $email . "</h3>";
 
        
         if ($q = $conn->prepare('SELECT InizioPrenotazione, InizioPrestito, FinePrenotazione, FinePrestito, FineAttesa FROM Prenotazione WHERE idPrenotazione=?')) {
@@ -105,7 +106,7 @@ if(!isset($_GET['id'])){
                         echo "<main>
                         <div class='container' >
                             <div class='left-column'>
-                                <img src='../../" . $row['Copertina'] . "' alt='Copertina Libro' >
+                                <img src='../../img/books/" . $row['Copertina'] . "' alt='Copertina Libro' >
                             </div>
                             <div class='right-column'>
                                 <div class='info'>
