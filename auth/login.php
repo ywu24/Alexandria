@@ -7,6 +7,7 @@ $message = '<a href="registrazione.php">Crea un account</a>';
 $domain = 'alexandria.it'; //NOTE: placeholder
 
 try {
+  require_once("../utils/connect.php");
   $database = DatabaseConnection::getInstance();
   $pdo = $database->getConnection();
   require_once("cookies.php");
@@ -26,7 +27,7 @@ if ($error === -1 && isset($_POST['submit'])) {
     $query = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email');
     $query->bindParam(':email', $_POST['email']);
     $query->execute();
-    $result = $query->fetch(PDO::FETCH_ASSOC);
+    $result = $query->fetch();
     $query->closeCursor();
     if ($result) {
       $user = $result;

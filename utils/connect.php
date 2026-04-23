@@ -1,4 +1,5 @@
 <?php
+//realizzato dopo averlo creato che il beneficio di avere singleton su php è molto limitato, ma ormai è fatta
 class DatabaseConnection
 {
     // Istanza singleton per la connessione al database
@@ -28,6 +29,7 @@ class DatabaseConnection
         $dsn = "mysql:host=$host;dbname=$database;charset=utf8mb4";
         // Opzioni per la connessione al database
         $options = [
+            PDO::ATTR_PERSISTENT => true, // connection survives across requests
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,

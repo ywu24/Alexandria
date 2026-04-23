@@ -1,4 +1,5 @@
 <?php
+require_once("../utils/connect.php");
 try {
     if (!isset($_SESSION['email'])) {
         if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
@@ -8,7 +9,7 @@ try {
             $query = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email');
             $query->bindParam(':email', $_COOKIE['email']);
             $query->execute();
-            $result = $query->fetch(PDO::FETCH_ASSOC);
+            $result = $query->fetch();
 
             if ($result) {
                 $user = $result;
