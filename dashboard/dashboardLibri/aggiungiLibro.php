@@ -1,6 +1,7 @@
 <?php
-$root = "../..";
 session_start();
+$root = "../..";
+
 if (!isset($_SESSION['copia'])) {
 	$_SESSION['copia'] = false;
 }

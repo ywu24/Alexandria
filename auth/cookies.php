@@ -1,5 +1,5 @@
 <?php
-require_once("../utils/connect.php");
+require_once($root . "/utils/connect.php");
 try {
     if (!isset($_SESSION['email'])) {
         if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
