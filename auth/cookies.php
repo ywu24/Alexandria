@@ -1,29 +1,32 @@
 <?php
-if (!isset($_SESSION['email'])) {
+try {
+    if (!isset($_SESSION['email'])) {
+        if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
+            $databaseConnection = DatabaseConnection::getInstance();
+            $pdo = $databaseConnection->getConnection();
 
-    if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
+            $query = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email');
+            $query->bindParam(':email', $_COOKIE['email']);
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_ASSOC);
 
-        require_once($root . "/utils/connect.php");
-        if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
-            $stmt->bind_param('s', $_COOKIE['email']);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if (mysqli_num_rows($result) == 1) {
-                $user = $result->fetch_assoc();
-
+            if ($result) {
+                $user = $result;
                 if (!($_COOKIE['password'] === $user['Password'])) {
-                    header('Location: ' . $root . '/auth/login.php');
+                    throw new Exception('Invalid password stored in cookie');
                 } else {
                     $_SESSION['email'] = $user['Email'];
                     $_SESSION['nome'] = $user['Nome'];
                     $_SESSION['cognome'] = $user['Cognome'];
                     $_SESSION['utenza'] = $user['Utenza'];
                 }
-
             } else {
-                header('Location: ' . $root . '/auth/login.php');
+                throw new Exception('User not found for email in cookie');
             }
         }
     }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    header('Location: ' . $root . '/auth/login.php');
+    exit;
 }
-?>

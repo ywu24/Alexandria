@@ -1,42 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accedi</title>
-  <link rel="stylesheet" href="../css/login.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-    rel="stylesheet" />
-</head>
-
 <?php
-require_once("../utils/connect.php");
-
-// check if there is a user already logged in, if so redirect them 
 session_start();
-$root = '..';
-require_once("cookies.php");
-if (isset($_SESSION['email'])) {
-  header("Location: ../index.php");
-} // redirect the user to the home page
 
+$root = '..';
 $error = -1;
 $message = '<a href="registrazione.php">Crea un account</a>';
-
 $domain = 'alexandria.it'; //NOTE: placeholder
 
-if (isset($_POST['submit'])) {
-  if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
-    $stmt->bind_param('s', $_POST['email']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if (mysqli_num_rows($result) == 1) {
-      $user = $result->fetch_assoc();
+try {
+  $database = DatabaseConnection::getInstance();
+  $pdo = $database->getConnection();
+  require_once("cookies.php");
+} catch (Exception $e) {
+  error_log('[login.php] DB connection failed: ' . $e->getMessage());
+  $error = 3;
+  $err_message = 'Service unavailable, please try again later';
+}
+
+if (isset($_SESSION['email'])) {
+  header("Location: ../index.php");
+  exit;
+} // redirect the user to the home page
+
+if ($error === -1 && isset($_POST['submit'])) {
+  try {
+    $query = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email');
+    $query->bindParam(':email', $_POST['email']);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    $query->closeCursor();
+    if ($result) {
+      $user = $result;
       if (password_verify($_POST['password'], $user['Password'])) {
         $_SESSION['email'] = $user['Email'];
         $_SESSION['nome'] = $user['Nome'];
@@ -52,6 +45,7 @@ if (isset($_POST['submit'])) {
         } else {
           header("Location: ../index.php");
         }
+        exit;
 
       } else {
         $error = 1;
@@ -61,16 +55,30 @@ if (isset($_POST['submit'])) {
       $error = 2;
       $err_message = "User does not exist";
     }
-
-  } else {
-    $message = '<h2 style="color: red;">Errore, operazione fallita</h2>';
+    
+  } catch (Exception $e) {
+    error_log('[login.php] Query failed: ' . $e->getMessage());
+    $error = 3;
+    $err_message = 'Something went wrong, please try again later';
   }
-
-  $stmt->close();
 }
-
-$conn->close();
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accedi</title>
+  <link rel="stylesheet" href="../css/login.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet" />
+</head>
 
 <body>
   <div class="container">
