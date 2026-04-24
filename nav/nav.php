@@ -42,11 +42,26 @@ if (isset($_POST['logout'])) {
 
 if (isset($_SESSION['email'])) {
     $email = $_SESSION['email'];
-    if ($q = $conn->prepare('SELECT * FROM Utente WHERE Email=?')) {
-        $q->bind_param('s', $email);
+
+    try {
+        $dbConnection = DatabaseConnection::getInstance();
+        $pdo = $dbConnection->getConnection();
+    } catch (Exception $e) {
+        error_log('[registrazione.php] DB connection failed: ' . $e->getMessage());
+        echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
+        exit;
+    }
+
+    try {
+        $q = $pdo->prepare('SELECT * FROM Utente WHERE Email=:email');
+        $q->bindParam(':email', $email);
         $q->execute();
-        $result = $q->get_result();
-        $utente = $result->fetch_assoc();
+        $utente = $q->fetch();
+        $q->closeCursor();
+    } catch (PDOException $e) {
+        error_log('[nav.php] Error executing query: ' . $e->getMessage());
+        echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
+        exit;
     }
 
     echo "

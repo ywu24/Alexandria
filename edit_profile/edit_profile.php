@@ -6,36 +6,48 @@ require_once("../auth/cookies.php");
 $email = $_SESSION['email'];
 //$message = "no";
 
-if ($q = $conn->prepare('SELECT propic FROM Utente WHERE Email=?')) {
-    $q->bind_param('s', $email);
-    $q->execute();
-    $result = $q->get_result();
-    $propics = $result->fetch_assoc();
+try {
+    $pdo = DatabaseConnection::getInstance()->getConnection();
+} catch (PDOException $e) {
+    echo "Errore durante la connessione al database: " . $e->getMessage();
+    exit;
+}
+
+if ($query = $pdo->prepare('SELECT propic FROM Utente WHERE Email=:email')) {
+    $query->bindParam(':email', $email);
+    $query->execute();
+    $propics = $query->fetch();
+    $query->closeCursor();
+} else {
+    echo "Errore durante la preparazione della query: " . $pdo->errorInfo()[2];
+    exit;
 }
 
 if (isset($_POST['change_password'])) {
-    if ($stmt = $conn->prepare('SELECT * FROM Utente WHERE Email = ?')) {
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
+    if ($query = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email')) {
+        $query->bindParam(':email', $email);
+        $query->execute();
+        $user = $query->fetch();
+        $query->closeCursor();
 
         if (password_verify($_POST['current_password'], $user['Password'])) {
 
             $password = $_POST['new_password'];
             $password_again = $_POST['confirm_password'];
 
-            if (strlen($password) >= 8 && strpbrk($password, "!#$.,:;()")) {
+            if (strlen($password) >= 8 && preg_match('{[!#$.,:;()@%^\-&_+=\[\]|\\/<>?~`]}', $password)) {
 
                 if (strlen($password) <= 50) {
 
                     if ($password === $password_again) {
 
-                        if ($stmt1 = $conn->prepare('UPDATE Utente SET Password = ? WHERE Email = ?')) {
+                        if ($query = $pdo->prepare('UPDATE Utente SET Password = :password WHERE Email = :email')) {
 
                             $password = password_hash($password, PASSWORD_BCRYPT);
-                            $stmt1->bind_param('ss', $password, $email);
-                            $stmt1->execute();
+                            $query->bindParam(':password', $password);
+                            $query->bindParam(':email', $email);
+                            $query->execute();
+                            $query->closeCursor();
 
                             $_SESSION['success_msg'] = "Password cambiata con successo";
                             header("Location: edit_profile.php");
@@ -61,6 +73,8 @@ if (isset($_POST['change_password'])) {
             $_SESSION['error_msg'] = "Password attuale errata";
         }
 
+    } else {
+        $_SESSION['error_msg'] = "Errore durante la preparazione della query";
     }
 }
 

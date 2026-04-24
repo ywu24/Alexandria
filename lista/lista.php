@@ -4,7 +4,14 @@ $root = '..';
 require_once("../utils/connect.php");
 
 require_once("../auth/cookies.php");
-
+try {
+    $dbConnection = DatabaseConnection::getInstance();
+    $pdo = $dbConnection->getConnection();
+} catch (Exception $e) {
+    error_log('[registrazione.php] DB connection failed: ' . $e->getMessage());
+    echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
+    exit;
+}
 
 $table = "Opera";
 $maxPerPage = 10;
@@ -12,13 +19,20 @@ $paginationCtrls = '';
 
 function paginator($where, $additionalParams = "")
 {
-    global $conn, $table, $maxPerPage, $paginationCtrls;
+    global $pdo, $table, $maxPerPage, $paginationCtrls;
     $pageTo = "lista.php";
 
-    $countQuery = "SELECT count(*) as tot FROM $table $where";
-    $result = mysqli_query($conn, $countQuery);
-    $row = $result->fetch_assoc();
-    $rowCount = $row['tot'];
+    $countQuery = "SELECT count(*) as tot FROM $table :w";
+    try {
+        $query = $pdo->prepare($countQuery);
+        $query->bindParam(":w", $where);
+        $query->execute();
+        $result = $query->fetch();
+        $query->closeCursor();
+        $rowCount = $result['tot'];
+    } catch (PDOException $e) {
+        throw new Exception("Error executing count query: " . $e->getMessage());
+    }
 
     if ($rowCount > 0) {
         $p = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -83,14 +97,22 @@ function paginator($where, $additionalParams = "")
 }
 
 $whereClause = "";
+$whereForPaginator = "";
 $orderBy = "ORDER BY Nome ASC";
+$params = [];
 
 if (isset($_POST["search_btn"]) || isset($_POST["search"])) {
-    $search_text = mysqli_real_escape_string($conn, $_POST["search"]);
-    $whereClause = "WHERE Nome LIKE '%$search_text%' OR Autore LIKE '%$search_text%' OR ISBN LIKE '%$search_text%' OR CasaEditrice LIKE '%$search_text%'";
+    $search_text = '%' . $_POST["search"] . '%';
+    $whereClause = "WHERE Nome LIKE ? OR Autore LIKE ? OR ISBN LIKE ? OR CasaEditrice LIKE ?";
+    $whereForPaginator = "WHERE Nome LIKE '$search_text' OR Autore LIKE '$search_text' 
+                            OR ISBN LIKE '$search_text' OR CasaEditrice LIKE '$search_text'";
+
+    $params = [$search_text, $search_text, $search_text, $search_text];
 } elseif (isset($_POST['genere_btn'])) {
-    $genere = mysqli_real_escape_string($conn, $_POST['genere_btn']);
-    $whereClause = "WHERE Genere = '$genere'";
+    $genere = $_POST['genere_btn'];
+    $whereClause = "WHERE Genere = ?";
+    $whereForPaginator = "WHERE Genere = '$genere'";
+    $params = [$genere];
 }
 
 if (isset($_GET['sort'])) {
@@ -101,9 +123,19 @@ if (isset($_GET['sort'])) {
     }
 }
 
-$limit = paginator($whereClause);
-$finalQuery = "SELECT * FROM $table $whereClause $orderBy $limit";
-$queryResult = mysqli_query($conn, $finalQuery);
+$limit = paginator($whereForPaginator);
+$finalQuery = "SELECT * FROM $table :whereClause :orderBy :limit";
+try {
+    $query = $pdo->prepare($finalQuery);
+    $query->bindParam(':whereClause', $whereClause);
+    $query->bindParam(':orderBy', $orderBy);
+    $query->bindParam(':limit', $limit);
+    $query->execute();
+    $result = $query->fetchAll();
+    $query->closeCursor();
+} catch (PDOException $e) {
+    throw new Exception("Error executing main query: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -187,24 +219,29 @@ $queryResult = mysqli_query($conn, $finalQuery);
 
                 <div class="right-column">
                     <?php
-                    if (mysqli_num_rows($queryResult) > 0) {
-                        while ($row = mysqli_fetch_assoc($queryResult)) {
+                    if (count($result) > 0) {
+                        foreach ($result as $row) {
                             $id = $row['id'];
 
                             // Controllo disponibilità in tempo reale
-                            $dispQuery = "SELECT count(idCopia) as qty FROM copiaLibro WHERE Stato = 1 AND ISBN = '{$row['ISBN']}'";
-                            $resDisp = mysqli_query($conn, $dispQuery);
-                            $qtyRow = mysqli_fetch_assoc($resDisp);
+                            $q = "SELECT count(idCopia) as qty FROM copiaLibro WHERE Stato = 1 AND ISBN = :isbn";
 
-                            if ($qtyRow['qty'] >= 1) {
-                                $disponibilita = "Disponibile";
-                                $color = "green";
-                            } else {
-                                $disponibilita = "Non disponibile";
-                                $color = "red";
-                            }
+                            if ($query = $pdo->prepare($q)) {
+                                $query->bindParam(':isbn', $row['ISBN']);
+                                $query->execute();
+                                $qtyRow = $query->fetch()['qty'];
+                                $query->closeCursor();
 
-                            echo "
+
+                                if ($qtyRow >= 1) {
+                                    $disponibilita = "Disponibile";
+                                    $color = "green";
+                                } else {
+                                    $disponibilita = "Non disponibile";
+                                    $color = "red";
+                                }
+
+                                echo "
                             <a href='../libro/libro.php?id=$id'>
                                 <div class='book-list hvr-float data-single-book'>
                                     <img src='" . "../img/books/" . $row['Copertina'] . "' width='113' height='171' class='book-img' style='object-fit: cover;'>
@@ -216,6 +253,7 @@ $queryResult = mysqli_query($conn, $finalQuery);
                                     </div>
                                 </div>
                             </a>";
+                            }
                         }
                     } else {
                         echo "<h4>Nessun libro trovato.</h4>";
