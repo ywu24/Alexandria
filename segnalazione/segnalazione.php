@@ -1,5 +1,4 @@
 <?php
-//TODO: MODIFICARE QUERY PER RENDERLI PDO
 session_start();
 $root = '..';
 require_once("../utils/connect.php");
@@ -11,6 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $messaggio = addslashes($_POST['messaggio']);
 
   if (!empty($_FILES['screenshot'])) {
+
+    try {
+      $pdo = DatabaseConnection::getInstance()->getConnection();
+    } catch (PDOException $e) {
+      echo "Errore durante la connessione al database: " . $e->getMessage();
+      exit;
+    }
 
     //Recupera i dati del file inviato
     $file = $_FILES['screenshot'];
@@ -41,11 +47,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           // Carica il file
           move_uploaded_file($file_tmp, $file_destination);
           $imgSegn = "../img/segnalazioni/" . $file_name_new;
-          $sql = "INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio, imgSegn) VALUES ('$user_email', '$oggetto', '$messaggio', '$imgSegn')";
-          mysqli_query($conn, $sql);
-          $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
-          header("Location: ../index.php");
-          exit();
+
+          try {
+            $query = $pdo->prepare("INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio, imgSegn) VALUES (:email, :oggetto, :messaggio, :imgSegn)");
+            $query->bindParam(':email', $user_email);
+            $query->bindParam(':oggetto', $oggetto);
+            $query->bindParam(':messaggio', $messaggio);
+            $query->bindParam(':imgSegn', $imgSegn);
+            $query->execute();
+            $query->closeCursor();
+            $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
+            header("Location: segnalazione.php");
+            exit();
+          } catch (PDOException $e) {
+            throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
+          }
         } else {
           $_SESSION['error_msg'] = "Il file è troppo grande (max 5MB)";
           header("Location: segnalazione.php");
@@ -57,11 +73,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
       }
     } else {
-      $sql = "INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio) VALUES ('$user_email', '$oggetto', '$messaggio')";
-      mysqli_query($conn, $sql);
-      $_SESSION['success_msg'] = "Segnalazione inviata con successo";
-      header("Location: segnalazione.php");
-      exit();
+      try {
+        $query = $pdo->prepare("INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio) VALUES (:email, :oggetto, :messaggio)");
+        $query->bindParam(':email', $user_email);
+        $query->bindParam(':oggetto', $oggetto);
+        $query->bindParam(':messaggio', $messaggio);
+        $query->execute();
+        $query->closeCursor();
+
+        $_SESSION['success_msg'] = "Segnalazione inviata con successo";
+        header("Location: segnalazione.php");
+        exit();
+      } catch (PDOException $e) {
+        throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
+      }
     }
 
   }
