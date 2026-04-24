@@ -52,6 +52,12 @@ if (isset($_POST['propicIns'])) {
     }
     $propic = $file_name_new;
 
+    try {
+        $pdo = DatabaseConnection::getInstance()->getConnection();
+    } catch (PDOException $e) {
+        echo "Errore durante la connessione al database: " . $e->getMessage();
+        exit;
+    }
     $sql = "UPDATE `Utente` SET propic = :propic WHERE `Utente`.`Email` = :email";
     try {
         $query = $pdo->prepare($sql);

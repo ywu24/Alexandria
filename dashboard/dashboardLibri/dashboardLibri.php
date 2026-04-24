@@ -146,7 +146,7 @@ if (isset($_POST['createDummy'])) {
 					$table2 = "copiaLibro";
 					switch (true) {
 						case isset($_POST['search_btn']):
-							$search_text = $_POST['search'];
+							$search_text = $_POST['search'] ? '%' . $_POST['search'] . '%' : '%';
 							try {
 
 								$query = $pdo->prepare("SELECT $table1.ISBN, Nome, Autore, Genere, AnnoPubblicazione, CasaEditrice,

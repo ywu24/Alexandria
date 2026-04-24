@@ -44,11 +44,9 @@ if (isset($_SESSION['email'])) {
     $email = $_SESSION['email'];
 
     try {
-        $dbConnection = DatabaseConnection::getInstance();
-        $pdo = $dbConnection->getConnection();
-    } catch (Exception $e) {
-        error_log('[registrazione.php] DB connection failed: ' . $e->getMessage());
-        echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
+	    $pdo = DatabaseConnection::getInstance()->getConnection();
+    } catch (PDOException $e) {
+        echo "Errore durante la connessione al database: " . $e->getMessage();
         exit;
     }
 

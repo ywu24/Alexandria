@@ -3,8 +3,12 @@ require_once($root . "/utils/connect.php");
 try {
     if (!isset($_SESSION['email'])) {
         if (isset($_COOKIE['email']) && isset($_COOKIE['password'])) {
-            $databaseConnection = DatabaseConnection::getInstance();
-            $pdo = $databaseConnection->getConnection();
+            try {
+                $pdo = DatabaseConnection::getInstance()->getConnection();
+            } catch (PDOException $e) {
+                echo "Errore durante la connessione al database: " . $e->getMessage();
+                exit;
+            }
 
             $query = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email');
             $query->bindParam(':email', $_COOKIE['email']);

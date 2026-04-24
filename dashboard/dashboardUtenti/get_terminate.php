@@ -4,15 +4,15 @@ if (!isset($_POST['idUtente']) && !isset($_POST['email'])) {
     exit;
 }
 $email = "";
+try {
+    $pdo = DatabaseConnection::getInstance()->getConnection();
+} catch (PDOException $e) {
+    echo "Errore durante la connessione al database: " . $e->getMessage();
+    exit;
+}
+
 if (isset($_POST['idUtente'])) {
     $idUtente = $_POST['idUtente'];
-
-    try {
-        $pdo = DatabaseConnection::getInstance()->getConnection();
-    } catch (PDOException $e) {
-        echo "Errore durante la connessione al database: " . $e->getMessage();
-        exit;
-    }
 
     // Recupero l'email dell'utente
     if ($query = $pdo->prepare('SELECT Email FROM Utente WHERE id = :id')) {

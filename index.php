@@ -49,28 +49,36 @@ require_once("utils/connect.php");
 
                         <label for="slide-1" class="slider__item slider__item--1 card">
                             <?php
-
+                            try {
+                                $pdo = DatabaseConnection::getInstance()->getConnection();
+                            } catch (PDOException $e) {
+                                echo "Errore durante la connessione al database: " . $e->getMessage();
+                                exit;
+                            }
                             $table = "Opera";
-                            $query = "SELECT id, Nome, Autore, Genere, Copertina, CasaEditrice, ISBN, AnnoPubblicazione, Descrizione FROM $table WHERE id = (SELECT MAX(id) FROM Opera)";
-                            $result = mysqli_query($conn, $query);
-                            $row = mysqli_fetch_assoc($result);
+                            $q = "SELECT id, Nome, Autore, Genere, Copertina, CasaEditrice, ISBN, AnnoPubblicazione, Descrizione 
+                                        FROM $table WHERE id = (SELECT MAX(id) FROM Opera)";
+                            if ($query = $pdo->prepare($q)) {
+                                $query->execute();
+                                $row = $query->fetch();
+                                $query->closeCursor();
 
-                            $row = ($row == null ? [
-                                'id' => 1,
-                                'Nome' => '',
-                                'Autore' => '',
-                                'Genere' => '',
-                                'Copertina' => 'default.jpg',
-                                'CasaEditrice' => '',
-                                'ISBN' => '',
-                                'AnnoPubblicazione' => '',
-                                'Descrizione' => ''
-                            ] : $row);
-                            //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
+                                $row = ($row == null ? [
+                                    'id' => 1,
+                                    'Nome' => '',
+                                    'Autore' => '',
+                                    'Genere' => '',
+                                    'Copertina' => 'default.jpg',
+                                    'CasaEditrice' => '',
+                                    'ISBN' => '',
+                                    'AnnoPubblicazione' => '',
+                                    'Descrizione' => ''
+                                ] : $row);
+                                //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
+                            
+                                $idLibro = $row['id'];
 
-                            $idLibro = $row['id'];
-
-                            echo "   
+                                echo "   
                                 <div class='slider__item-content'>
                                 <div class='left-column'>
                                 <a href='libro/libro.php?id=" . $row['id'] . "'>
@@ -97,32 +105,39 @@ require_once("utils/connect.php");
                                 </div>
                                 </a>
                             ";
+                            } else {
+                                throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+                            }
                             ?>
                     </div>
 
                     </label> <!-- Slider__item -->
                     <label for="slide-2" class="slider__item slider__item--2 card ">
                         <?php
-                        $query = "SELECT id, Nome, Autore, Genere, Copertina, CasaEditrice, ISBN, AnnoPubblicazione, Descrizione FROM $table WHERE id = (SELECT MAX(id) FROM Opera WHERE id < $idLibro)";
-                        $result = mysqli_query($conn, $query);
-                        $row = mysqli_fetch_assoc($result);
+                        $q = "SELECT id, Nome, Autore, Genere, Copertina, CasaEditrice, ISBN, AnnoPubblicazione, Descrizione 
+                                    FROM $table WHERE id = (SELECT MAX(id) FROM Opera WHERE id < :idLibro)";
+                        if ($query = $pdo->prepare($q)) {
+                            $query->bindParam(':idLibro', $idLibro);
+                            $query->execute();
+                            $row = $query->fetch();
+                            $query->closeCursor();
 
-                        $row = ($row == null ? [
-                            'id' => 1,
-                            'Nome' => '',
-                            'Autore' => '',
-                            'Genere' => '',
-                            'Copertina' => 'default.jpg',
-                            'CasaEditrice' => '',
-                            'ISBN' => '',
-                            'AnnoPubblicazione' => '',
-                            'Descrizione' => ''
-                        ] : $row);
-                        //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
+                            $row = ($row == null ? [
+                                'id' => 1,
+                                'Nome' => '',
+                                'Autore' => '',
+                                'Genere' => '',
+                                'Copertina' => 'default.jpg',
+                                'CasaEditrice' => '',
+                                'ISBN' => '',
+                                'AnnoPubblicazione' => '',
+                                'Descrizione' => ''
+                            ] : $row);
+                            //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
+                        
+                            $idLibro = $row['id'];
 
-                        $idLibro = $row['id'];
-
-                        echo "
+                            echo "
                             <div class='slider__item-content'>
                             <div class='left-column'>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
@@ -147,6 +162,9 @@ require_once("utils/connect.php");
                             </div>
                             </a>
                             ";
+                        } else {
+                            throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+                        }
                         ?>
             </div>
 
@@ -155,26 +173,30 @@ require_once("utils/connect.php");
             <label for="slide-3" class="slider__item slider__item--3 card">
 
                 <?php
-                $query = "SELECT id, Nome, Autore, Genere, Copertina, CasaEditrice, ISBN, AnnoPubblicazione, Descrizione FROM $table WHERE id = (SELECT MAX(id) FROM Opera WHERE id < $idLibro)";
-                $result = mysqli_query($conn, $query);
-                $row = mysqli_fetch_assoc($result);
+                $q = "SELECT id, Nome, Autore, Genere, Copertina, CasaEditrice, ISBN, AnnoPubblicazione, Descrizione 
+                        FROM $table WHERE id = (SELECT MAX(id) FROM Opera WHERE id < :idLibro)";
+                if ($query = $pdo->prepare($q)) {
+                    $query->bindParam(':idLibro', $idLibro);
+                    $query->execute();
+                    $row = $query->fetch();
+                    $query->closeCursor();
 
-                $row = ($row == null ? [
-                    'id' => 1,
-                    'Nome' => '',
-                    'Autore' => '',
-                    'Genere' => '',
-                    'Copertina' => 'default.jpg',
-                    'CasaEditrice' => '',
-                    'ISBN' => '',
-                    'AnnoPubblicazione' => '',
-                    'Descrizione' => ''
-                ] : $row);
-                //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
+                    $row = ($row == null ? [
+                        'id' => 1,
+                        'Nome' => '',
+                        'Autore' => '',
+                        'Genere' => '',
+                        'Copertina' => 'default.jpg',
+                        'CasaEditrice' => '',
+                        'ISBN' => '',
+                        'AnnoPubblicazione' => '',
+                        'Descrizione' => ''
+                    ] : $row);
+                    //errore non gestito se non esiste un libro con id 1 e l'utente clicca sull'href
+                
+                    $idLibro = $row['id'];
 
-                $idLibro = $row['id'];
-
-                echo "
+                    echo "
                             <div class='slider__item-content'>
                             <div class='left-column'>
                             <a href='libro/libro.php?id=" . $row['id'] . "'>
@@ -200,6 +222,9 @@ require_once("utils/connect.php");
                             </div>
                             </a>
                             ";
+                } else {
+                    throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+                }
                 ?>
         </div>
 
@@ -210,7 +235,7 @@ require_once("utils/connect.php");
     </div>
 
     <?php
-    //ultime prenotazioni
+    //ultimi prestiti
     if (isset($_SESSION['utenza'])) {
         $utenza = $_SESSION['utenza'];
         $email = $_SESSION['email'];
@@ -227,22 +252,24 @@ require_once("utils/connect.php");
         $class = "account-status";
 
         //1
-        $query2 = "SELECT Nome, Autore, Copertina, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa, idPrenotazione, Inizioprestito, FineAttesa 
-
+        $q = "SELECT Nome, Autore, Copertina, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa, idPrenotazione, Inizioprestito, FineAttesa 
                     FROM Prenotazione, Opera, copiaLibro 
-
                     WHERE copiaLibro.idCopia = Prenotazione.idCopia 
-
                     AND copiaLibro.ISBN = Opera.ISBN 
+                    AND idPrenotazione = (SELECT MAX(idPrenotazione) FROM Prenotazione  
+                                            WHERE InizioPrestito IS NOT NULL AND Email = :email)";
+        if (!($query = $pdo->prepare($q))) {
+            throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+        }
+        $query->bindParam(':email', $email);
+        $query->execute();
 
-                    AND idPrenotazione = (SELECT MAX(idPrenotazione) FROM Prenotazione  WHERE InizioPrestito IS NOT NULL AND Email = '$email')";
-
-
-        $result2 = mysqli_query($conn, $query2);
-        $count = $result2->num_rows;
-
+        $result = $query->fetchAll();
+    
+        $count = count($result);
+        $query->closeCursor();
         if ($count != 0) {
-            $prenotazione = mysqli_fetch_assoc($result2);
+            $prenotazione = $result[0];
             $idPrenotazione = $prenotazione['idPrenotazione'];
 
             if (($prenotazione['InizioPrestito'] == NULL) && (strtotime($prenotazione['FinePrenotazione']) > time())) {
@@ -271,9 +298,9 @@ require_once("utils/connect.php");
                     <div class='info-account'>
                     <a href='prenotazione/prenotazione.php'>
                         <div class='info-prenotazioni'>
-                        <h2 class='ultime-prenotazioni'>Ultime Prenotazioni</h2>
+                        <h2 class='ultime-prenotazioni'>Ultimi Prestiti</h2>
                             <div class='book-prenotation'>
-                                <img src='img/books/" .  $prenotazione['Copertina'] . "' alt='' class='cover'>
+                                <img src='img/books/" . $prenotazione['Copertina'] . "' alt='' class='cover'>
 
                                 <div class='book-right-column'>
                                     <h4>" . $prenotazione['Nome'] . "</h4>
@@ -293,18 +320,25 @@ require_once("utils/connect.php");
                             </div>";
 
             //2
-
-            $query2 = "SELECT Nome, Autore, Copertina,  idPrenotazione, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa
+    
+            $q = "SELECT Nome, Autore, Copertina,  idPrenotazione, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa
                                 FROM Prenotazione, Opera, copiaLibro 
                                 WHERE copiaLibro.idCopia = Prenotazione.idCopia 
                                 AND copiaLibro.ISBN = Opera.ISBN 
-                                AND idPrenotazione = (SELECT MAX(idPrenotazione) FROM Prenotazione WHERE FinePrestito!=NULL AND idPrenotazione < $idPrenotazione AND Email = '$email')";
-
-            $result2 = mysqli_query($conn, $query2);
-            $count = $result2->num_rows;
+                                AND idPrenotazione = (SELECT MAX(idPrenotazione) FROM Prenotazione 
+                                WHERE FinePrestito!=NULL AND idPrenotazione <:idPrenotazione AND Email = :email)";
+            if (!($query = $pdo->prepare($q))) {
+                throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+            }
+            $query->bindParam(":idPrenotazione", $idPrenotazione);
+            $query->bindParam(":email", $email);
+            $query->execute();
+            $result = $query->fetchAll();
+            $query->closeCursor();
+            $count = count($result);
 
             if ($count != 0) {
-                $prenotazione = mysqli_fetch_assoc($result2);
+                $prenotazione = $result[0];
                 $idPrenotazione = $prenotazione2['idPrenotazione'];
                 if (($prenotazione['InizioPrestito'] == NULL) && (strtotime($prenotazione['FinePrenotazione']) > time())) {
                     $stato = "Prenotato";
@@ -356,7 +390,7 @@ require_once("utils/connect.php");
                 <div class='info-account'>
                     <a href='prenotazione/prenotazione.php'>
                         <div class='info-prenotazioni'>
-                            <h2 class='ultime-prenotazioni'>Ultime Prenotazioni</h2>
+                            <h2 class='ultime-prenotazioni'>Ultimi Prestiti</h2>
                                 <div class='book-prenotation'>
                                     <div>
                                         <h4>Non hai prenotato nessun libro</h4>
@@ -367,33 +401,68 @@ require_once("utils/connect.php");
     }
 
     if (isset($_SESSION['email'])) {
-        $querys = "SELECT Nome, Cognome, propic FROM Utente WHERE Email = '$email'";
-        $results = mysqli_query($conn, $querys);
-        $utente = mysqli_fetch_assoc($results);
+        $q = "SELECT Nome, Cognome, propic FROM Utente WHERE Email = :email";
+        $query = $pdo->prepare($q);
+        $query->bindParam(':email', $email);
+        $query->execute();
+        $utente = $query->fetch();
+        $query->closeCursor();
 
         if ($utenza != 1 && $utenza != 2) {
-            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NULL";
-            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NULL";
-            $prenotazioni = "SELECT count(idPrenotazione) as prenotati FROM Prenotazione WHERE Email = '$email' AND InizioPrestito IS NULL";
-            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NOT NULL";
+            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione 
+                        WHERE Email = :email AND FinePrestito IS NULL";
+
+            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione 
+                        WHERE Email = :email AND FinePrestito IS NULL";
+
+            $prenotazioni = "SELECT count(idPrenotazione) as prenotati FROM Prenotazione 
+                        WHERE Email = :email AND InizioPrestito IS NULL";
+
+            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione 
+                        WHERE Email = :email AND FinePrestito IS NOT NULL";
         } else {
-            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = '$email'";
-            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NULL";
-            $prenotazioni = "SELECT count(idPrenotazione) as prenotati FROM Prenotazione WHERE Email = '$email' AND InizioPrestito IS NULL";
-            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = '$email' AND FinePrestito IS NOT NULL";
+            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione 
+                        WHERE Email = :email";
+
+            $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione 
+                        WHERE Email = :email AND FinePrestito IS NULL";
+
+            $prenotazioni = "SELECT count(idPrenotazione) as prenotati FROM Prenotazione 
+                        WHERE Email = :email AND InizioPrestito IS NULL";
+
+            $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione 
+                        WHERE Email = :email AND FinePrestito IS NOT NULL";
         }
 
-        $resultTotali = mysqli_query($conn, $totali);
-        $pTotali = mysqli_fetch_assoc($resultTotali);
+        try {
+            $query = $pdo->prepare($totali);
+            $query->bindParam(':email', $email);
+            $query->execute();
+            $pTotali = $query->fetch();
+            $query->closeCursor();
 
-        $result_inCorso = mysqli_query($conn, $inCorso);
-        $p_inCorso = mysqli_fetch_assoc($result_inCorso);
+            $query = $pdo->prepare($inCorso);
+            $query->bindParam(':email', $email);
+            $query->execute();
+            $p_inCorso = $query->fetch();
+            $query->closeCursor();
 
-        $result_riconsegnate = mysqli_query($conn, $riconsegnate);
-        $p_riconsegnate = mysqli_fetch_assoc($result_riconsegnate);
+            $query = $pdo->prepare($riconsegnate);
+            $query->bindParam(':email', $email);
+            $query->execute();
+            $p_riconsegnate = $query->fetch();
+            $query->closeCursor();
 
-        $result_prenotati = mysqli_query($conn, $prenotazioni);
-        $p_prenotati = mysqli_fetch_assoc($result_prenotati);
+            $query = $pdo->prepare($prenotazioni);
+            $query->bindParam(':email', $email);
+            $query->execute();
+            $p_prenotati = $query->fetch();
+            $query->closeCursor();
+
+        } catch (PDOException $e) {
+            throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+        }
+
     } else {
         $utente = ['Nome' => '', 'Cognome' => '', 'propic' => 'userDashFavicon.png'];
         $email = 'eg@example.com';

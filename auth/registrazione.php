@@ -1,8 +1,8 @@
 <?php
 session_start();
+$root = '..';
 require_once("../utils/connect.php");
 require_once("cookies.php");
-$root = '..';
 ?>
 <!DOCTYPE html>
 <html lang="en">

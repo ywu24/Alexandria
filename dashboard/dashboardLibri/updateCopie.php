@@ -42,7 +42,7 @@ if (isset($_POST['copie']) && isset($_POST['isbn'])) {
 
 		$differenza = $nuoveCopie - $vecchieCopie;
 		if ($differenza > 0) {
-			$sql2 = "INSERT INTO $table2 (ISBN, stato) VALUES(':isbn', 1)";
+			$sql2 = "INSERT INTO $table2 (ISBN, stato) VALUES(:isbn, 1)";
 			try {
 				for ($i = 0; $i < $differenza; $i++) {
 					$query = $pdo->prepare($sql2);
@@ -51,7 +51,7 @@ if (isset($_POST['copie']) && isset($_POST['isbn'])) {
 				}
 				echo "Inseriti " . $differenza . " libri con successo!";
 			} catch (exception $e) {
-				echo "ERRORE: inserimento fallito";
+				throw new Exception("ERRORE: " .  $e->getMessage());
 			}
 
 		} else if ($differenza < 0) {
@@ -67,7 +67,7 @@ if (isset($_POST['copie']) && isset($_POST['isbn'])) {
 					echo "Eliminati " . abs($differenza) . " libri con successo!";
 				}
 			} catch (exception $e) {
-				echo "ERRORE: nessun libro eliminato";
+				throw new Exception("ERRORE: " .  $e->getMessage());
 			}
 
 		} else {
@@ -75,7 +75,7 @@ if (isset($_POST['copie']) && isset($_POST['isbn'])) {
 		}
 
 	} catch (Exception $e) {
-		echo "ERRORE: libro non trovato " . $e->getMessage();
+		throw new Exception("ERRORE: libro non trovato " . $e->getMessage());
 	}
 }
 ?>

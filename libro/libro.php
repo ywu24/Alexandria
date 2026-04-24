@@ -72,7 +72,7 @@ require_once("../auth/cookies.php");
         }
 
         if (isset($email)) {
-            $query = $conn->prepare('SELECT count(*) FROM Utente, Prenotazione WHERE Utente.email = Prenotazione.email 
+            $query = $pdo->prepare('SELECT count(*) FROM Utente, Prenotazione WHERE Utente.email = Prenotazione.email 
                                 AND Utente.email = :email AND((FinePrestito IS NULL AND FinePrenotazione >= CURDATE()) 
                                 OR (FinePrestito IS NULL AND InizioPrestito IS NOT NULL))');
             $query->bindParam(':email', $email);
@@ -88,21 +88,22 @@ require_once("../auth/cookies.php");
                     try {
                         $nPrenotazioni = $_POST['sliderino'];
                         for ($i = 0; $i < $nPrenotazioni; $i++) {
-                            if ($query = $pdo->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera 
-                                                    WHERE Stato = 1 and id=:id and Opera.ISBN = copiaLibro.ISBN')) {
-                                $query->bindParam(':id', $book_id);
-                                $query->execute();
-                                $copiaPrenotata = $query->fetch();
-                                $query->closeCursor();
-                            }
+                            $query = $pdo->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera 
+                                                    WHERE Stato = 1 and id=:id and Opera.ISBN = copiaLibro.ISBN');
+
+                            $query->bindParam(':id', $book_id);
+                            $query->execute();
+                            $copiaPrenotata = $query->fetch();
+                            $query->closeCursor();
+
                             $id = $copiaPrenotata['id'];
                             $query = $pdo->prepare("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = :id");
                             $query->bindParam(':id', $id);
                             $query->execute();
                             $query->closeCursor();
 
-                            $query = $pdo->prepare("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) 
-                                                    VALUES (:email, :id, NOW(), ADDDATE(NOW(), INTERVAL :giorni DAY))");
+                            $query = $pdo->prepare("INSERT INTO Prenotazione (`Email`, `idCopia`, `InizioPrenotazione`, `FinePrenotazione`) 
+                                                VALUES (:email, :id, CURDATE(), ADDDATE(CURDATE(), INTERVAL :giorni DAY))");
                             $query->bindParam(':email', $email);
                             $query->bindParam(':id', $id);
                             $query->bindParam(':giorni', $giorniPrenotazione);
@@ -112,39 +113,27 @@ require_once("../auth/cookies.php");
                         }
                     } catch (Exception $e) {
                         echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
-                        $id = $copiaPrenotata['id'];
-                        $query = $pdo->prepare("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = :id");
-                        $query->bindParam(':id', $id);
-                        $query->execute();
-                        $query->closeCursor();
 
-                        $query = $pdo->prepare("INSERT INTO Prenotazione (`Email`, `idCopia`, `InizioPrenotazione`, `FinePrenotazione`) 
-                                                VALUES (:email, :id, CURDATE(), ADDDATE(CURDATE(), INTERVAL :giorni DAY))");
-                        $query->bindParam(':email', $email);
-                        $query->bindParam(':id', $id);
-                        $query->bindParam(':giorni', $giorniPrenotazione);
-                        $query->execute();
-                        $query->closeCursor();
                     }
 
                 } else if ($_SESSION['utenza'] == 4) {
                     try {
                         if ($numeroPrenotazioni < 3) {
-                            if ($query = $pdo->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera 
-                                                    WHERE Stato = 1 and id=:id and Opera.ISBN = copiaLibro.ISBN')) {
-                                $query->bindParam(':id', $book_id);
-                                $query->execute();
-                                $copiaPrenotata = $query->fetch();
-                                $query->closeCursor();
-                            }
+                            $query = $pdo->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera 
+                                                    WHERE Stato = 1 and id=:id and Opera.ISBN = copiaLibro.ISBN');
+                            $query->bindParam(':id', $book_id);
+                            $query->execute();
+                            $copiaPrenotata = $query->fetch();
+                            $query->closeCursor();
+
                             $id = $copiaPrenotata['id'];
                             $query = $pdo->prepare("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = :id");
                             $query->bindParam(':id', $id);
                             $query->execute();
                             $query->closeCursor();
-                            
-                            $query = $pdo->prepare("INSERT INTO Prenotazione (`Email`, `idCopia`, `Inizio`, `Fine`) 
-                                                    VALUES (:email, :id, NOW(), ADDDATE(NOW(), INTERVAL :giorni DAY))");
+
+                            $query = $pdo->prepare("INSERT INTO Prenotazione (`Email`, `idCopia`, `InizioPrenotazione`, `FinePrenotazione`) 
+                                                VALUES (:email, :id, CURDATE(), ADDDATE(CURDATE(), INTERVAL :giorni DAY))");
                             $query->bindParam(':email', $email);
                             $query->bindParam(':id', $id);
                             $query->bindParam(':giorni', $giorniPrenotazione);
@@ -156,19 +145,7 @@ require_once("../auth/cookies.php");
                         }
                     } catch (Exception $e) {
                         echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
-                        $id = $copiaPrenotata['id'];
-                        $query = $pdo->prepare("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = :id");
-                        $query->bindParam(':id', $id);
-                        $query->execute();
-                        $query->closeCursor();
 
-                        $query = $pdo->prepare("INSERT INTO Prenotazione (`Email`, `idCopia`, `InizioPrenotazione`, `FinePrenotazione`) 
-                                                VALUES (:email, :id, CURDATE(), ADDDATE(CURDATE(), INTERVAL :giorni DAY))");
-                        $query->bindParam(':email', $email);
-                        $query->bindParam(':id', $id);
-                        $query->bindParam(':giorni', $giorniPrenotazione);
-                        $query->execute();
-                        $query->closeCursor();
                     }
                 }
             }
@@ -176,7 +153,7 @@ require_once("../auth/cookies.php");
 
 
         $q = "SELECT count(idCopia) as qty FROM copiaLibro, Opera WHERE copiaLibro.Stato = 1 and id = :book_id and Opera.ISBN = copiaLibro.ISBN";
-        $query = $conn->prepare($q);
+        $query = $pdo->prepare($q);
         $query->bindParam(':book_id', $book_id);
         $query->execute();
         $qty = $query->fetch();

@@ -20,6 +20,13 @@ if(empty($id)||empty($nome)||empty($cognome)||empty($email)||empty($ruolo)){
 	
 }
 
+try {
+	$pdo = DatabaseConnection::getInstance()->getConnection();
+} catch (PDOException $e) {
+	echo "Errore durante la connessione al database: " . $e->getMessage();
+	exit;
+}
+
 // Controlla se l'utente ha inserito una nuova password
 if (!empty($password)) {
 	
@@ -28,7 +35,7 @@ if (!empty($password)) {
 	$sql = "UPDATE Utente SET Nome=:nome, Cognome=:cognome, Email=:email, Utenza=:ruolo, Password=:password WHERE id=:id";
 
 	try{
-		$query = $conn->prepare($sql);
+		$query = $pdo->prepare($sql);
 		$query->bindParam(':nome', $nome);
 		$query->bindParam(':cognome', $cognome);
 		$query->bindParam(':email', $email);
@@ -49,7 +56,7 @@ if (!empty($password)) {
 	$sql = "UPDATE Utente SET Nome=:nome, Cognome=:cognome, Email=:email, Utenza=:ruolo WHERE id=:id";
 
 	try{
-		$query = $conn->prepare($sql);
+		$query = $pdo->prepare($sql);
 		$query->bindParam(':nome', $nome);
 		$query->bindParam(':cognome', $cognome);
 		$query->bindParam(':email', $email);

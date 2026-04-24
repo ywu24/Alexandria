@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 <?php
 
 session_start();
+$root = "../..";
 require_once("../../utils/connect.php");
 require_once("../../auth/cookies.php");
 if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
@@ -124,7 +125,7 @@ if (isset($_GET['errore'])) {
 
 					switch (true) {
 						case isset($_POST['search_btn']):
-							$search_text = $_POST['search'];
+							$search_text = $_POST['search'] ? '%' . $_POST['search'] . '%' : '%';
 							try {
 								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email, punteggio, Utenza 
 														FROM $table 
@@ -136,7 +137,7 @@ if (isset($_GET['errore'])) {
 														OR id LIKE ?
 														OR concat(Nome,' ',Cognome) LIKE ?
 														OR concat(Cognome,' ',Nome) LIKE ?");
-								$query->execute(array_fill(0, 6, $search_text));
+								$query->execute(array_fill(0, 8, $search_text));
 
 								foreach ($query->fetchAll() as $row) {
 									if ($_SESSION['utenza'] == 1) {
