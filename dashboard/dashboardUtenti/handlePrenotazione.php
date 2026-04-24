@@ -29,7 +29,7 @@ switch (true) {
                 $query->bindParam(':id', $id);
                 $query->execute();
                 $query->closeCursor();
-                echo "Prestito confermato!";
+                echo "ok";
             } else {
                 ####segnalale errore: prenotazione scaduta.
                 echo "Errore prenotazione Scaduta?";
@@ -48,7 +48,7 @@ switch (true) {
                 $query->bindParam(':id', $id);
                 $query->execute();
                 $query->closeCursor();
-                echo "Prestito terminato con successo!";
+                echo "ok prestito terminato con successo!";
             } else {
                 echo "Errore: " . $id;
             }

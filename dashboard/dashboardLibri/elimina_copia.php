@@ -27,7 +27,7 @@ if (isset($_POST['id'])) {
             echo "Errore nell'eliminazione del libro con id " . $id;
             exit;
         }
-        echo "Libro con id " . $id . " eliminato con successo!";
+        echo "okLibro con id " . $id . " eliminato con successo!";
     } catch (Exception $e) {
         echo "Errore nell'eliminazione del libro con id " . $id . ", " . $e->getMessage();
         exit;
