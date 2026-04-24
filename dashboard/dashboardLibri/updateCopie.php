@@ -49,7 +49,7 @@ if (isset($_POST['copie']) && isset($_POST['isbn'])) {
 					$query->bindParam(':isbn', $isbn);
 					$query->execute();
 				}
-				echo "Inseriti " . $differenza . " libri con successo!";
+				echo "okInseriti " . $differenza . " libri con successo!";
 			} catch (exception $e) {
 				throw new Exception("ERRORE: " .  $e->getMessage());
 			}
@@ -64,14 +64,14 @@ if (isset($_POST['copie']) && isset($_POST['isbn'])) {
 				if ($query->rowCount() != abs($differenza)) {
 					echo "WARNING: eliminati solo " . $query->rowCount() . " su " . abs($differenza) . " richiesti: non puoi eliminare libri in prestito!";
 				} else {
-					echo "Eliminati " . abs($differenza) . " libri con successo!";
+					echo "okEliminati " . abs($differenza) . " libri con successo!";
 				}
 			} catch (exception $e) {
 				throw new Exception("ERRORE: " .  $e->getMessage());
 			}
 
 		} else {
-			echo "Nessun cambiamento necessario.";
+			echo "ignora";
 		}
 
 	} catch (Exception $e) {
