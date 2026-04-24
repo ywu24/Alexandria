@@ -1,38 +1,52 @@
 <?php
 require_once("../../utils/connect.php");
-if(!isset($_POST['idUtente']) && !isset($_POST['email'])){
-    die();
+if (!isset($_POST['idUtente']) && !isset($_POST['email'])) {
+    exit;
 }
 $email = "";
-if(isset($_POST['idUtente'])){
+try {
+    $pdo = DatabaseConnection::getInstance()->getConnection();
+} catch (PDOException $e) {
+    echo "Errore durante la connessione al database: " . $e->getMessage();
+    exit;
+}
+
+if (isset($_POST['idUtente'])) {
     $idUtente = $_POST['idUtente'];
 
     // Recupero l'email dell'utente
-    $q = $conn->prepare('SELECT Email FROM Utente WHERE id=?');
-    $q->bind_param('i', $idUtente);
-    $q->execute();
-    $email = $q->get_result()->fetch_assoc()['Email'];
-}
-else{
+    if ($query = $pdo->prepare('SELECT Email FROM Utente WHERE id = :id')) {
+        $query->bindParam(':id', $idUtente);
+        $query->execute();
+        $email = $query->fetch()['Email'];
+        $query->closeCursor();
+    } else {
+        throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+    }
+} else {
     $email = $_POST['email'];
 }
+
 // Query solo per Prenotazioni Terminate
 $sql = "SELECT idPrenotazione, InizioPrestito, FinePrestito, FineAttesa 
         FROM Prenotazione, copiaLibro, Opera 
         WHERE copiaLibro.idCopia = Prenotazione.idCopia 
         AND Opera.ISBN = copiaLibro.ISBN 
-        AND Prenotazione.Email = ? 
+        AND Prenotazione.Email = :email 
         AND FinePrestito IS NOT NULL
         ORDER BY Prenotazione.idPrenotazione DESC";
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param('s', $email);
-$stmt->execute();
-$result = $stmt->get_result();
+if ($query = $pdo->prepare($sql)) {
+    $query->bindParam(':email', $email);
+    $query->execute();
 
-$terminate = [];
-while ($row = $result->fetch_assoc()) {
-    $terminate[] = $row;
+    $terminate = [];
+    foreach ($query->fetchAll() as $row) {
+        $terminate[] = $row;
+    }
+    $query->closeCursor();
+    echo json_encode($terminate);
+} else {
+    throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
 }
-echo json_encode($terminate);
 ?>

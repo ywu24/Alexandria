@@ -11,27 +11,33 @@ require_once("../../utils/connect.php");
 
 if (!isset($_SESSION['utenza']) || ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2)) {
     header("Location: ../../index.php");
-    exit(); 
+    exit();
 }
 
 
 if (!isset($_GET['id'])) {
-    header("Location: dashboardLibri.php"); 
+    header("Location: dashboardLibri.php");
     exit();
 }
 
 $id = $_GET['id'];
 
 try {
-    
-    $query = $conn->prepare("SELECT idPrenotazione FROM Prenotazione WHERE idCopia = ? AND FinePrestito IS NULL");
-    $query->bind_param("i", $id);
-    $query->execute();
-    $result = $query->get_result();
-    $row = $result->fetch_assoc();
+    $pdo = DatabaseConnection::getInstance()->getConnection();
+} catch (PDOException $e) {
+    echo "Errore durante la connessione al database: " . $e->getMessage();
+    exit;
+}
 
-    if ($row) {
-        header("Location: ../dashboardUtenti/dettaglioPrenotazione.php?id=" . $row['idPrenotazione']);
+try {
+
+    $query = $pdo->prepare("SELECT idPrenotazione FROM Prenotazione WHERE idCopia = :id AND FinePrestito IS NULL");
+    $query->bindParam(':id', $id);
+    $query->execute();
+    $result = $query->fetch();
+
+    if ($result) {
+        header("Location: ../dashboardUtenti/dettaglioPrenotazione.php?id=" . $result['idPrenotazione']);
         exit();
     } else {
         $_SESSION['error_msg'] = "Nessuna prenotazione trovata per questa copia.";
@@ -40,10 +46,5 @@ try {
     }
 } catch (Exception $e) {
     echo "Errore di sistema: " . $e->getMessage();
-} finally {
-    
-    if (isset($conn)) {
-        $conn->close();
-    }
 }
 ?>

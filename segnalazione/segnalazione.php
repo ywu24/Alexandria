@@ -1,4 +1,5 @@
 <?php
+//TODO: MODIFICARE QUERY PER RENDERLI PDO
 session_start();
 $root = '..';
 require_once("../utils/connect.php");

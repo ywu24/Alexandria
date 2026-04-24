@@ -20,38 +20,55 @@ if(empty($id)||empty($nome)||empty($cognome)||empty($email)||empty($ruolo)){
 	
 }
 
+try {
+	$pdo = DatabaseConnection::getInstance()->getConnection();
+} catch (PDOException $e) {
+	echo "Errore durante la connessione al database: " . $e->getMessage();
+	exit;
+}
+
 // Controlla se l'utente ha inserito una nuova password
 if (!empty($password)) {
 	
 	// Aggiorna la password e gli altri campi nel database 
 	$password_hash = password_hash($password, PASSWORD_BCRYPT);
-	$sql = "UPDATE Utente SET Nome='$nome', Cognome='$cognome', Email='$email',  Utenza='$ruolo', Password='$password_hash' WHERE id=$id";
+	$sql = "UPDATE Utente SET Nome=:nome, Cognome=:cognome, Email=:email, Utenza=:ruolo, Password=:password WHERE id=:id";
 
 	try{
-		$conn->query($sql);
+		$query = $pdo->prepare($sql);
+		$query->bindParam(':nome', $nome);
+		$query->bindParam(':cognome', $cognome);
+		$query->bindParam(':email', $email);
+		$query->bindParam(':ruolo', $ruolo);
+		$query->bindParam(':password', $password_hash);
+		$query->bindParam(':id', $id);
+		$query->execute();
+		$query->closeCursor();
 		header("Location: dashboardUtenti.php?aggiornato=1");
-	} catch (mysqli_sql_exception $e) {
+	} catch (PDOException $e) {
 		#echo "Errore durante il salvataggio delle modifiche: " . $conn->error;
 		header("Location: modificaUtente.php?error=2&id=".$id);
-	} finally{
-		$conn->close();
+		exit;
 	}
 	
   } else {
 	// L'utente non ha inserito una nuova password, quindi si aggiornano gli altri campi e non la password nel database
-	$sql = "UPDATE Utente SET Nome='$nome', Cognome='$cognome', Email='$email', Utenza='$ruolo' WHERE id=$id";
+	$sql = "UPDATE Utente SET Nome=:nome, Cognome=:cognome, Email=:email, Utenza=:ruolo WHERE id=:id";
 
 	try{
-		$conn->query($sql);
+		$query = $pdo->prepare($sql);
+		$query->bindParam(':nome', $nome);
+		$query->bindParam(':cognome', $cognome);
+		$query->bindParam(':email', $email);
+		$query->bindParam(':ruolo', $ruolo);
+		$query->bindParam(':id', $id);
+		$query->execute();
+		$query->closeCursor();
 		header("Location: dashboardUtenti.php?aggiornato=1");
-	} catch (mysqli_sql_exception $e) {
+	} catch (PDOException $e) {
 		#echo "Errore durante il salvataggio delle modifiche: " . $conn->error;
 		header("Location: modificaUtente.php?error=2&id=".$id);
-	}
-	finally{
-		$conn->close();
+		exit;
 	}
   }
-
-
 ?>

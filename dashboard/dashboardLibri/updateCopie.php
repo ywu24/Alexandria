@@ -11,60 +11,71 @@ require_once("../../utils/connect.php");
 $table2 = "copiaLibro";
 
 if (isset($_POST['copie']) && isset($_POST['isbn'])) {
-	#echo "CIAOAOAAOAO";
+
 	$isbn = $_POST['isbn'];
 	$nuoveCopie = (int) $_POST['copie'];
 	if ($nuoveCopie < 0) {
 		echo "ERRORE: il numero inserito deve essere positivo o al più uguale zero!";
-		die();
+		exit;
 	}
-	$sql1 = "SELECT ISBN, COUNT(idCopia) as copie FROM $table2 WHERE ISBN='" . $isbn . "' GROUP BY ISBN";
+
 	try {
-		$result = $conn->query($sql1);
-		$row = $result->fetch_assoc();
+		$pdo = DatabaseConnection::getInstance()->getConnection();
+	} catch (PDOException $e) {
+		echo "Errore durante la connessione al database: " . $e->getMessage();
+		exit;
+	}
+	
+	$sql1 = "SELECT ISBN, COUNT(idCopia) as copie FROM $table2 WHERE ISBN=:isbn GROUP BY ISBN";
+	try {
+		$query = $pdo->prepare($sql1);
+		$query->bindParam(':isbn', $isbn);
+		$query->execute();
+		$result = $query->fetch();
 		$vecchieCopie = 0;
-		if ($row == NULL) {
+		if (!$result) {
 			#echo "ERRORE: libro non trovato!"; 
 			#die();
 		} else {
-			$vecchieCopie = (int) $row['copie'];
+			$vecchieCopie = (int) $result['copie'];
 		}
 
 		$differenza = $nuoveCopie - $vecchieCopie;
 		if ($differenza > 0) {
-			$sql2 = "INSERT INTO $table2 (ISBN, stato) VALUES('$isbn', 1)";
+			$sql2 = "INSERT INTO $table2 (ISBN, stato) VALUES(:isbn, 1)";
 			try {
 				for ($i = 0; $i < $differenza; $i++) {
-					$conn->query($sql2);
-
+					$query = $pdo->prepare($sql2);
+					$query->bindParam(':isbn', $isbn);
+					$query->execute();
 				}
-				echo "okinseriti " . $differenza . " libri con successo!";
+				echo "Inseriti " . $differenza . " libri con successo!";
 			} catch (exception $e) {
-				echo "ERRORE: inserimento fallito";
+				throw new Exception("ERRORE: " .  $e->getMessage());
 			}
 
 		} else if ($differenza < 0) {
 
-			$sql2 = "DELETE FROM $table2 WHERE ISBN='$isbn' and stato =1 LIMIT " . abs($differenza);
+			$sql2 = "DELETE FROM $table2 WHERE ISBN=:isbn and stato =1 LIMIT " . abs($differenza);
 			try {
-				$conn->query($sql2);
-				if ($conn->affected_rows != abs($differenza)) {
-					echo "WARNING: eliminati solo " . $conn->affected_rows . " su " . abs($differenza) . " richiesti: non puoi eliminare libri in prestito!";
+				$query = $pdo->prepare($sql2);
+				$query->bindParam(':isbn', $isbn);
+				$query->execute();
+				if ($query->rowCount() != abs($differenza)) {
+					echo "WARNING: eliminati solo " . $query->rowCount() . " su " . abs($differenza) . " richiesti: non puoi eliminare libri in prestito!";
 				} else {
-					echo "okeliminati " . abs($differenza) . " libri con successo!";
+					echo "Eliminati " . abs($differenza) . " libri con successo!";
 				}
 			} catch (exception $e) {
-				echo "ERRORE: nessun libro eliminato";
+				throw new Exception("ERRORE: " .  $e->getMessage());
 			}
 
 		} else {
-			echo "ignora";
+			echo "Nessun cambiamento necessario.";
 		}
 
-	} catch (exception $e) {
-		echo "ERRORE: libro non trovato " . $e;
-	} finally {
-		$conn->close();
+	} catch (Exception $e) {
+		throw new Exception("ERRORE: libro non trovato " . $e->getMessage());
 	}
 }
 ?>

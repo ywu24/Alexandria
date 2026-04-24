@@ -5,9 +5,6 @@ require_once("../../utils/connect.php");
 require_once("../../auth/cookies.php");
 $email = $_SESSION['email'];
 
-
-
-
 if (isset($_POST['propicIns'])) {
 
     if (!isset($_FILES['image']) || $_FILES['image']['error'] === 4) {
@@ -55,11 +52,23 @@ if (isset($_POST['propicIns'])) {
     }
     $propic = $file_name_new;
 
-    $sql = "UPDATE `Utente` SET propic = '$propic' WHERE `Utente`.`Email` = '$email'";
-    if ($conn->query($sql) === TRUE) {
+    try {
+        $pdo = DatabaseConnection::getInstance()->getConnection();
+    } catch (PDOException $e) {
+        echo "Errore durante la connessione al database: " . $e->getMessage();
+        exit;
+    }
+    $sql = "UPDATE `Utente` SET propic = :propic WHERE `Utente`.`Email` = :email";
+    try {
+        $query = $pdo->prepare($sql);
+        $query->bindParam(':propic', $propic);
+        $query->bindParam(':email', $email);
+        $query->execute();
+        $query->closeCursor();
         $_SESSION['success_msg'] = "Immagine cambiata con successo.";
         header("Location: ../edit_profile.php");
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        exit;
+    } catch (PDOException $e) {
+        echo "Error: " . $sql . "<br>" . $e->getMessage();
     }
 }

@@ -24,7 +24,7 @@ error_reporting(E_ALL);
     <link rel="stylesheet" href="../css/prenotazione.css">
     <link rel="stylesheet" href="../css/dettaglioUtenti.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    
+
     <link rel="stylesheet" href="../css/popup.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
@@ -33,7 +33,7 @@ error_reporting(E_ALL);
     <!--script per importare parti di codice-->
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
     <script src="prenotazione.js"></script>
-    
+
 </head>
 
 <body>
@@ -42,54 +42,74 @@ error_reporting(E_ALL);
         <?php
         require_once("../nav/nav.php"); ?>
     </div>
-    <div id = "messages">
+    <div id="messages">
     </div>
-        <h1>Prenotazione Libro</h1>
-    
+    <h1>Prenotazione Libro</h1>
+
     <div class="container">
         <?php
 
         if (isset($_SESSION['email'])) {
         } else {
             header("Location: ../index.php");
+            exit;
         }
         $table = "Prenotazione";
         $table1 = "copiaLibro";
         $table2 = "Opera";
         $email = $_SESSION['email'];
 
-        
+        try {
+            $pdo = DatabaseConnection::getInstance()->getConnection();
+        } catch (PDOException $e) {
+            echo "Errore durante la connessione al database: " . $e->getMessage();
+            exit;
+        }
         ################
         $numero_prenotazioni = 0;
-        foreach ($conn->query("SELECT idPrenotazione, Copertina, $table.idCopia, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa, Autore, Nome, CasaEditrice FROM $table, $table1, $table2 WHERE $table1.idCopia = $table.idCopia AND $table2.ISBN = $table1.ISBN and $table.Email = '$email'  ORDER BY $table.idPrenotazione DESC") as $row) {
-            
-            $inizio="";
-            $fine ="";
-            $stato = "";
-            
-            
-            if ($row["InizioPrestito"] == NULL) {
-                if(strtotime($row['FinePrenotazione']) < time()){ echo "OOOO"; }
-                else {
-                    $stato = "Prenotato"; $color = "green";
-                    $inizio = $row["InizioPrenotazione"]; $fine = $row["FinePrenotazione"];
-                }
-            } else {
-                if($row['FinePrestito'] == NULL){
-                    if(time() > strtotime($row['FineAttesa'])){
-                        $stato="In Ritardo"; $color = "red";
-                    } else {
-                        $stato="In Prestito"; $color = "orange";
-                    }
-                    $inizio = $row["InizioPrestito"];
-                    $fine = "Da riconsegnare entro = ". $row["FinePrenotazione"];
-                } else { $stato = "Terminato"; }
-            }
+        try {
+            $query = $pdo->prepare("SELECT idPrenotazione, Copertina, $table.idCopia, InizioPrenotazione, FinePrenotazione, InizioPrestito, 
+                                FinePrestito, FineAttesa, Autore, Nome, CasaEditrice FROM $table, $table1, $table2 
+                                WHERE $table1.idCopia = $table.idCopia AND $table2.ISBN = $table1.ISBN and $table.Email = :email 
+                                ORDER BY $table.idPrenotazione DESC");
+            $query->bindParam(':email', $email);
+            $query->execute();
+            foreach ($query->fetchAll() as $row) {
 
-            
-            if($stato != "Terminato"){
-                $numero_prenotazioni++;
-                echo "
+                $inizio = "";
+                $fine = "";
+                $stato = "";
+
+
+                if ($row["InizioPrestito"] == NULL) {
+                    if (strtotime($row['FinePrenotazione']) < time()) {
+                        echo "OOOO";
+                    } else {
+                        $stato = "Prenotato";
+                        $color = "green";
+                        $inizio = $row["InizioPrenotazione"];
+                        $fine = $row["FinePrenotazione"];
+                    }
+                } else {
+                    if ($row['FinePrestito'] == NULL) {
+                        if (time() > strtotime($row['FineAttesa'])) {
+                            $stato = "In Ritardo";
+                            $color = "red";
+                        } else {
+                            $stato = "In Prestito";
+                            $color = "orange";
+                        }
+                        $inizio = $row["InizioPrestito"];
+                        $fine = "Da riconsegnare entro = " . $row["FinePrenotazione"];
+                    } else {
+                        $stato = "Terminato";
+                    }
+                }
+
+
+                if ($stato != "Terminato") {
+                    $numero_prenotazioni++;
+                    echo "
                 <div class='book-container'>
                     <div class='book-link'>
                         <img src='../img/books/" . $row['Copertina'] . "' alt='' class='book-cover' width='160px'>
@@ -107,32 +127,38 @@ error_reporting(E_ALL);
                                 <span>Fine: " . $fine . "</span>
                             </div>";
 
-                            
-                           
 
-                if($stato == "Prenotato"){
-                    echo "
+
+
+                    if ($stato == "Prenotato") {
+                        echo "
                         <button class='delete-button' data-id ='" . $row['idPrenotazione'] . "' name='delete'>
                             <img src='../img/trash-bin.png' alt='' class='icon1' style='position: relative' width='24px'>
                         </button>";
-                } 
-            
-                echo "
+                    }
+
+                    echo "
                         </div> </div> </div> ";
-            }
-        } // Fine foreach
+                }
+            } // Fine foreach
+
+            $query->closeCursor();
+        } catch (PDOException $e) {
+            throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+        }
+
         echo '<hr>
 				<div id="terminate-container">
 						<button id="load-terminated" class="btn btn-secondary" data-id-utente=' . $_SESSION['email'] . '>
 							Mostra prenotazioni terminate
 						</button>
 				</div>';
-		
-        
-        if($numero_prenotazioni==0){
+
+
+        if ($numero_prenotazioni == 0) {
             echo "<h2>nessuna Prenotazione Attiva al momento</h2>";
         }
         echo "</div>"; // Chiude il div 'container'
-?>
+        ?>
 
 </body>

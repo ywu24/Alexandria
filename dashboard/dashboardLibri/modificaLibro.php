@@ -20,28 +20,34 @@
 		// Connessione al database
 		$table = "Opera";
 		require_once("../../utils/connect.php");
+		try {
+			$pdo = DatabaseConnection::getInstance()->getConnection();
+		} catch (PDOException $e) {
+			echo "Errore durante la connessione al database: " . $e->getMessage();
+			exit;
+		}
 
 		// Recupero l'isbn del libro selezionato dalla pagina precedente
 		$id = $_GET['id'];
 
 		// Recupero i dati del libro dal database
-		$sql = "SELECT * FROM $table WHERE ISBN = $id";
-		$result = $conn->query($sql);
-		if ($result->num_rows > 0) {
-			$row = $result->fetch_assoc();
-			$titolo = $row["Nome"];
-			$autore = $row["Autore"];
-			$genere = $row["Genere"];
-			$desc = $row["Descrizione"];
-			$casaed = $row["CasaEditrice"];
-			$annopub = $row["AnnoPubblicazione"];
-			$isbn = $row["ISBN"];
+		$q1 = "SELECT * FROM $table WHERE ISBN = :id";
+		$query = $pdo->prepare($q1);
+		$query->bindParam(':id', $id);
+		$query->execute();
+		$result = $query->fetch();
+		if ($result) {
+			$titolo = $result["Nome"];
+			$autore = $result["Autore"];
+			$genere = $result["Genere"];
+			$desc = $result["Descrizione"];
+			$casaed = $result["CasaEditrice"];
+			$annopub = $result["AnnoPubblicazione"];
+			$isbn = $result["ISBN"];
 		} else {
 			echo "Nessun libro trovato";
 		}
 
-		// Chiudo la connessione al database
-		$conn->close();
 		?>
 		<form action="salvaModificheLibro.php" method="post">
 			<div class="form-group">
@@ -70,7 +76,8 @@
 				<select class="form-control" name="genere" id="genere">
 					<option <?php if ($genere == "Romanzo Storico") {
 						echo "selected";
-					} ?> value="Romanzo Storico">Romanzo Storico</option>
+					} ?> value="Romanzo Storico">
+						Romanzo Storico</option>
 					<option <?php if ($genere == "Giallo") {
 						echo "selected";
 					} ?> value="Giallo">Giallo</option>

@@ -3,17 +3,17 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
- session_start();
+session_start();
 require_once("../../auth/cookies.php");
 require_once("../../utils/connect.php");
 
 
 $giorniPrenotazione = 30;
-if(!isset($_GET['id'])){
-            header("../../lista.php");
-            die();
-        }
-         ?>
+if (!isset($_GET['id'])) {
+    header("../../lista.php");
+    exit;
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,70 +40,89 @@ if(!isset($_GET['id'])){
     <div class="safe-area spaced-column">
 
         <div id="nav-placeholder"><?php
-			$root= "../..";
-           
-			require_once("../../nav/nav.php");
-		?></div>
-	<div id = "messages">
-   
-    </div>
-    <div id ="bookings">
+        $root = "../..";
 
-        <?php
-        
-        $table = "Opera";
-        
-        $id = $_GET['id'];
-    try{
-        if ($q2 = $conn->prepare('SELECT Opera.id, Prenotazione.Email as Email FROM Opera, Prenotazione, copiaLibro WHERE Prenotazione.idPrenotazione=? AND Prenotazione.idCopia = copiaLibro.idCopia AND Opera.ISBN = copiaLibro.ISBN')) {
-            $q2->bind_param('i', $id);
-            $q2->execute();
-            $result2 = $q2->get_result();
-            $opera = $result2->fetch_assoc();
-            $book_id = $opera['id'];
-            $email = $opera['Email'];
-        }
-        echo "<h3> Prenotazione di " . $email . "</h3>";
+        require_once("../../nav/nav.php");
+        ?></div>
+        <div id="messages">
 
-       
-        if ($q = $conn->prepare('SELECT InizioPrenotazione, InizioPrestito, FinePrenotazione, FinePrestito, FineAttesa FROM Prenotazione WHERE idPrenotazione=?')) {
-            $q->bind_param('i', $id);
-            $q->execute();
-            $result = $q->get_result();
-            $prenotazione = $result->fetch_assoc();
-        }
-        if ($prenotazione['InizioPrestito'] == NULL) {
-            if(strtotime($prenotazione['FinePrenotazione'])< time()){
-                ##ELIMINARE DAL DB
-            }
-            $stato = "Prenotato";
-        }else {
-            if($prenotazione['FinePrestito']==NULL){
-                 $stato = "In Prestito";
-                 if(time() > strtotime($prenotazione['FineAttesa'])){
-                    $stato = "In Prestito (in ritardo)";
-                }
-            }
-            else{
-                $stato = "Terminata";
-                if(strtotime($prenotazione['FinePrestito'])> strtotime($prenotazione['FineAttesa'])){
-                    $stato = "Terminata in ritardo";
-                }
-            }
-        }
-    } catch(Exception $e){
-        header("Location: dashboardUtenti.php");
-        exit();
-    }
-        
+        </div>
+        <div id="bookings">
 
-        if (isset($_GET['id'])) {
+            <?php
+
+            $table = "Opera";
+
+            $id = $_GET['id'];
 
             try {
-                foreach ($conn->query("SELECT Nome, Autore, Copertina, CasaEditrice, ISBN, Descrizione FROM $table WHERE id = $book_id") as $row){
+                $pdo = DatabaseConnection::getInstance()->getConnection();
+            } catch (PDOException $e) {
+                echo "Errore durante la connessione al database: " . $e->getMessage();
+                exit;
+            }
 
-                    if($stato != "Terminata"){
-                        echo "<main>
+            try {
+                if (
+                    $q1 = $pdo->prepare('SELECT Opera.id, Prenotazione.Email as Email FROM Opera, Prenotazione, copiaLibro 
+                                            WHERE Prenotazione.idPrenotazione=:id 
+                                            AND Prenotazione.idCopia = copiaLibro.idCopia 
+                                            AND Opera.ISBN = copiaLibro.ISBN')
+                ) {
+                    $q1->bindParam(':id', $id);
+                    $q1->execute();
+                    $opera = $q1->fetch();
+                    $q1->closeCursor();
+
+                    $book_id = $opera['id'];
+                    $email = $opera['Email'];
+                }
+                echo "<h3> Prenotazione di " . $email . "</h3>";
+
+
+                if (
+                    $q2 = $pdo->prepare('SELECT InizioPrenotazione, InizioPrestito, FinePrenotazione, FinePrestito, FineAttesa 
+                                        FROM Prenotazione WHERE idPrenotazione=:id')
+                ) {
+                    $q2->bindParam(':id', $id);
+                    $q2->execute();
+                    $prenotazione = $q2->fetch();
+                    $q2->closeCursor();
+                }
+                if ($prenotazione['InizioPrestito'] == NULL) {
+                    if (strtotime($prenotazione['FinePrenotazione']) < time()) {
+                        ##ELIMINARE DAL DB
+                    }
+                    $stato = "Prenotato";
+                } else {
+                    if ($prenotazione['FinePrestito'] == NULL) {
+                        $stato = "In Prestito";
+                        if (time() > strtotime($prenotazione['FineAttesa'])) {
+                            $stato = "In Prestito (in ritardo)";
+                        }
+                    } else {
+                        $stato = "Terminata";
+                        if (strtotime($prenotazione['FinePrestito']) > strtotime($prenotazione['FineAttesa'])) {
+                            $stato = "Terminata in ritardo";
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                header("Location: dashboardUtenti.php");
+                exit();
+            }
+
+
+            if (isset($_GET['id'])) {
+
+                try {
+                    $query = $pdo->prepare("SELECT Nome, Autore, Copertina, CasaEditrice, ISBN, Descrizione FROM $table WHERE id = :id");
+                    $query->bindParam(':id', $book_id);
+                    $query->execute();
+                    foreach ($query->fetchAll() as $row) {
+
+                        if ($stato != "Terminata") {
+                            echo "<main>
                         <div class='container' >
                             <div class='left-column'>
                                 <img src='../../img/books/" . $row['Copertina'] . "' alt='Copertina Libro' >
@@ -116,25 +135,25 @@ if(!isset($_GET['id'])){
                                 <div class='desc'>
                                     <p class='truncdesc'>" . $row['Descrizione'] . "</p>
                                 </div>";
-                             if ($stato =="Prenotato") {
-                                if($_SESSION['utenza']== 1 ||$_SESSION['utenza']== 2){
+                            if ($stato == "Prenotato") {
+                                if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
                                     echo "
                                     <button data-id =" . $id . "  class='prenotazione conferma' name='conferma'>Conferma Prenotazione</button>";
                                 }
-                                    echo"
+                                echo "
                                     <button data-id =" . $id . "  class='prenotazione elimina' name='elimina'>Elimina Prenotazione</button>
                                     ";
-                             } else {
-                                if($_SESSION['utenza']== 1 ||$_SESSION['utenza']== 2){
+                            } else {
+                                if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
                                     echo "<button data-id =" . $id . " class='prenotazione termina' name='termina'>Conferma Consegna</button>";
                                 }
-                             }
-                             echo
-                                 "</div>
+                            }
+                            echo
+                                "</div>
                             </div>
                         </main>";
-                    }else { #se Prenotazione terminata
-                        echo "<main>
+                        } else { #se Prenotazione terminata
+                            echo "<main>
                         <div class='container'>
                             <div class='left-column'>
                                 <img src='../../img/books/" . $row['Copertina'] . "' alt='Copertina Libro' >
@@ -149,46 +168,34 @@ if(!isset($_GET['id'])){
                                 </div></div> </div>
                             </div>
                         </main>";
+                        }
+
                     }
-                    
-                } 
+                    $query->closeCursor();
 
 
-            } catch (PDOException $e) {
-                print "Error!: " . $e->getMessage() . "<br/>";
-                header("Location: dashboardUtenti.php");
-                exit();
+                } catch (PDOException $e) {
+                    print "Error!: " . $e->getMessage() . "<br/>";
+                    header("Location: dashboardUtenti.php");
+                    exit();
+                }
             }
+            ?>
 
+            <!--inizio libro-->
 
-        }
+            <dialog class="pop-up" id="modal">
+                <h4>Sei sicuro di voler confermare la prenotazione di:</h4>
+                <div class="prenotation-info">
+                    <span>titololibro</span>
+                    <span>ISBN</span>
+                    <span>Durata prenotazione</span>
+                </div>
+                <form class="form" method="dialog">
 
+                    <button class="button close-button">no</button>
+                    <button class="button" type="submit" name='prenota'>si</button>
+                </form>
 
-
-
-
-
-
-
-
-        ?>
-
-        <!--inizio libro-->
-
-        <dialog class="pop-up" id="modal">
-            <h4>Sei sicuro di voler confermare la prenotazione di:</h4>
-            <div class="prenotation-info">
-                <span>titololibro</span>
-                <span>ISBN</span>
-                <span>Durata prenotazione</span>
-            </div>
-            <form class="form" method="dialog">
-
-                <button class="button close-button">no</button>
-                <button class="button" type="submit" name='prenota'>si</button>
-            </form>
-
-        </dialog>
-        </main>
-
-
+            </dialog>
+            </main>

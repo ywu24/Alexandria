@@ -4,29 +4,33 @@ session_start();
 if (isset($_POST['check'])) {
     // Connessione al database
     require_once("../../utils/connect.php");
+
     $isbn = $_POST['isbn-check'];
 
     // Controllo se il libro esiste già nel database
     try {
-        if ($stmt = $conn->prepare('SELECT * FROM Opera WHERE ISBN = ?')) {
-            $stmt->bind_param('s', $isbn);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if (mysqli_num_rows($result) > 0) {
-                $_SESSION['libroEsiste'] = true;
+        $pdo = DatabaseConnection::getInstance()->getConnection();
+        if ($query = $pdo->prepare('SELECT * FROM Opera WHERE ISBN = :isbn')) {
+            $query->bindParam(':isbn', $isbn);
+            $query->execute();
+
+            $exists = $query->fetch() ? true : false;
+            $query->closeCursor();
+            $_SESSION['libroEsiste'] = $exists;
+
+            if ($exists) {
                 header("Location: aggiungiLibro.php");
+                exit;
             } else {
-                $_SESSION['libroEsiste'] = false;
                 header("Location: aggiungiLibro.php");
+                exit;
             }
         } else {
-            echo "Errore durante controllo: " . $conn->error;
+            echo "Errore nella preparazione della query.";
         }
+
     } catch (PDOException $e) {
-        echo "Errore durante controllo: " . $conn->error;
-    } finally {
-        // Chiudo la connessione al database
-        $conn->close();
+        echo "Errore durante controllo: " . $e->getMessage();
     }
 }
 ?>

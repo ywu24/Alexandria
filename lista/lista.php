@@ -4,21 +4,32 @@ $root = '..';
 require_once("../utils/connect.php");
 
 require_once("../auth/cookies.php");
-
+try {
+	$pdo = DatabaseConnection::getInstance()->getConnection();
+} catch (PDOException $e) {
+	echo "Errore durante la connessione al database: " . $e->getMessage();
+	exit;
+}
 
 $table = "Opera";
 $maxPerPage = 10;
 $paginationCtrls = '';
 
-function paginator($where, $additionalParams = "")
+function paginator($where, $additionalParams = [], $urlParams = [])
 {
-    global $conn, $table, $maxPerPage, $paginationCtrls;
+    global $pdo, $table, $maxPerPage, $paginationCtrls;
     $pageTo = "lista.php";
 
     $countQuery = "SELECT count(*) as tot FROM $table $where";
-    $result = mysqli_query($conn, $countQuery);
-    $row = $result->fetch_assoc();
-    $rowCount = $row['tot'];
+    try {
+        $query = $pdo->prepare($countQuery);
+        $query->execute($additionalParams);
+        $result = $query->fetch();
+        $query->closeCursor();
+        $rowCount = $result['tot'];
+    } catch (PDOException $e) {
+        throw new Exception("Error executing count query: " . $e->getMessage());
+    }
 
     if ($rowCount > 0) {
         $p = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -40,11 +51,8 @@ function paginator($where, $additionalParams = "")
                 the previous page or the first page so we do nothing. If we aren't then we
                 generate links to the first page, and to the previous pages.
             */
-            $baseUrl = $pageTo . "?" . ltrim($additionalParams, '&');
-            if ($additionalParams != "")
-                $baseUrl .= "&";
-            else
-                $baseUrl .= "?";
+            $queryString = !empty($urlParams) ? http_build_query($urlParams) . "&" : "";
+            $baseUrl = $pageTo . "?" . $queryString;
 
             if ($page > 1) {
                 $previous = $page - 1;
@@ -59,21 +67,16 @@ function paginator($where, $additionalParams = "")
             }
 
             // Render the target (current) page number, but without it being a clickable link
-            // Concatenate the link to the variable
             $paginationCtrls .= '<a class="active">' . $page . '</a>';
 
-            // Render clickable number links that should appear on the right of the target (current) page number
             for ($i = $page + 1; $i <= $lastPage; $i++) {
-                // Concatenate the link to the variable
                 $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $i . '">' . $i . '</a>';
                 if ($i >= $page + 4)
                     break;
             }
 
-            // Same as above, only checking if we are on the last page, if not then generating the "Next"
             if ($page != $lastPage) {
                 $next = $page + 1;
-                // Concatenate the link to the variable
                 $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $next . '">&raquo;</a>';
             }
         }
@@ -83,14 +86,21 @@ function paginator($where, $additionalParams = "")
 }
 
 $whereClause = "";
+$whereForPaginator = "";
 $orderBy = "ORDER BY Nome ASC";
+$params = [];
+$urlParams = [];
 
 if (isset($_POST["search_btn"]) || isset($_POST["search"])) {
-    $search_text = mysqli_real_escape_string($conn, $_POST["search"]);
-    $whereClause = "WHERE Nome LIKE '%$search_text%' OR Autore LIKE '%$search_text%' OR ISBN LIKE '%$search_text%' OR CasaEditrice LIKE '%$search_text%'";
+    $search_text = '%' . $_POST["search"] . '%';
+    $whereClause = "WHERE Nome LIKE ? OR Autore LIKE ? OR ISBN LIKE ? OR CasaEditrice LIKE ?";
+    $params = [$search_text, $search_text, $search_text, $search_text];
+    $urlParams = ['search' => $_POST["search"]];
 } elseif (isset($_POST['genere_btn'])) {
-    $genere = mysqli_real_escape_string($conn, $_POST['genere_btn']);
-    $whereClause = "WHERE Genere = '$genere'";
+    $genere = $_POST['genere_btn'];
+    $whereClause = "WHERE Genere = ?";
+    $params = [$genere];
+    $urlParams = ['genere_btn' => $genere];
 }
 
 if (isset($_GET['sort'])) {
@@ -99,11 +109,19 @@ if (isset($_GET['sort'])) {
     } elseif ($_GET['sort'] == 'anno') {
         $orderBy = "ORDER BY AnnoPubblicazione DESC";
     }
+    $urlParams['sort'] = $_GET['sort'];
 }
 
-$limit = paginator($whereClause);
+$limit = paginator($whereClause, $params, $urlParams);
 $finalQuery = "SELECT * FROM $table $whereClause $orderBy $limit";
-$queryResult = mysqli_query($conn, $finalQuery);
+try {
+    $query = $pdo->prepare($finalQuery);
+    $query->execute($params);
+    $result = $query->fetchAll();
+    $query->closeCursor();
+} catch (PDOException $e) {
+    throw new Exception("Error executing main query: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -187,24 +205,29 @@ $queryResult = mysqli_query($conn, $finalQuery);
 
                 <div class="right-column">
                     <?php
-                    if (mysqli_num_rows($queryResult) > 0) {
-                        while ($row = mysqli_fetch_assoc($queryResult)) {
+                    if (count($result) > 0) {
+                        foreach ($result as $row) {
                             $id = $row['id'];
 
                             // Controllo disponibilità in tempo reale
-                            $dispQuery = "SELECT count(idCopia) as qty FROM copiaLibro WHERE Stato = 1 AND ISBN = '{$row['ISBN']}'";
-                            $resDisp = mysqli_query($conn, $dispQuery);
-                            $qtyRow = mysqli_fetch_assoc($resDisp);
+                            $q = "SELECT count(idCopia) as qty FROM copiaLibro WHERE Stato = 1 AND ISBN = :isbn";
 
-                            if ($qtyRow['qty'] >= 1) {
-                                $disponibilita = "Disponibile";
-                                $color = "green";
-                            } else {
-                                $disponibilita = "Non disponibile";
-                                $color = "red";
-                            }
+                            if ($query = $pdo->prepare($q)) {
+                                $query->bindParam(':isbn', $row['ISBN']);
+                                $query->execute();
+                                $qtyRow = $query->fetch()['qty'];
+                                $query->closeCursor();
 
-                            echo "
+
+                                if ($qtyRow >= 1) {
+                                    $disponibilita = "Disponibile";
+                                    $color = "green";
+                                } else {
+                                    $disponibilita = "Non disponibile";
+                                    $color = "red";
+                                }
+
+                                echo "
                             <a href='../libro/libro.php?id=$id'>
                                 <div class='book-list hvr-float data-single-book'>
                                     <img src='" . "../img/books/" . $row['Copertina'] . "' width='113' height='171' class='book-img' style='object-fit: cover;'>
@@ -216,6 +239,7 @@ $queryResult = mysqli_query($conn, $finalQuery);
                                     </div>
                                 </div>
                             </a>";
+                            }
                         }
                     } else {
                         echo "<h4>Nessun libro trovato.</h4>";
