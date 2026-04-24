@@ -1,4 +1,3 @@
-
 <?php
 session_start(); //non togliere
 
@@ -7,9 +6,9 @@ session_start(); //non togliere
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-if($_SESSION['utenza']!=1 && $_SESSION['utenza']!=2){
-    header("Location: ../../lista/lista.php");
-    die();
+if ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2) {
+	header("Location: ../../lista/lista.php");
+	exit;
 }
 
 ?>
@@ -28,7 +27,7 @@ if($_SESSION['utenza']!=1 && $_SESSION['utenza']!=2){
 	<link rel="stylesheet" href="../../css/colors.css">
 	<link rel="stylesheet" href="../../css/prenotazione.css">
 	<link rel="stylesheet" href="../../css/nav.css">
-	<link rel="stylesheet" href= "../../css/messaggi.css">
+	<link rel="stylesheet" href="../../css/messaggi.css">
 
 	<!--script per importare parti di codice-->
 	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>
@@ -42,43 +41,56 @@ if($_SESSION['utenza']!=1 && $_SESSION['utenza']!=2){
 	require_once("../../utils/connect.php");
 	require_once("../../nav/nav.php");
 	?>
-	<div id = "messages">
-    <?php
-    if(isset($_GET['eliminato'])){
-        echo "<p class= 'successo'> Prenotazione eliminata con successo</p>";
-        }
-    ?>
-    </div>
+	<div id="messages">
+		<?php
+		if (isset($_GET['eliminato'])) {
+			echo "<p class= 'successo'> Prenotazione eliminata con successo</p>";
+		}
+		?>
+	</div>
 	<div class="container">
 		<?php
-		// Connessione al database
-		
-		$table = "Prenotazione";
-        $table1 = "copiaLibro";
-        $table2 = "Opera";
-		
 
+		$table = "Prenotazione";
+		$table1 = "copiaLibro";
+		$table2 = "Opera";
+
+		if (!isset($_GET['id'])) {
+			header("dashboardUtenti.php");
+			exit;
+		}
 		// Recupero l'ID dell'utente selezionato dalla pagina precedente
 		$id = $_GET['id'];
 
+		try {
+			$pdo = DatabaseConnection::getInstance()->getConnection();
+		} catch (PDOException $e) {
+			echo "Errore durante la connessione al database: " . $e->getMessage();
+			exit;
+		}
+
 		// Recupero i dati dell'utente dal database
-		$sql = "SELECT * FROM Utente WHERE id = $id";
-		$result = $conn->query($sql);
-		if ($result->num_rows > 0) {
-			$row = $result->fetch_assoc();
-			$nome = $row["Nome"];
-			$cognome = $row["Cognome"];
-			$email = $row["Email"];
-			$ruolo = $row["Utenza"];
-			$propic = $row["propic"];
-		} else {
-			header("Location: dashboardUtenti.php?errore=3");
-			die();
-		}
-		if(empty($propic)){
-			$propic = "userDashFavicon.png";
-		}
-		echo "
+		$sql = "SELECT * FROM Utente WHERE id = :id";
+		if ($query = $pdo->prepare($sql)) {
+			$query->bindParam(':id', $id);
+			$query->execute();
+			$row = $query->fetch();
+			$query->closeCursor();
+
+			if ($row) {
+				$nome = $row["Nome"];
+				$cognome = $row["Cognome"];
+				$email = $row["Email"];
+				$ruolo = $row["Utenza"];
+				$propic = $row["propic"];
+			} else {
+				header("Location: dashboardUtenti.php?errore=3");
+				exit;
+			}
+			if (empty($propic)) {
+				$propic = "userDashFavicon.png";
+			}
+			echo "
 		
 		<div class='user-details'>
 			<img src='../../img/users/" . $propic . "'>
@@ -90,59 +102,58 @@ if($_SESSION['utenza']!=1 && $_SESSION['utenza']!=2){
 			</div>
 
 		";
-
-		if ($q = $conn->prepare('SELECT Email FROM Utente WHERE id=?')) {
-			$q->bind_param('i', $id);
-			$q->execute();
-			$result = $q->get_result();
-			$email = $result->fetch_assoc();
+		} else {
+			throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
 		}
-		
-		$query_base = "SELECT idPrenotazione, Copertina, $table.idCopia, InizioPrenotazione, FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa, Autore, Nome, CasaEditrice 
+
+		$query_base = "SELECT idPrenotazione, Copertina, $table.idCopia, InizioPrenotazione, 
+		FinePrenotazione, InizioPrestito, FinePrestito, FineAttesa, Autore, Nome, CasaEditrice 
 		FROM $table, $table1, $table2 
 		WHERE $table1.idCopia = $table.idCopia 
 		AND $table2.ISBN = $table1.ISBN 
-		AND $table.Email = '$email[Email]' 
+		AND $table.Email = :email 
 		AND finePrestito IS NULL
 		ORDER BY $table.idPrenotazione DESC";
+		if ($query = $pdo->prepare($query_base)) {
+			$query->bindParam(':email', $email);
+			$query->execute();
 
-		foreach ($conn->query($query_base) as $row) {
-			$inizio="";
-			$fine ="";
-			if ($row["InizioPrestito"] ==NULL) {
-					if(strtotime($row['FinePrenotazione'])< time()){
+
+			foreach ($query->fetchAll() as $row) {
+				$inizio = "";
+				$fine = "";
+				if ($row["InizioPrestito"] == NULL) {
+					if (strtotime($row['FinePrenotazione']) < time()) {
 						###BISOGNA FARE LA DELETE DELLA PRENOTAZIONE DAL DB
-					}
-					else{
+					} else {
 						$stato = "Prenotato";
 						$color = "green";#"#ff7600";
 						$inizio = $row["InizioPrenotazione"];
 						$fine = $row["FinePrenotazione"];
 					}
-			} else {
-				if($row['FinePrestito']==NULL){
-					if(time()>strtotime($row['FineAttesa'])){
-						$stato="In Ritardo";
-						$color = "red";
-						$inizio = $row["InizioPrestito"];
-						$fine = "attesa = ". $row["FinePrenotazione"];
+				} else {
+					if ($row['FinePrestito'] == NULL) {
+						if (time() > strtotime($row['FineAttesa'])) {
+							$stato = "In Ritardo";
+							$color = "red";
+							$inizio = $row["InizioPrestito"];
+							$fine = "attesa = " . $row["FinePrenotazione"];
+						} else {
+							$stato = "In Prestito";
+							$color = "orange";
+							$inizio = $row["InizioPrestito"];
+							$fine = "attesa = " . $row["FinePrenotazione"];
+						}
+					} else {
+						$stato = "Terminato";
 					}
-					else{
-						$stato="In Prestito";
-						$color = "orange";
-						$inizio = $row["InizioPrestito"];
-						$fine = "attesa = ". $row["FinePrenotazione"];
+
 				}
-				} else{
-					$stato = "Terminato";
-				}
-				
-			}
-						
-			
-			echo
-				"<div class='book-container'>" .
-            "<div class='book-link'>
+
+
+				echo
+					"<div class='book-container'>" .
+					"<div class='book-link'>
                 <img src='../../" . $row['Copertina'] . "' alt=''  class='book-cover' width='160px'>
                 <div class='book-section'>
                     <h3>" . $row['Nome'] . "</h3>
@@ -154,9 +165,13 @@ if($_SESSION['utenza']!=1 && $_SESSION['utenza']!=2){
             </div>
 				
             </div>";
+			}
+			$query->closeCursor();
+		} else {
+			echo "Errore nella preparazione della query.";
 		}
 
-		
+
 		echo '<hr>
 				<div id="terminate-container">
 						<button id="load-terminated" class="btn btn-secondary" data-id-utente=' . $id . '>

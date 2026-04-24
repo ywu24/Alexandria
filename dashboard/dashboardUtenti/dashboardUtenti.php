@@ -1,4 +1,3 @@
-
 <?php
 //LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
 ini_set('display_errors', 1);
@@ -11,36 +10,34 @@ session_start();
 require_once("../../utils/connect.php");
 require_once("../../auth/cookies.php");
 if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
-	
+
 } else {
 	header("Location: ../../index.php");
+	exit;
 }
 //gestiamo le scritte di conferma e di errore
 //utenti aggiunti correttamente
-if (isset($_GET['aggiunto'])){ 
-		echo '<p class= "successo">Utente aggiunto con successo!</p>';
+if (isset($_GET['aggiunto'])) {
+	echo '<p class= "successo">Utente aggiunto con successo!</p>';
 }
 //utenti rimossi correttamente
-if (isset($_GET['rimosso'])){ 
-		echo '<p class= "successo">Utente rimosso con successo!</p>';
+if (isset($_GET['rimosso'])) {
+	echo '<p class= "successo">Utente rimosso con successo!</p>';
 }
-if (isset($_GET['aggiornato'])){ 
-		echo '<p class= "successo">Utente aggiornato con successo!</p>';
+if (isset($_GET['aggiornato'])) {
+	echo '<p class= "successo">Utente aggiornato con successo!</p>';
 }
 //errori
-if (isset($_GET['errore'])){
-		if($_GET['errore']==1){
-			echo '<p class= "errore">Eliminazione utente non riuscita!</p>';
-		}
-		elseif($_GET['errore']==2){
-			echo '<p class= "errore">Non puoi eliminare il tuo account da qui!</p>';
-		}
-		elseif($_GET['errore']==3){
-			echo '<p class= "errore">utente non trovato, prova ad aggiornare la pagina o contatta assistenza</p>';
-		}
-		else {
-			echo '<p class= "errore">ERRORE' . $_GET['errore'] . '</p>';
-		}
+if (isset($_GET['errore'])) {
+	if ($_GET['errore'] == 1) {
+		echo '<p class= "errore">Eliminazione utente non riuscita!</p>';
+	} elseif ($_GET['errore'] == 2) {
+		echo '<p class= "errore">Non puoi eliminare il tuo account da qui!</p>';
+	} elseif ($_GET['errore'] == 3) {
+		echo '<p class= "errore">utente non trovato, prova ad aggiornare la pagina o contatta assistenza</p>';
+	} else {
+		echo '<p class= "errore">ERRORE' . $_GET['errore'] . '</p>';
+	}
 }
 
 ?>
@@ -60,19 +57,19 @@ if (isset($_GET['errore'])){
 	<link rel="stylesheet" href="../../css/styleDashboard.css">
 	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/colors.css">
-	<link rel="stylesheet" href= "../../css/messaggi.css">
+	<link rel="stylesheet" href="../../css/messaggi.css">
 	<link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">
 	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>
 </head>
 
 <body>
 	<div id="nav-placeholder">
-		 <?php 
-		 	$root = "../..";
-			require_once '../../nav/nav.php';
-				 ?>
+		<?php
+		$root = "../..";
+		require_once '../../nav/nav.php';
+		?>
 	</div>
-	
+
 
 	<div class="container-fluid">
 		<h1 class="text-center" style="font-size:4rem !important;">👤</h1>
@@ -82,12 +79,12 @@ if (isset($_GET['errore'])){
 			<input class="btn btn-outline-info my-2 my-sm-0" name="search_btn" type="submit" value="Cerca">
 		</form>
 		<div class="table-responsive">
-		<table class="table table-striped table-hover table-bordered">
-			<thead class="thead-dark">
-				<form action="dashboardUtenti.php" method="post">
-					<?php
-					if ($_SESSION['utenza'] == 1) {
-						echo "
+			<table class="table table-striped table-hover table-bordered">
+				<thead class="thead-dark">
+					<form action="dashboardUtenti.php" method="post">
+						<?php
+						if ($_SESSION['utenza'] == 1) {
+							echo "
 						<tr>
 							<th data-field='#' scope='col' name='test'>#<button class='sort_btn' name='sort_id'>&ensp; &#x25B2;</button></th> 
 							<th data-field='Nome' scope='col'>Nome<button class='sort_btn' name='sort_nome'>&ensp; &#x25B2;</button></th>
@@ -97,8 +94,8 @@ if (isset($_GET['errore'])){
 							<th data-field='Punteggio' scope='col'>Punteggio<button class='sort_btn' name='sort_punteggio'>&ensp; &#x25B2;</button></th>
 							<th scope='col'>Azioni<a href='aggiungiUtente.php' class='btn btn_adduser btn-success ml-auto'>Aggiungi utente</a></th>
 						</tr>";
-					} else if ($_SESSION['utenza'] == 2) {
-						echo "
+						} else if ($_SESSION['utenza'] == 2) {
+							echo "
 						<tr>
 							<th data-field='Nome' scope='col'>Nome<button class='sort_btn' name='sort_nome'>&ensp; &#x25B2;</button></th>
 							<th data-field='Cognome' scope='col'>Cognome<button class='sort_btn' name='sort_cognome'>&ensp; &#x25B2;</button></th>
@@ -106,165 +103,193 @@ if (isset($_GET['errore'])){
 							<th data-field='Punteggio' scope='col'>Punteggio<button class='sort_btn' name='sort_punteggio'>&ensp; &#x25B2;</button></th>
 							<th scope='col'><center>Azioni</center></th>
 						</tr>";
+						}
+
+						?>
+
+					</form>
+				</thead>
+
+				<tbody>
+					<?php
+
+					$table = "Utente";
+
+					try {
+						$pdo = DatabaseConnection::getInstance()->getConnection();
+					} catch (PDOException $e) {
+						echo "Errore durante la connessione al database: " . $e->getMessage();
+						exit;
 					}
 
+					switch (true) {
+						case isset($_POST['search_btn']):
+							$search_text = $_POST['search'];
+							try {
+								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email, punteggio, Utenza 
+														FROM $table 
+														WHERE Nome LIKE ? 
+														OR Cognome LIKE ? 
+														OR Email LIKE ?
+														OR Utenza LIKE ?
+														OR punteggio LIKE ?
+														OR id LIKE ?
+														OR concat(Nome,' ',Cognome) LIKE ?
+														OR concat(Cognome,' ',Nome) LIKE ?");
+								$query->execute(array_fill(0, 6, $search_text));
 
-
-
-					?>
-
-				</form>
-			</thead>
-			
-			<tbody>
-				<?php
-				
-				$table = "Utente";
-
-				switch (true) {
-					case isset($_POST['search_btn']):
-						$search_text = $_POST['search'];
-						try {
-							foreach ($conn->query("SELECT id, Nome, Cognome, Email, punteggio, Utenza 
-												FROM $table 
-												WHERE Nome LIKE '%$search_text%' 
-												OR Cognome LIKE '%$search_text%' 
-												OR Email LIKE '%$search_text%' 
-												OR Utenza LIKE '%$search_text%' 
-												OR punteggio LIKE '%$search_text%' 
-												OR id LIKE '%$search_text%' 
-												OR concat(Nome,' ',Cognome) LIKE '%$search_text%' 
-												OR concat(Cognome,' ',Nome) LIKE '%$search_text%'") 
-												as $row) {
-								if ($_SESSION['utenza'] == 1) {
-									printUtenti($row);
-								} else if ($_SESSION['utenza'] == 2) {
-									printUtentiB($row);
+								foreach ($query->fetchAll() as $row) {
+									if ($_SESSION['utenza'] == 1) {
+										printUtenti($row);
+									} else if ($_SESSION['utenza'] == 2) {
+										printUtentiB($row);
+									}
 								}
+								$query->closeCursor();
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+								exit;
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							die();
-						}
-						break;
+							break;
 
-					case isset($_POST['sort_id']):
-						try {
-							foreach ($conn->query("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY id") as $row) {
-								if ($_SESSION['utenza'] == 1) {
-									printUtenti($row);
-								} else if ($_SESSION['utenza'] == 2) {
-									printUtentiB($row);
+						case isset($_POST['sort_id']):
+							try {
+								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY id");
+								$query->execute();
+								foreach ($query->fetchAll() as $row) {
+									if ($_SESSION['utenza'] == 1) {
+										printUtenti($row);
+									} else if ($_SESSION['utenza'] == 2) {
+										printUtentiB($row);
+									}
 								}
+								$query->closeCursor();
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+								exit;
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							die();
-						}
-						break;
+							break;
 
-					case isset($_POST['sort_nome']):
-						try {
-							foreach ($conn->query("SELECT id, Nome, Cognome, Email, punteggio, Utenza FROM $table ORDER BY Nome") as $row) {
-								if ($_SESSION['utenza'] == 1) {
-									printUtenti($row);
-								} else if ($_SESSION['utenza'] == 2) {
-									printUtentiB($row);
+						case isset($_POST['sort_nome']):
+							try {
+								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email, punteggio, Utenza FROM $table ORDER BY Nome");
+								$query->execute();
+								foreach ($query->fetchAll() as $row) {
+									if ($_SESSION['utenza'] == 1) {
+										printUtenti($row);
+									} else if ($_SESSION['utenza'] == 2) {
+										printUtentiB($row);
+									}
 								}
+								$query->closeCursor();
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+								exit;
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							die();
-						}
-						break;
+							break;
 
-					case isset($_POST['sort_cognome']):
-						try {
-							foreach ($conn->query("SELECT id, Nome, Cognome, Email, punteggio, Utenza FROM $table ORDER BY Cognome") as $row) {
-								if ($_SESSION['utenza'] == 1) {
-									printUtenti($row);
-								} else if ($_SESSION['utenza'] == 2) {
-									printUtentiB($row);
+						case isset($_POST['sort_cognome']):
+							try {
+								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email, punteggio, Utenza FROM $table ORDER BY Cognome");
+								$query->execute();
+								foreach ($query->fetchAll() as $row) {
+									if ($_SESSION['utenza'] == 1) {
+										printUtenti($row);
+									} else if ($_SESSION['utenza'] == 2) {
+										printUtentiB($row);
+									}
 								}
+								$query->closeCursor();
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+								exit;
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							die();
-						}
-						break;
+							break;
 
-					case isset($_POST['sort_email']):
-						try {
-							foreach ($conn->query("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY Email") as $row) {
-								if ($_SESSION['utenza'] == 1) {
-									printUtenti($row);
-								} else if ($_SESSION['utenza'] == 2) {
-									printUtentiB($row);
+						case isset($_POST['sort_email']):
+							try {
+								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY Email");
+								$query->execute();
+								foreach ($query->fetchAll() as $row) {
+									if ($_SESSION['utenza'] == 1) {
+										printUtenti($row);
+									} else if ($_SESSION['utenza'] == 2) {
+										printUtentiB($row);
+									}
 								}
+								$query->closeCursor();
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+								exit;
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							die();
-						}
-						break;
+							break;
 
 
-					case isset($_POST['sort_ruolo']):
-						try {
-							foreach ($conn->query("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY Utenza") as $row) {
-								if ($_SESSION['utenza'] == 1) {
-									printUtenti($row);
-								} else if ($_SESSION['utenza'] == 2) {
-									printUtentiB($row);
+						case isset($_POST['sort_ruolo']):
+							try {
+								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY Utenza");
+								$query->execute();
+								foreach ($query->fetchAll() as $row) {
+									if ($_SESSION['utenza'] == 1) {
+										printUtenti($row);
+									} else if ($_SESSION['utenza'] == 2) {
+										printUtentiB($row);
+									}
 								}
+								$query->closeCursor();
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+								exit;
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							die();
-						}
-						break;
-					case isset($_POST['sort_punteggio']):
-						try {
-							foreach ($conn->query("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY punteggio desc") as $row) {
-								if ($_SESSION['utenza'] == 1) {
-									printUtenti($row);
-								} else if ($_SESSION['utenza'] == 2) {
-									printUtentiB($row);
+							break;
+						case isset($_POST['sort_punteggio']):
+							try {
+								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY punteggio desc");
+								$query->execute();
+								foreach ($query->fetchAll() as $row) {
+									if ($_SESSION['utenza'] == 1) {
+										printUtenti($row);
+									} else if ($_SESSION['utenza'] == 2) {
+										printUtentiB($row);
+									}
 								}
+								$query->closeCursor();
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+								exit;
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							die();
-						}
-						break;
+							break;
 
-					default:
-						try {
-							foreach ($conn->query("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY id") as $row) {
-								if ($_SESSION['utenza'] == 1) {
-									printUtenti($row);
-								} else if ($_SESSION['utenza'] == 2) {
-									printUtentiB($row);
+						default:
+							try {
+								$query = $pdo->prepare("SELECT id, Nome, Cognome, Email,  punteggio, Utenza FROM $table ORDER BY id");
+								$query->execute();
+								foreach ($query->fetchAll() as $row) {
+									if ($_SESSION['utenza'] == 1) {
+										printUtenti($row);
+									} else if ($_SESSION['utenza'] == 2) {
+										printUtentiB($row);
+									}
 								}
+								$query->closeCursor();
+							} catch (PDOException $e) {
+								print "Error!: " . $e->getMessage() . "<br/>";
+								exit;
 							}
-						} catch (PDOException $e) {
-							print "Error!: " . $e->getMessage() . "<br/>";
-							die();
-						}
-						break;
-				}
-				function printUtenti(&$row)
-				{
-					if ($row['Utenza'] == 1) {
-						$desc_utenza = "Admin";
-					} else if ($row['Utenza'] == 2) {
-						$desc_utenza = "Bibliotecario";
-					} else if ($row['Utenza'] == 3) {
-						$desc_utenza = "Docente";
-					} else if ($row['Utenza'] == 4) {
-						$desc_utenza = "Cittadino";
+							break;
 					}
-					echo "<tr>
+					function printUtenti(&$row)
+					{
+						if ($row['Utenza'] == 1) {
+							$desc_utenza = "Admin";
+						} else if ($row['Utenza'] == 2) {
+							$desc_utenza = "Bibliotecario";
+						} else if ($row['Utenza'] == 3) {
+							$desc_utenza = "Docente";
+						} else if ($row['Utenza'] == 4) {
+							$desc_utenza = "Cittadino";
+						}
+						echo "<tr>
                     <th scope='row'>" . $row['id'] . "</th>
                     <td>" . $row['Nome'] . "</td>
                     <td>" . $row['Cognome'] . "</td>
@@ -278,11 +303,11 @@ if (isset($_GET['errore'])){
                         </div>
                     </td>
                     </tr>";
-				}
+					}
 
-				function printUtentiB(&$row)
-				{
-					echo "<tr>
+					function printUtentiB(&$row)
+					{
+						echo "<tr>
                     <td>" . $row['Nome'] . "</td>
                     <td>" . $row['Cognome'] . "</td>
                     <td>" . $row['Email'] . "</td>
@@ -293,10 +318,10 @@ if (isset($_GET['errore'])){
                         </div>
                     </td>
                     </tr>";
-				}				
-				?>
-			</tbody>
-		</table>
+					}
+					?>
+				</tbody>
+			</table>
 		</div>
 	</div>
 
