@@ -38,7 +38,7 @@ document.addEventListener("click", async (e) => {
             }
             else if (result.includes("ok")) {
                 showMessage(result.slice(2));
-                const btnEspandi = document.querySelector(`.btn-espandi[data-isbn="${isbn}"]`);
+                let btnEspandi = document.querySelector(`.btn-espandi[data-isbn="${isbn}"]`);
                 if (btnEspandi) {
                     btnEspandi.click();
                     btnEspandi.click();
@@ -54,6 +54,7 @@ document.addEventListener("click", async (e) => {
 
         const button = e.target;
         const row = button.closest("tr");
+
         const id = row.dataset.id;
         const formData = new FormData();
         formData.append("id", id);
@@ -69,14 +70,24 @@ document.addEventListener("click", async (e) => {
         }
         else if (result.includes("ok")) {
             showMessage(result.slice(2));
-            const btnEspandi = document.querySelector(`.btn-espandi`);
-            if (btnEspandi) {
-                btnEspandi.click();
-                btnEspandi.click();
-            }
-        }
 
-        else {
+            // Risalgo dal pulsante elimina alla riga di dettaglio (quella con classe bg-light)
+            const rigaDettaglio = button.closest('tr.bg-light');
+            if (rigaDettaglio) {
+                // Prendo la riga principale che sta sopra il dettaglio
+                const rigaPrincipale = rigaDettaglio.previousElementSibling;
+                
+                // Trovo il pulsante espandi
+                const btnEspandi = rigaPrincipale.querySelector('.btn-espandi');
+
+                if (btnEspandi) {
+                    console.log("Aggiorno visualizzazione per ISBN:", btnEspandi.dataset.isbn);
+                    // Simulo il doppio click per chiudere e riaprire (refresh dati)
+                    btnEspandi.click();
+                    btnEspandi.click();
+                }
+            }
+        } else {
             showMessage(result, "errore");
         }
     }else if (e.target && e.target.classList.contains('btn-espandi')) {
