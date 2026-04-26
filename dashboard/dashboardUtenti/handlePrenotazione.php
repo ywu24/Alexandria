@@ -6,6 +6,7 @@ if (!isset($_POST['id'])) {
 $giorniPrenotazione = 30;
 
 $id = (int) $_POST['id'];
+$root = "../..";
 require_once("../../utils/connect.php");
 require_once("../../auth/cookies.php");
 

@@ -1,4 +1,5 @@
 <?php
+$root= "../..";
 require_once("../../utils/connect.php");
 if (!isset($_POST['idUtente']) && !isset($_POST['email'])) {
     exit;
@@ -28,7 +29,7 @@ if (isset($_POST['idUtente'])) {
 }
 
 // Query solo per Prenotazioni Terminate
-$sql = "SELECT idPrenotazione, InizioPrestito, FinePrestito, FineAttesa 
+$sql = "SELECT idPrenotazione, InizioPrestito, FinePrestito, FineAttesa, Copertina, Nome, Autore,CasaEditrice
         FROM Prenotazione, copiaLibro, Opera 
         WHERE copiaLibro.idCopia = Prenotazione.idCopia 
         AND Opera.ISBN = copiaLibro.ISBN 

@@ -23,7 +23,7 @@ document.getElementById('bookings').addEventListener('click', async (e) => {
     if (btn.classList.contains('conferma')) azione = 'conferma';
     else if (btn.classList.contains('termina')) azione = 'termina';
     else if (btn.classList.contains('elimina')) azione = 'elimina';
-    //console.log(azione);
+    //console.log("azione=",azione);
     let id = btn.dataset.id;
     console.log(id);
     if (!azione) return;
@@ -40,7 +40,7 @@ document.getElementById('bookings').addEventListener('click', async (e) => {
         });
 
         const result = await response.text();
-        console.log(result);
+        console.log("result= ",result);
 
         // Procediamo solo se la risposta contiene "ok"
         if (result.includes("ok")) {
