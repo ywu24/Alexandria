@@ -44,7 +44,7 @@ error_reporting(E_ALL);
         <h4>Dashboard Libri</h4>
       </div>
     </a>
-    <a href="#"> //"dashboardSegnalazioni/dashboardSegnalazioni.php">
+    <a href="dashboardSegnalazioni/dashboardSegnalazioni.php">
       <div class="card-container">
         <img src="../img/warning-icon.png" alt="">
         <h4>Dashboard Segnalazioni</h4>
