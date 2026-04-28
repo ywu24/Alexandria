@@ -29,7 +29,7 @@ if (isset($_POST['idUtente'])) {
 }
 
 // Query solo per Prenotazioni Terminate
-$sql = "SELECT idPrenotazione, InizioPrestito, FinePrestito, FineAttesa, Copertina, Nome, Autore,CasaEditrice
+$sql = "SELECT idPrenotazione, InizioPrestito, FinePrestito, FineAttesa, Copertina, Nome, Autore, CasaEditrice, id as idOpera
         FROM Prenotazione, copiaLibro, Opera 
         WHERE copiaLibro.idCopia = Prenotazione.idCopia 
         AND Opera.ISBN = copiaLibro.ISBN 

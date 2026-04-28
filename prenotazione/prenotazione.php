@@ -68,7 +68,7 @@ error_reporting(E_ALL);
         ################
         $numero_prenotazioni = 0;
         try {
-            $query = $pdo->prepare("SELECT idPrenotazione, Copertina, $table.idCopia, InizioPrenotazione, FinePrenotazione, InizioPrestito, 
+            $query = $pdo->prepare("SELECT idPrenotazione, $table2.id as idOpera, Copertina, $table.idCopia, InizioPrenotazione, FinePrenotazione, InizioPrestito, 
                                 FinePrestito, FineAttesa, Autore, Nome, CasaEditrice FROM $table, $table1, $table2 
                                 WHERE $table1.idCopia = $table.idCopia AND $table2.ISBN = $table1.ISBN and $table.Email = :email 
                                 ORDER BY $table.idPrenotazione DESC");
@@ -126,9 +126,7 @@ error_reporting(E_ALL);
                                 <span>Inizio: " . $inizio . "</span><br>
                                 <span>Fine: " . $fine . "</span>
                             </div>";
-
-
-
+   
 
                     if ($stato == "Prenotato") {
                         echo "

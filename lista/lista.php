@@ -227,18 +227,38 @@ try {
                                     $color = "red";
                                 }
 
-                                echo "
-                            <a href='../libro/libro.php?id=$id'>
-                                <div class='book-list hvr-float data-single-book'>
-                                    <img src='" . "../img/books/" . $row['Copertina'] . "' width='113' height='171' class='book-img' style='object-fit: cover;'>
-                                    <div class='container-book'>
-                                        <span class='book-link trunctitle' style='font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 5px;'>" . $row['Nome'] . "</span>
-                                        <p class='book-authors'>" . $row['Autore'] . " | " . $row['CasaEditrice'] . " | " . $row['ISBN'] . " | " . $row['Genere'] . "</p>
-                                        <p class='desc'>" . (strlen($row['Descrizione']) > 150 ? substr($row['Descrizione'], 0, 150) . "..." : $row['Descrizione']) . "</p>
-                                        <span style='color: $color; font-weight: bold;' class='disponibilita'>$disponibilita</span>
+                                $q = "SELECT AVG(Voto) as media, COUNT(*) as totale FROM Recensione WHERE idOpera = :id";
+                                
+                                if ($query = $pdo->prepare($q)) {
+                                    $query->bindParam(':id', $id, PDO::PARAM_INT);
+                                    $query->execute();
+                                    $dati_media = $query->fetch(PDO::FETCH_ASSOC);
+
+                                    $media = $dati_media['media'] ?? 0; // Se null (nessuna recensione), imposta a 0
+                                    $media_arrotondata = round((float)$media);
+                                    $totale_recensioni = (int)$dati_media['totale'];
+                                    
+                                    $query->closeCursor();
+
+                                    echo "
+                                <a href='../libro/libro.php?id=$id'>
+                                    <div class='book-list hvr-float data-single-book'>
+                                        <img src='" . "../img/books/" . $row['Copertina'] . "' width='113' height='171' class='book-img' style='object-fit: cover;'>
+                                        <div class='container-book'>
+                                            <span class='book-link trunctitle' style='font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 5px;'>" . $row['Nome'] . "</span>
+
+                                            <div class='rating-stars' style='margin-bottom: 5px; font-size: 0.9rem;'>
+                                                <span style='color: #ffc107;'>" . str_repeat("★", $media_arrotondata) . str_repeat("☆", 5 - $media_arrotondata) . "</span>
+                                                <small class='text-muted' style='font-size: 0.75rem;'> (" . $totale_recensioni . ")</small>
+                                            </div>
+
+                                            <p class='book-authors'>" . $row['Autore'] . " | " . $row['CasaEditrice'] . " | " . $row['ISBN'] . " | " . $row['Genere'] . "</p>
+                                            <p class='desc'>" . (strlen($row['Descrizione']) > 150 ? substr($row['Descrizione'], 0, 150) . "..." : $row['Descrizione']) . "</p>
+                                            <span style='color: $color; font-weight: bold;' class='disponibilita'>$disponibilita</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>";
+                                </a>";
+                                }
                             }
                         }
                     } else {

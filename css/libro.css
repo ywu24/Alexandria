@@ -1,7 +1,5 @@
-html {
-    scroll-behavior: smooth;
-}
-
+/* --- VARIABILI E BASE --- */
+html { scroll-behavior: smooth; }
 body {
     font-size: 1.125rem;
     line-height: 1.5;
@@ -11,382 +9,248 @@ body {
     background: var(--white);
 }
 
-.nmax {
-    font-weight: 1;
-    color: gray;
-}
-
-@media (min-width:769px) {
-
-
-    form.form-icon-back {
-        top: 112px !important;
-        left: 20px !important;
-    }
-
-
-
-    .left-column img {
-        aspect-ratio: 10/16;
-        max-width: fit-content;
-        height: 540px;
-        margin: 0px;
-        border: solid none;
-        border-radius: 10px;
-        float: right;
-    }
-
-
-
-    .right-column {
-        margin-left: 1.5pc;
-    }
-
-    .right-column .info {
-        font-weight: normal;
-        color: var(--text);
-    }
-
-    .right-column .info .info-title h6 {
-        font-style: oblique;
-        height: fit-content;
-        padding-top: 4px;
-        font-weight: lighter;
-        align-self: center;
-        margin-left: 1pc;
-    }
-
-    .right-column .info .info-title h1 {
-        font-weight: 600;
-        font-size: 1.5rem;
-    }
-
-    .right-column .info .info-release h5 {
-        font-weight: 400;
-        font-style: oblique;
-        width: fit-content;
-        margin: 0 10px;
-        margin-bottom: 15px;
-    }
-
-    .right-column .info .info-release .status {
-        margin: 0px;
-        font-weight: 600;
-        font-style: normal;
-        align-self: center;
-    }
-
-    .right-column .info .info-release {
-        margin-bottom: 10px;
-    }
-
-    .info-release>span {
-        display: none;
-    }
-
-    .right-column .info {
-        margin-bottom: 25px;
-    }
-
-    .right-column .desc {
-        width: 400px;
-        color: var(--articletext);
-        margin-bottom: 25px;
-        border-left: none;
-        border-right: none;
-    }
-
-    .right-column button {
-        border: solid 0px;
-        background-color: var(--button);
-        color: var(--white);
-        height: 60px;
-        width: 120px;
-        transition: cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
-    }
-
-    .right-column button:hover,
-    .pop-up button:hover {
-        background-color: var(--button-hover);
-        transition: cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
-    }
-
-    .prenotazione {
-        border-radius: 10px;
-        cursor: pointer;
-    }
-
-    .prenotazioneDisabled {
-        border-radius: 10px;
-        opacity: 0.3;
-    }
-
-    .info-title {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .info-release {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        max-width: 400px;
-    }
-
-    .status-container {
-        width: 400px;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .status-container h5 {
-        margin: 0 5px !important;
-    }
-
-
+/* --- LAYOUT PRINCIPALE (DESKTOP) --- */
+@media (min-width: 769px) {
     .container {
         margin-top: 14vh;
         display: flex;
         flex-direction: row;
         justify-content: center;
-        align-items: center;
+        align-items: stretch; /* Allinea le colonne in altezza */
         margin-bottom: 2vh;
+        gap: 30px;
     }
 
-    .truncdesc {
-        overflow: hidden;
-        overflow-y: scroll;
-        max-height: 20.25rem;
-        min-height: 324px;
+    .left-column img {
+        aspect-ratio: 10/16;
+        height: 540px;
+        border-radius: 10px;
+        object-fit: cover;
     }
-}
-
-.trunctitle {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 350px;
-    display: block;
-}
-
-
-.truncdesc::-webkit-scrollbar {
-    width: 5px;
-}
-
-.truncdesc::-webkit-scrollbar-track {
-    border-radius: 10px;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
-}
-
-.truncdesc::-webkit-scrollbar-thumb {
-    background-color: var(--border);
-    border-radius: 10px;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, .3);
-}
-
-
-
-@media (max-width:768px) {
-
-    form.form-icon-back {
-        top: 86px !important;
-        left: -6px !important;
-    }
-
-    /* .nav1 form input[type="search"] {
-        border: none;
-        background: transparent;
-        margin: 0;
-        padding: 7px 8px;
-        font-size: 14px;
-        width: 100%;
-      }
-    
-      nav form {
-        color: var(--sectiontext);
-        display: flex;
-        padding: 2px;
-        border: 1.5px solid var(--text);
-        border-radius: 20px;
-        height: 30px;
-        margin: 0;
-        margin-top: 4px;
-        width: 95%;
-        justify-content: space-between;
-        position: absolute;
-        top: 60px;
-      } */
 
     .right-column {
-        margin-left: 1pc;
-        margin-right: 1pc;
-    }
-
-    .left-column {
-        justify-content: center;
         display: flex;
-        margin-top: 5pc;
-        margin-bottom: 2pc;
-        margin-right: 5pc;
-        margin-left: 5pc;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin-left: 1.5pc;
+        max-width: 500px;
     }
 
-    .left-column>img {
-        box-sizing: border-box;
-        width: -webkit-fill-available;
-        border-radius: 10px;
-        aspect-ratio: 1/1.5;
-    }
-
-    .trunctitle {
-        font-size: 30px;
-        text-align: center;
-        width: 100%;
-        margin: auto;
-    }
-
-    .status,
-    .truncdesc {
-        text-align: center;
-    }
-
-    .info-release {
-        justify-content: space-around;
-        display: flex;
-        margin-bottom: 30px;
-    }
-
-
-    .info-title>h6 {
-        text-align: center;
-        font-size: 15px;
-        margin-top: 5px;
-        margin-bottom: 12px;
-    }
-
-    .info-release>h5 {
-        text-align: center;
-    }
-
-    .truncdesc {
-        margin-bottom: 2pc;
-        text-align: justify;
-        width: 85vw;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .right-column button {
-        border: solid 0px;
-        background-color: var(--button);
-        color: var(--white);
-        height: 60px;
-        width: 120px;
-        transition: cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
-        border-radius: 10px;
-        justify-content: center;
-    }
-
-    .right-column button:hover,
-    .pop-up button:hover {
-        background-color: var(--button-hover);
-        transition: cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+    .right-column .desc {
+        flex-grow: 1; /* Occupa lo spazio disponibile spingendo i tasti giù */
+        margin-bottom: 20px;
     }
 
     .div-button {
-        justify-content: center;
+        margin-top: auto; /* Forza i pulsanti in fondo alla colonna */
         display: flex;
-    }
-
-    .div-button>button {
-        box-sizing: border-box;
-        height: 35px;
-        width: 60vw;
-    }
-
-    .div-button {
-        justify-content: center;
-        display: flex;
-        margin-bottom: 2pc;
+        gap: 15px;
+        padding-top: 20px;
+        transform: translateY(-8px);
     }
 }
 
-@media (max-width:565px) {
+/* --- INFO LIBRO --- */
+.info-title { display: flex; flex-direction: row; }
+.info-title h1 { font-weight: 600; font-size: 1.5rem; margin: 0; }
+.info-title h6 { font-style: oblique; font-weight: lighter; align-self: center; margin-left: 1pc; }
+
+.info-release { display: flex; flex-direction: row; flex-wrap: wrap; margin-bottom: 10px; }
+.info-release h5 { font-weight: 400; font-style: oblique; margin: 0 10px 15px 0; }
+
+.status-container { display: flex; flex-direction: row; align-items: center; }
+.status-container h5 { margin: 0 5px !important; }
+
+/* --- DESCRIZIONE E SCROLLBAR --- */
+.truncdesc {
+    overflow-y: auto;
+    max-height: 20.25rem;
+    min-height: 324px;
+    padding-right: 10px;
+}
+
+.truncdesc::-webkit-scrollbar, .review-feed::-webkit-scrollbar { width: 6px; }
+.truncdesc::-webkit-scrollbar-thumb, .review-feed::-webkit-scrollbar-thumb {
+    background-color: var(--border, #ffc107);
+    border-radius: 10px;
+}
+
+/* --- RATING E STELLINE (UNIFICATO) --- */
+.rating-display { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+.rating-stars, .review-rating, .rating-stars span, .review-rating span { color: #ffc107 !important; font-size: 1.2rem; letter-spacing: 2px; display: inline-block; }
+.rating-stars .stars-empty, .review-rating .stars-empty { color: #e0e0e0 !important;}
+.media-voto { font-weight: bold; margin-left: 5px; color: #555; }
+
+/* --- SEZIONE RECENSIONI (PULIZIA SPAZI) --- */
+hr.my-5 { margin-top: 10px !important; margin-bottom: 15px !important; }
+
+h2.fw-bold { 
+    margin-top: 0 !important; 
+    margin-bottom: 1.5rem; 
+}
+
+.review-feed {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.review-card {
+    background: #fff;
+    border: 1px solid #eef0f2;
+    border-left: 5px solid #ffc107 !important;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.review-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+.review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.user-info { display: flex; align-items: center; gap: 12px; }
+.user-avatar {
+    width: 40px; height: 40px; background-color: #6c757d; color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;
+}
+
+/* --- BOTTONI --- */
+.right-column button, .pop-up button {
+    border: none;
+    background-color: var(--button);
+    color: var(--white);
+    height: 50px;
+    width: 140px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.right-column button:hover { background-color: var(--button-hover); }
+.prenotazioneDisabled { opacity: 0.3; cursor: not-allowed; }
+
+/* --- MOBILE (Sotto 768px) --- */
+@media (max-width: 768px) {
+    .container{ 
+        flex-direction: column; 
+        margin-top: 2pc; 
+        align-items: center; 
+        gap: 15px;
+    }
+
+    /* Immagine centrata e più piccola */
+    .left-column { 
+        margin: 0; 
+        width: 100%; 
+        display: flex;
+        justify-content: center;
+    }
+
+    .left-column img { 
+        width: 220px; /* Dimensione fissa più elegante per mobile */
+        height: auto; 
+        aspect-ratio: 10/16;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .right-column { 
+        margin: 0 1pc; 
+        align-items: center; 
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Testo descrizione più leggibile su mobile */
+    .truncdesc { 
+        text-align: center; 
+        width: 85vw; 
+        min-height: auto;
+        max-height: 200px; /* Più corto su mobile per non allungare troppo la pagina */
+        margin-bottom: 20px;
+    }
+
+    /* Pulsanti distaccati e centrati */
+    .div-button { 
+        flex-direction: column; 
+        width: 100%; 
+        align-items: center; 
+        gap: 15px; /* Spazio tra i due pulsanti */
+        margin-bottom: 25px;
+    }
+
+    .div-button button { 
+        width: 70vw; /* Non troppo larghi */
+        height: 50px; 
+        font-size: 1rem;
+    }
+
+    /* Titoli centrati */
+    .info-title { 
+        flex-direction: column; 
+        align-items: center; 
+        margin-bottom: 10px;
+    }
+    
+    .info-title h1 {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .info-title h6 { 
+        margin-left: 0; 
+        margin-top: 5px;
+    }
+
+    .info-release {
+        justify-content: center;
+        gap: 5px;
+    }
 
     .status-container {
-        flex-direction: row;
-        display: flex;
         justify-content: center;
-        margin-bottom: 5px;
-    }
-
-    .status-container>.status {
-        text-align: center;
-    }
-
-    .truncdesc {
-        width: 90vw;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 2pc;
-        text-size-adjust: auto;
-        justify-content: center;
-        display: flex;
-    }
-
-    .info-release {
-        display: flex;
-        flex-direction: column-reverse;
-        margin-bottom: 15px;
-    }
-
-    .info-release>span {
-        display: none;
-    }
-
-    .info-release>h5 {
-        margin-bottom: 10px;
-        align-items: center;
-        display: grid;
-    }
-
-    .info-release>h5:nth-last-child(2) {
-        display: none;
-    }
-
-    .info-release>h5:last-child {
-        margin-bottom: 14px;
-        font-weight: 700;
-        font-size: 1.03rem;
-    }
-
-    .trunctitle {
-        font-size: 27px;
-        margin-bottom: 18px;
-        font-weight: bold;
-        text-align: center;
         width: 100%;
-        margin: auto;
+        margin-top: 5px;
     }
 
-    .div-button>button {
-        box-sizing: border-box;
-        height: 35px;
-        width: 55vw;
+    /* Alziamo il titolo recensioni anche su mobile */
+    h2.fw-bold {
+        text-align: center;
+        font-size: 1.3rem;
     }
+
+    /* Centra il contenitore delle stelle e della media */
+    .rating-display {
+        justify-content: center;
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 20px;
+    }
+
+    /* Assicura che le stelle medie e il testo siano ben distribuiti */
+    .rating-display .rating-stars {
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Centra anche le stelline dentro le singole card recensione */
+    .review-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .user-info {
+        flex-direction: column;
+    }
+
 }
 
-@media (max-width:450px) {
-    .left-column {
-        margin-right: 14vw;
-        margin-left: 14vw;
+/* Fix per schermi molto piccoli (Smartphone mini) */
+@media (max-width: 480px) {
+    .left-column img { 
+        width: 180px; 
     }
-}
-
-@media (max-width:350px) {
-    .left-column {
-        margin-right: 15vw;
-        margin-left: 15vw;
+    .div-button button { 
+        width: 85vw; 
     }
 }

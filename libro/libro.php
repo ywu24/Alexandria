@@ -65,6 +65,17 @@ require_once("../auth/cookies.php");
             exit();
         }
 
+        // Recupera il voto medio dei libri
+        $q = "SELECT AVG(Voto) as media, COUNT(*) as totale FROM Recensione WHERE idOpera = :id";
+        $query = $pdo->prepare($q);
+        $query->bindParam(':id', $book_id, PDO::PARAM_INT);
+        $query->execute();
+        $dati_media = $query->fetch(PDO::FETCH_ASSOC);
+        $media_val = $dati_media['media'] ?? 0; 
+        $media = round((float)$media_val, 1);
+        $totale_recensioni = (int)($dati_media['totale'] ?? 0);
+        $query->closeCursor();
+
         if (isset($_SESSION['email'])) {
             $email = $_SESSION['email'];
         } else {
@@ -176,6 +187,9 @@ require_once("../auth/cookies.php");
             $query->closeCursor();
 
 
+            $stelle_piene = str_repeat("★", round($media));
+            $stelle_vuote = str_repeat("☆", 5 - round($media));
+
             echo "<main>
                <div class='container'>
                    <div class='left-column'>
@@ -186,6 +200,13 @@ require_once("../auth/cookies.php");
                            <div class='info-title'><h1 class='trunctitle'>" . $book['Nome'] . "</h1> <h6>ISBN: " . $book['ISBN'] . "</h6></div>
                            <div class='info-release'><h5>" . $book['Autore'] . "</h5> <span> | </span> <h5>" . $book['CasaEditrice'] . "</h5> <div class='status-container'> <h5>Stato:</h5>  <h5 class='status' style='color: $color'>" . $disponibilita . "</h5> </div></div>
                        </div>
+                        <div class='rating-display'>
+                            " . ($totale_recensioni > 0 ? 
+                                "<span class='rating-stars'>$stelle_piene<span class='stars-empty'>$stelle_vuote</span></span> 
+                                <span class='media-voto'>$media / 5</span> 
+                                <small class='text-muted'>($totale_recensioni recensioni)</small>" 
+                                : "<span class='text-muted'>Ancora nessuna recensione</span>") . "
+                        </div>
                        <div class='desc'>
                            <p class='truncdesc'>" . $book['Descrizione'] . "</p>
                        </div>";
@@ -200,9 +221,80 @@ require_once("../auth/cookies.php");
             }
             echo
                 "</div>
-               </div>
-           </main>";
+               </div>";
+            ?>
+            
+            <hr class="my-5">
+            <section class="container mb-5">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <h2 class="fw-bold">Recensioni degli utenti</h2>
+                    </div>
 
+                    <div class="col-lg-12">
+                        <?php
+                        try {
+                            // Preparazione della query con segnaposto
+                            $query_commenti = "SELECT * FROM Recensione WHERE idOpera = :book_id ORDER BY id DESC";
+                            $stmt_commenti = $pdo->prepare($query_commenti);
+                            $stmt_commenti->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+                            $stmt_commenti->execute();
+
+                            // Recupero di tutti i risultati
+                            $recensioni = $stmt_commenti->fetchAll(PDO::FETCH_ASSOC);
+
+                            if (count($recensioni) > 0) {
+                                echo '<div class="review-feed">'; // Contenitore per lo scroll
+                                
+                                foreach ($recensioni as $row) {
+                                    $voto = (int)$row['Voto'];
+                                    ?>
+                                    <div class="review-card mb-4">
+                                        <div class="review-header">
+                                            <div class="user-info">
+                                                <div class="user-avatar">
+                                                    <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
+                                                </div>
+                                                <div>
+                                                    <h5 class="m-0 fw-bold"><?php echo htmlspecialchars($row['Titolo']); ?></h5>
+                                                    <small class="text-muted"><?php echo htmlspecialchars($row['userEmail']); ?></small>
+                                                </div>
+                                            </div>
+                                            <div class="review-rating">
+                                                <?php 
+                                                // Visualizzazione stelle
+                                                echo str_repeat("★", $voto) . str_repeat("☆", 5 - $voto); 
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="review-body">
+                                            <p><?php echo nl2br(htmlspecialchars($row['Messaggio'])); ?></p>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                                echo '</div>'; 
+                            } else {
+                                echo "
+                                <div class='text-center py-5 border rounded bg-light'>
+                                    <h5 class='text-muted'>Non ci sono ancora recensioni.</h5>
+                                    <p>Sii il primo a condividere la tua opinione!</p>
+                                </div>";
+                            }
+                            
+                            $stmt_commenti->closeCursor();
+
+                        } catch (PDOException $e) {
+                            echo "<div class='alert alert-danger'>Errore nel caricamento delle recensioni: " . $e->getMessage() . "</div>";
+                        }
+                        ?>
+                    </div>
+                </div>
+            </section>
+
+           </main>
+
+        <?php
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             exit;

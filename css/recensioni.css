@@ -1,0 +1,22 @@
+ /* Stili CSS per il sistema a stelle */
+    .rating-css {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+    .rating-css input {
+      display: none; /* Nascondiamo i radio button */
+    }
+    .rating-css label {
+      cursor: pointer;
+      color: #ccc;
+      font-size: 2.5rem;
+      padding: 0 5px;
+      transition: color 0.2s ease-in-out;
+    }
+    /* Colora le stelle precedenti e quella selezionata/hovered */
+    .rating-css input:checked ~ label,
+    .rating-css label:hover,
+    .rating-css label:hover ~ label {
+      color: #ffc107; /* Giallo Bootstrap */
+    }

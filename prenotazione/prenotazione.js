@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         html += `
                         <div class='book-container'>
                             <div class='book-link'>
-                                <img src='../../${row.Copertina}' class='book-cover' width='160px'>
+                                <img src='../img/books/${row.Copertina}' class='book-cover' width='160px'>
                                 <div class='book-section'>
                                     <h3>${row.Nome}</h3>
                                     <div class='info-release'>
@@ -104,6 +104,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <span>inizio prestito: ${row.InizioPrestito}</span><br>
                                     <span>fine prestito: ${row.FinePrestito}</span><br>
                                     ${ritardo2}
+
+                                    <div class='container-pulsanti'>
+                                        <a href="../../recensione/recensione.php?id=${row.idOpera}" class="btn btn-warning">
+                                        Recensisci
+                                        </a>
+                                    </div>
                                    
                                 </div>
                             </div>
