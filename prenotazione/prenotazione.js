@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class='book-link'>
                                 <img src='../img/books/${row.Copertina}' class='book-cover' width='160px'>
                                 <div class='book-section'>
-                                    <h3>${row.Nome}</h3>
+                                    <div class='info-title'><h3 class='trunctitle'>${row.Nome}</h3> <h6>ISBN: ${row.ISBN}</h6></div>
                                     <div class='info-release'>
                                         <h5>${row.Autore}</h5> 
                                         <h5>${row.CasaEditrice}</h5> 
