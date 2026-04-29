@@ -183,6 +183,15 @@
     border: 1px solid var(--border);
 }
 
+.user-info h3 {
+    margin: 0;
+}
+
+.user-info h4 {
+    margin-left: auto;
+    font-size: 0.8em;
+}
+
 .sub-menu-link{
     display: flex;
     align-items: center;
