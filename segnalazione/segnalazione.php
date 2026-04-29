@@ -2,6 +2,7 @@
 session_start();
 $root = '..';
 require_once("../utils/connect.php");
+require_once("../utils/mailer.php");
 
 $msg = "";
 
@@ -17,7 +18,7 @@ if (isset($_SESSION['success_msg'])) {
 if (isset($_SESSION['error_msg'])) {
   $msg = '<div class="messages fade show" >
             <p class= "errore">
-            <strong>Errore:</strong> ' . $_SESSION['serror_msg'] . '
+            <strong>Errore:</strong> ' . $_SESSION['error_msg'] . '
           </p>
         </div>';
   unset($_SESSION['error_msg']);
@@ -57,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (in_array($file_ext, $allowed)) {
         if ($file_size <= 5000000) {
           move_uploaded_file($file_tmp, $file_destination);
-          $imgSegn =  $file_name_new;
+          $imgSegn = $file_name_new;
 
           try {
             $query = $pdo->prepare("INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio, imgSegn) VALUES (:email, :oggetto, :messaggio, :imgSegn)");
@@ -67,9 +68,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $query->bindParam(':imgSegn', $imgSegn);
             $query->execute();
             $query->closeCursor();
-            $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
-            header("Location: segnalazione.php");
-            exit();
+
+            // mandare email della segnalazione al bibliotecario:
+            if (
+              sendEmail(
+                getenv('EMAIL_BIBLIO'),
+                'Bibliotecario',
+                'Nuova segnalazione da ' . $user_email,
+                '<h2>È stata effettuata una nuova segnalazione!</h2>
+                                    <p>Informazioni sulla segnalazione:</p>
+                                    <ul>
+                                        <li>Email Utente: ' . $user_email . '</li>
+                                        <li>Oggetto: ' . $oggetto . '</li>
+                                        <li>Messaggio: <p>' . $messaggio . '</p></li>
+                                        <li>Immagine: ' . $imgSegn . '</li>
+                                    </ul>'
+              )
+            ) {
+              $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
+              header("Location: segnalazione.php");
+              exit();
+            } else {
+              $_SESSION["error_msg"] = "Errore nell'invio dell'email al bibliotecario";
+              header("Location: segnalazione.php");
+              exit();
+            }
+
+
           } catch (PDOException $e) {
             throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
           }
@@ -92,9 +117,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query->execute();
         $query->closeCursor();
 
-        $_SESSION['success_msg'] = "Segnalazione inviata con successo";
-        header("Location: segnalazione.php");
-        exit();
+        // mandare email della segnalazione al bibliotecario:
+        if (
+          sendEmail(
+            getenv('EMAIL_BIBLIO'),
+            'Bibliotecario',
+            'Nuova segnalazione da ' . $user_email,
+            '<h2>È stata effettuata una nuova segnalazione!</h2>
+                                    <p>Informazioni sulla segnalazione:</p>
+                                    <ul>
+                                        <li>Email Utente: ' . $user_email . '</li>
+                                        <li>Oggetto: ' . $oggetto . '</li>
+                                        <li>Messaggio: <p>' . $messaggio . '</p></li>
+                                        <li>Immagine: Nessuna</li>
+                                    </ul>'
+          )
+        ) {
+          $_SESSION['success_msg'] = "Segnalazione inviata con successo";
+          header("Location: segnalazione.php");
+          exit();
+        } else {
+          $_SESSION["error_msg"] = "Errore nell'invio dell'email al bibliotecario";
+          header("Location: segnalazione.php");
+          exit();
+        }
+
+
       } catch (PDOException $e) {
         throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
       }
@@ -143,7 +191,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
               <div class="form-group">
                 <label for="oggetto">Oggetto</label>
-                <input type="text" class="form-control" id="oggetto" name="oggetto" maxlength="50" placeholder="Di cosa si tratta?" required>
+                <input type="text" class="form-control" id="oggetto" name="oggetto" maxlength="50"
+                  placeholder="Di cosa si tratta?" required>
                 <div class="text-right">
                   <small class="text-muted" id="oggetto-counter">Caratteri rimanenti: 50</small>
                 </div>
@@ -151,7 +200,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
               <div class="form-group">
                 <label for="messaggio">Messaggio</label>
-                <textarea class="form-control" id="messaggio" name="messaggio" rows="5" maxlength="250" placeholder="Descrivi qui la tua segnalazione..." required></textarea>
+                <textarea class="form-control" id="messaggio" name="messaggio" rows="5" maxlength="250"
+                  placeholder="Descrivi qui la tua segnalazione..." required></textarea>
                 <div class="text-right">
                   <small class="text-muted" id="messaggio-counter">Caratteri rimanenti: 250</small>
                 </div>
@@ -160,13 +210,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <div class="form-group mb-4">
                 <label for="file">🖼️ Screenshot (facoltativo)</label>
                 <div class="custom-file mb-2">
-                  <input type="file" class="custom-file-input" id="file" name="screenshot" accept="image/*" onchange="previewImage(event)">
+                  <input type="file" class="custom-file-input" id="file" name="screenshot" accept="image/*"
+                    onchange="previewImage(event)">
                   <label class="custom-file-label" for="file">Scegli file...</label>
                 </div>
                 <small class="text-muted d-block mb-3">Formati: jpg, jpeg, png (Max 5MB)</small>
 
                 <div class="position-relative text-center">
-                  <i id="trash-btn" class="delete-icon fas fa-trash bg-danger text-white rounded-pill p-2" onclick="deleteImage()" title="Rimuovi Screenshot"></i>
+                  <i id="trash-btn" class="delete-icon fas fa-trash bg-danger text-white rounded-pill p-2"
+                    onclick="deleteImage()" title="Rimuovi Screenshot"></i>
                   <img id="image-preview" class="preview-image" src="#" alt="Anteprima" style="display: none;">
                 </div>
               </div>
