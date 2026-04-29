@@ -70,12 +70,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $query->closeCursor();
 
             // mandare email della segnalazione al bibliotecario:
-            if (
-              sendEmail(
-                getenv('EMAIL_BIBLIO'),
-                'Bibliotecario',
-                'Nuova segnalazione da ' . $user_email,
-                '<h2>È stata effettuata una nuova segnalazione!</h2>
+            $email_biblio = getenv('EMAIL_BIBLIO');
+            if ($email_biblio) {
+              if (
+                sendEmail(
+                  $email_biblio,
+                  'Bibliotecario',
+                  'Nuova segnalazione da ' . $user_email,
+                  '<h2>È stata effettuata una nuova segnalazione!</h2>
                                     <p>Informazioni sulla segnalazione:</p>
                                     <ul>
                                         <li>Email Utente: ' . $user_email . '</li>
@@ -83,17 +85,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <li>Messaggio: <p>' . $messaggio . '</p></li>
                                         <li>Immagine: ' . $imgSegn . '</li>
                                     </ul>'
-              )
-            ) {
+                )
+              ) {
+                $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
+                header("Location: segnalazione.php");
+                exit();
+              } else {
+                $_SESSION["error_msg"] = "Errore nell'invio dell'email al bibliotecario";
+                header("Location: segnalazione.php");
+                exit();
+              }
+            } else {
               $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
               header("Location: segnalazione.php");
               exit();
-            } else {
-              $_SESSION["error_msg"] = "Errore nell'invio dell'email al bibliotecario";
-              header("Location: segnalazione.php");
-              exit();
             }
-
 
           } catch (PDOException $e) {
             throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
@@ -118,12 +124,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query->closeCursor();
 
         // mandare email della segnalazione al bibliotecario:
-        if (
-          sendEmail(
-            getenv('EMAIL_BIBLIO'),
-            'Bibliotecario',
-            'Nuova segnalazione da ' . $user_email,
-            '<h2>È stata effettuata una nuova segnalazione!</h2>
+        $email_biblio = getenv('EMAIL_BIBLIO');
+        if ($email_biblio) {
+          if (
+            sendEmail(
+              $email_biblio,
+              'Bibliotecario',
+              'Nuova segnalazione da ' . $user_email,
+              '<h2>È stata effettuata una nuova segnalazione!</h2>
                                     <p>Informazioni sulla segnalazione:</p>
                                     <ul>
                                         <li>Email Utente: ' . $user_email . '</li>
@@ -131,17 +139,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <li>Messaggio: <p>' . $messaggio . '</p></li>
                                         <li>Immagine: Nessuna</li>
                                     </ul>'
-          )
-        ) {
-          $_SESSION['success_msg'] = "Segnalazione inviata con successo";
-          header("Location: segnalazione.php");
-          exit();
+            )
+          ) {
+            $_SESSION['success_msg'] = "Segnalazione inviato con successo";
+            header("Location: segnalazione.php");
+            exit();
+          } else {
+            $_SESSION["error_msg"] = "Errore nell'invio dell'email al bibliotecario";
+            header("Location: segnalazione.php");
+            exit();
+          }
         } else {
-          $_SESSION["error_msg"] = "Errore nell'invio dell'email al bibliotecario";
+          $_SESSION['success_msg'] = "Segnalazione inviato con successo";
           header("Location: segnalazione.php");
           exit();
         }
-
 
       } catch (PDOException $e) {
         throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());

@@ -123,14 +123,16 @@ require_once("../utils/mailer.php");
                             $query->bindParam(':giorni', $giorniPrenotazione);
                             $query->execute();
                             $query->closeCursor();
-                            
+
                             // mandare email della prenotazione al bibliotecario:
-                            if (
-                                sendEmail(
-                                    getenv('EMAIL_BIBLIO'),
-                                    'Bibliotecario',
-                                    'Nuova prenotazione',
-                                    '<h2>È stata effettuata una nuova prenotazione!</h2>
+                            $email_biblio = getenv('EMAIL_BIBLIO');
+                            if ($email_biblio) {
+                                if (
+                                    sendEmail(
+                                        $email_biblio,
+                                        'Bibliotecario',
+                                        'Nuova prenotazione',
+                                        '<h2>È stata effettuata una nuova prenotazione!</h2>
                                     <p>Informazioni sulla prenotazione:</p>
                                     <ul>
                                         <li>Email Utente: ' . $email . '</li>
@@ -140,11 +142,12 @@ require_once("../utils/mailer.php");
                                         <li>Data inizio: ' . date('d-m-Y') . '</li>
                                         <li>Data fine: ' . date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')) . '</li>
                                     </ul>'
-                                )
-                            ) {
-                                echo "<p class='successo'>Email mandato al bibliotecario</p>"; // per debug
-                            } else {
-                                echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
+                                    )
+                                ) {
+                                    echo "<p class='successo'>Email mandato al bibliotecario</p>"; // per debug
+                                } else {
+                                    echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
+                                }
                             }
 
                             echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
@@ -181,26 +184,29 @@ require_once("../utils/mailer.php");
                             $query->closeCursor();
 
                             // mandare email della prenotazione al bibliotecario:
-                            if (
-                                sendEmail(
-                                    getenv('EMAIL_BIBLIO'),
-                                    'Bibliotecario',
-                                    'Nuova prenotazione',
-                                    '<h2>È stata effettuata una nuova prenotazione!</h2>
-                                    <p>Informazioni sulla prenotazione:</p>
-                                    <ul>
-                                        <li>Email Utente: ' . $email . '</li>
-                                        <li>Tipo Utente: Standard</li>
-                                        <li>ISBN: ' . $ISBN . '</li>
-                                        <li>ID Copia: ' . $id . '</li>
-                                        <li>Data inizio: ' . date('d-m-Y') . '</li>
-                                        <li>Data fine: ' . date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')) . '</li>
-                                    </ul>'
-                                )
-                            ) {
-                                echo "<p class='successo'>Email mandato al bibliotecario</p>"; // per debug
-                            } else {
-                                echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
+                            $email_biblio = getenv('EMAIL_BIBLIO');
+                            if ($email_biblio) {
+                                if (
+                                    sendEmail(
+                                        $email_biblio,
+                                        'Bibliotecario',
+                                        'Nuova prenotazione',
+                                        '<h2>È stata effettuata una nuova prenotazione!</h2>
+                                        <p>Informazioni sulla prenotazione:</p>
+                                        <ul>
+                                            <li>Email Utente: ' . $email . '</li>
+                                            <li>Tipo Utente: Standard</li>
+                                            <li>ISBN: ' . $ISBN . '</li>
+                                            <li>ID Copia: ' . $id . '</li>
+                                            <li>Data inizio: ' . date('d-m-Y') . '</li>
+                                            <li>Data fine: ' . date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')) . '</li>
+                                        </ul>'
+                                    )
+                                ) {
+                                    echo "<p class='successo'>Email mandato al bibliotecario</p>"; // per debug
+                                } else {
+                                    echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
+                                }
                             }
 
                             echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
