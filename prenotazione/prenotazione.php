@@ -1,8 +1,22 @@
 <?php
+//LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 require_once("../utils/connect.php");
 $root = '..';
 require_once("../auth/cookies.php");
+if(isset($_SESSION['utenza'])){
+    if($_SESSION['utenza']==1 || $_SESSION['utenza']==2){
+        header("Location: prenotazioneAdmin.php");
+        die(); ///CREDO SIA GIUSTO USARE DIE IN QUESTO CASO MA BOH CHI LO SA SE GLI VA BENE
+    }
+} else{
+    header("Location: ../index.php");
+    die();///CREDO SIA GIUSTO USARE DIE IN QUESTO CASO MA BOH CHI LO SA SE GLI VA BENE
+}
 ?>
 <?php
 //LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!

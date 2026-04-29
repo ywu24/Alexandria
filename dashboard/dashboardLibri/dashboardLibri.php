@@ -69,6 +69,7 @@ if (isset($_POST['createDummy'])) {
 	<link rel="stylesheet" href="../../css/styleDashboard.css">
 	<script src="aggiornaCopie.js"></script>
 	<link rel="stylesheet" href="../../css/nav.css">
+	<link rel="stylesheet" href="../../css/messaggi.css">
 	<link rel="stylesheet" href="../../css/colors.css">
 	<link rel="stylesheet" href="../../css/popup.css">
 	<link rel="shortcut icon" href="../../immagini/bookDashFavicon.png" type="image/x-icon">
@@ -310,7 +311,7 @@ if (isset($_POST['createDummy'])) {
 							}
 					}
 
-					function printLibri(&$row)
+					function printLibri($row)
 					{
 						$isbn = $row['ISBN'];
 						echo "
@@ -332,8 +333,13 @@ if (isset($_POST['createDummy'])) {
 						</td>
 						<td>
 							<a class='btn btn-primary btn-sm' href='modificaLibro.php?id=$isbn'>Modifica</a>
-						</td>
-					</tr>
+						";
+						if($row['copie']==0){
+							echo "
+							<button type='button' class='btn btn-danger btn-sm elimina' >Elimina</a>
+						 ";
+						}
+					echo "</td> </tr>
 					<tr id='row-details-$isbn' style='display:none;' class='bg-light'>
 						<td colspan='8'>
 							<div id='content-$isbn' class='p-3'>

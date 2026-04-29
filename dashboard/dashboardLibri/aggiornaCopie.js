@@ -76,7 +76,7 @@ document.addEventListener("click", async (e) => {
             if (rigaDettaglio) {
                 // Prendo la riga principale che sta sopra il dettaglio
                 const rigaPrincipale = rigaDettaglio.previousElementSibling;
-                
+
                 // Trovo il pulsante espandi
                 const btnEspandi = rigaPrincipale.querySelector('.btn-espandi');
 
@@ -90,7 +90,7 @@ document.addEventListener("click", async (e) => {
         } else {
             showMessage(result, "errore");
         }
-    }else if (e.target && e.target.classList.contains('btn-espandi')) {
+    } else if (e.target && e.target.classList.contains('btn-espandi')) {
         const btn = e.target;
         const isbn = btn.getAttribute('data-isbn');
         const targetRow = document.getElementById(`row-details-${isbn}`);
@@ -132,10 +132,52 @@ document.addEventListener("click", async (e) => {
             }
         }
     }
-    else if(e.target.classList.contains("dettagli")){
+    else if (e.target.classList.contains("dettagli")) {
         idLibro = e.target.closest("tr").dataset.id;
         console.log(idLibro);
         window.location.href = "gotoPrenotazione.php?id=" + idLibro
+    }
+    else if (e.target.classList.contains("elimina")) {
+        const button = e.target;
+        console.log(button);
+        // 1. Trova prima la riga principale (tr)
+        const row = button.closest("tr");
+
+        // 2. Estrai l'isbn dai dataset della riga
+        let isbn = row.dataset.isbn;
+
+        // 3. Ora puoi cercare la riga dei dettagli usando l'isbn appena ottenuto
+        const targetRow = document.getElementById(`row-details-${isbn}`);
+
+        const formData = new FormData();
+        formData.append("isbn", isbn);
+
+        try {
+            // Chiamata Fetch
+            const response = await fetch(`eliminaLibro.php`, {
+                method: "POST",
+                body: formData
+            });
+
+            const ans = await response.text();
+
+            if (ans.includes("ok")) {
+                // Rimuovi la riga principale
+                row.remove();
+
+                // Se esiste una riga di dettagli (es. una riga espandibile), rimuovi anche quella
+                if (targetRow) {
+                    targetRow.remove();
+                }
+
+                // Mostra il messaggio togliendo il prefisso "ok"
+                showMessage(ans.slice(2));
+            } else {
+                showMessage(ans, "errore");
+            }
+        } catch (error) {
+            showMessage("Errore di rete o del server", "errore");
+        }
     }
 });
 
@@ -160,7 +202,7 @@ function showMessage(text, type = "successo") {
 function renderCopie(container, copie, e, idLibro) {
     // Svuotiamo il contenitore dal testo "Caricamento..."
     container.innerHTML = "";
-    
+
     if (copie.length === 0) {
         container.innerHTML = "<div class='alert alert-info'>Nessuna copia disponibile per questo volume.</div>";
         return;

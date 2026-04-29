@@ -18,12 +18,12 @@ try {
     die("Errore durante la connessione al database: " . $e->getMessage());
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'])) {
     // Controllo se l'utente è loggato
     if (!isset($_SESSION['email'])) {
         header("Location: ../login/login.php");
         exit();
-    }
+    }    
 
     $user_email = $_SESSION['email'];
     $titolo = $_POST['titolo'];
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Preparazione della query con PDO
-        $sql = "INSERT INTO Recensione (userEmail, Titolo, Messaggio, Voto, idOpera) 
+        $sql = "INSERT INTO recensione (userEmail, Titolo, Messaggio, Voto, idOpera) 
                 VALUES (:email, :titolo, :messaggio, :voto, :idOpera)";
         
         $stmt = $pdo->prepare($sql);
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
-            $_SESSION['success_msg'] = "Recensione inviata con successo. Grazie per il tuo feedback!";
+            $_SESSION['success_msg'] = "recensione inviata con successo. Grazie per il tuo feedback!";
         } else {
             $_SESSION['error_msg'] = "Errore durante l'invio della recensione. Riprova.";
         }
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../css/recensioni.css">
   <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
   <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
-  <title>Lascia una Recensione</title>
+  <title>Lascia una recensione</title>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <div class="centered-form">
     <div class="form-container mt-4 mb-5 p-4 bg-white shadow rounded" style="max-width: 600px; margin: 0 auto;">
-      <h2 class="text-center mb-4"><i class="fas fa-star text-warning"></i> La tua Recensione</h2>
+      <h2 class="text-center mb-4"><i class="fas fa-star text-warning"></i> La tua recensione</h2>
       
       <form action="recensione.php?id=<?php echo $idOpera; ?>" method="POST">
         
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <small class="text-muted" id="messaggio-counter">Caratteri rimanenti: 500</small>
         </div>
         
-        <button type="submit" class="btn btn-warning btn-block text-white font-weight-bold">Pubblica Recensione</button>
+        <button type="submit" class="btn btn-warning btn-block text-white font-weight-bold">Pubblica recensione</button>
       </form>
     </div>
   </div>

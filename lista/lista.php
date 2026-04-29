@@ -1,4 +1,8 @@
 <?php
+// LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 session_start();
 $root = '..';
 require_once("../utils/connect.php");
@@ -227,7 +231,7 @@ try {
                                     $color = "red";
                                 }
 
-                                $q = "SELECT AVG(Voto) as media, COUNT(*) as totale FROM Recensione WHERE idOpera = :id";
+                                $q = "SELECT AVG(Voto) as media, COUNT(*) as totale FROM recensione WHERE idOpera = :id";
                                 
                                 if ($query = $pdo->prepare($q)) {
                                     $query->bindParam(':id', $id, PDO::PARAM_INT);

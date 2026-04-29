@@ -1,4 +1,8 @@
 <?php
+// LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 session_start();
 require_once("../utils/connect.php");
 $root = '..';
@@ -66,7 +70,7 @@ require_once("../auth/cookies.php");
         }
 
         // Recupera il voto medio dei libri
-        $q = "SELECT AVG(Voto) as media, COUNT(*) as totale FROM Recensione WHERE idOpera = :id";
+        $q = "SELECT AVG(Voto) as media, COUNT(*) as totale FROM recensione WHERE idOpera = :id";
         $query = $pdo->prepare($q);
         $query->bindParam(':id', $book_id, PDO::PARAM_INT);
         $query->execute();
@@ -235,7 +239,7 @@ require_once("../auth/cookies.php");
                         <?php
                         try {
                             // Preparazione della query con segnaposto
-                            $query_commenti = "SELECT * FROM Recensione WHERE idOpera = :book_id ORDER BY id DESC";
+                            $query_commenti = "SELECT * FROM recensione WHERE idOpera = :book_id ORDER BY id DESC";
                             $stmt_commenti = $pdo->prepare($query_commenti);
                             $stmt_commenti->bindParam(':book_id', $book_id, PDO::PARAM_INT);
                             $stmt_commenti->execute();

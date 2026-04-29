@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', async () => {
         const idUtente = btn.getAttribute('data-id-utente');
         console.log(idUtente);
+        //if(!idUtente)idUtente=1;
         btn.disabled = true;
         btn.textContent = "Caricamento...";
 

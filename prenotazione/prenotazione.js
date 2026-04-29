@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // 2."ELIMINA" 
-        // Usiamo closest() perché l'utente potrebbe cliccare l'immagine dentro il bottone
+       
 
         const deleteBtn = event.target.closest('.delete-button');
         console.log("delete"+ deleteBtn);
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     ${ritardo2}
 
                                     <div class='container-pulsanti'>
-                                        <a href="../../recensione/recensione.php?id=${row.idOpera}" class="btn btn-warning">
+                                        <a href="../recensione/recensione.php?id=${row.idOpera}" class="btn btn-warning">
                                         Recensisci
                                         </a>
                                     </div>
