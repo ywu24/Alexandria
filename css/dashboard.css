@@ -5,11 +5,13 @@ html{
 }
 
 
-.container{
-    width: 100vw;
-    height: 50vh;
+.container {
+    width: 90vw; 
+    min-height: 50vh;
     display: flex;
     justify-content: space-around;
+    align-items: center; 
+    flex-wrap: wrap; 
     border-radius: 25px;
     position: absolute;
     top: 50%;
@@ -57,5 +59,26 @@ html{
     text-align: center;
 }
 @media(max-width:768px){
+    
+    .container {
+        flex-direction: column; /* Incolonna i blocchi */
+        position: relative; /* Rende lo scorrimento più naturale su mobile */
+        top: 0;
+        left: 0;
+        transform: none;
+        margin: 20px auto;
+        height: auto; /* Lascia che il contenuto decida l'altezza */
+    }
+
+    .container .card-container {
+        width: 80vw; /* I blocchi diventano più larghi su mobile */
+        height: auto; /* L'altezza si adatta al contenuto */
+        margin: 10px 0;
+    }
+    
+    .card-container img {
+        height: 150px; /* Dimensione fissa per l'immagine su mobile */
+        width: auto;
+    }
 
 }

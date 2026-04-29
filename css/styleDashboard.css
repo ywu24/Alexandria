@@ -62,3 +62,84 @@ p {
 	margin: 0 auto !important;
 	width: 169px !important;
 }
+
+@media (max-width: 768px) {
+    /* Allarghiamo il container per sfruttare più spazio laterale */
+    .container-fluid {
+        width: 98% !important; 
+    }
+
+    /* Riduciamo i margini della barra di ricerca per recuperare spazio in verticale */
+    .searchbar {
+        margin-top: 15px; 
+        margin-bottom: 15px;
+    }
+
+    /* Il bottone "Aggiungi utente" nella thead (solo per admin) */
+    .btn_adduser {
+        float: none !important; 
+        display: inline-block;
+        width: auto !important; 
+        margin-top: 5px !important;
+        padding: 4px 8px; /* Bottone leggermente più compatto */
+        font-size: 0.9rem;
+    }
+    
+    /* Intestazione della colonna Azioni per dare spazio al bottone sopra */
+    th:last-child {
+        min-width: 140px; 
+    }
+
+    p.errore, p.successo {
+        font-size: 14px; 
+        padding: 8px;
+    }
+}
+
+/* Dispositivi piccoli (Smartphone, fino a 480px) */
+@media (max-width: 480px) {
+    .container-fluid {
+        width: 100% !important; 
+        padding-left: 10px !important; 
+        padding-right: 10px !important;
+    }
+
+    /* Adatta la larghezza della form di ricerca in modo che non superi lo schermo */
+    form.form-inline.mx-auto {
+        width: 100% !important;
+        flex-direction: column; /* Impila input e bottone "cerca" */
+    }
+    
+    .searchbar {
+        width: 100% !important; /* L'input di ricerca prende tutta la larghezza */
+        margin-right: 0 !important;
+        margin-bottom: 10px !important;
+    }
+    
+    form.form-inline.mx-auto .btn-outline-info {
+        width: 100%; /* Il tasto Cerca diventa largo quanto lo schermo */
+    }
+
+    /* Gestione dei bottoni nella colonna Azioni (Modifica/Elimina) */
+    .btn_actions {
+        width: 100% !important; 
+        min-width: 100px; /* Assicura uno spazio minimo */
+        display: flex;
+        flex-direction: column; 
+        gap: 8px; 
+    }
+    
+    .btn_actions .btn {
+        width: 100% !important; /* Rende Modifica ed Elimina più larghi e facili da tappare */
+        margin-bottom: 0;
+        font-size: 0.85rem; /* Testo leggermente ridotto per schermi piccoli */
+    }
+
+    /* Sistemazione del bottone "Aggiungi utente" per schermi piccolissimi */
+    .btn_adduser {
+        display: block;
+        width: 100% !important;
+        margin-top: 10px !important;
+        text-align: center;
+    }
+}

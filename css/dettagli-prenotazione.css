@@ -1,5 +1,22 @@
-.prenotation-status{
+.prenotation-status {
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-around;
+    align-items: center; 
+    gap: 15px;
+    padding: 15px 0;
+}
+
+
+@media (max-width: 768px) {
+    .prenotation-status {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        gap: 12px; 
+    }
+    
+    .prenotation-status > * {
+        width: 100%; 
+    }
 }

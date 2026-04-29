@@ -1,0 +1,112 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+
+.messages {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.errore {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+    font-weight: 600;
+}
+
+.successo {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #c3e6cb;
+    font-weight: 600;
+}
+
+/* --- TITOLO E SEPARATORE --- */
+h2 {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+hr {
+    border-top: 2px solid var(--button, #007bff);
+    width: 50px;
+    margin-left: 0;
+    margin-bottom: 30px;
+}
+
+/* --- CARDS SEGNALAZIONI --- */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #007bff; /* O usa var(--button) */
+}
+
+.card-subtitle {
+    font-size: 0.9rem;
+    color: #6c757d !important;
+    margin-bottom: 15px;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    color: #555;
+    /* Tronca il testo se troppo lungo */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- LINK DETTAGLI --- */
+.card-link {
+    display: inline-block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.card-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* --- RESPONSIVNESS --- */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    h2 {
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    hr {
+        margin: 10px auto 30px auto;
+    }
+}
