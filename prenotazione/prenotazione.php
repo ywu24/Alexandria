@@ -69,7 +69,7 @@ error_reporting(E_ALL);
         $numero_prenotazioni = 0;
         try {
             $query = $pdo->prepare("SELECT idPrenotazione, $table2.id as idOpera, Copertina, $table.idCopia, InizioPrenotazione, FinePrenotazione, InizioPrestito, 
-                                FinePrestito, FineAttesa, Autore, Nome, CasaEditrice FROM $table, $table1, $table2 
+                                FinePrestito, FineAttesa, Autore, Nome, CasaEditrice, $table2.ISBN as ISBN FROM $table, $table1, $table2 
                                 WHERE $table1.idCopia = $table.idCopia AND $table2.ISBN = $table1.ISBN and $table.Email = :email 
                                 ORDER BY $table.idPrenotazione DESC");
             $query->bindParam(':email', $email);
@@ -114,7 +114,7 @@ error_reporting(E_ALL);
                     <div class='book-link'>
                         <img src='../img/books/" . $row['Copertina'] . "' alt='' class='book-cover' width='160px'>
                         <div class='book-section'>
-                            <h3>" . $row['Nome'] . "</h3>
+                            <div class='info-title'><h3 class='trunctitle'>" . $row['Nome'] . "</h3> <h6>ISBN: " . $row['ISBN'] . "</h6></div>
                             <div class='info-release'>
                                 <h5>" . $row['Autore'] . "</h5>
                                 <h5>" . $row['CasaEditrice'] . "</h5>
