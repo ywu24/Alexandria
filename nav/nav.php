@@ -92,6 +92,7 @@ if (isset($_SESSION['email'])) {
                 <div class='user-info'>
                     <img src='" . $root ."/img/users/". $utente["propic"] . "'>
                     <h3>" . $utente["Nome"] . " " . $utente["Cognome"] . "</h3>
+                    <h4> Punti: ".$utente['punteggio']."</h4>
                 </div>
 
                 <a href='" . $root . "/prenotazione/prenotazione.php' class='sub-menu-link'>
