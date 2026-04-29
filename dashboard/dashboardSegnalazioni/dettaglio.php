@@ -10,14 +10,17 @@
 <body>
    <div id="nav-placeholder">
     <?php $root = "../..";
-    require_once('../../nav/nav.php');
+    session_start();
     require_once("../../utils/connect.php");
+     require_once("../../auth/cookies.php");
+    require_once('../../nav/nav.php');
+
     ?>
   </div>
 <div class="container mt-5">
 
 <?php
-// 1. Connessione tramite Singleton
+
 try {
     $pdo = DatabaseConnection::getInstance()->getConnection();
 } catch (PDOException $e) {
@@ -25,7 +28,7 @@ try {
     exit;
 }
 
-// 2. Controllo e sanificazione ID
+
 $idSegnalazione = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($idSegnalazione <= 0) {
@@ -33,7 +36,7 @@ if ($idSegnalazione <= 0) {
     exit;
 }
 
-// 3. Esecuzione query con Prepared Statement
+
 try {
     $sql = "SELECT userEmail, Oggetto, Messaggio, imgSegn FROM Segnalazione WHERE idSegnalazione = :id";
     $query = $pdo->prepare($sql);
@@ -44,10 +47,10 @@ try {
         // Prepariamo l'immagine se esiste
         $imgHtml = "";
         if (!empty($row['imgSegn'])) {
-            $imgHtml = "<img src='../" . htmlspecialchars($row['imgSegn']) . "' class='card-img-bottom' alt='Immagine segnalazione'>";
+            $imgHtml = "<img src='../../img/segnalazioni/" . htmlspecialchars($row['imgSegn']) . "' class='card-img-bottom' alt='Immagine segnalazione'>";
         }
 
-        // Layout unificato (evitiamo duplicati di codice)
+        
         echo "
         <div class='text-center mb-4'>
             <h2>Dettagli Segnalazione n° " . $idSegnalazione . "</h2>

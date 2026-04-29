@@ -1,185 +1,171 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 $root = "../..";
-
-if (!isset($_SESSION['copia'])) {
-	$_SESSION['copia'] = false;
-}
 $msg = "";
-
-if (isset($_POST['submitOpera'])) {
-	$_SESSION['copia'] = false;
-	unset($_POST['submitOpera']);
-} else if (isset($_POST['submitCopia'])) {
-	$_SESSION['copia'] = true;
-	unset($_POST['submitCopia']);
-}
 
 if (isset($_SESSION['libroEsiste'])) {
 	if ($_SESSION['libroEsiste']) {
-		if ($_SESSION['copia'] == false) {
-			$_SESSION['copia'] = true;
-			header("Location: aggiungiLibro.php");
-			exit();
-		}
-		$msg = "<p class='successo'>Il libro esiste già nel DataBase</p>";
+		$msg = '<div class="messages">
+					<p class="successo"> Trovato! Il libro esiste già nel DataBase.</p>
+                </div>';
 	} else {
-		if ($_SESSION['copia'] == true) {
-			$_SESSION['copia'] = false;
-			header("Location: aggiungiLibro.php");
-			exit();
-		}
-		$msg = "<p class= 'errore'>Il libro non è presente nel DataBase</p>";
-
+		$msg = '<div class="messages" role="alert">
+                    <p class= "errore"> Il libro non è presente. Compila tutti i campi.</p>                    
+                </div>';
 	}
 	unset($_SESSION['libroEsiste']);
 }
 ?>
 
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
-	<title>Aggiungi libro</title>
-	<!-- Link ai file CSS di Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Aggiungi Libro | Dashboard</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/styleDashboard.css">
-	<link rel="stylesheet" href="../../css/messaggi.css">
+	<link rel="stylesheet" href="../../css/nav.css">
+	<link rel="stylesheet" href="../../css/aggiungiLibro.css">
+	<style>
 
+	</style>
 </head>
 
 <body>
 
 	<div id="nav-placeholder">
-		<?php
-		require_once("../../nav/nav.php");
-		echo $msg; ?>
+		<?php require_once("../../nav/nav.php"); ?>
 	</div>
-	<div class="container mt-5">
+	<?php echo $msg; ?>
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
 
-		<h1>Aggiungi libro</h1>
-
-		<!-- Check -->
-		<h2 style="margin-top: 25px; margin-bottom: 25px;">Controlla se il DataBase ha già i dati sul libro</h2>
-		<form action="check.php" method="post">
-			<div class="form-group">
-				<label for="isbn-check">ISBN</label>
-				<input type="text" name="isbn-check" id="isbn-check" class="form-control"
-					style="width: 89%; display: inline;" required>
-				<input type="submit" name="check" class="btn btn-secondary" value="Check"
-					style="margin-bottom: 0.425rem; margin-right: 0;">
-			</div>
-		</form>
-
-		<?php
+				<div class="text-center mb-4">
+					<h1 class="display-4">📚 Aggiungi Libro</h1>
+					<p class="text-muted">Inserisci una nuova opera o aggiungi copie al catalogo</p>
+				</div>
 
 
 
-		if ($_SESSION['copia']) {
-			echo '<form action="aggiungiLibro.php" method="post">
-				<input type="submit" name="submitOpera" class="btn btn-secondary" value="Torna indietro"
-					style="margin-bottom: 0.425rem; padding: 0.175rem 0.375rem;">
-				</form>';
-		} else {
-			echo '<form action="aggiungiLibro.php" method="post">
-			<label for="submitCopia">Il DataBase ha già i dati sul libro da aggiungere? Se si, si prega di cliccare
-			</label>
-			<input type="submit" id="submitCopia" name="submitCopia" class="btn btn-secondary" value="qui"
-				style="margin-bottom: 0.425rem; padding: 0.175rem 0.375rem;">
-			</form>';
-		}
-		?>
-
-
-		<h2 style="margin-top: 25px; margin-bottom: 15px;">Inserisci le informazioni sul libro</h2>
-		<form action="insertLibro.php" method="post" enctype="multipart/form-data">
-
-			<div class="form-group">
-				<label for="isbn">ISBN</label>
-				<input type="text" name="isbn" id="isbn" class="form-control" required>
-			</div>
-
-			<?php
-
-
-			if ($_SESSION['copia']) {
-				echo '<div class="form-group">
-						<label for="qty">Copie:</label>
-						<input type="number" class="form-control" id="qty" name="qty" value="1" min="1" max="50" step="1" style="width: 10%; display: inline;" required>
+				<div class="card mb-4">
+					<div class="card-header font-weight-bold">
+						🔍 Verifica Esistenza
 					</div>
-					<br>
-					<div class="form-group">
-						<input type="submit" name="btnCopia" class="btn btn-primary" value="Aggiungi libro">
-					</div>';
-			} else {
-				echo '<div class="form-group">
-				<label for="titolo">Titolo</label>
-				<input type="text" name="titolo" id="titolo" class="form-control" required>
+					<div class="card-body">
+						<form action="check.php" method="post" class="form-inline justify-content-center">
+							<div class="input-group w-100">
+								<div class="input-group-prepend">
+									<span class="input-group-text">ISBN</span>
+								</div>
+								<input type="text" name="isbn-check" class="form-control" placeholder="Inserisci ISBN per controllare..." required>
+								<div class="input-group-append">
+									<button type="submit" name="check" class="btn btn-secondary">Controlla</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header font-weight-bold">
+						📝 Dettagli Opera
+					</div>
+					<div class="card-body">
+						<form action="insertLibro.php" method="post" enctype="multipart/form-data">
+
+							<div class="form-group">
+								<label for="isbn">ISBN (Conferma)</label>
+								<input type="text" name="isbn" id="isbn" class="form-control" placeholder="es. 9788804668237" required>
+							</div>
+
+							<div class="form-group">
+								<label for="titolo">Titolo Libro</label>
+								<input type="text" name="titolo" id="titolo" class="form-control" placeholder="Il nome dell'opera" required>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 form-group">
+									<label for="autore">Autore</label>
+									<input type="text" class="form-control" id="autore" name="autore" placeholder="Nome e Cognome" required>
+								</div>
+								<div class="col-md-6 form-group">
+									<label for="genere">Genere</label>
+									<select class="form-control" name="genere" id="genere" required>
+										<option value="" disabled selected>Scegli...</option>
+										<option value="Romanzo Storico">Romanzo Storico</option>
+										<option value="Giallo">Giallo</option>
+										<option value="Biografia">Biografia</option>
+										<option value="Avventura">Avventura</option>
+										<option value="Azione">Azione</option>
+										<option value="Fantascienza">Fantascienza</option>
+										<option value="Horror">Horror</option>
+										<option value="Umoristico">Umoristico</option>
+										<option value="Distopia">Distopia</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="desc">Descrizione / Trama</label>
+								<textarea rows="4" class="form-control" name="desc" placeholder="Breve riassunto del libro..." required></textarea>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 form-group">
+									<label for="casaed">Casa Editrice</label>
+									<input type="text" class="form-control" id="casaed" name="casaed" required>
+								</div>
+								<div class="col-md-3 form-group">
+									<label for="annopub">Anno</label>
+									<input type="text" class="form-control" id="annopub" name="annopub" maxlength="4" placeholder="AAAA" required>
+								</div>
+								<div class="col-md-3 form-group">
+									<label for="qty">Copie</label>
+									<input type="number" class="form-control" id="qty" name="qty" value="1" min="1" max="50" required>
+								</div>
+							</div>
+
+							<div class="form-group mb-4">
+								<label for="image">🖼️ Immagine di Copertina</label>
+								<div class="custom-file">
+									<input type="file" class="custom-file-input" name="image" id="image">
+									<label class="custom-file-label" for="image">Scegli file...</label>
+								</div>
+							</div>
+
+							<button type="submit" name="btnOpera" class="btn btn-primary btn-block btn-lg">
+								Salva Opera nel Database
+							</button>
+
+						</form>
+					</div>
+				</div>
+
+				<div class="text-center mt-4">
+					<a href="dashboardLibri.php" class="text-secondary text-decoration-none">← Torna alla Dashboard</a>
+				</div>
+
 			</div>
-
-			<div class="form-group">
-				<label for="autore">Autore</label>
-				<input type="text" class="form-control" id="autore" name="autore" required>
-			</div>
-
-			<div class="form-group">
-				<label for="desc">Descrizione</label>
-				<textarea rows="5" class="form-control" name="desc" required></textarea>
-			</div>
-
-			<div class="form-group">
-				<label for="casaed">Casa Editrice</label>
-				<input type="text" class="form-control" id="casaed" name="casaed" required>
-			</div>
-
-			<div class="form-group">
-				<label for="annopub">Anno Pubblicazione</label>
-				<input type="text" class="form-control" id="annopub" name="annopub" maxlength="4" required>
-
-			</div>
-
-			<div class="form-group">
-				<label for="genere">Genere</label>
-				<select class="form-control" name="genere" id="genere" required>
-				<option value="Romanzo Storico">Romanzo Storico</option>
-				<option value="Giallo">Giallo</option>
-				<option value="Biografia">Biografia</option>
-				<option value="Avventura">Avventura</option>
-				<option value="Azione">Azione</option>
-				<option value="Fantascienza">Fantascienza</option>
-				<option value="Horros">Horror</option>
-				<option value="Umoristico">Umoristico</option>
-				<option value="Distopia">Distopia</option>
-				</select>
-			</div>
-
-			<div class="form-group">
-				<label for="qty">Copie:</label>
-				<input type="number" class="form-control" id="qty" name="qty" value="1" min="1" max="50" step="1" style="width: 10%; display: inline;" required>
-			</div>
-			<br>
-			<div class="form-group">
-				<label class="titolo" for="image">Immagine di Copertina</label>
-				<input type="file" name="image" id="">
-				<input type="submit" name="btnOpera" class="btn btn-primary" value="Aggiungi libro">
-			</div>';
-			}
-			?>
-
-		</form>
+		</div>
 	</div>
-	<!-- Link ai file JavaScript di Bootstrap -->
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		crossorigin="anonymous"></script>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<script>
+		// Piccolo scriptino per mostrare il nome del file selezionato nell'input di Bootstrap
+		$(".custom-file-input").on("change", function() {
+			var fileName = $(this).val().split("\\").pop();
+			$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		});
+	</script>
 </body>
 
 </html>

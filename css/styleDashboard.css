@@ -5,24 +5,10 @@
 
 :any-link:hover {
 	color: white;
-	text-decoration: none;	
+	text-decoration: none;
 }
-p.errore{
-    color: rgb(192, 81, 81); 
-    font-weight: bold; 
-    background: #fee; 
-    padding: 10px; 
-    border: 1px solid rgb(192, 81, 81);
 
-}
-p.successo{
-	color: rgb(88, 192, 81); 
-    font-weight: bold; 
-    background: rgba(212, 245, 212, 0.699); 
-    padding: 10px; 
-    border: 1px solid rgb(88, 192, 81); 
 
-}
 .container-fluid {
 	width: 93% !important;
 }
@@ -36,14 +22,16 @@ p.successo{
 	margin-bottom: 30px;
 }
 
-dl, ol, ul {
-    margin-top: 0;
-    margin-bottom: 0rem !important;
+dl,
+ol,
+ul {
+	margin-top: 0;
+	margin-bottom: 0rem !important;
 }
 
 p {
-    margin-top: 0;
-    margin-bottom: 0rem !important;
+	margin-top: 0;
+	margin-bottom: 0rem !important;
 }
 
 .sort_btn {
@@ -61,4 +49,57 @@ p {
 .btn_actions {
 	margin: 0 auto !important;
 	width: 169px !important;
+}
+
+body {
+	background-color: #f8f9fa;
+}
+
+.card {
+	border: none;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+	background-color: #343a40;
+	color: white;
+	border-radius: 10px 10px 0 0 !important;
+}
+
+.btn-primary {
+	background-color: #007bff;
+	border: none;
+	transition: 0.3s;
+}
+
+.btn-primary:hover {
+	background-color: #0056b3;
+	transform: translateY(-2px);
+}
+
+.form-control:focus {
+	border-color: #007bff;
+	box-shadow: none;
+}
+
+label {
+	font-weight: 600;
+	color: #495057;
+}
+
+.preview-image {
+	max-width: 100%;
+	border-radius: 5px;
+	margin-top: 10px;
+	border: 1px solid #ddd;
+}
+
+.delete-icon {
+	cursor: pointer;
+	position: absolute;
+	top: 15px;
+	right: 25px;
+	display: none;
+	z-index: 10;
 }
