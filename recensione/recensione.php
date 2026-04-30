@@ -31,7 +31,7 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
     $voto = (int)$_POST['voto'];
 
     try {
-        // Preparazione della query con PDO
+        // 1. Preparazione della query per la recensione
         $sql = "INSERT INTO recensione (userEmail, Titolo, Messaggio, Voto, idOpera) 
                 VALUES (:email, :titolo, :messaggio, :voto, :idOpera)";
         
@@ -45,7 +45,15 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
         $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
-            $_SESSION['success_msg'] = "recensione inviata con successo. Grazie per il tuo feedback!";
+            $sqlPunti = "UPDATE utenti SET punti = punti + 5 WHERE email = :email";
+            $stmtPunti = $pdo->prepare($sqlPunti);
+            $stmtPunti->bindParam(':email', $user_email);
+            $stmtPunti->execute();
+            $stmtPunti->closeCursor();
+
+            $_SESSION['success_msg'] = "Recensione inviata con successo!";
+            $_SESSION['punti_guadagnati'] = true; 
+
         } else {
             $_SESSION['error_msg'] = "Errore durante l'invio della recensione. Riprova.";
         }
@@ -97,6 +105,14 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
     if (isset($_SESSION['error_msg'])) {
       echo '<p class="errore">' . htmlspecialchars($_SESSION['error_msg']) . '</p>';
       unset($_SESSION['error_msg']);
+    }
+
+    // Controlliamo se dobbiamo attivare il trigger per i punti
+    if (isset($_SESSION['punti_guadagnati'])) {
+        echo '<script> const puntiGuadagnati = true; </script>';
+        unset($_SESSION['punti_guadagnati']);
+    } else {
+        echo '<script> const puntiGuadagnati = false; </script>';
     }
     ?>
   </div>
