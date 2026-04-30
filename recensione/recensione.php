@@ -45,7 +45,7 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
         $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
-            $sqlPunti = "UPDATE utenti SET punti = punti + 5 WHERE email = :email";
+            $sqlPunti = "UPDATE utente SET punteggio = punteggio + 5 WHERE Email = :email";
             $stmtPunti = $pdo->prepare($sqlPunti);
             $stmtPunti->bindParam(':email', $user_email);
             $stmtPunti->execute();
