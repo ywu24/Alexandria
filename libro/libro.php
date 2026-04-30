@@ -7,6 +7,7 @@ session_start();
 require_once("../utils/connect.php");
 $root = '..';
 require_once("../auth/cookies.php");
+require_once("../utils/mailer.php");
 ?>
 
 
@@ -75,9 +76,9 @@ require_once("../auth/cookies.php");
         $query->bindParam(':id', $book_id, PDO::PARAM_INT);
         $query->execute();
         $dati_media = $query->fetch(PDO::FETCH_ASSOC);
-        $media_val = $dati_media['media'] ?? 0; 
-        $media = round((float)$media_val, 1);
-        $totale_recensioni = (int)($dati_media['totale'] ?? 0);
+        $media_val = $dati_media['media'] ?? 0;
+        $media = round((float) $media_val, 1);
+        $totale_recensioni = (int) ($dati_media['totale'] ?? 0);
         $query->closeCursor();
 
         if (isset($_SESSION['email'])) {
@@ -103,7 +104,8 @@ require_once("../auth/cookies.php");
                     try {
                         $nPrenotazioni = $_POST['sliderino'];
                         for ($i = 0; $i < $nPrenotazioni; $i++) {
-                            $query = $pdo->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera 
+                            //MIN(Opera.ISBN) è usato solo per poter prendere l'ISBN del libro, tanto è uguale per tutte le copie
+                            $query = $pdo->prepare('SELECT min(idCopia) AS id, MIN(Opera.ISBN) as ISBN FROM copiaLibro, Opera 
                                                     WHERE Stato = 1 and id=:id and Opera.ISBN = copiaLibro.ISBN');
 
                             $query->bindParam(':id', $book_id);
@@ -112,6 +114,7 @@ require_once("../auth/cookies.php");
                             $query->closeCursor();
 
                             $id = $copiaPrenotata['id'];
+                            $ISBN = $copiaPrenotata['ISBN']; //viene sovrascritto con lo stesso valore ad ogni ciclo, si potrebbe migliorare 
                             $query = $pdo->prepare("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = :id");
                             $query->bindParam(':id', $id);
                             $query->execute();
@@ -124,6 +127,33 @@ require_once("../auth/cookies.php");
                             $query->bindParam(':giorni', $giorniPrenotazione);
                             $query->execute();
                             $query->closeCursor();
+
+                            // mandare email della prenotazione al bibliotecario:
+                            $email_biblio = getenv('EMAIL_BIBLIO');
+                            if ($email_biblio) {
+                                if (
+                                    sendEmail(
+                                        $email_biblio,
+                                        'Bibliotecario',
+                                        'Nuova prenotazione',
+                                        '<h2>È stata effettuata una nuova prenotazione!</h2>
+                                    <p>Informazioni sulla prenotazione:</p>
+                                    <ul>
+                                        <li>Email Utente: ' . $email . '</li>
+                                        <li>Tipo Utente: Premium</li>
+                                        <li>ISBN: ' . $ISBN . '</li>
+                                        <li>Quantità: ' . $nPrenotazioni . '</li>
+                                        <li>Data inizio: ' . date('d-m-Y') . '</li>
+                                        <li>Data fine: ' . date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')) . '</li>
+                                    </ul>'
+                                    )
+                                ) {
+                                    echo "<p class='successo'>Email mandato al bibliotecario</p>"; // per debug
+                                } else {
+                                    echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
+                                }
+                            }
+
                             echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
                         }
                     } catch (Exception $e) {
@@ -134,7 +164,8 @@ require_once("../auth/cookies.php");
                 } else if ($_SESSION['utenza'] == 4) {
                     try {
                         if ($numeroPrenotazioni < 3) {
-                            $query = $pdo->prepare('SELECT min(idCopia) AS id FROM copiaLibro, Opera 
+                            //MIN(Opera.ISBN) è usato solo per poter prendere l'ISBN del libro, tanto è uguale per tutte le copie
+                            $query = $pdo->prepare('SELECT min(idCopia) AS id, MIN(Opera.ISBN) as ISBN FROM copiaLibro, Opera  
                                                     WHERE Stato = 1 and id=:id and Opera.ISBN = copiaLibro.ISBN');
                             $query->bindParam(':id', $book_id);
                             $query->execute();
@@ -142,6 +173,7 @@ require_once("../auth/cookies.php");
                             $query->closeCursor();
 
                             $id = $copiaPrenotata['id'];
+                            $ISBN = $copiaPrenotata['ISBN'];
                             $query = $pdo->prepare("UPDATE copiaLibro SET Stato = '0' WHERE copiaLibro.idCopia = :id");
                             $query->bindParam(':id', $id);
                             $query->execute();
@@ -154,6 +186,33 @@ require_once("../auth/cookies.php");
                             $query->bindParam(':giorni', $giorniPrenotazione);
                             $query->execute();
                             $query->closeCursor();
+
+                            // mandare email della prenotazione al bibliotecario:
+                            $email_biblio = getenv('EMAIL_BIBLIO');
+                            if ($email_biblio) {
+                                if (
+                                    sendEmail(
+                                        $email_biblio,
+                                        'Bibliotecario',
+                                        'Nuova prenotazione',
+                                        '<h2>È stata effettuata una nuova prenotazione!</h2>
+                                        <p>Informazioni sulla prenotazione:</p>
+                                        <ul>
+                                            <li>Email Utente: ' . $email . '</li>
+                                            <li>Tipo Utente: Standard</li>
+                                            <li>ISBN: ' . $ISBN . '</li>
+                                            <li>ID Copia: ' . $id . '</li>
+                                            <li>Data inizio: ' . date('d-m-Y') . '</li>
+                                            <li>Data fine: ' . date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')) . '</li>
+                                        </ul>'
+                                    )
+                                ) {
+                                    echo "<p class='successo'>Email mandato al bibliotecario</p>"; // per debug
+                                } else {
+                                    echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
+                                }
+                            }
+
                             echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
                         } else {
                             echo "<p class= 'errore'> Numero massimo di prenotazioni raggiunto </p>";
@@ -205,11 +264,11 @@ require_once("../auth/cookies.php");
                            <div class='info-release'><h5>" . $book['Autore'] . "</h5> <span> | </span> <h5>" . $book['CasaEditrice'] . "</h5> <div class='status-container'> <h5>Stato:</h5>  <h5 class='status' style='color: $color'>" . $disponibilita . "</h5> </div></div>
                        </div>
                         <div class='rating-display'>
-                            " . ($totale_recensioni > 0 ? 
-                                "<span class='rating-stars'>$stelle_piene<span class='stars-empty'>$stelle_vuote</span></span> 
+                            " . ($totale_recensioni > 0 ?
+                "<span class='rating-stars'>$stelle_piene<span class='stars-empty'>$stelle_vuote</span></span> 
                                 <span class='media-voto'>$media / 5</span> 
-                                <small class='text-muted'>($totale_recensioni recensioni)</small>" 
-                                : "<span class='text-muted'>Ancora nessuna recensione</span>") . "
+                                <small class='text-muted'>($totale_recensioni recensioni)</small>"
+                : "<span class='text-muted'>Ancora nessuna recensione</span>") . "
                         </div>
                        <div class='desc'>
                            <p class='truncdesc'>" . $book['Descrizione'] . "</p>
@@ -227,7 +286,7 @@ require_once("../auth/cookies.php");
                 "</div>
                </div>";
             ?>
-            
+
             <hr class="my-5">
             <section class="container mb-5">
                 <div class="row">
@@ -249,9 +308,9 @@ require_once("../auth/cookies.php");
 
                             if (count($recensioni) > 0) {
                                 echo '<div class="review-feed">'; // Contenitore per lo scroll
-                                
+                    
                                 foreach ($recensioni as $row) {
-                                    $voto = (int)$row['Voto'];
+                                    $voto = (int) $row['Voto'];
                                     ?>
                                     <div class="review-card mb-4">
                                         <div class="review-header">
@@ -265,9 +324,9 @@ require_once("../auth/cookies.php");
                                                 </div>
                                             </div>
                                             <div class="review-rating">
-                                                <?php 
+                                                <?php
                                                 // Visualizzazione stelle
-                                                echo str_repeat("★", $voto) . str_repeat("☆", 5 - $voto); 
+                                                echo str_repeat("★", $voto) . str_repeat("☆", 5 - $voto);
                                                 ?>
                                             </div>
                                         </div>
@@ -277,7 +336,7 @@ require_once("../auth/cookies.php");
                                     </div>
                                     <?php
                                 }
-                                echo '</div>'; 
+                                echo '</div>';
                             } else {
                                 echo "
                                 <div class='text-center py-5 border rounded bg-light'>
@@ -285,7 +344,7 @@ require_once("../auth/cookies.php");
                                     <p>Sii il primo a condividere la tua opinione!</p>
                                 </div>";
                             }
-                            
+
                             $stmt_commenti->closeCursor();
 
                         } catch (PDOException $e) {
@@ -296,9 +355,9 @@ require_once("../auth/cookies.php");
                 </div>
             </section>
 
-           </main>
+            </main>
 
-        <?php
+            <?php
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             exit;
