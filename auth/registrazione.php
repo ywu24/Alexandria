@@ -1,11 +1,118 @@
 <?php
+//LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+function generaCodice($lunghezza = 8)
+{
+  // Definiamo i caratteri permessi (abbiamo tolto 0, O, 1, I per evitare confusioni)
+  $caratteri = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+  $codice = '';
+  $max = strlen($caratteri) - 1;
+
+  for ($i = 0; $i < $lunghezza; $i++) {
+    // random_int è sicuro a livello crittografico
+    $codice .= $caratteri[random_int(0, $max)];
+  }
+
+  return $codice;
+}
+
+// Utilizzo:
 session_start();
 $root = '..';
 require_once("../utils/connect.php");
 require_once("cookies.php");
+require_once("../utils/mailer.php");
+// check to see if there is a user already logged in, if so redirect them 
+if (isset($_SESSION['email'])) {
+  header("Location: ../index.php");
+  exit;
+} // redirect the user to the home page
+
+if (isset($_POST['submit'])) {
+  if (
+    !isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['nome']) || !isset($_POST['cognome']) || !isset($_POST['passwordAgain']) ||
+    empty($_POST['email']) || empty($_POST['password']) || empty($_POST['nome']) || empty($_POST['cognome']) || empty($_POST['passwordAgain'])
+  ) {
+    $_SESSION['error_msg'] = "Non possono esserci campi vuoti ";
+    header("Location: registrazione.php");
+    exit();
+  }
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $nome = $_POST['nome'];
+  $cognome = $_POST['cognome'];
+  $passwordAgain = $_POST['passwordAgain'];
+  $codice = "";
+  if ($password != $passwordAgain) {
+    $_SESSION['error_msg'] = 'Le due password non corrispondono!';
+    header("Location: registrazione.php");
+    exit();
+  }
+  try {
+    $dbConnection = DatabaseConnection::getInstance();
+    $pdo = $dbConnection->getConnection();
+  } catch (Exception $e) {
+    error_log('[registrazione.php] DB connection failed: ' . $e->getMessage());
+    $_SESSION['error_msg'] = 'Service unavailable please try again later';
+    header("Location: registrazione.php");
+    exit();
+  }
+
+  if ($query = $pdo->prepare('SELECT Email FROM Utente WHERE Email = :email')) {
+    $query->bindParam(':email', $email);
+    $query->execute();
+    $result = $query->fetch();
+    if ($result) {
+      $_SESSION['error_msg'] = "Utente già registrato";
+      header("Location: registrazione.php");
+      exit();
+    } else {
+      $codice = generaCodice();
+      if (
+        sendEmail(
+          $email,
+          'Bibliotecario',
+          'Conferma Registrazione',
+          '<h2>Conferma la registrazione!</h2>
+                        <p>Ciao, ' . $_POST['nome'] . $_POST['cognome'] . '</br> conferma la tua mail inserendo questo codice sul sito:</p>
+                        <ul>
+                            <li>La tua email: ' . $email . '</li>
+                            <li>Il codice di conferma: ' . $codice . '</li>
+                            
+                        </ul>'
+        )
+      ) {
+        $_SESSION['temp_email'] = $email;
+        $_SESSION['temp_password'] = $password;
+        $_SESSION['temp_nome'] = $nome;
+        $_SESSION['temp_cognome'] = $cognome;
+        $_SESSION['passwordAgain'] = $passwordAgain;
+        $_SESSION['codice'] = $codice;
+        $_SESSION['codice_scadenza'] = time() + 600; // Valido per 10 minuti (600 secondi)
+        $_SESSION['tentativi']=3;
+        $_SESSION['reinvii']= 1;
+
+
+        echo "<p class='successo'>Email mandato all'utente/p>"; // per debug
+        sleep(2);
+        header("Location: confermaRegistrazione.php");
+      } else {
+        echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
+      }
+    }
+    $query->closeCursor();
+  } else {
+    $_SESSION['error_msg'] = "Errore, operazione fallita";
+    header("Location: registrazione.php");
+    exit();
+  }
+}
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
   <meta charset="UTF-8" />
@@ -13,6 +120,7 @@ require_once("cookies.php");
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registrazione</title>
   <link rel="stylesheet" href="../css/registrazione.css" />
+  <link rel="stylesheet" href="../css/messaggi.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -21,12 +129,24 @@ require_once("cookies.php");
 </head>
 
 <body>
+  <div class="messages">
+    <?php
+    if (isset($_SESSION['ok_msg'])) {
+      echo "<p class='successo'>" . $_SESSION['ok_msg'] . "</p>";
+      unset($_SESSION['ok_msg']);
+    } else if (isset($_SESSION['error_msg'])) {
+      echo "<p class='errore'>" . $_SESSION['error_msg'] . "</p>";
+      unset($_SESSION['error_msg']);
+    }
+    ?>
+  </div>
   <div class="container">
     <div class="left"></div>
 
     <div class="right">
       <div class="right-content">
 
+        <!-- L'attributo action è stato modificato in confermaRegistrazione.php -->
         <form action="registrazione.php" method="POST">
           <h1>Crea un account</h1>
           <div>
@@ -39,7 +159,7 @@ require_once("cookies.php");
           </div>
           <div>
             <h3>EMAIL</h3>
-            <input type="text" name="email" placeholder="Inserisci il tuo indirizzo email" required />
+            <input type="email" name="email" placeholder="Inserisci il tuo indirizzo email" required />
           </div>
           <div>
             <h3>PASSWORD</h3>
@@ -55,66 +175,7 @@ require_once("cookies.php");
           <input type="submit" class="submit" name="submit" value="Registrami" />
           <br />
 
-          <?php
-          // check to see if there is a user already logged in, if so redirect them 
-          if (isset($_SESSION['email'])) {
-            header("Location: ../index.php");
-            exit;
-          } // redirect the user to the home page
-          if (isset($_POST['submit'])) {
-            $email = $_POST['email'];
-            
-            try {
-              $dbConnection = DatabaseConnection::getInstance();
-              $pdo = $dbConnection->getConnection();
-            } catch (Exception $e) {
-              error_log('[registrazione.php] DB connection failed: ' . $e->getMessage());
-              echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
-              exit;
-            }
 
-            if ($query = $pdo->prepare('SELECT Email FROM Utente WHERE Email = :email')) {
-              $query->bindParam(':email', $email);
-              $query->execute();
-              $result = $query->fetch();
-              if ($result) {
-                echo '<h2 style="color: red;">Utente già registrato. <a style="color: #2ac32d;" href="login.php">Accedi</a></h2>';
-              } else {
-                $password = $_POST['password'];
-                if (strlen($password) >= 8 && preg_match('{[!#$.,:;()@%^\-&_+=\[\]|\\/<>?~`]}', $password)) {
-                  if (strlen($password) <= 50) {
-                    if ($password === $_POST['passwordAgain']) {
-                      if ($query1 = $pdo->prepare('INSERT INTO Utente (Email,Nome,Cognome,Password,Utenza) VALUES(:email,:nome,:cognome,:password,:utenza)')) {
-                        $password = password_hash($password, PASSWORD_BCRYPT);
-                        $utenza = 4;
-                        $query1->bindParam(':email', $email);
-                        $query1->bindParam(':nome', $_POST['nome']);
-                        $query1->bindParam(':cognome', $_POST['cognome']);
-                        $query1->bindParam(':password', $password);
-                        $query1->bindParam(':utenza', $utenza);
-                        $query1->execute();
-                        echo '<h2>Account creato, puoi ora <a style="color: #2ac32d;" href="login.php">Accedere</a></h2>';
-                      } else {
-                        echo '<h2 style="color: red;">Errore, operazione fallita</h2>';
-                      }
-                    } else {
-                      echo '<h2 style="color: red;">Le password non corrispondono, si prega di riprovare</h2>';
-                    }
-                  } else {
-                    echo '<h2 style="color: red;">La password supera il limite di lunghezza</h2>';
-                  }
-                } else {
-                  echo '<h2 style="color: red;">La password non soddisfa i requisiti minimi di sicurezza</h2>';
-                }
-              }
-              $query->closeCursor();
-            } else {
-              echo '<h2 style="color: red;">Errore, operazione fallita</h2>';
-            }
-          } else {
-            echo '<a href="login.php">Accedi</a>';
-          }
-          ?>
           <center>
             <h4 class="privacy">Privacy · Termini e Condizioni</h4>
           </center>
