@@ -145,7 +145,7 @@ require_once("../utils/mailer.php");
                                         <li>Quantità: ' . $nPrenotazioni . '</li>
                                         <li>Data inizio: ' . date('d-m-Y') . '</li>
                                         <li>Data fine: ' . date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')) . '</li>
-                                    </ul>'
+                                    </ul>'  
                                     )
                                 ) {
                                     echo "<p class='successo'>Email mandato al bibliotecario</p>"; // per debug
