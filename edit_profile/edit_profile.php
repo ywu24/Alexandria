@@ -67,6 +67,7 @@ if (isset($_POST['change_password'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -80,43 +81,45 @@ if (isset($_POST['change_password'])) {
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/messaggi.css">
 </head>
+
 <body class="bg-light">
 
     <div id="nav-placeholder">
         <?php require_once("../nav/nav.php"); ?>
     </div>
-
+    <div class="messages">
+        <?php
+        if (isset($_SESSION['success_msg'])) {
+            echo '<p class="successo">' . $_SESSION['success_msg'] . '</p>';
+            unset($_SESSION['success_msg']);
+        }
+        if (isset($_SESSION['error_msg'])) {
+            echo '<p class="errore">' . $_SESSION['error_msg'] . '</p>';
+            unset($_SESSION['error_msg']);
+        }
+        ?></div>
     <div class="container py-5">
-        <!-- Messaggi di Feedback -->
-        <div class="row justify-content-center">
-            <div class="col-lg-10" id="messages">
-                <?php
-                if (isset($_SESSION['success_msg'])) {
-                    echo '<div class="alert alert-success successo">' . $_SESSION['success_msg'] . '</div>';
-                    unset($_SESSION['success_msg']);
-                }
-                if (isset($_SESSION['error_msg'])) {
-                    echo '<div class="alert alert-danger errore">' . $_SESSION['error_msg'] . '</div>';
-                    unset($_SESSION['error_msg']);
-                }
-                ?>
-            </div>
-        </div>
+
+
 
         <div class="row justify-content-center">
             <!-- Sidebar Navigation (Desktop Only via your CSS or d-none d-lg-block) -->
             <div class="col-lg-3 edit-section mb-4">
                 <div class="card shadow-sm border-0">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><a href="#profile-settings" class="text-dark"><div class="section"><span>Your Profile</span></div></a></li>
-                        <li class="list-group-item"><a href="#password-reset" class="text-dark"><div class="section"><span>Change Password</span></div></a></li>
+                        <li class="list-group-item"><a href="#profile-settings" class="text-dark">
+                                <div class="section"><span>Your Profile</span></div>
+                            </a></li>
+                        <li class="list-group-item"><a href="#password-reset" class="text-dark">
+                                <div class="section"><span>Change Password</span></div>
+                            </a></li>
                     </ul>
                 </div>
             </div>
 
             <!-- Main Content Area -->
             <div class="col-lg-7 settings px-lg-4">
-                
+
                 <!-- Profile Card -->
                 <div class="card mb-4 shadow-sm border-0 settings-section" id="profile-settings">
                     <div class="card-header bg-dark text-white font-weight-bold">👤 Profile Information</div>
@@ -185,4 +188,5 @@ if (isset($_POST['change_password'])) {
         });
     </script>
 </body>
+
 </html>
