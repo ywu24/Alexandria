@@ -123,45 +123,53 @@ if (isset($_POST['change_password'])) {
             <div class="col-lg-7 settings px-lg-4">
 
                 <!-- Profile Card -->
-                <!-- Profile Card -->
-                <div class="card mb-4 shadow-sm border-0 settings-section" id="profile-settings">
-                    <div class="card-header bg-dark text-white font-weight-bold">👤 Profile Information</div>
-                    <div class="card-body text-center">
-                        <div class="settings-profile-info">
-                            <div class="data-profile-info">
-                                <?php if (isset($_SESSION['nome'])): ?>
-                                    <h4 class="mb-1"><?php echo $_SESSION['nome'] . " " . $_SESSION['cognome']; ?></h4>
-                                    <p class="text-muted mb-2"><?php echo $_SESSION['email']; ?></p>
+           <!-- Unified Profile Card -->
+<div class="card mb-4 shadow-sm border-0 settings-section" id="profile-settings">
+    <div class="card-header bg-dark text-white font-weight-bold">👤 Profile Information</div>
+    <div class="card-body text-center">
+        
+        <!-- Parte superiore: Visualizzazione Dati -->
+        <div class="settings-profile-info mb-4">
+            <div class='edit-profile-parameter'>
+                <!-- Immagine Profilo -->
+                <img src='../img/users/<?php echo $userData["propic"]; ?>' alt='Profile' 
+                     class="rounded-circle mb-3 border" 
+                     style="width: 130px; height: 130px; object-fit: cover; border-width: 3px !important;">
+                
+                <div class="data-profile-info">
+                    <?php if (isset($_SESSION['nome'])): ?>
+                        <h3 class="mb-1"><?php echo $_SESSION['nome'] . " " . $_SESSION['cognome']; ?></h3>
+                        <p class="text-muted mb-2"><?php echo $_SESSION['email']; ?></p>
 
-                                    <!-- Aggiunta Punteggio -->
-                                    <div class="mt-3">
-                                        <span class="badge badge-primary p-2" style="font-size: 0.9rem;">
-                                            🏆 Punteggio: <?php echo $userData['punteggio'] ?? '0'; ?>
-                                        </span>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
+                        <!-- Badge Punteggio -->
+                        <div class="mt-2 mb-4">
+                            <span class="badge badge-primary p-2" style="font-size: 1rem; border-radius: 20px;">
+                                🏆 Punteggio: <?php echo $userData['punteggio'] ?? '0'; ?>
+                            </span>
                         </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
+            </div>
+        </div>
 
-                <!-- Profile Picture Card -->
-                <div class="card mb-4 shadow-sm border-0 settings-section">
-                    <div class="card-header bg-dark text-white font-weight-bold">🖼️ Profile Picture</div>
-                    <div class="card-body text-center">
-                        <div class='edit-profile-parameter'>
-                            <img src='../img/users/<?php echo $userData["propic"]; ?>' alt='Profile' class="rounded-circle mb-3 border" style="width: 120px; height: 120px; object-fit: cover;">
-                            <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data' class="mt-2">
-                                <div class="custom-file mb-3 text-left">
-                                    <input type='file' name='image' class="custom-file-input" id="image">
-                                    <label class="custom-file-label" for="image">Choose image...</label>
-                                </div>
-                                <button type='submit' name='propicIns' class="btn btn-secondary btn-block">Update Image</button>
-                            </form>
-                        </div>
-                    </div>
+        <hr>
+
+        <!-- Parte inferiore: Form caricamento immagine -->
+        <div class="mt-4 px-lg-5">
+            <h6 class="text-muted mb-3">🖼️ Change Profile Picture</h6>
+            <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data'>
+                <div class="custom-file mb-3 text-left">
+                    <input type='file' name='image' class="custom-file-input" id="image">
+                    <label class="custom-file-label" for="image">Choose new image...</label>
                 </div>
+                <button type='submit' name='propicIns' class="btn btn-secondary btn-sm px-4">
+                    Update Image
+                </button>
+            </form>
+        </div>
 
+    </div>
+</div>
                 <!-- Password Reset Card -->
                 <div class="card mb-4 shadow-sm border-0 settings-section" id="password-reset">
                     <div class="card-header bg-dark text-white font-weight-bold">🔑 Security</div>
