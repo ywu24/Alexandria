@@ -12,15 +12,17 @@ try {
     exit;
 }
 
-if ($query = $pdo->prepare('SELECT propic FROM Utente WHERE Email=:email')) {
+// Recuperiamo propic E punteggio
+if ($query = $pdo->prepare('SELECT propic, punteggio FROM Utente WHERE Email=:email')) {
     $query->bindParam(':email', $email);
     $query->execute();
-    $propics = $query->fetch();
+    $userData = $query->fetch(); // Cambiato nome per chiarezza
     $query->closeCursor();
 } else {
     echo "Errore durante la preparazione della query: " . $pdo->errorInfo()[2];
     exit;
 }
+
 
 if (isset($_POST['change_password'])) {
     if ($query = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email')) {
@@ -116,10 +118,11 @@ if (isset($_POST['change_password'])) {
                     </ul>
                 </div>
             </div>
-          
+
             <!-- Main Content Area -->
             <div class="col-lg-7 settings px-lg-4">
 
+                <!-- Profile Card -->
                 <!-- Profile Card -->
                 <div class="card mb-4 shadow-sm border-0 settings-section" id="profile-settings">
                     <div class="card-header bg-dark text-white font-weight-bold">👤 Profile Information</div>
@@ -128,7 +131,14 @@ if (isset($_POST['change_password'])) {
                             <div class="data-profile-info">
                                 <?php if (isset($_SESSION['nome'])): ?>
                                     <h4 class="mb-1"><?php echo $_SESSION['nome'] . " " . $_SESSION['cognome']; ?></h4>
-                                    <p class="text-muted"><?php echo $_SESSION['email']; ?></p>
+                                    <p class="text-muted mb-2"><?php echo $_SESSION['email']; ?></p>
+
+                                    <!-- Aggiunta Punteggio -->
+                                    <div class="mt-3">
+                                        <span class="badge badge-primary p-2" style="font-size: 0.9rem;">
+                                            🏆 Punteggio: <?php echo $userData['punteggio'] ?? '0'; ?>
+                                        </span>
+                                    </div>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -140,7 +150,7 @@ if (isset($_POST['change_password'])) {
                     <div class="card-header bg-dark text-white font-weight-bold">🖼️ Profile Picture</div>
                     <div class="card-body text-center">
                         <div class='edit-profile-parameter'>
-                            <img src='../img/users/<?php echo $propics["propic"]; ?>' alt='Profile' class="rounded-circle mb-3 border" style="width: 120px; height: 120px; object-fit: cover;">
+                            <img src='../img/users/<?php echo $userData["propic"]; ?>' alt='Profile' class="rounded-circle mb-3 border" style="width: 120px; height: 120px; object-fit: cover;">
                             <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data' class="mt-2">
                                 <div class="custom-file mb-3 text-left">
                                     <input type='file' name='image' class="custom-file-input" id="image">
@@ -173,7 +183,7 @@ if (isset($_POST['change_password'])) {
                         </form>
                     </div>
                 </div>
-                    <!-- DANGER ZONE (Pulsante Elimina Account) -->
+                <!-- DANGER ZONE (Pulsante Elimina Account) -->
                 <div class="card shadow-sm danger-card" id="danger-zone">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
@@ -187,9 +197,9 @@ if (isset($_POST['change_password'])) {
                         </form>
                     </div>
                 </div>
-               
+
             </div>
-            
+
         </div>
     </div>
 
@@ -201,9 +211,10 @@ if (isset($_POST['change_password'])) {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
+
         function confirmDelete() {
-    return confirm("Sei assolutamente sicuro? Questa azione non può essere annullata e perderai l'accesso a tutti i tuoi dati.");
-}
+            return confirm("Sei assolutamente sicuro? Questa azione non può essere annullata e perderai l'accesso a tutti i tuoi dati.");
+        }
     </script>
 </body>
 
