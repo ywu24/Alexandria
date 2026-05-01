@@ -11,18 +11,12 @@ require_once("../auth/cookies.php");
 if(isset($_SESSION['utenza'])){
     if($_SESSION['utenza']==1 || $_SESSION['utenza']==2){
         header("Location: prenotazioneAdmin.php");
-        die(); ///CREDO SIA GIUSTO USARE DIE IN QUESTO CASO MA BOH CHI LO SA SE GLI VA BENE
+        die(); 
     }
 } else{
     header("Location: ../index.php");
-    die();///CREDO SIA GIUSTO USARE DIE IN QUESTO CASO MA BOH CHI LO SA SE GLI VA BENE
+    die();
 }
-?>
-<?php
-//LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 ?>
 
 <!DOCTYPE html>
@@ -32,42 +26,57 @@ error_reporting(E_ALL);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, user-scalable=no,
-    initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <title>Alexandria's Library</title>
+    
+    <!-- Bootstrap per classi di utilità su titoli e bottoni -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    
     <link rel="stylesheet" href="../css/prenotazione.css">
     <link rel="stylesheet" href="../css/dettaglioUtenti.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
     <link rel="stylesheet" href="../css/popup.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/messaggi.css">
 
-    <!--script per importare parti di codice-->
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
     <script src="prenotazione.js"></script>
-
 </head>
 
 <body>
 
     <div id="nav-placeholder">
-        <?php
-        require_once("../nav/nav.php"); ?>
+        <?php require_once("../nav/nav.php"); ?>
     </div>
+
+    <!-- Messaggi originali -->
     <div id="messages">
+        <?php
+        if (isset($_SESSION['success_msg'])) {
+            echo '<p class="successo">' . $_SESSION['success_msg'] . '</p>';
+            unset($_SESSION['success_msg']);
+        }
+        if (isset($_SESSION['error_msg'])) {
+            echo '<p class="errore">' . $_SESSION['error_msg'] . '</p>';
+            unset($_SESSION['error_msg']);
+        }
+        ?>
     </div>
-    <h1>Prenotazione Libro</h1>
+
+    <!-- SEZIONE TITOLO E SOTTOTITOLO AGGIORNATA -->
+    <div class="container mt-5 mb-4">
+        <div class="text-center">
+            <h1 class="display-4 font-weight-bold">Prenotazione Libro</h1>
+            <p class="lead text-muted">Visualizza e gestisci lo stato dei tuoi prestiti attivi</p>
+        </div>
+    </div>
 
     <div class="container">
         <?php
-
-        if (isset($_SESSION['email'])) {
-        } else {
+        if (!isset($_SESSION['email'])) {
             header("Location: ../index.php");
             exit;
         }
+
         $table = "Prenotazione";
         $table1 = "copiaLibro";
         $table2 = "Opera";
@@ -79,7 +88,7 @@ error_reporting(E_ALL);
             echo "Errore durante la connessione al database: " . $e->getMessage();
             exit;
         }
-        ################
+
         $numero_prenotazioni = 0;
         try {
             $query = $pdo->prepare("SELECT idPrenotazione, $table2.id as idOpera, Copertina, $table.idCopia, InizioPrenotazione, FinePrenotazione, InizioPrestito, 
@@ -88,16 +97,15 @@ error_reporting(E_ALL);
                                 ORDER BY $table.idPrenotazione DESC");
             $query->bindParam(':email', $email);
             $query->execute();
+            
             foreach ($query->fetchAll() as $row) {
-
                 $inizio = "";
                 $fine = "";
                 $stato = "";
 
-
                 if ($row["InizioPrestito"] == NULL) {
                     if (strtotime($row['FinePrenotazione']) < time()) {
-                        echo "OOOO";
+                        // Logica gestione scaduti...
                     } else {
                         $stato = "Prenotato";
                         $color = "green";
@@ -120,7 +128,6 @@ error_reporting(E_ALL);
                     }
                 }
 
-
                 if ($stato != "Terminato") {
                     $numero_prenotazioni++;
                     echo "
@@ -140,7 +147,6 @@ error_reporting(E_ALL);
                                 <span>Inizio: " . $inizio . "</span><br>
                                 <span>Fine: " . $fine . "</span>
                             </div>";
-   
 
                     if ($stato == "Prenotato") {
                         echo "
@@ -149,28 +155,25 @@ error_reporting(E_ALL);
                         </button>";
                     }
 
-                    echo "
-                        </div> </div> </div> ";
+                    echo "</div></div></div>";
                 }
-            } // Fine foreach
-
+            }
             $query->closeCursor();
         } catch (PDOException $e) {
-            throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+            echo "Errore nella query.";
         }
 
         echo '<hr>
-				<div id="terminate-container">
-						<button id="load-terminated" class="btn btn-secondary" data-id-utente=' . $_SESSION['email'] . '>
-							Mostra prenotazioni terminate
-						</button>
-				</div>';
-
+                <div id="terminate-container">
+                        <button id="load-terminated" class="btn btn-secondary" data-id-utente="' . $_SESSION['email'] . '">
+                            Mostra prenotazioni terminate
+                        </button>
+                </div>';
 
         if ($numero_prenotazioni == 0) {
-            echo "<h2>nessuna Prenotazione Attiva al momento</h2>";
+            echo "<h2>Nessuna Prenotazione Attiva al momento</h2>";
         }
-        echo "</div>"; // Chiude il div 'container'
+        echo "</div>"; 
         ?>
-
 </body>
+</html>

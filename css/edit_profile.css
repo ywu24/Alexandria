@@ -1,3 +1,4 @@
+/* RESET E BASI */
 * {
   margin: 0;
   padding: 0;
@@ -11,241 +12,132 @@ html {
 ul { list-style: none; }
 a { text-decoration: none; }
 
-.blur {
-  filter: blur(6px);
+body {
+  background-color: #f8f9fa; /* Sfondo chiaro come esempio */
 }
 
+/* CONTAINER E LAYOUT LOGIC */
 .safe-area {
   width: 100%;
-  margin: auto;
 }
 
-.container {
-  margin: 35px 0 0;
-  display: flex;
-  gap: 15px;
-  padding: 0 30px;
+/* Sovrascriviamo leggermente il container di bootstrap per mantenere i tuoi margini */
+.container.py-5 {
+  margin-top: 20px;
 }
 
+/* SIDEBAR (EDIT SECTION) */
 .edit-section {
-  flex: 0 0 20%;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  height: 85vh;
+  /* Manteniamo la logica originale ma adattata alle card di Bootstrap */
 }
 
-.edit-section ul li:first-child {
-  margin-top: 40px;
-}
-
-.edit-section ul li:not(:last-child) {
-  border-bottom: 1px solid var(--darkerbackground);
+.edit-section .card {
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 .edit-section .section {
-  padding: 18px 20px;
-  text-align: center;
+  padding: 15px 20px;
+  transition: background 0.3s;
+}
+
+.edit-section .section:hover {
+  background-color: #f1f3f5;
 }
 
 .edit-section span {
   font-size: 0.9rem;
-  color: var(--sectiontext);
+  font-weight: 600;
+  color: #495057;
 }
 
+/* SETTINGS AREA (MAIN CONTENT) */
 .settings {
-  flex: 1;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  display: flex;
-  flex-direction: column;
-  max-height: 85vh;
-  overflow-y: auto;
+  /* Rimosso flex:1 e border perché gestiti dalle colonne di Bootstrap */
 }
 
-.settings-section {
-  width: 90%;
-  margin: auto;
-  border-bottom: 1px solid var(--darkerbackground);
+/* Sovrascriviamo lo stile delle card per conformità */
+.settings .card {
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  overflow: hidden;
 }
 
+.settings .card-header {
+  background-color: #343a40; /* Antracite dell'esempio */
+  color: white;
+  font-size: 1rem;
+}
+
+/* PROFILE INFO */
 .settings-profile-info {
-  padding: 25px 15px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 }
 
-.data-profile-info {
-  text-align: center;
+.data-profile-info h4 {
+  font-weight: 700;
+  color: #343a40;
 }
 
-.data-profile-info span {
-  font-size: 0.95rem;
-}
-
-.data-profile-info p {
-  font-size: 0.75rem;
-  font-style: oblique;
-  opacity: 0.7;
-}
-
+/* PROFILE PICTURE */
 .edit-profile-parameter {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  width: 100%;
 }
 
-.edit-profile-parameter img {
-  width: 80px;
-  border-radius: 50%;
-  margin-bottom: 8px;
-  margin-top: -20px;
-}
-
-.edit-action {
-  color: var(--text);
-  font-weight: 600;
-  font-size: 1.10rem;
-  pointer-events: none;
-}
-
-
-.edit-phone-parameter,
-.edit-personal-parameter {
-  text-align: center;
-  font-size: 0.75rem;
-}
-
-.edit-phone-parameter p,
-.edit-personal-parameter p {
-  font-style: oblique;
-  opacity: 0.75;
-}
-
-.phone-number {
-  font-weight: 600;
-}
-
-.password-reset {
-  width: 100%;
-  padding: 10px 0;
-}
-
-.password-block {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 10px 0;
-}
-
+/* PASSWORD FIELDS */
 .password {
-  border: 1.5px solid var(--text);
-  border-radius: 20px;
-  padding: 5px 10px;
-  width: 250px;
+  border: 1px solid #ced4da; /* Stile bootstrap form-control */
+  border-radius: 5px;
+  padding: 8px 12px;
+  width: 100%; /* Si adatta al contenitore */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.section-title {
-  font-weight: 600;
-  font-size: 1rem;
+.password:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
 }
 
 .section-title1 {
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.radio-section {
-  width: 100%;
-}
-
-.radio-option {
-  margin-top: 15px;
-}
-
-.radio-option label {
-  display: block;
-  padding: 5px 0;
   font-weight: 600;
+  color: #495057;
+  display: block;
+  margin-bottom: 5px;
 }
 
-.section-explain {
-  font-size: 0.65rem;
-  padding: 10px 20px;
-  opacity: 0.7;
+/* BOTTONI (Mantenendo lo stile arrotondato ma con colori uniformati) */
+button[type="submit"], input[type="submit"].btn-primary {
+  border-radius: 5px; /* Più squadrati come Bootstrap */
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
+/* SCROLLBAR PER SETTINGS (se applicata a un div fisso) */
 .settings::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
-
 .settings::-webkit-scrollbar-thumb {
-  background: rgba(0,0,50,0.4);
+  background: rgba(0,0,0,0.2);
   border-radius: 10px;
 }
 
 
-
-button[type="submit"], input[type="submit"] {
-  background-color: var(--editaction);
-  border: none;
-  border-radius: 25px; 
-  padding: 10px 24px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
-}
-
-button[type="submit"]:hover, input[type="submit"]:hover {
-  background-color: var(--editaction-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-button[type="submit"]:active, input[type="submit"]:active {
-  transform: translateY(0);
-}
-
-input[type="file"] {
-  font-size: 0.8rem;
-  color: var(--sectiontext);
-  max-width: 220px;
-  cursor: pointer;
-}
-
-input[type="file"]::file-selector-button {
-  background-color: transparent;
-  color: var(--text, #333);
-  border: 1px solid var(--border, #ccc);
-  border-radius: 15px;
-  padding: 6px 12px;
-  margin-right: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-input[type="file"]::file-selector-button:hover {
-  background-color: var(--darkerbackground);
-}
-
 @media (max-width: 768px) {
-
-  .safe-area {
-    width: 100%;
-  }
-
   .container {
-    flex-direction: column;
-    width: 95vw;
-    margin: 20px auto 0 auto;
-    align-items: center;
+    width: 100%;
+    padding: 0 15px;
   }
 
+  /* La tua logica: nascondere la sidebar su mobile */
   .edit-section {
     display: none;
   }
@@ -257,30 +149,20 @@ input[type="file"]::file-selector-button:hover {
   .settings-profile-info {
     flex-direction: column;
     text-align: center;
-    align-items: center;
   }
 
-  .edit-profile-parameter img {
-    width: 70px;
-  }
-
-  .password-block {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
+  /* Espansione dei campi password su mobile */
   .password {
-    width: 100%;
-    margin-top: 5px;
+    width: 100% !important;
   }
 
-  form input,
-  form button {
-    width: 100%;
-    margin: 5px 0;
+  /* Messaggi */
+  #messages {
+    padding: 0 15px;
   }
+}
 
-  .section-explain {
-    text-align: center;
-  }
+/* Fix per input file di bootstrap */
+.custom-file-label::after {
+    content: "Sfoglia"; /* Traduzione italiana */
 }

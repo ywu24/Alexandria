@@ -1,4 +1,5 @@
-<?php //LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
+<?php 
+// LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -9,116 +10,90 @@ require_once("../../utils/connect.php");
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Segnalazioni</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="../../css/nav.css">
-  <link rel="stylesheet" href="../../css/messaggi.css">
-  <link rel="stylesheet" href="../../css/dashboardSegnalazioni.css">
-  <link rel="shortcut icon" href="../../img/segnDashFavicon.png" type="image/x-icon">
-  <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Segnalazioni - Alexandria's Library</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/nav.css">
+    <link rel="stylesheet" href="../../css/colors.css">
+    <link rel="stylesheet" href="../../css/messaggi.css">
+    <link rel="stylesheet" href="../../css/dashboardSegnalazioni.css">
+    <link rel="shortcut icon" href="../../img/segnDashFavicon.png" type="image/x-icon">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<body>
-  <div id="nav-placeholder">
-    <?php 
-    require_once('../../nav/nav.php');
-    
-    ?>
-  </div>
-  <div class="messages">
-    <?php
-    if(isset($_SESSION['errore'])){
-      echo "<p class='errore'>ERRORE: ".$_SESSION['errore'] ."</p>";
-    }
-    else if(isset($_SESSION['successo'])){
-      echo "<p class='successo'>".$_SESSION['successo'] ."</p>";
-    }
-    ?>
-  </div>
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-12">
-        <h2>Segnalazioni Utenti</h2>
-        <hr>
-      </div>
+<body class="bg-light">
+    <div id="nav-placeholder">
+        <?php require_once('../../nav/nav.php'); ?>
     </div>
 
-
-    <div class="row">
-
-      <?php
-      
-      
-      try {
-        $pdo = DatabaseConnection::getInstance()->getConnection();
-      } catch (PDOException $e) {
-        echo "Errore durante la connessione al database: " . $e->getMessage();
-        exit;
-      }
-
-      
-      try {
-        $sql = "SELECT idSegnalazione, userEmail, Oggetto FROM Segnalazione";
-        $query = $pdo->prepare($sql);
-        $query->execute();
-
-        // Verifichiamo se ci sono risultati
-        if ($query->rowCount() > 0) {
-          while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-            echo "
-            <div class='col-md-6'>
-                <div class='card mb-3'>
-                    <div class='card-body'>
-                        <h5 class='card-title'>Segnalazione n°" . $row['idSegnalazione'] . "</h5>
-                        <h6 class='card-subtitle mb-2 text-muted'>" . $row['userEmail'] . "</h6>
-                        <p class='card-text'>" . $row['Oggetto'] . "</p>
-                        <a href='dettaglio.php?id=" . $row['idSegnalazione'] . "' class='card-link'>Dettagli</a>
-                    </div>
-                </div>
-            </div>";
-          }
-        } else {
-          echo "<p class='text-center'>Nessuna segnalazione trovata.</p>";
-        }
-      } catch (Exception $e) {
-        echo "Errore durante il recupero delle segnalazioni: " . $e->getMessage();
-        exit;
-      }
-      ?>
-    </div>
-
-    <!-- 
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">Segnalazione n°" . $row['idSegnalazione'] . "</h5>
-          <h6 class="card-subtitle mb-2 text-muted">" . $row['userEmail'] . "</h6>
-          <p class="card-text">" . $row['Oggetto'] . "</p>
-          <a href="#" class="card-link">Dettagli</a>
+    <div class="container py-5">
+        <!-- Titolo Centrato Uniformato -->
+        <div class="mb-5 text-center">
+            <h1 class="display-4 font-weight-bold">Segnalazioni Utenti</h1>
+            <p class="lead text-muted">Gestione e monitoraggio delle problematiche riscontrate dai lettori</p>
         </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">Segnalazione 456</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Oggetto della segnalazione</h6>
-          <p class="card-text">Breve descrizione della segnalazione.</p>
-          <a href="dettagli.html" class="card-link">Dettagli</a>
-        </div>
-      </div>
-    </div>
-  </div> -->
-</div>
 
+        <!-- Messaggi di Feedback (Ripristinati come in precedenza) -->
+        <div class="messages mb-4">
+            <?php
+            if(isset($_SESSION['errore'])){
+                echo "<p class='errore'>ERRORE: ".$_SESSION['errore'] ."</p>";
+                unset($_SESSION['errore']);
+            }
+            else if(isset($_SESSION['successo'])){
+                echo "<p class='successo'>".$_SESSION['successo'] ."</p>";
+                unset($_SESSION['successo']);
+            }
+            ?>
+        </div>
+
+        <div class="row">
+            <?php
+            try {
+                $pdo = DatabaseConnection::getInstance()->getConnection();
+            } catch (PDOException $e) {
+                echo "<div class='col-12'><p class='errore'>Errore durante la connessione al database.</p></div>";
+                exit;
+            }
+
+            try {
+                $sql = "SELECT idSegnalazione, userEmail, Oggetto FROM Segnalazione ORDER BY idSegnalazione DESC";
+                $query = $pdo->prepare($sql);
+                $query->execute();
+
+                if ($query->rowCount() > 0) {
+                    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                        echo "
+                        <div class='col-md-6 mb-4'>
+                            <div class='card h-100 border-0 shadow-sm'>
+                                <div class='card-header bg-dark text-white font-weight-bold d-flex justify-content-between align-items-center'>
+                                    <span>Segnalazione n° " . $row['idSegnalazione'] . "</span>
+                                    <i class='fa fa-exclamation-circle text-warning'></i>
+                                </div>
+                                <div class='card-body'>
+                                    <h6 class='card-subtitle mb-3 text-primary font-weight-bold'>" . $row['userEmail'] . "</h6>
+                                    <p class='card-text text-secondary'><strong>Oggetto:</strong> " . $row['Oggetto'] . "</p>
+                                </div>
+                                <div class='card-footer bg-white border-0 pb-3'>
+                                    <a href='dettaglio.php?id=" . $row['idSegnalazione'] . "' class='btn btn-outline-primary btn-block shadow-none'>Visualizza Dettagli</a>
+                                </div>
+                            </div>
+                        </div>";
+                    }
+                } else {
+                    echo "<div class='col-12 text-center py-5'><h4 class='text-muted font-weight-light'>Nessuna segnalazione trovata.</h4></div>";
+                }
+            } catch (Exception $e) {
+                echo "<div class='col-12'><p class='errore'>Errore durante il recupero delle segnalazioni.</p></div>";
+            }
+            ?>
+        </div>
+    </div>
 </body>
-
 </html>
