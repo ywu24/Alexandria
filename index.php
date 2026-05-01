@@ -339,7 +339,7 @@ require_once("utils/connect.php");
 
             if ($count != 0) {
                 $prenotazione = $result[0];
-                $idPrenotazione = $prenotazione2['idPrenotazione'];
+                $idPrenotazione = $prenotazione['idPrenotazione'];
                 if (($prenotazione['InizioPrestito'] == NULL) && (strtotime($prenotazione['FinePrenotazione']) > time())) {
                     $stato = "Prenotato";
                     $color = "#ff7600";

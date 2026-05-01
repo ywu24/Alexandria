@@ -79,6 +79,7 @@ if ($error === -1 && isset($_POST['submit'])) {
   <link
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
     rel="stylesheet" />
+    <script src="login.js"></script>
 </head>
 
 <body>
@@ -87,7 +88,7 @@ if ($error === -1 && isset($_POST['submit'])) {
 
     <div class="right">
       <div class="right-content">
-        <form action="login.php" method="POST">
+        <form action="login.php" id="myform" method="POST">
           <h1>Accedi</h1>
           <div class="inputs">
             <div class="field">

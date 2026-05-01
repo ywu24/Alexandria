@@ -300,7 +300,7 @@ if (isset($_GET['errore'])) {
                     <td>
                         <div class='btn_actions'>
                         <a class='btn btn-primary' href='modificaUtente.php?id=" . $row['id'] . "'>Modifica</a>
-                        <a class='btn btn-danger' href='eliminaUtente.php?id=" . $row['id'] . "'>Elimina</a>
+                        <a class='btn btn-danger' href='eliminaUtente.php?id=" . $row['Email'] . "'>Elimina</a>
                         </div>
                     </td>
                     </tr>";

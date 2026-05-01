@@ -123,6 +123,7 @@ if (isset($_POST['submit'])) {
   <link rel="stylesheet" href="../css/messaggi.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <script src="registrazione.js"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
     rel="stylesheet" />
@@ -131,9 +132,9 @@ if (isset($_POST['submit'])) {
 <body>
   <div class="messages">
     <?php
-    if (isset($_SESSION['ok_msg'])) {
-      echo "<p class='successo'>" . $_SESSION['ok_msg'] . "</p>";
-      unset($_SESSION['ok_msg']);
+    if (isset($_SESSION['success_msg'])) {
+      echo "<p class='successo'>" . $_SESSION['success_msg'] . "</p>";
+      unset($_SESSION['success_msg']);
     } else if (isset($_SESSION['error_msg'])) {
       echo "<p class='errore'>" . $_SESSION['error_msg'] . "</p>";
       unset($_SESSION['error_msg']);
@@ -147,7 +148,7 @@ if (isset($_POST['submit'])) {
       <div class="right-content">
 
         <!-- L'attributo action è stato modificato in confermaRegistrazione.php -->
-        <form action="registrazione.php" method="POST">
+        <form action="registrazione.php" method="POST" id="myform">
           <h1>Crea un account</h1>
           <div>
             <h3>NOME</h3>

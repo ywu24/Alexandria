@@ -116,7 +116,7 @@ if (isset($_POST['change_password'])) {
                     </ul>
                 </div>
             </div>
-
+          
             <!-- Main Content Area -->
             <div class="col-lg-7 settings px-lg-4">
 
@@ -173,8 +173,23 @@ if (isset($_POST['change_password'])) {
                         </form>
                     </div>
                 </div>
-
+                    <!-- DANGER ZONE (Pulsante Elimina Account) -->
+                <div class="card shadow-sm danger-card" id="danger-zone">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="text-danger mb-1 font-weight-bold">Elimina account permanentemente</h5>
+                            <p class="text-muted mb-0 small">L'eliminazione è irreversibile. Tutti i tuoi dati verranno cancellati. POSSIBILE SOLO SE NON SI HANNO PRESTITI O PRENOTAZIONI ATTIVI </p>
+                        </div>
+                        <form action="../dashboard/dashboardUtenti/eliminaUtente.php" method="POST" onsubmit="return confirmDelete();">
+                            <button type="submit" name="delete_account" class="btn btn-outline-danger">
+                                Elimina Account
+                            </button>
+                        </form>
+                    </div>
+                </div>
+               
             </div>
+            
         </div>
     </div>
 
@@ -186,6 +201,9 @@ if (isset($_POST['change_password'])) {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
+        function confirmDelete() {
+    return confirm("Sei assolutamente sicuro? Questa azione non può essere annullata e perderai l'accesso a tutti i tuoi dati.");
+}
     </script>
 </body>
 

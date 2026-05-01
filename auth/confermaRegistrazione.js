@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+    const storageKey = "reinvio_count";
     // Selezioniamo il div con classe 'reinvio' che hai aggiunto nel PHP
     const reinvioContainer = document.querySelector('.reinvio');
 
@@ -6,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!reinvioContainer) return;
 
     // Appare la versione scherzosa dopo 2 secondi
-    setTimeout(function() {
+    setTimeout(function () {
         // Popoliamo il div con il titolo rosso e il messaggio iniziale
         reinvioContainer.innerHTML = `
             <div style="margin-top: 25px; width: 100%;">
@@ -20,27 +21,42 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
             </div>
         `;
+    }, 2000);
 
-        // Dopo 12 secondi, cambiamo solo il contenuto di 'dynamic-content'
-        setTimeout(function() {
-            const dynamicContent = document.getElementById('dynamic-content');
-            
-            if (dynamicContent) {
-                dynamicContent.innerHTML = `
+    // Dopo 12 secondi, cambiamo solo il contenuto di 'dynamic-content'
+    setTimeout(function () {
+        let inviiEffettuati = localStorage.getItem(storageKey) || 0;
+        const dynamicContent = document.getElementById('dynamic-content');
+        // Se l'utente ha già fatto 2 o più tentativi, non mostriamo nulla
+        if (inviiEffettuati > 2) {
+            dynamicContent.innerHTML = `
+                    <h4 style="margin-bottom: 10px; color: rgb(70, 70, 70); font-style: normal; font-weight: normal;">
+                        Limite rinvii raggiunto, torna indietro e verifica che i dati inseriti siano corretti.
+                    </h4>`
+            return;
+        }
+        
+
+        if (dynamicContent) {
+            dynamicContent.innerHTML = `
                     <h4 style="margin-bottom: 10px; color: rgb(70, 70, 70); font-style: normal; font-weight: normal;">
                         Controlla la cartella Spam o prova a richiedere un nuovo invio.
                     </h4>
-                    <form action="confermaRegistrazione.php" method="POST">
+                    <form id="reinvio-form" action="confermaRegistrazione.php" method="POST">
                         <input type="hidden" name="reinvia" value="1">
                         <button type="submit" style="background: none; border: none; color: #1f3a78; text-decoration: underline; cursor: pointer; font-weight: bold; font-family: 'Roboto', sans-serif; font-size: 0.85em; padding: 0;">
                             Clicca qui per reinviare
                         </button>
                     </form>
                 `;
-            }
-        }, 12000); 
-
+        }
+        document.getElementById('reinvio-form').addEventListener('submit', function() {
+                // Incrementiamo il contatore nel localStorage
+                inviiEffettuati++;
+                localStorage.setItem(storageKey, inviiEffettuati);
+            });
     }, 2000);
+
+
 });
 
-//si potrebbe implementare local storage per far si che dopo il secondo click, js smetta di mettere a schermo il link per i rinivii, visto che tanto il server li bloccherebbe
