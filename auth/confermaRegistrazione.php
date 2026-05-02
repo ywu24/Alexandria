@@ -118,10 +118,10 @@
             if (
                 sendEmail(
                     $_SESSION['temp_email'],
-                    'Bibliotecario',
+                    $_SESSION['temp_nome'] . ' ' . $_SESSION['temp_cognome'],
                     'Conferma Registrazione',
                     '<h2>Conferma la registrazione!</h2>
-                        <p>Ciao, ' . $_SESSION['temp_nome'] . $_SESSION['temp_cognome'] . '</br> conferma la tua mail inserendo questo codice sul sito:</p>
+                        <p>Ciao, ' . $_SESSION['temp_nome'] . ' ' . $_SESSION['temp_cognome'] . '</br> conferma la tua mail inserendo questo codice sul sito:</p>
                         <ul>
                             <li>La tua email: ' . $_SESSION['temp_email'] . '</li>
                             <li>Il codice di conferma: ' . $_SESSION['codice'] . '</li>

@@ -74,10 +74,10 @@ if (isset($_POST['submit'])) {
       if (
         sendEmail(
           $email,
-          'Bibliotecario',
+          $_POST['nome'] . ' ' . $_POST['cognome'],
           'Conferma Registrazione',
           '<h2>Conferma la registrazione!</h2>
-                        <p>Ciao, ' . $_POST['nome'] . $_POST['cognome'] . '</br> conferma la tua mail inserendo questo codice sul sito:</p>
+                        <p>Ciao, ' . $_POST['nome'] . ' ' . $_POST['cognome'] . '</br> conferma la tua mail inserendo questo codice sul sito:</p>
                         <ul>
                             <li>La tua email: ' . $email . '</li>
                             <li>Il codice di conferma: ' . $codice . '</li>
