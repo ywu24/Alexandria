@@ -78,6 +78,7 @@
                                 $_SESSION['utenza'] = 4;
                                 $query1->closeCursor();
 
+                                $_SESSION['success_msg'] = "Registrazione completata con successo! Login automatico eseguito";
                                 header("Location: login.php");
                                 exit();
                             } else {
