@@ -40,11 +40,7 @@ if (!isset($_GET['id'])) {
 <body>
     <div class="safe-area spaced-column">
 
-        <div id="nav-placeholder"><?php
-
-
-                                    require_once("../../nav/nav.php");
-                                    ?></div>
+        <div id="nav-placeholder"><?php require_once("../../nav/nav.php"); ?></div>
         <div id="messages">
 
         </div>
@@ -65,10 +61,12 @@ if (!isset($_GET['id'])) {
 
             try {
                 // 1. Recupero dati Opera ed Email
-                if ($q1 = $pdo->prepare('SELECT Opera.id, Prenotazione.Email as Email FROM Opera, Prenotazione, copiaLibro 
+                if (
+                    $q1 = $pdo->prepare('SELECT Opera.id, Prenotazione.Email as Email FROM Opera, Prenotazione, copiaLibro 
                              WHERE Prenotazione.idPrenotazione=:id 
                              AND Prenotazione.idCopia = copiaLibro.idCopia 
-                             AND Opera.ISBN = copiaLibro.ISBN')) {
+                             AND Opera.ISBN = copiaLibro.ISBN')
+                ) {
                     $q1->bindParam(':id', $id);
                     $q1->execute();
                     $opera = $q1->fetch();
@@ -80,8 +78,10 @@ if (!isset($_GET['id'])) {
                 echo "<h3> Prenotazione di " . $email . "</h3>";
 
                 // 2. Recupero date e calcolo stato (Logica allineata al secondo file)
-                if ($q2 = $pdo->prepare('SELECT InizioPrenotazione, InizioPrestito, FinePrenotazione, FinePrestito, FineAttesa 
-                             FROM Prenotazione WHERE idPrenotazione=:id')) {
+                if (
+                    $q2 = $pdo->prepare('SELECT InizioPrenotazione, InizioPrestito, FinePrenotazione, FinePrestito, FineAttesa 
+                             FROM Prenotazione WHERE idPrenotazione=:id')
+                ) {
                     $q2->bindParam(':id', $id);
                     $q2->execute();
                     $prenotazione = $q2->fetch();
@@ -173,7 +173,7 @@ if (!isset($_GET['id'])) {
 
                             if ($stato == "Prenotato") {
                                 if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
-                                    // Aggiunta classe 'prenotazione' richiesta dal tuo JS
+                                    //classe 'prenotazione' richiesta dal JS
                                     echo "<button data-id='$id' class='prenotazione conferma' name='conferma'>Conferma Prenotazione</button>";
                                 }
                                 echo "<button data-id='$id' class='prenotazione elimina' name='elimina'>Elimina Prenotazione</button>";

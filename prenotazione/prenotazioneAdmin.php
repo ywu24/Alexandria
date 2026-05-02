@@ -6,13 +6,14 @@ require_once("../auth/cookies.php");
 
 if (!isset($_SESSION['utenza']) || ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2)) {
     header("Location: ../index.php");
-    die();
+    exit();
 }
 
 try {
     $pdo = DatabaseConnection::getInstance()->getConnection();
 } catch (PDOException $e) {
-    die("Errore connessione: " . $e->getMessage());
+    echo "Errore durante la connessione al database: " . $e->getMessage();
+    exit;
 }
 
 // --- LOGICA FILTRI E ORDINAMENTO ---
