@@ -22,6 +22,7 @@ require_once("utils/connect.php");
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/hover.css">
     <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/messaggi.css">
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>HomePage - Alexandria </title>
@@ -32,6 +33,19 @@ require_once("utils/connect.php");
     <?php
     $root = '.';
     require_once("nav/nav.php"); ?>
+    
+    <div id="messages">
+        <?php
+        if (isset($_SESSION['success_msg'])) {
+            echo '<p class="successo">' . $_SESSION['success_msg'] . '</p>';
+            unset($_SESSION['success_msg']);
+        }
+        if (isset($_SESSION['error_msg'])) {
+            echo '<p class="errore">' . $_SESSION['error_msg'] . '</p>';
+            unset($_SESSION['error_msg']);
+        }
+        ?>
+    </div>
 
     <div style="padding:20px;">
 

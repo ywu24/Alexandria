@@ -99,6 +99,7 @@ if (isset($_POST['submit'])) {
         echo "<p class='successo'>Email mandato all'utente/p>"; // per debug
         sleep(2);
         header("Location: confermaRegistrazione.php");
+        exit();
       } else {
         echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
       }
