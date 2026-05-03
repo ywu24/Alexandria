@@ -123,53 +123,53 @@ if (isset($_POST['change_password'])) {
             <div class="col-lg-7 settings px-lg-4">
 
                 <!-- Profile Card -->
-           <!-- Unified Profile Card -->
-<div class="card mb-4 shadow-sm border-0 settings-section" id="profile-settings">
-    <div class="card-header bg-dark text-white font-weight-bold">👤 Profile Information</div>
-    <div class="card-body text-center">
-        
-        <!-- Parte superiore: Visualizzazione Dati -->
-        <div class="settings-profile-info mb-4">
-            <div class='edit-profile-parameter'>
-                <!-- Immagine Profilo -->
-                <img src='../img/users/<?php echo $userData["propic"]; ?>' alt='Profile' 
-                     class="rounded-circle mb-3 border" 
-                     style="width: 130px; height: 130px; object-fit: cover; border-width: 3px !important;">
-                
-                <div class="data-profile-info">
-                    <?php if (isset($_SESSION['nome'])): ?>
-                        <h3 class="mb-1"><?php echo $_SESSION['nome'] . " " . $_SESSION['cognome']; ?></h3>
-                        <p class="text-muted mb-2"><?php echo $_SESSION['email']; ?></p>
+                <!-- Unified Profile Card -->
+                <div class="card mb-4 shadow-sm border-0 settings-section" id="profile-settings">
+                    <div class="card-header bg-dark text-white font-weight-bold">👤 Profile Information</div>
+                    <div class="card-body text-center">
 
-                        <!-- Badge Punteggio -->
-                        <div class="mt-2 mb-4">
-                            <span class="badge badge-primary p-2" style="font-size: 1rem; border-radius: 20px;">
-                                🏆 Punteggio: <?php echo $userData['punteggio'] ?? '0'; ?>
-                            </span>
+                        <!-- Parte superiore: Visualizzazione Dati -->
+                        <div class="settings-profile-info mb-4">
+                            <div class='edit-profile-parameter'>
+                                <!-- Immagine Profilo -->
+                                <img src='../img/users/<?php echo $userData["propic"]; ?>' alt='Profile'
+                                    class="rounded-circle mb-3 border"
+                                    style="width: 130px; height: 130px; object-fit: cover; border-width: 3px !important;">
+
+                                <div class="data-profile-info">
+                                    <?php if (isset($_SESSION['nome'])): ?>
+                                        <h3 class="mb-1"><?php echo $_SESSION['nome'] . " " . $_SESSION['cognome']; ?></h3>
+                                        <p class="text-muted mb-2"><?php echo $_SESSION['email']; ?></p>
+
+                                        <!-- Badge Punteggio -->
+                                        <div class="mt-2 mb-4">
+                                            <span class="badge badge-primary p-2" style="font-size: 1rem; border-radius: 20px;">
+                                                🏆 Punteggio: <?php echo $userData['punteggio'] ?? '0'; ?>
+                                            </span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
-                    <?php endif; ?>
+
+                        <hr>
+
+                        <!-- Parte inferiore: Form caricamento immagine -->
+                        <div class="mt-4 px-lg-5">
+                            <h6 class="text-muted mb-3">🖼️ Change Profile Picture</h6>
+                            <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data'>
+                                <div class="custom-file mb-3 text-left">
+                                    <input type='file' name='image' class="custom-file-input" id="image">
+                                    <label class="custom-file-label" for="image">Choose new image...</label>
+                                </div>
+                                <button type='submit' name='propicIns' class="btn btn-secondary btn-sm px-4">
+                                    Update Image
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <!-- Parte inferiore: Form caricamento immagine -->
-        <div class="mt-4 px-lg-5">
-            <h6 class="text-muted mb-3">🖼️ Change Profile Picture</h6>
-            <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data'>
-                <div class="custom-file mb-3 text-left">
-                    <input type='file' name='image' class="custom-file-input" id="image">
-                    <label class="custom-file-label" for="image">Choose new image...</label>
-                </div>
-                <button type='submit' name='propicIns' class="btn btn-secondary btn-sm px-4">
-                    Update Image
-                </button>
-            </form>
-        </div>
-
-    </div>
-</div>
                 <!-- Password Reset Card -->
                 <div class="card mb-4 shadow-sm border-0 settings-section" id="password-reset">
                     <div class="card-header bg-dark text-white font-weight-bold">🔑 Security</div>
@@ -198,11 +198,22 @@ if (isset($_POST['change_password'])) {
                             <h5 class="text-danger mb-1 font-weight-bold">Elimina account permanentemente</h5>
                             <p class="text-muted mb-0 small">L'eliminazione è irreversibile. Tutti i tuoi dati verranno cancellati. POSSIBILE SOLO SE NON SI HANNO PRESTITI O PRENOTAZIONI ATTIVI </p>
                         </div>
-                        <form action="../dashboard/dashboardUtenti/eliminaUtente.php" method="POST" onsubmit="return confirmDelete();">
+                        <?php
+                        if ($_SESSION['utenza'] == 2) {
+                            echo '
+                            <button type="submit" name="delete_account" class="btn btn-danger disabled">
+                                Elimina Account
+                            </button>
+                           ';
+                        } else {
+                            echo '<form action="../dashboard/dashboardUtenti/eliminaUtente.php" method="POST" onsubmit="return confirmDelete();">
                             <button type="submit" name="delete_account" class="btn btn-outline-danger">
                                 Elimina Account
                             </button>
-                        </form>
+                        </form>';
+                        }
+                        ?>
+
                     </div>
                 </div>
 
