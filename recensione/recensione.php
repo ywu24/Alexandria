@@ -5,59 +5,98 @@ require_once("../utils/connect.php");
 
 // Controllo ID Opera
 if (!isset($_GET['id'])) {
-    header("Location: ../lista/lista.php");
-    exit();
+  header("Location: ../lista/lista.php");
+  exit();
 }
 
 $idOpera = (int)$_GET['id'];
 
-// Istanza del database tramite PDO (come nel tuo esempio)
+// Istanza del database tramite PDO 
 try {
-    $pdo = DatabaseConnection::getInstance()->getConnection();
+  $pdo = DatabaseConnection::getInstance()->getConnection();
 } catch (PDOException $e) {
-    die("Errore durante la connessione al database: " . $e->getMessage());
+  die("Errore durante la connessione al database: " . $e->getMessage());
 }
 
 if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'])) {
-    // Controllo se l'utente è loggato
-    if (!isset($_SESSION['email'])) {
-        header("Location: ../login/login.php");
-        exit();
-    }    
+  // Controllo se l'utente è loggato
+  if (!isset($_SESSION['email'])) {
+    header("Location: ../login/login.php");
+    exit();
+  }
 
-    $user_email = $_SESSION['email'];
-    $titolo = $_POST['titolo'];
-    $messaggio = $_POST['messaggio'];
-    $voto = (int)$_POST['voto'];
+  $user_email = $_SESSION['email'];
+  $titolo = $_POST['titolo'];
+  $messaggio = $_POST['messaggio'];
+  $voto = (int)$_POST['voto'];
 
-    try {
-        // Preparazione della query con PDO
-        $sql = "INSERT INTO recensione (userEmail, Titolo, Messaggio, Voto, idOpera) 
-                VALUES (:email, :titolo, :messaggio, :voto, :idOpera)";
-        
-        $stmt = $pdo->prepare($sql);
-        
-        // Binding dei parametri
-        $stmt->bindParam(':email', $user_email);
-        $stmt->bindParam(':titolo', $titolo);
-        $stmt->bindParam(':messaggio', $messaggio);
-        $stmt->bindParam(':voto', $voto, PDO::PARAM_INT);
-        $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
+  try {
+    #CONTROLLO CHE NON SIA GIA' STATO RECENSITO
+    $pre_sql = "SELECT 1 FROM recensione WHERE userEmail = :email AND idOpera = :idOpera LIMIT 1";
+    $stmt = $pdo->prepare($pre_sql);
+    $stmt->bindParam(':email', $user_email);
+    $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
 
-        if ($stmt->execute()) {
-            $_SESSION['success_msg'] = "recensione inviata con successo. Grazie per il tuo feedback!";
-        } else {
-            $_SESSION['error_msg'] = "Errore durante l'invio della recensione. Riprova.";
-        }
-        
-        $stmt->closeCursor();
 
-    } catch (PDOException $e) {
-        $_SESSION['error_msg'] = "Errore database: " . $e->getMessage();
+    $stmt->execute();
+
+
+    $recensione_esistente = $stmt->fetch();
+
+    if ($recensione_esistente) {
+
+      $_SESSION['error_msg'] = "hai già recensito questo libro!";
+      header("Location: ../prenotazione/prenotazione.php");
+      exit();
+    }
+    #CONTROLLO CHE ABBIA EFFETTIVAMENTE PRESO IN PRESTITO QUEL LIBRO
+    $pre_sql = "SELECT 1 
+                FROM Prenotazione 
+                JOIN copiaLibro ON Prenotazione.idCopia = copiaLibro.idCopia 
+                JOIN Opera ON copiaLibro.ISBN = Opera.ISBN 
+                WHERE Prenotazione.Email =:email 
+                AND Opera.id =:idOpera AND FinePrestito IS NOT NULL
+                ";
+    $stmt = $pdo->prepare($pre_sql);
+    $stmt->bindParam(':email', $user_email);
+    $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
+
+    // Esegui la query
+    $stmt->execute();
+
+
+    $prenotazione_esistente = $stmt->fetch();
+
+    if (! $prenotazione_esistente) {
+
+      $_SESSION['error_msg'] = "Non puoi recensire libri che non hai mai preso in prestito!";
+      header("Location: ../prenotazione/prenotazione.php");
+      exit();
     }
 
-    header("Location: recensione.php?id=$idOpera");
-    exit();
+    $sql = "INSERT INTO recensione (userEmail, Titolo, Messaggio, Voto, idOpera) 
+                VALUES (:email, :titolo, :messaggio, :voto, :idOpera)";
+
+    $stmt = $pdo->prepare($sql);
+
+    // Binding dei parametri
+    $stmt->bindParam(':email', $user_email);
+    $stmt->bindParam(':titolo', $titolo);
+    $stmt->bindParam(':messaggio', $messaggio);
+    $stmt->bindParam(':voto', $voto, PDO::PARAM_INT);
+    $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
+
+    if ($stmt->execute()) {
+      $_SESSION['success_msg'] = "recensione inviata con successo. Grazie per il tuo feedback!";
+    } else {
+      $_SESSION['error_msg'] = "Errore durante l'invio della recensione. Riprova.";
+    }
+  } catch (PDOException $e) {
+    $_SESSION['error_msg'] = "Errore database: " . $e->getMessage();
+  }
+
+  header("Location: recensione.php?id=$idOpera");
+  exit();
 }
 ?>
 
@@ -86,7 +125,7 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
   <div id="nav-placeholder">
     <?php require_once("../nav/nav.php"); ?>
   </div>
-  
+
   <div id="messages" class="container mt-3 text-center">
     <?php
     if (isset($_SESSION['success_msg'])) {
@@ -104,24 +143,24 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
   <div class="centered-form">
     <div class="form-container mt-4 mb-5 p-4 bg-white shadow rounded" style="max-width: 600px; margin: 0 auto;">
       <h2 class="text-center mb-4"><i class="fas fa-star text-warning"></i> La tua recensione</h2>
-      
+
       <form action="recensione.php?id=<?php echo $idOpera; ?>" method="POST">
-        
+
         <div class="form-group">
           <label><strong>Valutazione:</strong></label>
           <div class="rating-css">
             <input type="radio" id="star5" name="voto" value="5" required>
             <label for="star5" title="5 Stelle"><i class="fas fa-star"></i></label>
-            
+
             <input type="radio" id="star4" name="voto" value="4">
             <label for="star4" title="4 Stelle"><i class="fas fa-star"></i></label>
-            
+
             <input type="radio" id="star3" name="voto" value="3">
             <label for="star3" title="3 Stelle"><i class="fas fa-star"></i></label>
-            
+
             <input type="radio" id="star2" name="voto" value="2">
             <label for="star2" title="2 Stelle"><i class="fas fa-star"></i></label>
-            
+
             <input type="radio" id="star1" name="voto" value="1">
             <label for="star1" title="1 Stella"><i class="fas fa-star"></i></label>
           </div>
@@ -132,17 +171,18 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
           <input type="text" class="form-control" id="titolo" name="titolo" maxlength="50" placeholder="Riassumi la tua esperienza" required>
           <small class="text-muted" id="titolo-counter">Caratteri rimanenti: 50</small>
         </div>
-        
+
         <div class="form-group">
           <label for="messaggio"><strong>Scrivi la tua recensione:</strong></label>
           <textarea class="form-control" id="messaggio" name="messaggio" rows="5" maxlength="500" placeholder="Cosa ti è piaciuto o non ti è piaciuto?" required></textarea>
           <small class="text-muted" id="messaggio-counter">Caratteri rimanenti: 500</small>
         </div>
-        
+
         <button type="submit" class="btn btn-warning btn-block text-white font-weight-bold">Pubblica recensione</button>
       </form>
     </div>
   </div>
 
 </body>
+
 </html>
