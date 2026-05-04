@@ -101,51 +101,48 @@ switch (true) {
                         $queryPunti->execute();
                         $queryPunti->closeCursor();
                         
-                        // Risponde "ok" per far scattare il JS, ma puoi loggare il ritardo
                         echo "ok prestito terminato con ritardo. 10 punti sottratti!";
                     } else {
                         // Nessun ritardo
                         echo "ok prestito terminato con successo!";
+                        //email 
+                        $query = $pdo->prepare("SELECT Email, Prenotazione.idPrenotazione AS idPrenotazione, Prenotazione.idCopia AS idCopia, Opera.ISBN AS ISBN, Opera.Nome AS Titolo, InizioPrestito, FineAttesa, FinePrestito
+                                                FROM Prenotazione, Opera, copiaLibro 
+                                                WHERE Prenotazione.idCopia = copiaLibro.idCopia 
+                                                AND copiaLibro.ISBN = Opera.ISBN
+                                                AND idPrenotazione = :id");
+                        $query->bindParam(':id', $id);
+                        $query->execute();
+                        $result = $query->fetch();
+                        $query->closeCursor();
+        
+                        if ($result) {
+                            if (
+                                sendEmail(
+                                    $result['Email'],
+                                    $result['Email'],
+                                    'Libro Restituito',
+                                    '<h2>Hai restituito il libro ' . $result['Titolo'] . '</h2>
+                                            <p>Informazioni sul prestito:</p>
+                                            <ul>
+                                                <li>ISBN: ' . $result['ISBN'] . '</li>
+                                                <li>ID Copia: ' . $result['idCopia'] . '</li>
+                                                <li>ID Prenotazione: ' . $result['idPrenotazione'] . '</li>
+                                                <li>Data inizio prestito: ' . $result['InizioPrestito'] . '</li>
+                                                <li>Data fine prestito: ' . $result['FineAttesa'] . '</li>
+                                                <li>Data restituzione: ' . $result['FinePrestito'] . '</li>
+                                            </ul>'
+                                )
+                            ) {
+                                echo "Email mandato al bibliotecario"; // per debug
+                            } else {
+                                //echo "Errore nell'invio dell'email"; //per debug
+                            }
+                        }
                     }
+                } else {
+                    echo "Errore: " . $id;
                 }
-                echo "ok prestito terminato con successo!";
-                //email 
-                $query = $pdo->prepare("SELECT Email, Prenotazione.idPrenotazione AS idPrenotazione, Prenotazione.idCopia AS idCopia, Opera.ISBN AS ISBN, Opera.Nome AS Titolo, InizioPrestito, FineAttesa, FinePrestito
-                                        FROM Prenotazione, Opera, copiaLibro 
-                                        WHERE Prenotazione.idCopia = copiaLibro.idCopia 
-                                        AND copiaLibro.ISBN = Opera.ISBN
-                                        AND idPrenotazione = :id");
-                $query->bindParam(':id', $id);
-                $query->execute();
-                $result = $query->fetch();
-                $query->closeCursor();
- 
-                if ($result) {
-                    if (
-                        sendEmail(
-                            $result['Email'],
-                            $result['Email'],
-                            'Libro Restituito',
-                            '<h2>Hai restituito il libro ' . $result['Titolo'] . '</h2>
-                                    <p>Informazioni sul prestito:</p>
-                                    <ul>
-                                        <li>ISBN: ' . $result['ISBN'] . '</li>
-                                        <li>ID Copia: ' . $result['idCopia'] . '</li>
-                                        <li>ID Prenotazione: ' . $result['idPrenotazione'] . '</li>
-                                        <li>Data inizio prestito: ' . $result['InizioPrestito'] . '</li>
-                                        <li>Data fine prestito: ' . $result['FineAttesa'] . '</li>
-                                        <li>Data restituzione: ' . $result['FinePrestito'] . '</li>
-                                    </ul>'
-                        )
-                    ) {
-                        echo "Email mandato al bibliotecario"; // per debug
-                    } else {
-                        //echo "Errore nell'invio dell'email"; //per debug
-                    }
-                }
-
-            } else {
-                echo "Errore: " . $id;
             }
         } catch (Exception $e) {
             echo "Errore " . $e->getMessage();
@@ -243,7 +240,6 @@ switch (true) {
             echo "Errore durante l'eliminazione: " . $e->getMessage();
         }
         break;
-
     default:
         echo "ID = " . $id;
         break;
