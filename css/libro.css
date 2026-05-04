@@ -105,6 +105,19 @@ h2.fw-bold {
     transition: all 0.3s ease;
 }
 
+.review-body p {
+    /* Mantiene le andate a capo naturali se l'utente ha premuto Invio */
+    white-space: normal; 
+    
+    /* Forza il testo ad andare a capo e spezza le parole troppo lunghe */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    
+    /* Impedisce che il testo esca visivamente dal contenitore */
+    max-width: 100%;
+}
+
 .review-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
 .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }

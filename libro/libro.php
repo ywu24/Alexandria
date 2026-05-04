@@ -8,6 +8,62 @@ require_once("../utils/connect.php");
 $root = '..';
 require_once("../auth/cookies.php");
 require_once("../utils/mailer.php");
+
+
+try {
+    $pdo = DatabaseConnection::getInstance()->getConnection();
+} catch (PDOException $e) {
+    echo "Errore durante la connessione al database: " . $e->getMessage();
+    exit;
+}
+
+//AJAX
+
+if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
+    $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+    $book_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+    $limit = 5; // Numero di recensioni da caricare ad ogni scroll
+
+    try {
+        $query_ajax = "SELECT * FROM recensione WHERE idOpera = :book_id ORDER BY id DESC LIMIT :limit OFFSET :offset";
+        $stmt_ajax = $pdo->prepare($query_ajax);
+        $stmt_ajax->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+        $stmt_ajax->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt_ajax->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt_ajax->execute();
+
+        $recensioni_ajax = $stmt_ajax->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($recensioni_ajax as $row) {
+            $voto = (int) $row['Voto'];
+            ?>
+            <div class="review-card mb-4">
+                <div class="review-header">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
+                        </div>
+                        <div>
+                            <h5 class="m-0 fw-bold"><?php echo htmlspecialchars($row['Titolo']); ?></h5>
+                            <small class="text-muted"><?php echo htmlspecialchars($row['userEmail']); ?></small>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <?php echo str_repeat("★", $voto) . str_repeat("☆", 5 - $voto); ?>
+                    </div>
+                </div>
+                <div class="review-body">
+                    <p><?php echo nl2br(htmlspecialchars($row['Messaggio'])); ?></p>
+                </div>
+            </div>
+            <?php
+        }
+    } catch (PDOException $e) {
+        echo "";
+    }
+    // FONDAMENTALE: Interrompe l'esecuzione della pagina qui se è una chiamata AJAX
+    exit; 
+}
 ?>
 
 
@@ -29,6 +85,7 @@ require_once("../utils/mailer.php");
 
     <!--script per importare parti di codice-->
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+    <script src="./libro.js" defer></script>
 </head>
 
 <body>
@@ -49,13 +106,6 @@ require_once("../utils/mailer.php");
             exit();
         }
         $book_id = $_GET['id'];
-
-        try {
-            $pdo = DatabaseConnection::getInstance()->getConnection();
-        } catch (PDOException $e) {
-            echo "Errore durante la connessione al database: " . $e->getMessage();
-            exit;
-        }
 
         //controllo se il libro è presente nel database
         $q = "SELECT count(idCopia) as qty FROM copiaLibro, Opera WHERE id = :book_id and Opera.ISBN = copiaLibro.ISBN";
@@ -288,7 +338,7 @@ require_once("../utils/mailer.php");
             ?>
 
             <hr class="my-5">
-            <section class="container mb-5">
+            <section class="container-fluid mb-5 fluid">
                 <div class="row">
                     <div class="col-12 mb-4">
                         <h2 class="fw-bold">Recensioni degli utenti</h2>
@@ -297,17 +347,18 @@ require_once("../utils/mailer.php");
                     <div class="col-lg-12">
                         <?php
                         try {
-                            // Preparazione della query con segnaposto
-                            $query_commenti = "SELECT * FROM recensione WHERE idOpera = :book_id ORDER BY id DESC";
+                            $limit = 5; // Limite iniziale
+                            $query_commenti = "SELECT * FROM recensione WHERE idOpera = :book_id ORDER BY id DESC LIMIT :limit";
                             $stmt_commenti = $pdo->prepare($query_commenti);
                             $stmt_commenti->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+                            $stmt_commenti->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt_commenti->execute();
 
-                            // Recupero di tutti i risultati
                             $recensioni = $stmt_commenti->fetchAll(PDO::FETCH_ASSOC);
 
                             if (count($recensioni) > 0) {
-                                echo '<div class="review-feed">'; // Contenitore per lo scroll
+                                // Aggiunto data-book-id e id container per JS
+                                echo '<div class="review-feed" id="reviews-container" data-book-id="' . $book_id . '">'; 
                     
                                 foreach ($recensioni as $row) {
                                     $voto = (int) $row['Voto'];
@@ -324,10 +375,7 @@ require_once("../utils/mailer.php");
                                                 </div>
                                             </div>
                                             <div class="review-rating">
-                                                <?php
-                                                // Visualizzazione stelle
-                                                echo str_repeat("★", $voto) . str_repeat("☆", 5 - $voto);
-                                                ?>
+                                                <?php echo str_repeat("★", $voto) . str_repeat("☆", 5 - $voto); ?>
                                             </div>
                                         </div>
                                         <div class="review-body">
@@ -337,6 +385,13 @@ require_once("../utils/mailer.php");
                                     <?php
                                 }
                                 echo '</div>';
+                                
+                                // Aggiunto trigger per lo scroll
+                                echo '<div id="scroll-trigger" class="text-center py-3" style="min-height: 60px;">
+                                        <div class="spinner-border text-primary d-none" role="status">
+                                            <span class="visually-hidden">Caricamento in corso...</span>
+                                        </div>
+                                      </div>';
                             } else {
                                 echo "
                                 <div class='text-center py-5 border rounded bg-light'>
