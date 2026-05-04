@@ -30,19 +30,13 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
   $messaggio = $_POST['messaggio'];
   $voto = (int)$_POST['voto'];
 
-    try {
-        // 1. Preparazione della query per la recensione
-        $sql = "INSERT INTO recensione (userEmail, Titolo, Messaggio, Voto, idOpera) 
   try {
     #CONTROLLO CHE NON SIA GIA' STATO RECENSITO
     $pre_sql = "SELECT 1 FROM recensione WHERE userEmail = :email AND idOpera = :idOpera LIMIT 1";
     $stmt = $pdo->prepare($pre_sql);
     $stmt->bindParam(':email', $user_email);
     $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
-
-
     $stmt->execute();
-
 
     $recensione_esistente = $stmt->fetch();
 
@@ -103,23 +97,16 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
             $_SESSION['error_msg'] = "Errore durante l'invio della recensione. Riprova.";
         }
         
-        $stmt->closeCursor();
+    $stmt->closeCursor();
 
     } catch (PDOException $e) {
         $_SESSION['error_msg'] = "Errore database: " . $e->getMessage();
     }
-    if ($stmt->execute()) {
-      $_SESSION['success_msg'] = "recensione inviata con successo. Grazie per il tuo feedback!";
-    } else {
-      $_SESSION['error_msg'] = "Errore durante l'invio della recensione. Riprova.";
-    }
-  } catch (PDOException $e) {
-    $_SESSION['error_msg'] = "Errore database: " . $e->getMessage();
-  }
 
   header("Location: recensione.php?id=$idOpera");
   exit();
 }
+
 ?>
 
 <!DOCTYPE html>
