@@ -67,7 +67,7 @@ switch (true) {
                     }
                 }
             } else {
-                ####segnalale errore: prenotazione scaduta.
+                ####segnalare errore: prenotazione scaduta.
                 echo "Errore prenotazione Scaduta?";
             }
         } catch (Exception $e) {
@@ -84,6 +84,30 @@ switch (true) {
                 $query->bindParam(':id', $id);
                 $query->execute();
                 $query->closeCursor();
+
+                $queryInfo = $pdo->prepare("SELECT Email, FineAttesa FROM Prenotazione WHERE idPrenotazione = :id");
+                $queryInfo->bindParam(':id', $id);
+                $queryInfo->execute();
+                $info = $queryInfo->fetch();
+                $queryInfo->closeCursor();
+
+                if ($info) {
+                    // Controlla se la data odierna supera la data massima di attesa
+                    if (strtotime(date('Y-m-d')) > strtotime($info['FineAttesa'])) {
+                        
+                        // C'è stato un ritardo: togliamo 10 punti
+                        $queryPunti = $pdo->prepare("UPDATE Utente SET punteggio = punteggio - 10 WHERE Email = :email");
+                        $queryPunti->bindParam(':email', $info['Email']);
+                        $queryPunti->execute();
+                        $queryPunti->closeCursor();
+                        
+                        // Risponde "ok" per far scattare il JS, ma puoi loggare il ritardo
+                        echo "ok prestito terminato con ritardo. 10 punti sottratti!";
+                    } else {
+                        // Nessun ritardo
+                        echo "ok prestito terminato con successo!";
+                    }
+                }
                 echo "ok prestito terminato con successo!";
                 //email 
                 $query = $pdo->prepare("SELECT Email, Prenotazione.idPrenotazione AS idPrenotazione, Prenotazione.idCopia AS idCopia, Opera.ISBN AS ISBN, Opera.Nome AS Titolo, InizioPrestito, FineAttesa, FinePrestito

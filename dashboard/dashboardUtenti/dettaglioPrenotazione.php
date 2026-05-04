@@ -40,7 +40,10 @@ if (!isset($_GET['id'])) {
 <body>
     <div class="safe-area spaced-column">
 
-        <div id="nav-placeholder"><?php require_once("../../nav/nav.php"); ?></div>
+        <div id="nav-placeholder"><?php
+            require_once("../../nav/nav.php");
+        ?></div>
+        
         <div id="messages">
 
         </div>
