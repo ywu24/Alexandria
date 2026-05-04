@@ -89,7 +89,7 @@ if (isset($_POST['change_password'])) {
     <div id="nav-placeholder">
         <?php require_once("../nav/nav.php"); ?>
     </div>
-    <div class="messages">
+    <div>
         <?php
         if (isset($_SESSION['success_msg'])) {
             echo '<p class="successo">' . $_SESSION['success_msg'] . '</p>';
@@ -142,12 +142,18 @@ if (isset($_POST['change_password'])) {
                                         <p class="text-muted mb-2"><?php echo $_SESSION['email']; ?></p>
 
                                         <!-- Badge Punteggio -->
-                                        <div class="mt-2 mb-4">
-                                            <span class="badge badge-primary p-2" style="font-size: 1rem; border-radius: 20px;">
-                                                🏆 Punteggio: <?php echo $userData['punteggio'] ?? '0'; ?>
-                                            </span>
-                                        </div>
+                                        <?php
+                                        if ($_SESSION['utenza'] != 2 && $_SESSION['utenza'] != 1) {
+                                            echo '<div class="mt-2 mb-4">
+                                                <span class="badge badge-primary p-2" style="font-size: 1rem; border-radius: 20px;">
+                                                    🏆 Punteggio: ' . ($userData['punteggio'] ?? "0") . '
+                                                </span>
+                                            </div>';
+                                        }
+                                        ?>
+
                                     <?php endif; ?>
+
                                 </div>
                             </div>
                         </div>
@@ -167,9 +173,10 @@ if (isset($_POST['change_password'])) {
                                 </button>
                             </form>
                         </div>
-
+                      
                     </div>
                 </div>
+                  <div id="messages"></div>
                 <!-- Password Reset Card -->
                 <div class="card mb-4 shadow-sm border-0 settings-section" id="password-reset">
                     <div class="card-header bg-dark text-white font-weight-bold">🔑 Security</div>
@@ -177,15 +184,15 @@ if (isset($_POST['change_password'])) {
                         <form action="./edit_profile.php" method="POST">
                             <div class="form-group mb-3">
                                 <label class="section-title1">Current Password</label>
-                                <input type="password" name="current_password" class="form-control password">
+                                <input type="password" name="current_password" class="form-control password" required>
                             </div>
                             <div class="form-group mb-3">
                                 <label class="section-title1">New Password</label>
-                                <input type="password" name="new_password" class="form-control password">
+                                <input type="password" name="new_password" class="form-control password" required>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="section-title1">Confirm Password</label>
-                                <input type="password" name="confirm_password" class="form-control password">
+                                <input type="password" name="confirm_password" class="form-control password" required>
                             </div>
                             <input type="submit" name="change_password" value="Confirm Changes" class="btn btn-primary btn-block btn-lg shadow-sm">
                         </form>
@@ -225,15 +232,12 @@ if (isset($_POST['change_password'])) {
     <!-- Scripts per Bootstrap e gestione input file -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="edit_profile.js"></script>
     <script>
         $(".custom-file-input").on("change", function() {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
-
-        function confirmDelete() {
-            return confirm("Sei assolutamente sicuro? Questa azione non può essere annullata e perderai l'accesso a tutti i tuoi dati.");
-        }
     </script>
 </body>
 

@@ -1,6 +1,6 @@
 localStorage.removeItem('reinvio_count');
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Selezioniamo tutti gli input del form che hanno un attributo 'name'
     const form = document.getElementById("myform");
     const inputs = form.querySelectorAll('input[name]');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-    window.addEventListener('beforeunload', function() {
+    window.addEventListener('beforeunload', function () {
         inputs.forEach(input => {
             // Salviamo solo i campi non sensibili
             if (input.type !== 'password' && input.type !== 'submit' && input.value !== "") {
@@ -24,5 +24,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    form.addEventListener('submit', function (e) {
+        // Recuperiamo i due campi password
+        const password = form.querySelector('input[name="password"]').value;
+        const passwordAgain = form.querySelector('input[name="passwordAgain"]').value;
+
+        // Confronto
+        if (password !== passwordAgain) {
+            // Blocchiamo l'invio del form al PHP
+            e.preventDefault();
+
+            showMessage("Le password inserite non coincidono. Riprova.", "errore");
+
+            //puliamo i campi password per sicurezza
+            form.querySelector('input[name="password"]').value = "";
+            form.querySelector('input[name="passwordAgain"]').value = "";
+            form.querySelector('input[name="password"]').focus();
+        }
+    });
 });
-//2. Salvo i dati prima che la pagina venga cambiata/refreshata
+function showMessage(text, type = "successo") {
+    const div = document.getElementById("messages");
+
+    const p = document.createElement("p");
+    p.textContent = text;
+
+    p.classList.add(type);
+
+    div.appendChild(p);
+
+    // sparisce dopo 5 secondi
+    setTimeout(() => {
+        p.remove();
+    }, 4000);
+}
+
+
