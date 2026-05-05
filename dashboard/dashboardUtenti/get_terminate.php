@@ -30,10 +30,10 @@ if (isset($_POST['idUtente'])) {
     $email = $_POST['email'];
 }
 try {
-    if ($_SESSION['utenza'] != 1 || $_SESSION['utenza'] != 2) {
+    if ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2) {
         if ($_SESSION['email'] != $email) {
             http_response_code(500);
-            echo json_encode(["error" ]);
+            echo json_encode(["error" => "Accesso Negato" ]);
         }
     }
     //$email = $_SESSION['email'];
