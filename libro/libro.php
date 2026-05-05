@@ -82,6 +82,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/popup.css">
     <link rel="stylesheet" href="../css/messaggi.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <!--script per importare parti di codice-->
     <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
