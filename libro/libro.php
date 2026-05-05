@@ -269,7 +269,6 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                         }
                     } catch (Exception $e) {
                         echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
-
                     }
                 }
             }
