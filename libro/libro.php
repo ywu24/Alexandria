@@ -20,8 +20,8 @@ try {
 //AJAX
 
 if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
-    $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-    $book_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+    $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
+    $book_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     $limit = 5; // Numero di recensioni da caricare ad ogni scroll
 
     try {
@@ -62,7 +62,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
         echo "";
     }
     // FONDAMENTALE: Interrompe l'esecuzione della pagina qui se è una chiamata AJAX
-    exit; 
+    exit;
 }
 ?>
 
@@ -97,6 +97,13 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
         </div>
 
         <?php
+        if (isset($_GET['success'])) {
+            echo "<p class='successo'>Prenotazione effettuata con successo</p>";
+        }
+        if (isset($_GET['errore'])) {
+            echo "<p class='errore'>" . htmlspecialchars($_GET['errore']) . "</p>";
+        }
+
         $maxCopie = isset($_POST['slider']) ? $_POST['slider'] : 2;
         $date = date('Y/m/d', time());
         $table = "Opera";
@@ -149,6 +156,8 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
             $giorniPrenotazione = 30;
 
             if (isset($_POST["prenota"])) {
+                $success = false;
+                $error_msg = "";
 
                 if ($_SESSION['utenza'] == 3) {
                     try {
@@ -195,7 +204,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                         <li>Quantità: ' . $nPrenotazioni . '</li>
                                         <li>Data inizio: ' . date('d-m-Y') . '</li>
                                         <li>Data fine: ' . date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')) . '</li>
-                                    </ul>'  
+                                    </ul>'
                                     )
                                 ) {
                                     echo "<p class='successo'>Email mandato al bibliotecario</p>"; // per debug
@@ -203,12 +212,12 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                     echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
                                 }
                             }
-
-                            echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
+                            $success = true;
+                            #echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
                         }
                     } catch (Exception $e) {
-                        echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
-
+                        $error_msg = $e->getMessage();
+                        #echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
                     }
 
                 } else if ($_SESSION['utenza'] == 4) {
@@ -262,15 +271,23 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                     echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
                                 }
                             }
-
-                            echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
+                            $success = true;
+                            #echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
                         } else {
-                            echo "<p class= 'errore'> Numero massimo di prenotazioni raggiunto </p>";
+                            $error_msg = "Numero massimo di prenotazioni raggiunto";
+                            #echo "<p class= 'errore'> Numero massimo di prenotazioni raggiunto </p>";
                         }
                     } catch (Exception $e) {
-                        echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
+                        $error_msg = $e->getMessage();
+                        #echo "<p class= 'errore'> Errore durante la prenotazione: " . $e->getMessage() . "</p>";
                     }
                 }
+                if ($success) {
+                    header("Location: libro.php?id=" . $book_id . "&success=1");
+                } else {
+                    header("Location: libro.php?id=" . $book_id . "&errore=" . urlencode($error_msg));
+                }
+                exit();
             }
         }
 
@@ -336,82 +353,82 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                </div>";
             ?>
 
-            <hr class="my-5">
-            <section class="container-fluid mb-5 fluid">
-                <div class="row">
-                    <div class="col-12 mb-4">
-                        <h2 class="fw-bold">Recensioni degli utenti</h2>
-                    </div>
+                <hr class="my-5">
+                <section class="container-fluid mb-5 fluid">
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <h2 class="fw-bold">Recensioni degli utenti</h2>
+                        </div>
 
-                    <div class="col-lg-12">
-                        <?php
-                        try {
-                            $limit = 5; // Limite iniziale
-                            $query_commenti = "SELECT * FROM recensione WHERE idOpera = :book_id ORDER BY id DESC LIMIT :limit";
-                            $stmt_commenti = $pdo->prepare($query_commenti);
-                            $stmt_commenti->bindParam(':book_id', $book_id, PDO::PARAM_INT);
-                            $stmt_commenti->bindValue(':limit', $limit, PDO::PARAM_INT);
-                            $stmt_commenti->execute();
+                        <div class="col-lg-12">
+                            <?php
+                            try {
+                                $limit = 5; // Limite iniziale
+                                $query_commenti = "SELECT * FROM recensione WHERE idOpera = :book_id ORDER BY id DESC LIMIT :limit";
+                                $stmt_commenti = $pdo->prepare($query_commenti);
+                                $stmt_commenti->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+                                $stmt_commenti->bindValue(':limit', $limit, PDO::PARAM_INT);
+                                $stmt_commenti->execute();
 
-                            $recensioni = $stmt_commenti->fetchAll(PDO::FETCH_ASSOC);
+                                $recensioni = $stmt_commenti->fetchAll(PDO::FETCH_ASSOC);
 
-                            if (count($recensioni) > 0) {
-                                // Aggiunto data-book-id e id container per JS
-                                echo '<div class="review-feed" id="reviews-container" data-book-id="' . $book_id . '">'; 
-                    
-                                foreach ($recensioni as $row) {
-                                    $voto = (int) $row['Voto'];
-                                    ?>
-                                    <div class="review-card mb-4">
-                                        <div class="review-header">
-                                            <div class="user-info">
-                                                <div class="user-avatar">
-                                                    <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
-                                                </div>
-                                                <div>
-                                                    <h5 class="m-0 fw-bold"><?php echo htmlspecialchars($row['Titolo']); ?></h5>
-                                                    <small class="text-muted"><?php echo htmlspecialchars($row['userEmail']); ?></small>
-                                                </div>
-                                            </div>
-                                            <div class="review-rating">
-                                                <?php echo str_repeat("★", $voto) . str_repeat("☆", 5 - $voto); ?>
-                                            </div>
-                                        </div>
-                                        <div class="review-body">
-                                            <p><?php echo nl2br(htmlspecialchars($row['Messaggio'])); ?></p>
-                                        </div>
-                                    </div>
-                                    <?php
-                                }
-                                echo '</div>';
-                                
-                                // Aggiunto trigger per lo scroll
-                                echo '<div id="scroll-trigger" class="text-center py-3" style="min-height: 60px;">
+                                if (count($recensioni) > 0) {
+                                    // Aggiunto data-book-id e id container per JS
+                                    echo '<div class="review-feed" id="reviews-container" data-book-id="' . $book_id . '">';
+
+                                    foreach ($recensioni as $row) {
+                                        $voto = (int) $row['Voto'];
+                                        ?>
+                                                    <div class="review-card mb-4">
+                                                        <div class="review-header">
+                                                            <div class="user-info">
+                                                                <div class="user-avatar">
+                                                                    <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
+                                                                </div>
+                                                                <div>
+                                                                    <h5 class="m-0 fw-bold"><?php echo htmlspecialchars($row['Titolo']); ?></h5>
+                                                                    <small class="text-muted"><?php echo htmlspecialchars($row['userEmail']); ?></small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="review-rating">
+                                                                <?php echo str_repeat("★", $voto) . str_repeat("☆", 5 - $voto); ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="review-body">
+                                                            <p><?php echo nl2br(htmlspecialchars($row['Messaggio'])); ?></p>
+                                                        </div>
+                                                    </div>
+                                                    <?php
+                                    }
+                                    echo '</div>';
+
+                                    // Aggiunto trigger per lo scroll
+                                    echo '<div id="scroll-trigger" class="text-center py-3" style="min-height: 60px;">
                                         <div class="spinner-border text-primary d-none" role="status">
                                             <span class="visually-hidden">Caricamento in corso...</span>
                                         </div>
                                       </div>';
-                            } else {
-                                echo "
+                                } else {
+                                    echo "
                                 <div class='text-center py-5 border rounded bg-light'>
                                     <h5 class='text-muted'>Non ci sono ancora recensioni.</h5>
                                     <p>Sii il primo a condividere la tua opinione!</p>
                                 </div>";
+                                }
+
+                                $stmt_commenti->closeCursor();
+
+                            } catch (PDOException $e) {
+                                echo "<div class='alert alert-danger'>Errore nel caricamento delle recensioni: " . $e->getMessage() . "</div>";
                             }
-
-                            $stmt_commenti->closeCursor();
-
-                        } catch (PDOException $e) {
-                            echo "<div class='alert alert-danger'>Errore nel caricamento delle recensioni: " . $e->getMessage() . "</div>";
-                        }
-                        ?>
+                            ?>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            </main>
+                </main>
 
-            <?php
+                <?php
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             exit;
