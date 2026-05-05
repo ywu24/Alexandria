@@ -65,6 +65,7 @@ if (isset($_POST['submit'])) {
     $query->bindParam(':email', $email);
     $query->execute();
     $result = $query->fetch();
+    $query->closeCursor();
     if ($result) {
       $_SESSION['error_msg'] = "Utente già registrato";
       header("Location: registrazione.php");
@@ -92,19 +93,20 @@ if (isset($_POST['submit'])) {
         $_SESSION['passwordAgain'] = $passwordAgain;
         $_SESSION['codice'] = $codice;
         $_SESSION['codice_scadenza'] = time() + 600; // Valido per 10 minuti (600 secondi)
-        $_SESSION['tentativi']=3;
-        $_SESSION['reinvii']= 1;
-
-
-        echo "<p class='successo'>Email mandato all'utente/p>"; // per debug
-        sleep(2);
+        $_SESSION['tentativi'] = 3;
+        $_SESSION['reinvii'] = 1;
+        
+        #echo "<p class='successo'>Email mandato all'utente/p>"; // per debug
+        #sleep(2);
         header("Location: confermaRegistrazione.php");
         exit();
       } else {
-        echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
+        $_SESSION['error_msg'] = "Errore nell'invio dell'email";
+        header("Location: registrazione.php");
+        exit();
       }
     }
-    $query->closeCursor();
+
   } else {
     $_SESSION['error_msg'] = "Errore, operazione fallita";
     header("Location: registrazione.php");

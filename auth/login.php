@@ -19,8 +19,8 @@ try {
 
 if (isset($_SESSION['email'])) {
   header("Location: ../index.php");
-  exit;
-} // redirect the user to the home page
+  exit; // redirect the user to the home page
+}
 
 if ($error === -1 && isset($_POST['submit'])) {
   try {
@@ -49,19 +49,28 @@ if ($error === -1 && isset($_POST['submit'])) {
         exit;
 
       } else {
-        $error = 1;
-        $err_message = "Incorrect password";
+        $_SESSION['login_error'] = ['type' => 1, 'msg' => "Incorrect password"];
+        header("Location: login.php");
+        exit;
       }
     } else {
-      $error = 2;
-      $err_message = "User does not exist";
+      $_SESSION['login_error'] = ['type' => 2, 'msg' => "User does not exist"];
+      header("Location: login.php");
+      exit;
     }
     
   } catch (Exception $e) {
     error_log('[login.php] Query failed: ' . $e->getMessage());
-    $error = 3;
-    $err_message = 'Something went wrong, please try again later';
+    $_SESSION['login_error'] = ['type' => 1, 'msg' => 'Something went wrong, please try again later'];
+    header("Location: login.php");
+    exit;
   }
+}
+
+if (isset($_SESSION['login_error'])) {
+  $error = $_SESSION['login_error']['type'];
+  $err_message = $_SESSION['login_error']['msg'];
+  unset($_SESSION['login_error']);
 }
 ?>
 
