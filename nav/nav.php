@@ -31,7 +31,7 @@ if (isset($_POST['logout'])) {
     <?php  
 
     echo "
-    <form method='post' action='" . $root . "/lista/lista.php' class='search-form'>
+    <form method='get' action='" . $root . "/lista/lista.php' class='search-form'>
         <input type='search' name='search' placeholder='Search...'>
         <button type='submit' name='search_btn'>
         </button>
