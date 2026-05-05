@@ -58,7 +58,7 @@ html{
     padding: 20px;
     text-align: center;
 }
-@media(max-width:768px){
+@media(max-width:924px){
     
     .container {
         flex-direction: column; /* Incolonna i blocchi */
