@@ -48,21 +48,33 @@ if (isset($_POST['change_password'])) {
                             exit;
                         } else {
                             $_SESSION['error_msg'] = "Errore durante l'aggiornamento";
+                            header("Location: edit_profile.php");
+                            exit;
                         }
                     } else {
                         $_SESSION['error_msg'] = "Le password non corrispondono";
+                        header("Location: edit_profile.php");
+                        exit;
                     }
                 } else {
                     $_SESSION['error_msg'] = "Password troppo lunga";
+                    header("Location: edit_profile.php");
+                    exit;
                 }
             } else {
                 $_SESSION['error_msg'] = "Password non sicura";
+                header("Location: edit_profile.php");
+                exit;
             }
         } else {
             $_SESSION['error_msg'] = "Password attuale errata";
+            header("Location: edit_profile.php");
+            exit;
         }
     } else {
         $_SESSION['error_msg'] = "Errore durante la preparazione della query";
+        header("Location: edit_profile.php");
+        exit;
     }
 }
 ?>
@@ -99,7 +111,8 @@ if (isset($_POST['change_password'])) {
             echo '<p class="errore">' . $_SESSION['error_msg'] . '</p>';
             unset($_SESSION['error_msg']);
         }
-        ?></div>
+        ?>
+    </div>
     <div class="container py-5">
 
 
@@ -163,7 +176,8 @@ if (isset($_POST['change_password'])) {
                         <!-- Parte inferiore: Form caricamento immagine -->
                         <div class="mt-4 px-lg-5">
                             <h6 class="text-muted mb-3">🖼️ Change Profile Picture</h6>
-                            <form action='./change_propic/change_propic.php' method='POST' enctype='multipart/form-data'>
+                            <form action='./change_propic/change_propic.php' method='POST'
+                                enctype='multipart/form-data'>
                                 <div class="custom-file mb-3 text-left">
                                     <input type='file' name='image' class="custom-file-input" id="image">
                                     <label class="custom-file-label" for="image">Choose new image...</label>
@@ -173,10 +187,10 @@ if (isset($_POST['change_password'])) {
                                 </button>
                             </form>
                         </div>
-                      
+
                     </div>
                 </div>
-                  <div id="messages"></div>
+                <div id="messages"></div>
                 <!-- Password Reset Card -->
                 <div class="card mb-4 shadow-sm border-0 settings-section" id="password-reset">
                     <div class="card-header bg-dark text-white font-weight-bold">🔑 Security</div>
@@ -194,7 +208,8 @@ if (isset($_POST['change_password'])) {
                                 <label class="section-title1">Confirm Password</label>
                                 <input type="password" name="confirm_password" class="form-control password" required>
                             </div>
-                            <input type="submit" name="change_password" value="Confirm Changes" class="btn btn-primary btn-block btn-lg shadow-sm">
+                            <input type="submit" name="change_password" value="Confirm Changes"
+                                class="btn btn-primary btn-block btn-lg shadow-sm">
                         </form>
                     </div>
                 </div>
@@ -203,7 +218,8 @@ if (isset($_POST['change_password'])) {
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
                             <h5 class="text-danger mb-1 font-weight-bold">Elimina account permanentemente</h5>
-                            <p class="text-muted mb-0 small">L'eliminazione è irreversibile. Tutti i tuoi dati verranno cancellati. POSSIBILE SOLO SE NON SI HANNO PRESTITI O PRENOTAZIONI ATTIVI </p>
+                            <p class="text-muted mb-0 small">L'eliminazione è irreversibile. Tutti i tuoi dati verranno
+                                cancellati. POSSIBILE SOLO SE NON SI HANNO PRESTITI O PRENOTAZIONI ATTIVI </p>
                         </div>
                         <?php
                         if ($_SESSION['utenza'] == 2) {
@@ -234,7 +250,7 @@ if (isset($_POST['change_password'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="edit_profile.js"></script>
     <script>
-        $(".custom-file-input").on("change", function() {
+        $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
