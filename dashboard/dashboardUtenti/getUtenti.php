@@ -65,13 +65,13 @@ foreach ($utenti as $row) {
     
     if ($_SESSION['utenza'] == 1) {
         $html = "
-            <th scope='row'>{$row['id']}</th>
+            <th scope='row' class='col-nascondi'>{$row['id']}</th>
             <td>{$row['Nome']}</td>
             <td>{$row['Cognome']}</td>
-            <td>{$row['Email']}</td>
-            <td>{$desc}</td>
-            <td>{$row['punteggio']}</td>
-            <td>
+            <td class='col-nascondi'>{$row['Email']}</td>
+            <td class='col-nascondi'>{$desc}</td>
+            <td class='col-nascondi'>{$row['punteggio']}</td>
+            <td class='col-nascondi'>
                 <div class='btn_actions'>
                     <a class='btn btn-primary' href='modificaUtente.php?id={$row['id']}'>Modifica</a>
                     <a class='btn btn-danger' href='eliminaUtente.php?id={$row['Email']}'>Elimina</a>
@@ -81,15 +81,21 @@ foreach ($utenti as $row) {
         $html = "
             <td>{$row['Nome']}</td>
             <td>{$row['Cognome']}</td>
-            <td>{$row['Email']}</td>
-            <td>{$row['punteggio']}</td>
-            <td>
+            <td class='col-nascondi'>{$row['Email']}</td>
+            <td class='col-nascondi'>{$row['punteggio']}</td>
+            <td class='col-nascondi'>
                 <div class='btn_actions text-center'>
                     <a class='btn btn-primary' href='dettaglioUtente.php?id={$row['id']}'>Prenotazioni</a>
                 </div>
             </td>";
     }
-    $response[] = ['html' => $html];
+    $response[] = [
+        'html'      => $html,
+        'id'        => $row['id'],
+        'email'     => $row['Email'],
+        'punteggio' => $row['punteggio'],
+        'ruolo'     => $desc
+    ];
 }
 
 echo json_encode($response);

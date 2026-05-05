@@ -48,24 +48,30 @@ if (isset($_GET['errore'])) {
             <button id="searchBtn" class="btn btn-outline-info my-2 my-sm-0" type="button">Cerca</button>
         </form>
 
+        <?php if ($_SESSION['utenza'] == 1): ?>
+            <a href="aggiungiUtente.php" class="btn btn_adduser btn-success">Aggiungi utente</a>
+        <?php endif; ?>
+
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered">
                 <thead class="thead-dark">
                     <tr>
                         <?php if ($_SESSION['utenza'] == 1): ?>
-                            <th scope="col">#<button class="sort_btn" data-sort="id">&ensp; &#x25B2;</button></th>
+                            <th scope="col" class='col-nascondi'>#<button class="sort_btn" data-sort="id">&ensp; &#x25B2;</button></th>
                             <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&ensp; &#x25B2;</button></th>
                             <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Ruolo<button class="sort_btn" data-sort="Utenza">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Azioni<a href="aggiungiUtente.php" class="btn btn_adduser btn-success ml-auto">Aggiungi utente</a></th>
+                            <th scope="col" class='col-nascondi'>Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
+                            <th scope="col" class='col-nascondi'>Ruolo<button class="sort_btn" data-sort="Utenza">&ensp; &#x25B2;</button></th>
+                            <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
+                            <th scope="col" class='col-nascondi'>Azioni</th>
+                            <th scope="col" class="mobile-only mobile-toggle-col">Info<button class="sort_btn" data-sort="Info">&ensp; &#x25B2;</button></th>
                         <?php else: ?>
                             <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&ensp; &#x25B2;</button></th>
                             <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
-                            <th scope="col" class="text-center">Azioni</th>
+                            <th scope="col" class='col-nascondi'>Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
+                            <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
+                            <th scope="col" class="col-nascondi text-center">Azioni</th>
+                            <th scope="col" class="mobile-only mobile-toggle-col">Info<button class="sort_btn" data-sort="Info">&ensp; &#x25B2;</button></th>
                         <?php endif; ?>
                     </tr>
                 </thead>
@@ -81,7 +87,7 @@ if (isset($_GET['errore'])) {
     </button>
 </div>
     </div>
-
+    <script>const USER_TYPE = <?php echo $_SESSION['utenza']; ?>;</script>
     <script src="dashboardUtenti.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

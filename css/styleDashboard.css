@@ -103,7 +103,83 @@ label {
 	display: none;
 	z-index: 10;
 }
+
+.mobile-details {
+    display: none;
+    background-color: #f1f3f5;
+}
+
+@media (min-width: 769px) {
+    .mobile-only { display: none !important; }
+    .mobile-details-row { display: none !important; }
+}
+
 @media (max-width: 768px) {
+
+    /* 1. NASCONDERE: Colpiamo qualsiasi th o td con la classe col-nascondi */
+    .table .col-nascondi {
+        display: none !important;
+    }
+
+    /* 2. Assicura che Nome e Cognome occupino lo spazio corretto */
+    /* Colpiamo sia th che td per sicurezza */
+    .table tr th:not(.col-nascondi):not(.mobile-only),
+    .table tr td:not(.col-nascondi):not(.mobile-only) {
+        display: table-cell !important;
+        width: 40% !important;
+        vertical-align: middle;
+    }
+
+    /* 3. Colonna Info (il tasto ▼) */
+    .mobile-only.mobile-toggle-col {
+        display: table-cell !important;
+        width: 20% !important;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .mobile-details-row td, 
+    .mobile-details-row th {
+        display: table-cell !important;
+        width: 100% !important;
+        padding: 0 !important;
+        border-top: none !important;
+    }
+
+    /* Contenitore interno dei dettagli */
+    .mobile-details-row div.p-3 {
+        border-left: 5px solid #17a2b8;
+        background-color: #fdfdfd;
+        margin: 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* 5. DETTAGLI: Stile dei dati interni */
+    .detail-item {
+        margin-bottom: 8px;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .detail-label {
+        font-weight: bold;
+        color: #495057;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+    }
+
+    .btn_adduser {
+        position: fixed !important;
+        top: 80px;
+        right: 20px;
+        z-index: 10000; /* Sopra a tutto */
+        display: block !important;
+    }
+
     /* Allarghiamo il container per sfruttare più spazio laterale */
     .container-fluid {
         width: 98% !important; 
@@ -111,29 +187,45 @@ label {
 
     /* Riduciamo i margini della barra di ricerca per recuperare spazio in verticale */
     .searchbar {
-        margin-top: 15px; 
-        margin-bottom: 15px;
-    }
-
-    /* Il bottone "Aggiungi utente" nella thead (solo per admin) */
-    .btn_adduser {
-        float: none !important; 
-        display: inline-block;
-        width: auto !important; 
-        margin-top: 5px !important;
-        padding: 4px 8px; /* Bottone leggermente più compatto */
-        font-size: 0.9rem;
+        width: 100% !important; /* L'input di ricerca prende tutta la larghezza */
+        margin-right: 0 !important;
+        margin-bottom: 8px !important;
+        margin-top: 20px !important;
     }
     
-    /* Intestazione della colonna Azioni per dare spazio al bottone sopra */
-    th:last-child {
-        min-width: 140px; 
+    form.form-inline.mx-auto .btn-outline-info {
+        width: 100%; /* Il tasto Cerca diventa largo quanto lo schermo */
+        margin-left: 0 !important;
+        margin-bottom: 25px !important;
+        margin-top: 0 !important;
     }
 
+    /* Gestione dei bottoni nella colonna Azioni (Modifica/Elimina) */
+    .btn_actions {
+        width: 100% !important; 
+        min-width: 100px; /* Assicura uno spazio minimo */
+        display: flex;
+        flex-direction: column; 
+        gap: 8px; 
+    }
+    
+    .btn_actions .btn {
+        width: 100% !important; /* Rende Modifica ed Elimina più larghi e facili da tappare */
+        margin-bottom: 0;
+        font-size: 0.85rem; /* Testo leggermente ridotto per schermi piccoli */
+    }
+    
     p.errore, p.successo {
         font-size: 14px; 
         padding: 8px;
     }
+}
+
+/* Ottimizzazione pulsanti per dita (Touch Target) */
+.btn-toggle-expand {
+    padding: 8px 12px;
+    line-height: 1;
+    border-radius: 50%; /* Lo rende un circolino cliccabile */
 }
 
 /* Dispositivi piccoli (Smartphone, fino a 480px) */
@@ -177,9 +269,11 @@ label {
 
     /* Sistemazione del bottone "Aggiungi utente" per schermi piccolissimi */
     .btn_adduser {
-        display: block;
-        width: 100% !important;
-        margin-top: 10px !important;
-        text-align: center;
+        position: fixed !important;
+        top: 80px;
+        right: 20px;
+        z-index: 10000; /* Sopra a tutto */
+        display: block !important;
     }
+
 }

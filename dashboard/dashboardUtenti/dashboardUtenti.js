@@ -8,7 +8,7 @@ async function caricaUtenti(append = false) {
     try {
         const formData = new FormData(form);
         // Calcolo offset basato sulle righe già presenti
-        const offset = append ? container.querySelectorAll("tr").length : 0;
+        const offset = append ? container.querySelectorAll("tr.user-main-row").length : 0;
         
         formData.set('offset', offset);
         formData.set('limit', 10);
@@ -35,9 +35,59 @@ async function caricaUtenti(append = false) {
         }
 
         utenti.forEach(user => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = user.html;
-            container.appendChild(tr);
+            // 1. Creiamo la riga principale
+            const trMain = document.createElement('tr');
+            trMain.className = "user-main-row";
+            trMain.innerHTML = user.html; 
+            
+            // Aggiungiamo il pulsante di espansione per mobile alla fine della riga
+            const toggleTd = document.createElement('td');
+            toggleTd.className = "mobile-only text-center align-middle";
+            toggleTd.innerHTML = `<button class="btn btn-sm btn-info btn-toggle-expand">▼</button>`;
+            trMain.appendChild(toggleTd);
+
+            container.appendChild(trMain);
+
+            // 2. Creiamo la riga "Dettagli" (nascosta di default via CSS)
+            const trDetails = document.createElement('tr');
+            trDetails.className = "mobile-details-row";
+            trDetails.style.display = "none"; // Gestito da JS al click
+            
+            // Costruiamo il contenuto espandibile
+            let azioniHtml = "";
+    
+            if (USER_TYPE == 1) {
+                // Se ADMIN: Mostra Modifica ed Elimina
+                azioniHtml = `
+                    <div class="d-flex flex-column gap-2 mt-3">
+                        <a class="btn btn-primary btn-block" href="modificaUtente.php?id=${user.id}">Modifica</a>
+                        <a class="btn btn-danger btn-block" href="eliminaUtente.php?id=${user.email}">Elimina</a>
+                    </div>
+                `;
+            } else {
+                // Se Altro: Mostra solo Prenotazioni
+                azioniHtml = `
+                    <div class="d-flex flex-column gap-2 mt-3">
+                        <a class="btn btn-primary btn-block" href="dettaglioUtente.php?id=${user.id}">Prenotazioni</a>
+                    </div>
+                `;
+            }
+
+            trDetails.innerHTML = `
+                <td colspan="10">
+                    <div class="p-3 bg-white border-left-info shadow-sm">
+                        <div class="detail-item"><span class="detail-label">Email:</span> <span>${user.email || 'N/D'}</span></div>
+                        <div class="detail-item"><span class="detail-label">Ruolo:</span> <span>${user.ruolo || 'N/D'}</span></div>
+                        <div class="detail-item"><span class="detail-label">Punteggio:</span> <span>${user.punteggio || '0'}</span></div>
+                        
+                        <div class="mt-3 pt-2 border-top">
+                            <p class="small text-muted mb-2 text-uppercase font-weight-bold">Azioni:</p>
+                            ${azioniHtml}
+                        </div>
+                    </div>
+                </td>
+            `;
+            container.appendChild(trDetails);
         });
 
         // Mostra il tasto Carica Altro solo se abbiamo ricevuto esattamente 10 record
@@ -49,6 +99,22 @@ async function caricaUtenti(append = false) {
         console.error("Errore nel caricamento utenti:", error);
     }
 }
+
+document.addEventListener("click", function(e) {
+    // Gestione click sul tasto espandi (il triangolino)
+    if (e.target && e.target.classList.contains('btn-toggle-expand')) {
+        const mainRow = e.target.closest('tr');
+        const detailsRow = mainRow.nextElementSibling;
+        
+        if (detailsRow && detailsRow.classList.contains('mobile-details-row')) {
+            const isHidden = detailsRow.style.display === "none";
+            detailsRow.style.display = isHidden ? "table-row" : "none";
+            e.target.innerText = isHidden ? "▲" : "▼";
+            e.target.classList.toggle('btn-secondary');
+            e.target.classList.toggle('btn-info');
+        }
+    }
+});
 
 document.addEventListener("DOMContentLoaded", function () {
     const btnSearch = document.getElementById("searchBtn");
