@@ -7,7 +7,7 @@ async function caricaLibri(append = false) {
     const searchInput = document.getElementById("searchInput");
     const loadMoreBtn = document.getElementById("loadMoreBtn");
     
-    if (!append) currentOffset = 0; // Se è una nuova ricerca/ordinamento, resetta l'offset
+    if (!append) currentOffset = 0; 
 
     const formData = new FormData();
     formData.append('search', searchInput ? searchInput.value : "");
@@ -30,7 +30,6 @@ async function caricaLibri(append = false) {
             tableBody.insertAdjacentHTML('beforeend', libro.html);
         });
 
-        // Se abbiamo ricevuto esattamente LIMIT risultati, mostriamo il tasto "Carica Altro"
         if (data.length === LIMIT) {
             loadMoreBtn.style.display = "inline-block";
             currentOffset += LIMIT;
@@ -44,7 +43,6 @@ async function caricaLibri(append = false) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Caricamento iniziale gestito da JS per coerenza con l'offset
     caricaLibri();
 
     document.getElementById("searchBtn").onclick = () => caricaLibri(false);
@@ -60,14 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Mantieni il resto del codice (click globale per save, espandi, elimina...)
-
-// LOGICA CLICK GLOBALE (Salva, Espandi, Elimina)
+// LOGICA CLICK GLOBALE (Salva, Espandi, Elimina Opera, Elimina Copia)
 document.addEventListener("click", async (e) => {
     const target = e.target;
 
+    // --- AGGIORNA COPIE (VELOCE) ---
     if (target.classList.contains("save")) {
-        // ... tua logica salva esistente ...
         const row = target.closest("tr");
         const input = row.querySelector("input[type='number']");
         const isbn = row.dataset.isbn;
@@ -82,6 +78,7 @@ document.addEventListener("click", async (e) => {
         if (txt.includes("ok")) showMessage("Aggiornato!");
     }
 
+    // --- ESPANDI DETTAGLI COPIE ---
     if (target.classList.contains('btn-espandi')) {
         const isbn = target.dataset.isbn;
         const targetRow = document.getElementById(`row-details-${isbn}`);
@@ -104,9 +101,10 @@ document.addEventListener("click", async (e) => {
         }
     }
 
+    // --- ELIMINA INTERA OPERA (ISBN) ---
     if (target.classList.contains("elimina")) {
         const row = target.closest("tr");
-        if (!confirm("Eliminare il libro?")) return;
+        if (!confirm("Sei sicuro di voler eliminare l'intera opera e tutte le sue copie?")) return;
         const fd = new FormData();
         fd.append("isbn", row.dataset.isbn);
         const res = await fetch("eliminaLibro.php", { method: "POST", body: fd });
@@ -114,7 +112,50 @@ document.addEventListener("click", async (e) => {
         if (txt.includes("ok")) {
             row.remove();
             document.getElementById(`row-details-${row.dataset.isbn}`)?.remove();
+            showMessage("Opera eliminata correttamente");
         }
+    }
+
+    // --- NUOVA LOGICA: ELIMINA SINGOLA COPIA (ID) ---
+    if (target.classList.contains("delete") || target.closest(".delete")) {
+        // Se l'utente clicca sull'icona trash dentro il bottone
+        const btn = target.classList.contains("delete") ? target : target.closest(".delete");
+        const row = btn.closest("tr");
+        const idCopia = row.dataset.id;
+
+        if (!confirm(`Vuoi eliminare definitivamente la copia #${idCopia}?`)) return;
+
+        const fd = new FormData();
+        fd.append("id", idCopia);
+
+        try {
+            const res = await fetch("elimina_copia.php", { method: "POST", body: fd });
+            const result = await res.text();
+
+            if (result.includes("ok")) {
+                showMessage(result.slice(2)); // Toglie 'ok' e mostra il resto
+                
+                // Per aggiornare il conteggio nella riga principale, simuliamo un refresh del dettaglio
+                const rigaDettaglio = btn.closest('tr.bg-light') || btn.closest('td').closest('tr').closest('tbody').closest('table').closest('div').closest('td').closest('tr');
+                const rigaPrincipale = rigaDettaglio.previousElementSibling;
+                const btnEspandi = rigaPrincipale.querySelector('.btn-espandi');
+                
+                if (btnEspandi) {
+                    btnEspandi.click(); // Chiude
+                    btnEspandi.click(); // Riapre e ricarica i dati aggiornati
+                }
+            } else {
+                showMessage(result, "errore");
+            }
+        } catch (error) {
+            showMessage("Errore di connessione", "errore");
+        }
+    }
+
+    // --- DETTAGLI PRENOTAZIONE ---
+    if (target.classList.contains("dettagli")) {
+        const idCopia = target.closest("tr").dataset.id;
+        window.location.href = "gotoPrenotazione.php?id=" + idCopia;
     }
 });
 
@@ -148,30 +189,18 @@ function renderCopie(container, copie, e) {
             <tbody>`;
 
     for (let copia of copie) {
-        let statoTesto = 'Non Disponibile';
-        let badgeClass = 'badge-danger';
-        let btnClass = 'btn-outline-secondary';
-        let action = "";
-        let dettagli = "";
-        let disabled = "";
-
-        if (copia.Stato == '1') {
-            badgeClass = 'badge-success';
-            statoTesto = 'Disponibile';
-            btnClass = 'btn-outline-danger delete';
-            // Qui dovresti avere la logica per eliminare la singola copia (idCopia)
-        } else {
-            disabled = "disabled";
-            action = "showMessage('Non puoi eliminare libri in prestito!', 'errore');";
-            dettagli = '<button class="btn btn-sm btn-warning dettagli">Dettagli</button>';
-        }
-
+        let isDisponibile = (copia.Stato == '1');
+        let statoTesto = isDisponibile ? 'Disponibile' : 'In Prestito';
+        let badgeClass = isDisponibile ? 'badge-success' : 'badge-danger';
+        
         html += `<tr data-id="${copia.idCopia}">
             <td><strong>#${copia.idCopia}</strong></td>
             <td><span class="badge ${badgeClass}">${statoTesto}</span></td>
             <td class="text-right">
-                ${dettagli}
-                <button class="btn btn-sm ${btnClass}" ${disabled} onclick="${action}">
+                ${!isDisponibile ? '<button class="btn btn-sm btn-warning dettagli">Dettagli</button>' : ''}
+                <button class="btn btn-sm ${isDisponibile ? 'btn-outline-danger delete' : 'btn-outline-secondary'}" 
+                        ${!isDisponibile ? 'disabled' : ''}
+                        onclick="${!isDisponibile ? "showMessage('Impossibile eliminare una copia in prestito!', 'errore')" : ""}">
                     <i class="fas fa-trash"></i> Elimina
                 </button>
             </td>
