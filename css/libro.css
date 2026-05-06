@@ -1,4 +1,6 @@
 /* --- VARIABILI E BASE --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 html { scroll-behavior: smooth; }
 body {
     font-size: 1.125rem;
@@ -7,6 +9,7 @@ body {
     padding: 0;
     color: var(--text);
     background: var(--white);
+    font-family: var(--font-family-base);
 }
 
 /* --- LAYOUT PRINCIPALE (DESKTOP) --- */

@@ -89,7 +89,8 @@ if (isset($_POST['change_password'])) {
     <title>Edit Profile</title>
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <!-- Tuoi CSS Originali -->
+    <!-- CSS Originali -->
+    <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/edit_profile.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/nav.css">

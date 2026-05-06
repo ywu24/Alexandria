@@ -91,7 +91,7 @@ if (isset($_SESSION['email'])) {
 
                 <div class='user-info'>
                     <img src='" . $root ."/img/users/". $utente["propic"] . "'>
-                    <h3>" . $utente["Nome"] . " " . $utente["Cognome"] . "</h3>
+                    <h3 style='font-size: 1.2rem;'>" . $utente["Nome"] . " " . $utente["Cognome"] . "</h3>
                     <h4> Punti: ".$utente['punteggio']."</h4>
                 </div>
 

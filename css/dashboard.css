@@ -5,6 +5,7 @@ html{
 }
 
 
+
 .container {
     width: 90vw; 
     min-height: 50vh;
@@ -12,7 +13,7 @@ html{
     justify-content: space-around;
     align-items: center; 
     flex-wrap: wrap; 
-    border-radius: 25px;
+    border-radius: 0.5rem;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -22,28 +23,31 @@ html{
 .container .card-container{
     width: 45vmin;
     height: 40vmin;
-    border:0px solid var(--border);
-    color: white;
-    border-radius: 5px;
+    border: none;
+    color: var(--text-color);
+    border-radius: 0.5rem;
     display: flex;
     justify-content: center;
     flex-direction: column;
     margin: 15px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    transition: 0.5s;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    background-color: var(--white-color);
 }
 
 .container a:hover div{
-    /* background: var(--border); */
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    scale: 0.99;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-5px);
 }
+
 
 
 .container a{
     margin: auto 0;
     text-decoration: none;
+    color: var(--text-color);
 }
+
 
 
 .card-container img{
@@ -51,12 +55,14 @@ html{
     height: 50%;
     padding: 10px;
     margin: auto;
+    border-radius: 0.25rem;
 }
 
 .card-container h4{
-    color: black;
+    color: var(--dark-color);
     padding: 20px;
     text-align: center;
+    font-weight: 600;
 }
 @media(max-width:924px){
     

@@ -1,12 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 :any-link {
 	color: white;
 	text-decoration: none;
+	font-family: var(--font-family-base);
 }
 
 :any-link:hover {
 	color: white;
 	text-decoration: none;
 }
+
+* {
+	font-family: var(--font-family-base);
+}
+
 
 
 .container-fluid {

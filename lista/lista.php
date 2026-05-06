@@ -127,6 +127,7 @@ try {
     <title>Alexandria's Library</title>
     <!-- Bootstrap per layout e utilità, ma manteniamo i CSS originali per la lista -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/lista.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
@@ -163,7 +164,7 @@ try {
         <div class="row">
             <!-- Sidebar Filtri -->
             <div class="col-lg-3 mb-4">
-                <div class="card border-0 shadow-sm overflow-hidden sticky-top" style="top: 20px;">
+                <div class="card border-0 shadow-sm overflow-hidden sticky-top"  style="top: 20px; z-index: 100;">
                     <!-- Header Nero con iconcina blu -->
                     <div class="card-header bg-dark text-white font-weight-bold d-flex align-items-center" id="sort-by" style="cursor:pointer;">
                         <i class="fa fa-filter mr-2" style="color: #007bff;"></i> 
@@ -269,7 +270,7 @@ try {
                     ?>
 
                     <div class="center" style="margin-top: 30px; display: flex; justify-content: center;">
-                        <div class="pagination shadow-sm">
+                        <div class="pagination">
                             <?php echo $paginationCtrls; ?>
                         </div>
                     </div>

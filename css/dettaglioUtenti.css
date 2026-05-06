@@ -1,7 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 .user-details{
     display:flex;
     flex-direction: row;
 	/* align-items: center; */
+    font-family: var(--font-family-base);
+}
+
+* {
+    font-family: var(--font-family-base);
 }
 
 .user-details img{
