@@ -42,8 +42,11 @@ p {
 }
 
 .btn_adduser {
-	/* margin-left: 20px !important; */
-	float: right !important;
+    position: absolute !important;
+    top: 80px;
+    right: 20px;
+    z-index: 10000; /* Sopra a tutto */
+    display: block !important;
 }
 
 .btn_actions {
@@ -109,12 +112,12 @@ label {
     background-color: #f1f3f5;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1057px) {
     .mobile-only { display: none !important; }
     .mobile-details-row { display: none !important; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1056px) {
 
     /* 1. NASCONDERE: Colpiamo qualsiasi th o td con la classe col-nascondi */
     .table .col-nascondi {
@@ -173,7 +176,7 @@ label {
     }
 
     .btn_adduser {
-        position: fixed !important;
+        position: absolute !important;
         top: 80px;
         right: 20px;
         z-index: 10000; /* Sopra a tutto */
@@ -214,11 +217,38 @@ label {
         margin-bottom: 0;
         font-size: 0.85rem; /* Testo leggermente ridotto per schermi piccoli */
     }
-    
-    p.errore, p.successo {
-        font-size: 14px; 
-        padding: 8px;
+
+    .btn-toggle-expand {
+    background-color: #17a2b8; /* Colore info */
+    color: white;
+    border: none;
+    border-radius: 50%; /* Diventa un cerchio */
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease; /* Per l'animazione */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+
+    .btn-toggle-expand:hover {
+        background-color: #138496;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Classe da aggiungere con JS quando il contenuto è espanso */
+    .btn-toggle-expand.expanded {
+        transform: rotate(180deg); /* Ruota la freccia sottosopra */
+        background-color: #6c757d; /* Cambia colore se vuoi */
+    }
+        
+        p.errore, p.successo {
+            font-size: 14px; 
+            padding: 8px;
+        }
 }
 
 /* Ottimizzazione pulsanti per dita (Touch Target) */
@@ -269,7 +299,7 @@ label {
 
     /* Sistemazione del bottone "Aggiungi utente" per schermi piccolissimi */
     .btn_adduser {
-        position: fixed !important;
+        position: absolute !important;
         top: 80px;
         right: 20px;
         z-index: 10000; /* Sopra a tutto */

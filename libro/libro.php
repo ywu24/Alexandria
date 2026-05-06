@@ -25,7 +25,12 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
     $limit = 5; // Numero di recensioni da caricare ad ogni scroll
 
     try {
-        $query_ajax = "SELECT * FROM recensione WHERE idOpera = :book_id ORDER BY id DESC LIMIT :limit OFFSET :offset";
+        $query_ajax = "SELECT r.*, u.propic 
+               FROM recensione r 
+               JOIN utente u ON r.userEmail = u.email 
+               WHERE r.idOpera = :book_id 
+               ORDER BY r.id DESC 
+               LIMIT :limit OFFSET :offset";
         $stmt_ajax = $pdo->prepare($query_ajax);
         $stmt_ajax->bindParam(':book_id', $book_id, PDO::PARAM_INT);
         $stmt_ajax->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -41,7 +46,11 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                 <div class="review-header">
                     <div class="user-info">
                         <div class="user-avatar">
-                            <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
+                            <?php if (!empty($row['propic']) && file_exists("../img/users/" . $row['propic'])): ?>
+                                <img src="../img/users/<?php echo $row['propic']; ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            <?php else: ?>
+                                <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
+                            <?php endif; ?>
                         </div>
                         <div>
                             <h5 class="m-0 fw-bold"><?php echo htmlspecialchars($row['Titolo']); ?></h5>
@@ -347,7 +356,12 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                         <?php
                         try {
                             $limit = 5; // Limite iniziale
-                            $query_commenti = "SELECT * FROM recensione WHERE idOpera = :book_id ORDER BY id DESC LIMIT :limit";
+                            $query_commenti = "SELECT r.*, u.propic 
+                                            FROM recensione r 
+                                            JOIN utente u ON r.userEmail = u.email
+                                            WHERE r.idOpera = :book_id 
+                                            ORDER BY r.id DESC 
+                                            LIMIT :limit";
                             $stmt_commenti = $pdo->prepare($query_commenti);
                             $stmt_commenti->bindParam(':book_id', $book_id, PDO::PARAM_INT);
                             $stmt_commenti->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -366,7 +380,11 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                         <div class="review-header">
                                             <div class="user-info">
                                                 <div class="user-avatar">
-                                                    <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
+                                                    <?php if (!empty($row['propic']) && file_exists("../img/users/" . $row['propic'])): ?>
+                                                        <img src="../img/users/<?php echo $row['propic']; ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div>
                                                     <h5 class="m-0 fw-bold"><?php echo htmlspecialchars($row['Titolo']); ?></h5>
@@ -383,14 +401,15 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                     </div>
                                     <?php
                                 }
-                                echo '</div>';
-                                
                                 // Aggiunto trigger per lo scroll
-                                echo '<div id="scroll-trigger" class="text-center py-3" style="min-height: 60px;">
+                                echo '<div id="scroll-trigger" class="text-center py-3">
                                         <div class="spinner-border text-primary d-none" role="status">
                                             <span class="visually-hidden">Caricamento in corso...</span>
                                         </div>
-                                      </div>';
+                                    </div>';
+
+                                echo '</div>';
+                                
                             } else {
                                 echo "
                                 <div class='text-center py-5 border rounded bg-light'>

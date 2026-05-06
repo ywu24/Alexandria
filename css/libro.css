@@ -87,6 +87,8 @@ hr.my-5 { margin-top: 10px !important; margin-bottom: 15px !important; }
 h2.fw-bold { 
     margin-top: 0 !important; 
     margin-bottom: 1.5rem; 
+    max-width: 70%;
+    margin: auto;
 }
 
 .review-feed {
@@ -103,6 +105,8 @@ h2.fw-bold {
     padding: 20px;
     margin-bottom: 1.5rem;
     transition: all 0.3s ease;
+    max-width: 70%; /* Riduce la larghezza al 70% del contenitore padre */
+    margin: auto; 
 }
 
 .review-body p {
@@ -123,8 +127,45 @@ h2.fw-bold {
 .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .user-info { display: flex; align-items: center; gap: 12px; }
 .user-avatar {
-    width: 40px; height: 40px; background-color: #6c757d; color: white;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #d1d1d1; /* Il cerchio grigio di sfondo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Stile per la lettera */
+.avatar-letter {
+    font-weight: bold;
+    color: #fff;
+    font-size: 1.2rem;
+    z-index: 1; /* Sta sotto l'immagine se presente */
+}
+
+/* Stile per l'immagine */
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute; /* Si sovrappone perfettamente al cerchio */
+    top: 0;
+    left: 0;
+    z-index: 2; /* Sta sopra la lettera */
+}
+
+
+#scroll-trigger {
+    min-height: 60px;
+    max-width: 70%; /* Stessa larghezza delle card */
+    margin: 0 auto; /* Centra il div nella pagina */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* --- BOTTONI --- */
