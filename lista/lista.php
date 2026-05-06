@@ -164,7 +164,7 @@ try {
         <div class="row">
             <!-- Sidebar Filtri -->
             <div class="col-lg-3 mb-4">
-                <div class="card border-0 shadow-sm overflow-hidden sticky-top" style="top: 20px;">
+                <div class="card border-0 shadow-sm overflow-hidden sticky-top"  style="top: 20px; z-index: 100;">
                     <!-- Header Nero con iconcina blu -->
                     <div class="card-header bg-dark text-white font-weight-bold d-flex align-items-center" id="sort-by" style="cursor:pointer;">
                         <i class="fa fa-filter mr-2" style="color: #007bff;"></i> 

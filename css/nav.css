@@ -309,7 +309,7 @@ p.logoutform{
         cursor: pointer;
         -webkit-tap-highlight-color: transparent !important;
         outline: none !important;
-        z-index: 2; 
+        z-index: 200; 
     }
 
     .nav1 .li-icon {
@@ -323,7 +323,7 @@ p.logoutform{
     .nav1 ul{
         display: flex;
         align-items: center !important;
-        z-index: 3; 
+        z-index: 300; 
     }
 
     .nav1 ul li{
@@ -332,7 +332,7 @@ p.logoutform{
         margin: 0;
         float: right;
         align-items: center;
-        z-index: 3;
+        z-index: 300;
     }
 
     .nav1 form input[type="search"]{
