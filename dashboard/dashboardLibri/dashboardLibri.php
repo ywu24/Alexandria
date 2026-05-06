@@ -1,11 +1,11 @@
 <?php
 session_start();
 $root = "../..";
-require_once("../../auth/cookies.php");
-require_once("../../utils/connect.php");
+require_once("$root/auth/cookies.php");
+require_once("$root/utils/connect.php");
 
 if (!isset($_SESSION['utenza']) || ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2)) {
-	header("Location: ../../index.php");
+	header("Location: $root/index.php");
 	exit;
 }
 
@@ -47,19 +47,16 @@ function renderRow($row)
 	<title>Dashboard Libri</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo $root; ?>/css/unified.css">
-	<link rel="stylesheet" href="<?php echo $root; ?>/css/styleDashboard.css">
+	<link rel="stylesheet" href="<?php echo $root; ?>/css/styleDashboardLibri.css">
 	<link rel="stylesheet" href="<?php echo $root; ?>/css/messaggi.css">
-	<link rel="shortcut icon" href="<?php echo $root; ?>/immagini/bookDashFavicon.png">
+	<link rel="shortcut icon" href="<?php echo $root; ?>/img/bookDashFavicon.png">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<link rel="stylesheet" href="../../css/styleDashboardLibri.css">
-	<link rel="stylesheet" href="../../css/messaggi.css">
-	<link rel="shortcut icon" href="../../img/bookDashFavicon.png">
 	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>
 	<script src="aggiornaCopie.js" defer></script>
 </head>
 
 <body>
-	<?php require_once("../../nav/nav.php"); ?>
+	<?php require_once("$root/nav/nav.php"); ?>
 
 	<div id="messages"></div>
 

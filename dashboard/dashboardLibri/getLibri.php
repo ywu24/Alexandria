@@ -1,7 +1,7 @@
 <?php
 session_start();
 $root = "../..";
-require_once("../../utils/connect.php");
+require_once("$root/utils/connect.php");
 
 header('Content-Type: application/json');
 
