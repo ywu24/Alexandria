@@ -156,7 +156,7 @@ $orderBy = "idPrenotazione DESC";
         </div>
 
           <div class="d-flex justify-content-center w-100 my-5">
-    <button id="caricaAltro" class="btn btn-outline-primary shadow-sm" style="display:none; min-width: 200px;">
+    <button id="caricaAltro" class="btn btn-outline-primary shadow-sm" style="min-width: 200px;">
         Carica Altro...
     </button>
 </div>

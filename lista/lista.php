@@ -83,13 +83,13 @@ $whereClause = "";
 $params = [];
 $urlParams = [];
 
-if (isset($_POST["search_btn"]) || isset($_POST["search"])) {
-    $search_text = '%' . $_POST["search"] . '%';
+if (isset($_GET["search_btn"]) || isset($_GET["search"])) {
+    $search_text = '%' . $_GET["search"] . '%';
     $whereClause = "WHERE Nome LIKE ? OR Autore LIKE ? OR ISBN LIKE ? OR CasaEditrice LIKE ?";
     $params = [$search_text, $search_text, $search_text, $search_text];
-    $urlParams = ['search' => $_POST["search"]];
-} elseif (isset($_POST['genere_btn'])) {
-    $genere = $_POST['genere_btn'];
+    $urlParams = ['search' => $_GET["search"]];
+} elseif (isset($_GET['genere_btn'])) {
+    $genere = $_GET['genere_btn'];
     $whereClause = "WHERE Genere = ?";
     $params = [$genere];
     $urlParams = ['genere_btn' => $genere];
@@ -186,7 +186,7 @@ try {
                         </div>
 
                         <div class="bg-light px-3 py-2" id="genere-subwrap" style="display:none;">
-                            <form action="lista.php" method="post">
+                            <form action="lista.php" method="get">
                                 <?php
                                 $generi = ["Romanzo Storico", "Giallo", "Biografia", "Avventura", "Azione", "Fantascienza", "Horror", "Umoristico", "Distopia"];
                                 foreach ($generi as $g) {
