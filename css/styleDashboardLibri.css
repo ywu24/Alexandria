@@ -1,0 +1,163 @@
+.mt-5, .my-5 {
+    margin-top: 4rem!important;
+    margin-bottom: 2rem;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1.8rem;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    color: inherit;
+}   
+
+/* Reset link nei bottoni */
+:any-link {
+    color: white;
+    text-decoration: none;
+}
+
+:any-link:hover {
+    color: white;
+    text-decoration: none;
+}
+
+/* Layout Generale */
+body {
+    background-color: #f8f9fa;
+}
+
+.container-fluid {
+    width: 93% !important;
+}
+
+.searchbar {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+/* Reset margini Bootstrap */
+dl, ol, ul, p {
+    margin-top: 0;
+    margin-bottom: 0 !important;
+}
+
+/* Pulsanti di ordinamento nelle tabelle */
+.sort_btn {
+	color: white;
+	background-color: transparent;
+	border: none;
+	/* text-decoration: bold; */
+}
+
+/* Posizionamento fisso tasto Aggiungi Libro */
+.btn_addlibro {
+    position: absolute !important;
+    top: 80px;
+    right: 20px;
+    z-index: 10000; /* Sopra a tutto */
+    display: block !important;
+}
+
+/* Stile Tabella */
+.card-header {
+    background-color: #343a40;
+    color: white;
+}
+
+/* 1. Desktop: nascondi colonna mobile */
+@media (min-width: 1101px) {
+    .mobile-only { display: none !important; }
+    .riga-mobile-info {
+        display: none !important;
+    }
+}
+
+/* 2. Tablet/Smartphone: nascondi colonne extra e mostra tasto espandi */
+@media (max-width: 1100px) {
+
+    .riga-mobile-info {
+        display: table-row;
+    }
+
+    .container-fluid { width: 98% !important; }
+
+    /* Nasconde le colonne secondarie contrassegnate nel PHP */
+    .table .col-nascondi {
+        display: none !important;
+    }
+
+    /* Regola le colonne rimanenti (ISBN e Titolo) */
+    .table tr th:not(.col-nascondi):not(.mobile-only),
+    .table tr td:not(.col-nascondi):not(.mobile-only) {
+        display: table-cell !important;
+        vertical-align: middle;
+    }
+
+    /* Colonna Info (il tasto + / -) */
+    .mobile-only {
+        display: table-cell !important;
+        width: 60px !important;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Stile della riga di dettaglio espansa */
+    .bg-light {
+        background-color: #fdfdfd !important;
+    }
+
+    /* Contenitore interno dei dettagli caricati via AJAX */
+    #libriTableBody div[id^="content-"] {
+        border-left: 5px solid #17a2b8;
+        background-color: #ffffff;
+        margin: 5px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        padding: 15px !important;
+    }
+
+    /* Riduciamo i margini della barra di ricerca per recuperare spazio in verticale */
+    .searchbar {
+        width: 100% !important; /* L'input di ricerca prende tutta la larghezza */
+        margin-right: 0 !important;
+        margin-bottom: 8px !important;
+        margin-top: 20px !important;
+    }
+
+    /* Sposta il tasto Aggiungi Libro per non sovrapporsi */
+    .btn_addlibro {
+        position: absolute !important;
+        top: 80px;
+        right: 20px;
+        z-index: 10000; /* Sopra a tutto */
+        display: block !important;
+    }
+
+    .btn_modifica {
+        display: block;
+        width: 100%;
+        margin-bottom: 8px; /* Spazio tra Modifica ed Elimina */
+    }
+
+}
+
+/* Smartphone Small */
+@media (max-width: 480px) {
+    .container-fluid { padding: 0 10px !important; }
+    
+    /* Riduce leggermente il font per ISBN/Titolo */
+    .table td, .table th {
+        font-size: 0.85rem;
+    }
+}
+
+/* Classi per messaggi (da messaggi.css, assicurate qui per sicurezza) */
+p.errore, p.successo {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: center;
+}
+p.errore { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+p.successo { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }

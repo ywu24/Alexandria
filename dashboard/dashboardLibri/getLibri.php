@@ -1,7 +1,7 @@
 <?php
 session_start();
 $root = "../..";
-require_once("$root/utils/connect.php");
+require_once("../../utils/connect.php");
 
 header('Content-Type: application/json');
 
@@ -57,21 +57,24 @@ foreach ($libri as $row) {
     <tr data-isbn='$isbn'>
         <th scope='row'><button class='btn btn-sm btn-info btn-espandi' type='button' data-isbn='$isbn'>+</button> $isbn</th>
         <td>".htmlspecialchars($row['Nome'])."</td>
-        <td>".htmlspecialchars($row['Autore'])."</td>
-        <td>".htmlspecialchars($row['Genere'])."</td>
-        <td>{$row['AnnoPubblicazione']}</td>
-        <td>".htmlspecialchars($row['CasaEditrice'])."</td>
-        <td>
+        <td class='col-nascondi'>".htmlspecialchars($row['Autore'])."</td>
+        <td class='col-nascondi'>".htmlspecialchars($row['Genere'])."</td>
+        <td class='col-nascondi'>{$row['AnnoPubblicazione']}</td>
+        <td class='col-nascondi'>".htmlspecialchars($row['CasaEditrice'])."</td>
+        <td class='col-nascondi'>
             <input type='number' value='{$row['copie']}' class='form-control-sm' style='width:60px'>
             <button class='btn btn-outline-info btn-sm save'>Salva</button>
         </td>
-        <td>
-            <a class='btn btn-primary btn-sm' href='modificaLibro.php?id=$isbn'>Modifica</a>
+        <td class='col-nascondi'>
+            <a class='btn btn-primary btn-sm btn_modifica' href='modificaLibro.php?id=$isbn'>Modifica</a>
             $btnElimina
+        </td>
+        <td class='mobile-only'>
+            <button class='btn btn-sm btn-secondary btn-info-mobile' type='button'>Info</button>
         </td>
     </tr>
     <tr id='row-details-$isbn' style='display:none;' class='bg-light'>
-        <td colspan='8'><div id='content-$isbn' class='p-3'>Caricamento in corso...</div></td>
+        <td colspan='9'><div id='content-$isbn' class='p-3'>Caricamento in corso...</div></td>
     </tr>";
     
     $response[] = ['html' => $html];

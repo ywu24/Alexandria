@@ -62,6 +62,63 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("click", async (e) => {
     const target = e.target;
 
+    // --- MENU A TENDINA RESPONSIVE (INFO MOBILE) ---
+    if (target.classList.contains('btn-info-mobile') || target.closest('.btn-info-mobile')) {
+        const btn = target.classList.contains('btn-info-mobile') ? target : target.closest('.btn-info-mobile');
+        const row = btn.closest("tr");
+        const isbn = row.dataset.isbn;
+        const mobileRowId = `mobile-info-${isbn}`;
+        let mobileRow = document.getElementById(mobileRowId);
+
+        if (mobileRow) {
+            // Se esiste già, alterna visualizzazione
+            if (mobileRow.style.display === 'none') {
+                mobileRow.style.display = 'table-row';
+                btn.innerHTML = 'Chiudi';
+                btn.classList.replace('btn-secondary', 'btn-dark');
+            } else {
+                mobileRow.style.display = 'none';
+                btn.innerHTML = 'Info';
+                btn.classList.replace('btn-dark', 'btn-secondary');
+            }
+        } else {
+            // Se non esiste, crea la riga estraendo i dati dalle colonne nascoste
+            const tds = row.querySelectorAll("td");
+            
+            // Indici basati sul renderRow: 
+            const autore = tds[1] ? tds[1].innerHTML : '';
+            const genere = tds[2] ? tds[2].innerHTML : '';
+            const anno = tds[3] ? tds[3].innerHTML : '';
+            const casa = tds[4] ? tds[4].innerHTML : '';
+            const copie = tds[5] ? tds[5].innerHTML : '';
+            const azioni = tds[6] ? tds[6].innerHTML : '';
+
+            // Layout a tendina
+            const html = `
+                <tr id="${mobileRowId}" class="bg-light shadow-sm riga-mobile-info">
+                    <td colspan="3" class="p-3 border-info">
+                        <ul class="list-unstyled mb-0 text-left">
+                            <li class="mb-1"><strong>Autore:</strong> ${autore}</li>
+                            <li class="mb-1"><strong>Genere:</strong> ${genere}</li>
+                            <li class="mb-1"><strong>Casa Editrice:</strong> ${casa}</li>
+                            <li class="mb-1"><strong>Anno:</strong> ${anno}</li>
+                            <li class="mb-2 mt-3 p-2 bg-white border rounded d-flex align-items-center justify-content-between">
+                                <strong>Copie:</strong>
+                                <div>${copie}</div>
+                            </li>
+                            <li class="mt-3 text-right border-top pt-2">${azioni}</li>
+                        </ul>
+                    </td>
+                </tr>
+            `;
+            // Inserisci sotto la riga principale
+            row.insertAdjacentHTML('afterend', html);
+            btn.innerHTML = 'Chiudi';
+            btn.classList.replace('btn-secondary', 'btn-dark');
+        }
+        return; // Ferma l'esecuzione per evitare conflitti con altre logiche
+    }
+
     // --- AGGIORNA COPIE (VELOCE) ---
     if (target.classList.contains("save")) {
         const row = target.closest("tr");

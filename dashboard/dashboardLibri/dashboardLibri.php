@@ -1,11 +1,11 @@
 <?php
 session_start();
 $root = "../..";
-require_once("$root/auth/cookies.php");
-require_once("$root/utils/connect.php");
+require_once("../../auth/cookies.php");
+require_once("../../utils/connect.php");
 
 if (!isset($_SESSION['utenza']) || ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2)) {
-	header("Location: $root/index.php");
+	header("Location: ../../index.php");
 	exit;
 }
 
@@ -46,9 +46,9 @@ function renderRow($row)
 	<meta charset="UTF-8">
 	<title>Dashboard Libri</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="<?php echo $root; ?>/css/styleDashboard.css">
-	<link rel="stylesheet" href="<?php echo $root; ?>/css/messaggi.css">
-	<link rel="shortcut icon" href="<?php echo $root; ?>/immagini/bookDashFavicon.png">
+	<link rel="stylesheet" href="../../css/styleDashboardLibri.css">
+	<link rel="stylesheet" href="../../css/messaggi.css">
+	<link rel="shortcut icon" href="../../img/bookDashFavicon.png">
 	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>
 	<script src="aggiornaCopie.js" defer></script>
 </head>
@@ -70,18 +70,23 @@ function renderRow($row)
 			</div>
 		</div>
 
+		<?php if ($_SESSION['utenza'] == 1): ?>
+            <a href="aggiungiLibro.php" class="btn btn_addlibro btn-success">Aggiungi Libro</a>
+        <?php endif; ?>
+
 		<div class="table-responsive">
 			<table class="table table-striped table-hover">
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col">ISBN <button class="sort_btn" data-sort="ISBN">▲</button></th>
-						<th scope="col">Titolo <button class="sort_btn" data-sort="Nome">▲</button></th>
-						<th scope="col">Autore <button class="sort_btn" data-sort="Autore">▲</button></th>
-						<th scope="col">Genere <button class="sort_btn" data-sort="Genere">▲</button></th>
-						<th scope="col">Anno <button class="sort_btn" data-sort="AnnoPubblicazione">▲</button></th>
-						<th scope="col">Casa Editrice <button class="sort_btn" data-sort="CasaEditrice">▲</button></th>
-						<th scope="col">Copie <button class="sort_btn" data-sort="copie">▲</button></th>
-						<th scope="col">Azioni <a href="aggiungiLibro.php" class="btn btn-success btn-sm">Aggiungi</a></th>
+                        <th scope="col">Titolo <button class="sort_btn" data-sort="Nome">▲</button></th>
+                        <th scope="col" class="col-nascondi">Autore <button class="sort_btn" data-sort="Autore">▲</button></th>
+                        <th scope="col" class="col-nascondi">Genere <button class="sort_btn" data-sort="Genere">▲</button></th>
+						<th scope="col" class="col-nascondi">Casa Editrice <button class="sort_btn" data-sort="Genere">▲</button></th>
+                        <th scope="col" class="col-nascondi">Anno <button class="sort_btn" data-sort="AnnoPubblicazione">▲</button></th>
+                        <th scope="col" class="col-nascondi">Copie <button class="sort_btn" data-sort="copie">▲</button></th>
+                        <th scope="col" class="col-nascondi">Azioni </th>
+                        <th scope="col" class="mobile-only">Info</th>
 					</tr>
 				</thead>
 				<tbody id="libriTableBody">
