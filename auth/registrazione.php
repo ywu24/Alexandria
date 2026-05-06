@@ -28,8 +28,8 @@ require_once("../utils/mailer.php");
 // check to see if there is a user already logged in, if so redirect them 
 if (isset($_SESSION['email'])) {
   header("Location: ../index.php");
-  exit;
-} // redirect the user to the home page
+  exit; // redirect the user to the home page
+}
 
 if (isset($_POST['submit'])) {
   if (
@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['codice_scadenza'] = time() + 600; // Valido per 10 minuti (600 secondi)
         $_SESSION['tentativi'] = 3;
         $_SESSION['reinvii'] = 1;
-        
+
         #echo "<p class='successo'>Email mandato all'utente/p>"; // per debug
         #sleep(2);
         header("Location: confermaRegistrazione.php");
@@ -178,12 +178,12 @@ if (isset($_POST['submit'])) {
             <input type="password" name="passwordAgain" placeholder="Conferma la tua password" required />
           </div>
           <input type="submit" class="submit" name="submit" value="Registrami" />
-          <br />
 
+          <a href="login.php" class="login-link">Hai già un account? Accedi qui</a>
 
-          <center>
+          <div style="text-align: center;">
             <h4 class="privacy">Privacy · Termini e Condizioni</h4>
-          </center>
+          </div>
         </form>
       </div>
     </div>

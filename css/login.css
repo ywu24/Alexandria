@@ -103,7 +103,6 @@ a {
   font-size: medium;
   text-decoration: none;
   color: var(--secondary-color);
-  font-weight: bold;
   transition: color 0.2s ease;
 }
 
