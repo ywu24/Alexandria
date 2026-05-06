@@ -7,6 +7,7 @@ body {
   background-repeat: no-repeat;
   background-position: right top;
   background-size: cover;
+  background-attachment: fixed;
 }
 
 .container {
@@ -212,6 +213,11 @@ input:focus {
   position: absolute;
 }
 
+  /* Shift background image more to the left on mobile */
+  body {
+    background-position: 100% center;
+    background-size: cover;
+}
 }
 
 @media screen and (max-width: 600px){
@@ -235,6 +241,12 @@ input:focus {
   bottom: 3%;
   width: 77%;
   position: absolute;
+}
+
+  /* More aggressive left shift for very small screens */
+  body {
+    background-position: 100% center;
+    background-size: cover;
 }
 }
 
@@ -261,12 +273,16 @@ input:focus {
   position: absolute;
 }
 
+  /* Ensure proper left shift on smallest screens */
+  body {
+    background-position: 100% center;
+    background-size: cover;
+}
 }
 
 /**
-
 https://dribbble.com/shots/13938759-Register-Page-Website/attachments/5549893?mode=media
 
 https://www.google.com/search?q=books+t+background+minimalistic&tbm=isch&ved=2ahUKEwi49LPwmoH7AhUipycCHY8yBsAQ2-cCegQIABAA&oq=books+t+background+minimalistic&gs_lcp=CgNpbWcQAzoECCMQJ1C_FVi_FWCtGGgAcAB4AIABZIgBpwGSAQMxLjGYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=0uRaY7jDHqLOnsEPj-WYgAw&bih=748&biw=771&client=firefox-b-d#imgrc=oJV7QUsdYSzw5M
-
 **/
+
