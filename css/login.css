@@ -1,11 +1,13 @@
 * {
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
   background: url("../img/auth_wallpaper.jpg");
   background-repeat: no-repeat;
   background-position: right top;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .container {
@@ -19,13 +21,14 @@ body {
   margin-left: -450px;
   background-color: white;
   position: absolute;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
 }
 
 .container:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .left {
@@ -35,7 +38,7 @@ body {
   width: 50%;
   background-position: right top;
   background-size: cover;
-  border-radius: 10px 0px 0px 10px;
+  border-radius: 0.5rem 0 0 0.5rem;
 }
 
 .right {
@@ -61,20 +64,21 @@ h1 {
   margin-bottom: 50px;
   max-width: 80%;
   font-weight: 800;
+  color: var(--dark-color);
 }
 
 h2 {
   margin: 0;
   padding: 0;
   font-size: medium;
-  color: #2ac32d;
+  color: var(--success-color);
   font-weight: normal;
   max-width: 80%;
 }
 
 h3 {
   font-size: medium;
-  color: rgb(100, 100, 100);
+  color: var(--text-muted);
   max-width: 80%;
   font-weight: 700;
 }
@@ -85,7 +89,7 @@ h4 {
   font-size: 0.75em;
   font-weight: normal;
   font-style: italic;
-  color: rgb(70, 70, 70);
+  color: var(--text-muted);
   max-width: 80%;
 }
 
@@ -98,17 +102,27 @@ h4 {
 a {
   font-size: medium;
   text-decoration: none;
-  color: #4b4b4b;
-  font-weight: bold;
+  color: var(--secondary-color);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--info-color);
 }
 
 input {
   width: 83%;
   outline: 0;
   border-width: 0 0 1.5px;
-  border-color: rgb(200, 200, 200);
-  border-radius: 3px;
+  border-color: var(--border-color);
+  border-radius: 0.25rem;
   padding: 7px;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .field {
@@ -117,9 +131,9 @@ input {
 
 .submit {
   appearance: none;
-  background-color: gray;
+  background-color: var(--secondary-color);
   border: 1px solid rgba(27, 31, 35, 0.15);
-  border-radius: 6px;
+  border-radius: 0.25rem;
   box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
   box-sizing: border-box;
   color: #fff;
@@ -127,7 +141,7 @@ input {
   font-size: 14px;
   font-weight: 600;
   line-height: 20px;
-  padding: 6px 16px;
+  padding: 8px 16px;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -138,10 +152,13 @@ input {
   white-space: nowrap;
   margin-bottom: 30px;
   margin-top: 15px;
+  transition: all 0.3s ease;
 }
 
 .submit:hover {
-  background-color: #595959;
+  background-color: #0069d9;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
 .submit:focus {
@@ -150,7 +167,7 @@ input {
 }
 
 .submit:active {
-  background-color: #4b4b4b;
+  background-color: #0056b3;
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }
 
@@ -195,6 +212,11 @@ input {
   position: absolute;
 }
 
+  /* Shift background image more to the left on mobile */
+  body {
+    background-position: 100% center;
+    background-size: cover;
+}
 }
 
 @media screen and (max-width: 600px){
@@ -218,6 +240,12 @@ input {
   bottom: 3%;
   width: 77%;
   position: absolute;
+}
+
+  /* More aggressive left shift for very small screens */
+  body {
+    background-position: 100% center;
+    background-size: cover;
 }
 }
 
@@ -244,12 +272,16 @@ input {
   position: absolute;
 }
 
+  /* Ensure proper left shift on smallest screens */
+  body {
+    background-position: 100% center;
+    background-size: cover;
+}
 }
 
 /**
-
 https://dribbble.com/shots/13938759-Register-Page-Website/attachments/5549893?mode=media
 
 https://www.google.com/search?q=books+t+background+minimalistic&tbm=isch&ved=2ahUKEwi49LPwmoH7AhUipycCHY8yBsAQ2-cCegQIABAA&oq=books+t+background+minimalistic&gs_lcp=CgNpbWcQAzoECCMQJ1C_FVi_FWCtGGgAcAB4AIABZIgBpwGSAQMxLjGYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=0uRaY7jDHqLOnsEPj-WYgAw&bih=748&biw=771&client=firefox-b-d#imgrc=oJV7QUsdYSzw5M
-
 **/
+

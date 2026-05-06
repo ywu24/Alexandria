@@ -29,8 +29,8 @@ if(isset($_SESSION['utenza'])){
     <title>Alexandria's Library</title>
     
     <!-- Bootstrap per classi di utilità su titoli e bottoni -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/prenotazione.css">
     <link rel="stylesheet" href="../css/dettaglioUtenti.css">
     <link rel="stylesheet" href="../css/popup.css">
@@ -38,7 +38,7 @@ if(isset($_SESSION['utenza'])){
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/messaggi.css">
 
-    <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="prenotazione.js"></script>
 </head>
 
@@ -132,17 +132,20 @@ if(isset($_SESSION['utenza'])){
                     $numero_prenotazioni++;
                     echo "
                 <div class='book-container'>
-                    <div class='book-link'>
-                        <img src='../img/books/" . $row['Copertina'] . "' alt='' class='book-cover' width='160px'>
+                    <div class='book-wrapper'>
+                        <img src='../img/books/" . $row['Copertina'] . "' alt='' class='book-cover'>
                         <div class='book-section'>
-                            <div class='info-title'><h3 class='trunctitle'>" . $row['Nome'] . "</h3> <h6>ISBN: " . $row['ISBN'] . "</h6></div>
-                            <div class='info-release'>
-                                <h5>" . $row['Autore'] . "</h5>
-                                <h5>" . $row['CasaEditrice'] . "</h5>
-                                <h5>Stato:</h5> 
-                                <h5 class='status' style='color: $color'>" . $stato . "</h5>
+                            <div class='info-title'>
+                                <h3>" . $row['Nome'] . "</h3>
+                                <span class='isbn-label'>ISBN: " . $row['ISBN'] . "</span>
                             </div>
-                            
+                            <div class='info-meta'>
+                                <span>" . $row['Autore'] . "</span> |
+                                <span>" . $row['CasaEditrice'] . "</span>
+                            </div>
+                            <div class='info-status'>
+                                Stato: <span class='status' style='color: $color'>" . $stato . "</span>
+                            </div>
                             <div class='book-dates'>
                                 <span>Inizio: " . $inizio . "</span><br>
                                 <span>Fine: " . $fine . "</span>
@@ -151,7 +154,7 @@ if(isset($_SESSION['utenza'])){
                     if ($stato == "Prenotato") {
                         echo "
                         <button class='delete-button' data-id ='" . $row['idPrenotazione'] . "' name='delete'>
-                            <img src='../img/trash-bin.png' alt='' class='icon1' style='position: relative' width='24px'>
+                            <img src='../img/trash-bin.png' alt='' class='icon-trash'>
                         </button>";
                     }
 

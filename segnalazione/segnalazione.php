@@ -171,6 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Feedback Utente | Supporto</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/unified.css">
   <link rel="stylesheet" href="../css/nav.css">
   <link rel="stylesheet" href="../css/segnalazione.css">
   <link rel="stylesheet" href="../css/messaggi.css">

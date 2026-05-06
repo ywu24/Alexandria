@@ -19,11 +19,11 @@ require_once("utils/connect.php");
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/unified.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/hover.css">
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/messaggi.css">
-    <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>HomePage - Alexandria </title>
 </head>

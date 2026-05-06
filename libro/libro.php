@@ -86,6 +86,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
     <meta name="viewport" content="width=device-width, user-scalable=no,
     initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <title>Alexandria's Library </title>
+    <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/libro.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
@@ -93,7 +94,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
     <link rel="stylesheet" href="../css/messaggi.css">
 
     <!--script per importare parti di codice-->
-    <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./libro.js" defer></script>
 </head>
 

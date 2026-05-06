@@ -58,7 +58,7 @@ if ($error === -1 && isset($_POST['submit'])) {
       header("Location: login.php");
       exit;
     }
-    
+
   } catch (Exception $e) {
     error_log('[login.php] Query failed: ' . $e->getMessage());
     $_SESSION['login_error'] = ['type' => 1, 'msg' => 'Something went wrong, please try again later'];
@@ -82,13 +82,14 @@ if (isset($_SESSION['login_error'])) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Accedi</title>
+  <link rel="stylesheet" href="../css/unified.css" />
   <link rel="stylesheet" href="../css/login.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
     rel="stylesheet" />
-    <script src="login.js"></script>
+  <script src="login.js"></script>
 </head>
 
 <body>
@@ -127,12 +128,12 @@ if (isset($_SESSION['login_error'])) {
           <br />
 
           <?php
-          echo "<h2>$message</h2>";
+          echo $message;
           ?>
 
-          <center>
+          <div style="text-align: center;">
             <h4 class="privacy">Privacy · Termini e Condizioni</h4>
-          </center>
+          </div>
         </form>
       </div>
     </div>
