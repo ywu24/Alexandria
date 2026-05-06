@@ -29,8 +29,8 @@ if(isset($_SESSION['utenza'])){
     <title>Alexandria's Library</title>
     
     <!-- Bootstrap per classi di utilità su titoli e bottoni -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/prenotazione.css">
     <link rel="stylesheet" href="../css/dettaglioUtenti.css">
     <link rel="stylesheet" href="../css/popup.css">
@@ -38,7 +38,7 @@ if(isset($_SESSION['utenza'])){
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/messaggi.css">
 
-    <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="prenotazione.js"></script>
 </head>
 

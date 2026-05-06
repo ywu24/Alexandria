@@ -1,18 +1,19 @@
-* {
-  font-family: "Roboto", sans-serif;
+* {  
+  font-family: "Poppins", sans-serif;
 }
 
 html{
   scroll-behavior: smooth;
 }
 
-body {
+body {  
   background: url("../img/auth_wallpaper.jpg");
   background-repeat: no-repeat;
   background-position: right top;
+  background-size: cover;
 }
 
-.container {
+.container {  
   height: 650px;
   width: 900px;
   align-items: center;
@@ -23,26 +24,27 @@ body {
   margin-left: -450px;
   background-color: white;
   position: absolute;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
 }
 
-.container:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
+.container:hover {  
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
-.left {
+.left {  
   background: url("../img/auth_wallpaper.jpg");
   background-repeat: no-repeat;
   height: 100%;
   width: 50%;
   background-position: right top;
   background-size: cover;
-  border-radius: 10px 0px 0px 10px;
+  border-radius: 0.5rem 0 0 0.5rem;
 }
 
-.right {
+.right {  
   height: 100%;
   width: 50%;
   position: absolute;
@@ -50,7 +52,7 @@ body {
   top: 0%;
 }
 
-.right-content {
+.right-content {  
   width: 90%;
   height: 90%;
   position: absolute;
@@ -58,63 +60,76 @@ body {
   top: 2.5%;
 }
 
-h1 {
+h1 {  
   font-size: 26px;
   margin-bottom: 25px;
   max-width: 80%;
+  color: var(--dark-color);
 }
 
-h2 {
+h2 {  
   margin: 0;
   padding: 0;
   font-size: 0.9em;
-  color: #2ac32d;
+  color: var(--success-color);
   font-weight: normal;
   max-width: 80%;
 }
 
-h3 {
+h3 {  
   font-size: medium;
-  color: rgb(100, 100, 100);
+  color: var(--text-muted);
   max-width: 80%;
+  font-weight: 600;
 }
 
-h4 {
+h4 {  
   padding-top: 0;
   margin-top: 10px;
   font-size: 0.75em;
   font-weight: normal;
   font-style: italic;
-  color: rgb(70, 70, 70);
+  color: var(--text-muted);
   max-width: 80%;
 }
 
-.privacy {
+.privacy {  
   bottom: -8.5%;
   width: 100%;
   position:absolute;
 }
 
-a {
+a {  
   font-size: medium;
   text-decoration: none;
-  color: #4b4b4b;
+  color: var(--secondary-color);
   font-weight: bold;
+  transition: color 0.2s ease;
 }
 
-input {
+a:hover {
+  color: var(--info-color);
+}
+
+input {  
   width: 83%;
   outline: 0;
   border-width: 0 0 1.5px;
-  border-color: rgb(200, 200, 200);
+  border-color: var(--border-color);
   padding-bottom: 7px;
+  transition: all 0.2s ease;
 }
 
-.submit {
+input:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.submit {  
   appearance: none;
-  background-color: gray;
+  background-color: var(--secondary-color);
   border: 1px solid rgba(27, 31, 35, 0.15);
-  border-radius: 6px;
+  border-radius: 0.25rem;
   box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
   box-sizing: border-box;
   color: #fff;
@@ -122,7 +137,7 @@ input {
   font-size: 14px;
   font-weight: 600;
   line-height: 20px;
-  padding: 6px 16px;
+  padding: 8px 16px;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -133,23 +148,26 @@ input {
   white-space: nowrap;
   margin-bottom: 25px;
   margin-top: 25px;
+  transition: all 0.3s ease;
 }
 
-.submit:hover {
-  background-color: #595959;
+.submit:hover {  
+  background-color: #0069d9;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
-.submit:focus {
+.submit:focus {  
   box-shadow: rgba(108, 108, 108, 0.7) 0 0 0 2px;
   outline: none;
 }
 
-.submit:active {
-  background-color: #4b4b4b;
+.submit:active {  
+  background-color: #0056b3;
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }
 
-.submit:focus:not(:focus-visible):not(.focus-visible) {
+.submit:focus:not(:focus-visible):not(.focus-visible) {  
   box-shadow: none;
   outline: none;
 }

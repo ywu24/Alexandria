@@ -46,10 +46,11 @@ function renderRow($row)
 	<meta charset="UTF-8">
 	<title>Dashboard Libri</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="<?php echo $root; ?>/css/unified.css">
 	<link rel="stylesheet" href="<?php echo $root; ?>/css/styleDashboard.css">
 	<link rel="stylesheet" href="<?php echo $root; ?>/css/messaggi.css">
 	<link rel="shortcut icon" href="<?php echo $root; ?>/immagini/bookDashFavicon.png">
-	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="aggiornaCopie.js" defer></script>
 </head>
 

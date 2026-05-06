@@ -1,4 +1,5 @@
 @import url(../css/colors.css);
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root{
     --text: #232323;
@@ -172,7 +173,7 @@
 .user-info .truncname{
     font-weight: 600;
     font-size: 1rem;
-    font-family: 'Poppins', sans-serif !important;
+    font-family: var(--font-family-base) !important;
 }
 
 .user-info img{
@@ -185,6 +186,7 @@
 
 .user-info h3 {
     margin: 0;
+    font-weight: 600 !important;
 }
 
 .user-info h4 {
@@ -210,7 +212,7 @@
 
 .sub-menu-link p{
     width: 100%;
-    font-family: 'Poppins', sans-serif !important;
+    font-family: var(--font-family-base) !important;
     font-size: 15px;
     color: var(--sectiontext);
     font-weight: 600;
@@ -226,7 +228,7 @@
 
 .sub-menu-link span{
     font-size: 15px;
-    font-family: 'Poppins', sans-serif !important;
+    font-family: var(--font-family-base) !important;
     transition: transform 0.2s;
     color: var(--sectiontext);
     font-weight: 700;
@@ -333,10 +335,6 @@ p.logoutform{
         z-index: 3;
     }
 
-    
-
-    
-
     .nav1 form input[type="search"]{
         border: none !important;
         background: transparent !important;
@@ -372,7 +370,7 @@ p.logoutform{
 
     .sub-menu-link p{
         width: 100%;
-        font-family: 'Poppins', sans-serif !important;
+        font-family: var(--font-family-base) !important;
         font-size: 15px;
         color: var(--sectiontext);
         font-weight: 600;

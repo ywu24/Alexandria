@@ -127,6 +127,7 @@ try {
     <title>Alexandria's Library</title>
     <!-- Bootstrap per layout e utilità, ma manteniamo i CSS originali per la lista -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/lista.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
@@ -269,7 +270,7 @@ try {
                     ?>
 
                     <div class="center" style="margin-top: 30px; display: flex; justify-content: center;">
-                        <div class="pagination shadow-sm">
+                        <div class="pagination">
                             <?php echo $paginationCtrls; ?>
                         </div>
                     </div>

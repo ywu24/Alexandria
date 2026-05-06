@@ -30,11 +30,12 @@ $orderBy = "idPrenotazione DESC";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alexandria's Library - Gestione Prenotazioni</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/unified.css">
     <link rel="stylesheet" href="../../css/styleDashboard.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/messaggi.css">
-    <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="prenotazioneAdmin.js"></script>
     <style>
         .clickable-row { cursor: pointer; }
