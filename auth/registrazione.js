@@ -30,18 +30,30 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = form.querySelector('input[name="password"]').value;
         const passwordAgain = form.querySelector('input[name="passwordAgain"]').value;
 
-        // Confronto
+        // 1. Controllo Robustezza: Lunghezza minima e Carattere Speciale
+        const specialChars = /[!#$.,:;()@%^\-&_+=[\]|\\/<>?~`]/;
+
+        if (password.length < 8 || !specialChars.test(password)) {
+            showMessage("La password deve essere di almeno 8 caratteri e contenere almeno un carattere speciale.", "errore");
+            e.preventDefault();
+            return;
+        }
+
+        // 2. Controllo Corrispondenza
         if (password !== passwordAgain) {
             // Blocchiamo l'invio del form al PHP
-            e.preventDefault();
-
             showMessage("Le password inserite non coincidono. Riprova.", "errore");
 
-            //puliamo i campi password per sicurezza
+            // Puliamo i campi password per sicurezza
             form.querySelector('input[name="password"]').value = "";
             form.querySelector('input[name="passwordAgain"]').value = "";
             form.querySelector('input[name="password"]').focus();
+            e.preventDefault();
+            return;
         }
+
+        
+
     });
 });
 function showMessage(text, type = "successo") {

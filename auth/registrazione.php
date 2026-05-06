@@ -133,7 +133,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-  <div class="messages">
+  <div id="messages">
     <?php
     if (isset($_SESSION['success_msg'])) {
       echo "<p class='successo'>" . $_SESSION['success_msg'] . "</p>";
