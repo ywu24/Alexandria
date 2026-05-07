@@ -65,14 +65,14 @@ if (isset($_GET['errore'])) {
                             <th scope="col" class='col-nascondi'>Ruolo<button class="sort_btn" data-sort="Utenza">&ensp; &#x25B2;</button></th>
                             <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
                             <th scope="col" class='col-nascondi'>Azioni</th>
-                            <th scope="col" class="mobile-only mobile-toggle-col">Info<button class="sort_btn" data-sort="Info">&ensp; &#x25B2;</button></th>
+                            <th scope="col" class="mobile-only mobile-toggle-col">Info</th>
                         <?php else: ?>
                             <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&ensp; &#x25B2;</button></th>
                             <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&ensp; &#x25B2;</button></th>
                             <th scope="col" class='col-nascondi'>Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
                             <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
                             <th scope="col" class="col-nascondi text-center">Azioni</th>
-                            <th scope="col" class="mobile-only mobile-toggle-col">Info<button class="sort_btn" data-sort="Info">&ensp; &#x25B2;</button></th>
+                            <th scope="col" class="mobile-only mobile-toggle-col">Info</th>
                         <?php endif; ?>
                     </tr>
                 </thead>
