@@ -26,8 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
         isFetching = true;
         if(spinner) spinner.classList.remove('d-none'); 
 
-        const currentPath = window.location.pathname; 
-        const fetchUrl = `${currentPath}?id=${bookId}&ajax_reviews=1&offset=${offset}`;
+        const fetchUrl = `?id=${bookId}&ajax_reviews=1&offset=${offset}`;
 
         fetch(fetchUrl)
             .then(response => response.text())
