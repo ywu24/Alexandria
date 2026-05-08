@@ -12,15 +12,7 @@ if (isset($_POST['logout'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo $root; ?>/css/nav.css">
-</head>
-
-<body style="background:#ffffff !important;">
+<link rel="stylesheet" href="<?php echo $root; ?>/css/nav.css">
 
 <nav class="nav1">
 
@@ -86,6 +78,7 @@ if (isset($_SESSION['email'])) {
             <a href='#'></a>
             <img src='" . $root . "/img/account.png' class='icon' onclick='toggleMenu()'>
         </li>
+    </ul>
 
         <div class='sub-menu-wrap' id='subMenu'>
             <div class='sub-menu'>
@@ -141,10 +134,8 @@ if (isset($_SESSION['email'])) {
                         </button>
                     </form>
                 </a>
-
             </div>
         </div>
-    </ul>
     </nav>";
 
 } else {
@@ -161,6 +152,8 @@ if (isset($_SESSION['email'])) {
         <li>
             <img src='" . $root . "/img/account.png' class='icon' onclick='toggleMenu()'>
         </li>
+
+    </ul>
 
         <div class='sub-menu-wrap' id='subMenu'>
             <div class='sub-menu'>
@@ -179,7 +172,7 @@ if (isset($_SESSION['email'])) {
 
             </div>
         </div>
-    </ul>
+    
     </nav>";
 }
 
@@ -192,7 +185,3 @@ function toggleMenu() {
     subMenu.classList.toggle("open-menu");
 }
 </script>
-
-
-</body>
-</html>
