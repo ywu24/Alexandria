@@ -1,10 +1,24 @@
+.pop-up {
+  max-width: 35ch;
+  min-width: 27ch;
+  margin: auto; /* Center the item vertically & horizontally */
+  position: absolute; /* Break it out of the regular flow */
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; /* Set the bounds in which to center it, relative to its parent/container */
+  border: 0px solid;
+  border-radius: 17px;
+  padding: 15px 30px;
+}
+
 .pop-up::backdrop {
   background: rgb(0 0 0 / 0.4);
 }
 
 .pop-up form {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .pop-up button {
@@ -15,6 +29,7 @@
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  margin: 10px 10px 0px 10px;
 }
 
 .pop-up h4 {
@@ -24,7 +39,7 @@
 .prenotation-info {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .prenotation-info span {

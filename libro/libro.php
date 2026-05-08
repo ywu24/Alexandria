@@ -47,7 +47,8 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                     <div class="user-info">
                         <div class="user-avatar">
                             <?php if (!empty($row['propic']) && file_exists("../img/users/" . $row['propic'])): ?>
-                                <img src="../img/users/<?php echo $row['propic']; ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                <img src="../img/users/<?php echo $row['propic']; ?>" alt="Avatar"
+                                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                             <?php else: ?>
                                 <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
                             <?php endif; ?>
@@ -363,12 +364,12 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                </div>";
             ?>
 
-                <hr class="my-5">
-                <section class="container-fluid mb-5 fluid">
-                    <div class="row">
-                        <div class="col-12 mb-4">
-                            <h2 class="fw-bold">Recensioni degli utenti</h2>
-                        </div>
+            <hr class="my-5">
+            <section class="container-fluid mb-5 fluid">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <h2 class="fw-bold">Recensioni degli utenti</h2>
+                    </div>
 
                     <div class="col-lg-12">
                         <?php
@@ -385,12 +386,12 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                             $stmt_commenti->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt_commenti->execute();
 
-                                $recensioni = $stmt_commenti->fetchAll(PDO::FETCH_ASSOC);
+                            $recensioni = $stmt_commenti->fetchAll(PDO::FETCH_ASSOC);
 
                             if (count($recensioni) > 0) {
                                 // Aggiunto data-book-id e id container per JS
-                                echo '<div class="review-feed" id="reviews-container" data-book-id="' . $book_id . '">'; 
-                    
+                                echo '<div class="review-feed" id="reviews-container" data-book-id="' . $book_id . '">';
+
                                 foreach ($recensioni as $row) {
                                     $voto = (int) $row['Voto'];
                                     ?>
@@ -399,7 +400,8 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                             <div class="user-info">
                                                 <div class="user-avatar">
                                                     <?php if (!empty($row['propic']) && file_exists("../img/users/" . $row['propic'])): ?>
-                                                        <img src="../img/users/<?php echo $row['propic']; ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                                        <img src="../img/users/<?php echo $row['propic']; ?>" alt="Avatar"
+                                                            style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                                                     <?php else: ?>
                                                         <?php echo strtoupper(substr($row['userEmail'], 0, 1)); ?>
                                                     <?php endif; ?>
@@ -427,28 +429,28 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                     </div>';
 
                                 echo '</div>';
-                                
+
                             } else {
                                 echo "
                                 <div class='text-center py-5 border rounded bg-light'>
                                     <h5 class='text-muted'>Non ci sono ancora recensioni.</h5>
                                     <p>Sii il primo a condividere la tua opinione!</p>
                                 </div>";
-                                }
-
-                                $stmt_commenti->closeCursor();
-
-                            } catch (PDOException $e) {
-                                echo "<div class='alert alert-danger'>Errore nel caricamento delle recensioni: " . $e->getMessage() . "</div>";
                             }
-                            ?>
-                        </div>
+
+                            $stmt_commenti->closeCursor();
+
+                        } catch (PDOException $e) {
+                            echo "<div class='alert alert-danger'>Errore nel caricamento delle recensioni: " . $e->getMessage() . "</div>";
+                        }
+                        ?>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                </main>
+            </main>
 
-                <?php
+            <?php
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             exit;
@@ -485,11 +487,12 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                 <center><span id='sliderValue'>1</span></center>";
                 }
                 ?>
-            </div>
 
-            <button class="button close-button">no</button>
-            <button class='button' type='submit' name='prenota'>si</button>
-            </form>
+
+                <button class="button close-button">no</button>
+                <button class='button' type='submit' name='prenota'>si</button>
+                </form>
+            </div>
         </dialog>
 
         <script>
