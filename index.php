@@ -30,9 +30,10 @@ require_once("utils/connect.php");
 
 <body>
     <script src="homepage.js"></script>
-    <?php
-    $root = '.';
-    require_once("nav/nav.php"); ?>
+    
+    <div id="nav-placeholder">
+        <?php require_once("nav/nav.php"); ?>
+    </div>
     
     <div id="messages">
         <?php

@@ -11,14 +11,11 @@
     color: inherit;
 }   
 
-/* Reset link nei bottoni */
-:any-link {
-    color: white;
+/* Stili mirati solo per i link all'interno della dashboard o bottoni, senza colpire la navbar */
+.table-responsive a, .btn_addlibro {
     text-decoration: none;
 }
-
-:any-link:hover {
-    color: white;
+.table-responsive a:hover, .btn_addlibro:hover {
     text-decoration: none;
 }
 
@@ -29,25 +26,37 @@ body {
 
 .container-fluid {
     width: 93% !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .searchbar {
-	margin-top: 30px;
-	margin-bottom: 30px;
+    margin-top: 10px !important;
+    margin-bottom: 20px !important;
+    flex-grow: 1;
 }
 
-/* Reset margini Bootstrap */
-dl, ol, ul, p {
+#searchBtn {
+    margin-top: 10px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Riduce il margine del div contenitore (che ha la classe mb-4 di Bootstrap) */
+.container-fluid > .d-flex.mb-4 {
+    margin-bottom: 0.1rem !important; /* Ridotto da 1.5rem (24px) a 0.1rem */
+}
+
+/* CORRETTO: Reset margini limitato per non rompere il flexbox della navbar */
+.table-responsive p, .table-responsive dl, .table-responsive ul, .table-responsive ol {
     margin-top: 0;
     margin-bottom: 0 !important;
+    /* Rimosso flex-grow: 1 che distruggeva l'impaginazione della nav */
 }
 
 /* Pulsanti di ordinamento nelle tabelle */
 .sort_btn {
-	color: white;
-	background-color: transparent;
-	border: none;
-	/* text-decoration: bold; */
+    color: white;
+    background-color: transparent;
+    border: none;
 }
 
 /* Posizionamento fisso tasto Aggiungi Libro */
@@ -66,7 +75,7 @@ dl, ol, ul, p {
 }
 
 /* 1. Desktop: nascondi colonna mobile */
-@media (min-width: 1101px) {
+@media (min-width: 1121px) {
     .mobile-only { display: none !important; }
     .riga-mobile-info {
         display: none !important;
@@ -74,7 +83,7 @@ dl, ol, ul, p {
 }
 
 /* 2. Tablet/Smartphone: nascondi colonne extra e mostra tasto espandi */
-@media (max-width: 1100px) {
+@media (max-width: 1120px) {
 
     .riga-mobile-info {
         display: table-row;
@@ -119,10 +128,22 @@ dl, ol, ul, p {
 
     /* Riduciamo i margini della barra di ricerca per recuperare spazio in verticale */
     .searchbar {
-        width: 100% !important; /* L'input di ricerca prende tutta la larghezza */
+        width: 100% !important;
         margin-right: 0 !important;
         margin-bottom: 8px !important;
         margin-top: 20px !important;
+    }
+    
+    #searchBtn {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-bottom: 0px !important;
+        margin-top: 0 !important;
+    }
+
+    /* Riduce il margine del div contenitore (che ha la classe mb-4 di Bootstrap) */
+    .container-fluid > .d-flex.mb-4 {
+        margin-bottom: 0.5rem !important; /* Ridotto da 1.5rem (24px) a 0.5rem (8px) */
     }
 
     /* Sposta il tasto Aggiungi Libro per non sovrapporsi */
@@ -130,29 +151,90 @@ dl, ol, ul, p {
         position: absolute !important;
         top: 80px;
         right: 20px;
-        z-index: 10000; /* Sopra a tutto */
+        z-index: 10000;
         display: block !important;
     }
 
     .btn_modifica {
         display: block;
         width: 100%;
-        margin-bottom: 8px; /* Spazio tra Modifica ed Elimina */
+        margin-bottom: 8px;
     }
 
 }
 
 /* Smartphone Small */
 @media (max-width: 480px) {
-    .container-fluid { padding: 0 10px !important; }
+    /* Trasformiamo il contenitore in una colonna flessibile per riordinare gli elementi */
+    .container-fluid { 
+        padding: 0 10px !important; 
+        display: flex;
+        flex-direction: column;
+    }
     
-    /* Riduce leggermente il font per ISBN/Titolo */
+    /* 1. L'emoji del libro resta in cima */
+    .container-fluid > h1 {
+        order: 1;
+    }
+
+    /* 2. Il tasto Aggiungi Libro si posiziona subito sotto */
+    .btn_addlibro {
+        position: static !important; 
+        order: 2;
+        width: 100%; 
+        margin-bottom: 15px; 
+        text-align: center;
+        transition: none !important; /* Blocca strane animazioni di spostamento */
+    }
+
+    /* 3. La barra di ricerca finisce sotto il tasto Aggiungi Libro */
+    .container-fluid > .d-flex.mb-4 {
+        order: 3;
+        width: 100% !important; /* Forza il contenitore a prendere tutta la larghezza */
+        margin-bottom: 15px !important;
+    }
+
+    /* Regole per allargare il form interno (sia per i Libri che per Utenti) */
+    .container-fluid > .d-flex.mb-4 .form-inline,
+    form#filtriForm {
+        order: 3;
+        width: 100% !important;
+        display: flex;
+        flex-direction: column; /* Impila la barra di ricerca e il tasto Cerca */
+    }
+    
+    /* Allarga al massimo l'input di testo */
+    .form-inline .searchbar,
+    form#filtriForm .searchbar {
+        width: 100% !important;
+        margin-right: 0 !important;
+        margin-bottom: 10px !important;
+    }
+    
+    /* Allarga al massimo il bottone Cerca */
+    .form-inline #searchBtn,
+    form#filtriForm #searchBtn {
+        width: 100% !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* 4. La tabella */
+    .table-responsive {
+        order: 4;
+    }
+
+    /* 5. Il contenitore del tasto Carica Altro in fondo */
+    .container-fluid > .text-center.my-4 {
+        order: 5;
+    }
+
+    /* Riduce leggermente il font per ISBN/Titolo per farli entrare meglio */
     .table td, .table th {
         font-size: 0.85rem;
     }
 }
 
-/* Classi per messaggi (da messaggi.css, assicurate qui per sicurezza) */
+/* Classi per messaggi */
 p.errore, p.successo {
     padding: 10px;
     border-radius: 5px;

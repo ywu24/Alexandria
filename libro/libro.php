@@ -432,7 +432,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
 
                             } else {
                                 echo "
-                                <div class='text-center py-5 border rounded bg-light'>
+                                <div class='no-reviews-container text-center py-5 border rounded bg-light'>
                                     <h5 class='text-muted'>Non ci sono ancora recensioni.</h5>
                                     <p>Sii il primo a condividere la tua opinione!</p>
                                 </div>";

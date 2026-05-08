@@ -48,6 +48,7 @@ function renderRow($row)
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/unified.css">
 	<link rel="stylesheet" href="../../css/styleDashboardLibri.css">
+	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/messaggi.css">
 	<link rel="shortcut icon" href="../../img/bookDashFavicon.png">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -56,7 +57,9 @@ function renderRow($row)
 </head>
 
 <body>
-	<?php require_once("../../nav/nav.php"); ?>
+	<div id="nav-placeholder">
+		<?php require_once("../../nav/nav.php"); ?>
+	</div>
 
 	<div id="messages"></div>
 
@@ -84,8 +87,8 @@ function renderRow($row)
                         <th scope="col">Titolo <button class="sort_btn" data-sort="Nome">▲</button></th>
                         <th scope="col" class="col-nascondi">Autore <button class="sort_btn" data-sort="Autore">▲</button></th>
                         <th scope="col" class="col-nascondi">Genere <button class="sort_btn" data-sort="Genere">▲</button></th>
-						<th scope="col" class="col-nascondi">Casa Editrice <button class="sort_btn" data-sort="Genere">▲</button></th>
                         <th scope="col" class="col-nascondi">Anno <button class="sort_btn" data-sort="AnnoPubblicazione">▲</button></th>
+						<th scope="col" class="col-nascondi">Casa Editrice <button class="sort_btn" data-sort="Genere">▲</button></th>
                         <th scope="col" class="col-nascondi">Copie <button class="sort_btn" data-sort="copie">▲</button></th>
                         <th scope="col" class="col-nascondi">Azioni </th>
                         <th scope="col" class="mobile-only">Info</th>

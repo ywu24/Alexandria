@@ -75,6 +75,7 @@ if (isset($_SESSION['email'])) {
                     <li class ='li-icon'>
                         <a href='" . $root . "/dashboard/dashboard.php'>
                         <img src='" . $root . "/img/dashboard.svg' class='icon svg'>
+                        </a>
                     </li>
 
                 ";

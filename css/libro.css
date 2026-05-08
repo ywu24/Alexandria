@@ -48,7 +48,7 @@ body {
         margin-top: auto; /* Forza i pulsanti in fondo alla colonna */
         display: flex;
         gap: 15px;
-        padding-top: 20px;
+        padding-top: 5px;
         transform: translateY(-8px);
     }
 }
@@ -56,10 +56,10 @@ body {
 /* --- INFO LIBRO --- */
 .info-title { display: flex; flex-direction: row; }
 .info-title h1 { font-weight: 600; font-size: 1.5rem; margin: 0; }
-.info-title h6 { font-style: oblique; font-weight: lighter; align-self: center; margin-left: 1pc; }
+.info-title h6 { font-style: oblique; font-weight: lighter; align-self: flex-end; margin-left: 1pc; }
 
-.info-release { display: flex; flex-direction: row; flex-wrap: wrap; margin-bottom: 10px; }
-.info-release h5 { font-weight: 400; font-style: oblique; margin: 0 10px 15px 0; }
+.info-release { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; margin-bottom: 10px; gap: 10px;}
+.info-release h5 { font-weight: 400; font-style: oblique; margin: 0; }
 
 .status-container { display: flex; flex-direction: row; align-items: center; }
 .status-container h5 { margin: 0 5px !important; }
@@ -186,6 +186,11 @@ h2.fw-bold {
 .right-column button:hover { background-color: var(--button-hover); }
 .prenotazioneDisabled { opacity: 0.3; cursor: not-allowed; }
 
+.no-reviews-container {
+    max-width: 70%;
+    margin: auto;
+}
+
 /* --- MOBILE (Sotto 768px) --- */
 @media (max-width: 768px) {
     .container{ 
@@ -265,8 +270,8 @@ h2.fw-bold {
 
     .status-container {
         justify-content: center;
-        width: 100%;
-        margin-top: 5px;
+        width: auto;
+        margin-top: 0;
     }
 
     /* Alziamo il titolo recensioni anche su mobile */
@@ -298,6 +303,11 @@ h2.fw-bold {
 
     .user-info {
         flex-direction: column;
+    }
+
+    .no-reviews-container {
+        max-width: 100%; /* Su mobile è meglio fargli prendere tutto lo spazio */
+        padding: 20px 15px !important;
     }
 
 }

@@ -100,8 +100,8 @@ document.addEventListener("click", async (e) => {
                         <ul class="list-unstyled mb-0 text-left">
                             <li class="mb-1"><strong>Autore:</strong> ${autore}</li>
                             <li class="mb-1"><strong>Genere:</strong> ${genere}</li>
-                            <li class="mb-1"><strong>Casa Editrice:</strong> ${casa}</li>
                             <li class="mb-1"><strong>Anno:</strong> ${anno}</li>
+                            <li class="mb-1"><strong>Casa Editrice:</strong> ${casa}</li>
                             <li class="mb-2 mt-3 p-2 bg-white border rounded d-flex align-items-center justify-content-between">
                                 <strong>Copie:</strong>
                                 <div>${copie}</div>

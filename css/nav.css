@@ -17,12 +17,25 @@
 }
 
 /* BOOTSTRAP: Reset forzato per il contenitore della nav */
-#nav-placeholder,
-#nav-placeholder * {
+/* 1. Blocca il contenitore padre per ignorare il layout esterno */
+#nav-placeholder {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important; /* Impedisce che un contenitore flex lo schiacci */
+    align-self: flex-start !important; /* Neutralizza un eventuale align-items: stretch del body */
+}
+
+/* 2. Reset a cascata per tutti gli elementi interni */
+#nav-placeholder *,
+.nav1 * {
     box-sizing: border-box !important;
     line-height: normal !important;
 }
 
+/* 3. Protezione specifica per liste, testi e link */
 #nav-placeholder ul,
 #nav-placeholder p,
 #nav-placeholder form {
@@ -33,6 +46,15 @@
 
 #nav-placeholder a {
     text-decoration: none !important;
+    color: inherit;
+}
+
+/* 4. Blinda immagini icone */
+#nav-placeholder img,
+.nav1 img,
+.nav1 svg {
+    align-self: center !important; /* Risolve il problema dello spostamento in alto */
+    vertical-align: middle !important;
 }
 
 .nav1{
