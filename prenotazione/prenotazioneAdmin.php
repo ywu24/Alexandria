@@ -107,7 +107,7 @@ function calcolaStatoPHP($row) {
             <div class="book-container shadow-sm" id="container-prenotazione-<?= $id ?>">
                 <div class="row no-gutters">
                     <div class="col-md-6 left-panel">
-                        <div class="media">
+                        <div class="media" style="margin-left: 5%;">
                             <img src="../img/books/<?= $row['Copertina'] ?>" class="mr-4 shadow-sm" width="110" style="border-radius:5px">
                             <div class="media-body">
                                 <h3 class="h5 font-weight-bold" style="margin:0;"><?= htmlspecialchars($row['Nome']) ?></h3>
