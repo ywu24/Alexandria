@@ -31,7 +31,7 @@ if (isset($_GET['error'])) {
 	<div id="nav-placeholder">
 		<?php
 		$root = "../../";
-		require_once '../../nav/nav.php';
+		require_once('../../nav/nav.php');
 		?>
 	</div>
 	<div class="container">

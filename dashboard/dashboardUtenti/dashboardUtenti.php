@@ -28,14 +28,13 @@ if (isset($_GET['errore'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../css/unified.css">
     <link rel="stylesheet" href="../../css/styleDashboard.css">
-    <link rel="stylesheet" href="../../css/nav.css">
     <link rel="stylesheet" href="../../css/colors.css">
     <link rel="stylesheet" href="../../css/messaggi.css">
     <link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">
 </head>
 <body>
     <div id="nav-placeholder">
-        <?php require_once '../../nav/nav.php'; ?>
+        <?php require_once('../../nav/nav.php'); ?>
     </div>
 
     <div class="container-fluid">

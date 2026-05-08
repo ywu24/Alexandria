@@ -30,7 +30,6 @@ if (isset($_SESSION['libroEsiste'])) {
 	<title>Aggiungi Libro | Dashboard</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/styleDashboard.css">
-	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/aggiungiLibro.css">
 	<style>
 

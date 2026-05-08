@@ -172,7 +172,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>Feedback Utente | Supporto</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/unified.css">
-  <link rel="stylesheet" href="../css/nav.css">
   <link rel="stylesheet" href="../css/segnalazione.css">
   <link rel="stylesheet" href="../css/messaggi.css">
   <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">

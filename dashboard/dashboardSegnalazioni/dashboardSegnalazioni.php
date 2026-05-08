@@ -18,7 +18,6 @@ require_once("../../utils/connect.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Segnalazioni - Alexandria's Library</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/nav.css">
     <link rel="stylesheet" href="../../css/colors.css">
     <link rel="stylesheet" href="../../css/messaggi.css">
     <link rel="stylesheet" href="../../css/dashboardSegnalazioni.css">

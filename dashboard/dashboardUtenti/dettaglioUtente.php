@@ -26,7 +26,6 @@ if ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2) {
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../../css/colors.css">
 	<link rel="stylesheet" href="../../css/prenotazione.css">
-	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/messaggi.css">
 
 	<!--script per importare parti di codice-->

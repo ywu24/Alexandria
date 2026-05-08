@@ -89,7 +89,6 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
     <title>Alexandria's Library </title>
     <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/libro.css">
-    <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/popup.css">
     <link rel="stylesheet" href="../css/messaggi.css">

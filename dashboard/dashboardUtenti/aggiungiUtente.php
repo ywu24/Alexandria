@@ -30,7 +30,7 @@ session_start();//non togliere
 	<div id="nav-placeholder">
 		 <?php 
 		 	$root = "../../";
-			require_once '../../nav/nav.php';
+			require_once('../../nav/nav.php');
 				 ?>
 	</div>
 	<div class="container mt-5">

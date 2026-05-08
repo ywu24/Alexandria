@@ -48,7 +48,6 @@ function renderRow($row)
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/unified.css">
 	<link rel="stylesheet" href="../../css/styleDashboardLibri.css">
-	<link rel="stylesheet" href="../../css/nav.css">
 	<link rel="stylesheet" href="../../css/messaggi.css">
 	<link rel="shortcut icon" href="../../img/bookDashFavicon.png">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

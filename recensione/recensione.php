@@ -117,7 +117,6 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/unified.css">
-  <link rel="stylesheet" href="../nav/nav.css">
   <link rel="stylesheet" href="../css/segnalazione.css">
   <link rel="stylesheet" href="../css/messaggi.css">
   <link rel="stylesheet" href="../css/recensioni.css">

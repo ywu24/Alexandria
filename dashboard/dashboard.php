@@ -18,7 +18,6 @@ error_reporting(E_ALL);
   <title>Dashboard Admin</title>
   <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/colors.css">
-  <link rel="stylesheet" href="../css/nav.css">
   <link rel="stylesheet" href="../../css/messaggi.css">
   <link rel="shortcut icon" href="../img/dashboard.png" type="image/x-icon">
   <!--script per importare parti di codice-->
@@ -29,7 +28,7 @@ error_reporting(E_ALL);
 
   <div id="nav-placeholder">
     <?php $root = "..";
-    require_once '../nav/nav.php'; ?>
+    require_once('../nav/nav.php'); ?>
   </div>
   <div class="container">
     <a href="dashboardUtenti/dashboardUtenti.php">

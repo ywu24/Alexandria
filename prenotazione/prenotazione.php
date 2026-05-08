@@ -32,7 +32,6 @@ if (isset($_SESSION['utenza'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/prenotazione.css">
-    <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/colors.css">
     <link rel="stylesheet" href="../css/messaggi.css">
     <!-- Aggiunto stile inline per garantire il layout a due colonne simile all'admin -->
