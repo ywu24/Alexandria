@@ -222,7 +222,7 @@ switch (true) {
                                     '
                         )
                     ) {
-                        echo "Email mandato al bibliotecario"; // per debug
+                        echo "Email mandata al bibliotecario"; // per debug
                     } else {
                         //echo "Errore nell'invio dell'email"; //per debug
                     }

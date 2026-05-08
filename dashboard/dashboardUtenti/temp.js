@@ -115,3 +115,5 @@ function chiudiDettaglio(id) {
         targetDiv.innerHTML = '';
     }
 }
+// Esempio di utilizzo (facendo finta di avere l'ID 123)
+// showReservationPopup(123);

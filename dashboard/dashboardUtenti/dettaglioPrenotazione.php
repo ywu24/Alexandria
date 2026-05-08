@@ -9,45 +9,14 @@ require_once("../../auth/cookies.php");
 require_once("../../utils/connect.php");
 
 
-$giorniPrenotazione = 30;
+$giorniPrenotazione = 5;
 if (!isset($_GET['id'])) {
-    header("../../lista.php");
+    echo http_response_code(500);
     exit;
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, user-scalable=no,
-    initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
-    <title>Medusa's Library </title>
-    <link rel="stylesheet" href="../../css/libro.css">
-    <link rel="stylesheet" href="../../css/messaggi.css">
-    <link rel="stylesheet" href="../../css/nav.css">
-    <link rel="stylesheet" href="../../css/colors.css">
-    <script src="dettaglioPrenotazione.js" defer></script>
-    <link rel="stylesheet" href="../../css/dettagli-prenotazione.css">
-
-    <!--script per importare parti di codice-->
-    <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
-</head>
-
-<body>
-    <div class="safe-area spaced-column">
-
-        <div id="nav-placeholder"><?php
-            require_once("../../nav/nav.php");
-        ?></div>
-        
-        <div id="messages">
-
-        </div>
-        <div id="bookings">
 
             <?php
 
@@ -65,7 +34,7 @@ if (!isset($_GET['id'])) {
             try {
                 // 1. Recupero dati Opera ed Email
                 if (
-                    $q1 = $pdo->prepare('SELECT Opera.id, Prenotazione.Email as Email FROM Opera, Prenotazione, copiaLibro 
+                    $q1 = $pdo->prepare('SELECT Opera.id, Copertina, Prenotazione.Email as Email FROM Opera, Prenotazione, copiaLibro 
                              WHERE Prenotazione.idPrenotazione=:id 
                              AND Prenotazione.idCopia = copiaLibro.idCopia 
                              AND Opera.ISBN = copiaLibro.ISBN')
@@ -76,13 +45,14 @@ if (!isset($_GET['id'])) {
                     $q1->closeCursor();
 
                     $book_id = $opera['id'];
+                    $copertina = $opera['Copertina'];
                     $email = $opera['Email'];
                 }
-                echo "<h3> Prenotazione di " . $email . "</h3>";
+                //echo "<h3> Prenotazione di " . $email . "</h3>";
 
-                // 2. Recupero date e calcolo stato (Logica allineata al secondo file)
+                // 2. Recupero date e calcolo stato 
                 if (
-                    $q2 = $pdo->prepare('SELECT InizioPrenotazione, InizioPrestito, FinePrenotazione, FinePrestito, FineAttesa 
+                    $q2 = $pdo->prepare('SELECT InizioPrenotazione, Email, InizioPrestito, FinePrenotazione, FinePrestito, FineAttesa 
                              FROM Prenotazione WHERE idPrenotazione=:id')
                 ) {
                     $q2->bindParam(':id', $id);
@@ -95,6 +65,7 @@ if (!isset($_GET['id'])) {
                 $fine = "";
                 $stato = "";
                 $color = "black";
+                $inizio = "";
 
                 if ($prenotazione['InizioPrestito'] == NULL) {
                     // Caso: Ancora solo prenotato
@@ -122,25 +93,34 @@ if (!isset($_GET['id'])) {
                         $fine = $prenotazione["FinePrestito"];
                     }
                 }
+                $to_send = [];
+                $to_send["Copertina"] = $copertina;
+                $to_send ["Email"] = $email;
+                $to_send["Color"] = $color;
+                $to_send["Fine"] = $fine;
+                $to_send["Inizio"] = $inizio;
+                $to_send["Stato"] = $stato;
+               
+                echo json_encode($to_send);
             } catch (Exception $e) {
-                header("Location: dashboardUtenti.php");
+                echo http_response_code(500);
                 exit();
             }
 
-            if (isset($_GET['id'])) {
-                try {
-                    $query = $pdo->prepare("SELECT Nome, Autore, Copertina, CasaEditrice, ISBN, Descrizione FROM $table WHERE id = :id");
-                    $query->bindParam(':id', $book_id);
-                    $query->execute();
-                    $row = $query->fetch();
+            /*
+            try {
+                $query = $pdo->prepare("SELECT Nome, Autore, Copertina, CasaEditrice, ISBN, Descrizione FROM $table WHERE id = :id");
+                $query->bindParam(':id', $book_id);
+                $query->execute();
+                $row = $query->fetch();
 
-                    if ($row) {
-                        // Inizio dell'output HTML
-                        // CRITICO: l'ID 'bookings' deve essere presente per il JS
-                        echo "<div id='bookings'>";
+                if ($row) {
+                    // Inizio dell'output HTML
+                    // CRITICO: l'ID 'bookings' deve essere presente per il JS
+                    echo "<div id='bookings'>";
 
-                        if ($stato != "Terminata") {
-                            echo "<main>
+                    if ($stato != "Terminata") {
+                        echo "<main>
                 <div class='container'>
                     <div class='left-column'>
                         <img src='../../img/books/" . $row['Copertina'] . "' alt='Copertina Libro'>
@@ -174,25 +154,25 @@ if (!isset($_GET['id'])) {
 
                         <div class='div-button'>";
 
-                            if ($stato == "Prenotato") {
-                                if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
-                                    //classe 'prenotazione' richiesta dal JS
-                                    echo "<button data-id='$id' class='prenotazione conferma' name='conferma'>Conferma Prenotazione</button>";
-                                }
-                                echo "<button data-id='$id' class='prenotazione elimina' name='elimina'>Elimina Prenotazione</button>";
-                            } else {
-                                if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
-                                    echo "<button data-id='$id' class='prenotazione termina' name='termina'>Conferma Consegna</button>";
-                                }
+                        if ($stato == "Prenotato") {
+                            if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
+                                //classe 'prenotazione' richiesta dal JS
+                                echo "<button data-id='$id' class='prenotazione conferma' name='conferma'>Conferma Prenotazione</button>";
                             }
+                            echo "<button data-id='$id' class='prenotazione elimina' name='elimina'>Elimina Prenotazione</button>";
+                        } else {
+                            if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
+                                echo "<button data-id='$id' class='prenotazione termina' name='termina'>Conferma Consegna</button>";
+                            }
+                        }
 
-                            echo "      </div> 
+                        echo "      </div> 
                     </div> 
                 </div>
                 </main>";
-                        } else {
-                            // Caso Prenotazione terminata
-                            echo "<main>
+                    } else {
+                        // Caso Prenotazione terminata
+                        echo "<main>
                 <div class='container'>
                     <div class='left-column'>
                         <img src='../../img/books/" . $row['Copertina'] . "' alt='Copertina Libro' >
@@ -224,30 +204,14 @@ if (!isset($_GET['id'])) {
                     </div> 
                 </div>
                 </main>";
-                        }
-
-                        echo "</div>"; // Fine div#bookings
                     }
-                    $query->closeCursor();
-                } catch (PDOException $e) {
-                    echo "Errore: " . $e->getMessage();
+
+                    echo "</div>"; // Fine div#bookings
                 }
+                $query->closeCursor();
+            } catch (PDOException $e) {
+                echo "Errore: " . $e->getMessage();
             }
+*/
             ?>
-            <!--inizio libro-->
-
-            <dialog class="pop-up" id="modal">
-                <h4>Sei sicuro di voler confermare la prenotazione di:</h4>
-                <div class="prenotation-info">
-                    <span>titololibro</span>
-                    <span>ISBN</span>
-                    <span>Durata prenotazione</span>
-                </div>
-                <form class="form" method="dialog">
-
-                    <button class="button close-button">no</button>
-                    <button class="button" type="submit" name='prenota'>si</button>
-                </form>
-
-            </dialog>
-            </main>
+         

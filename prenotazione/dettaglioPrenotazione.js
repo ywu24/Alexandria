@@ -12,7 +12,7 @@ async function apriDettaglioPrenotazione(id) {
         targetDiv.style.display = 'block';
         targetDiv.innerHTML = '<p class="text-muted small">Caricamento...</p>';
 
-        const response = await fetch(`dettaglioPrenotazione.php?id=${id}`);
+        const response = await fetch(`../dashboard/dashboardUtenti/dettaglioPrenotazione.php?id=${id}`);
         const data = await response.json();
 
         // 2. Definizione dei pulsanti in base allo stato
@@ -84,7 +84,7 @@ async function eseguiAzione(id, azione) {
         formData.append('id', id);      // <--- Questo risolve il primo errore
         formData.append(azione, 'true'); // <--- Questo attiva lo 'switch' nel PHP
 
-        const response = await fetch(`handlePrenotazione.php`, {
+        const response = await fetch(`../dashboard/dashboardUtenti/handlePrenotazione.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

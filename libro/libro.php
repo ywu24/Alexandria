@@ -376,7 +376,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                             $limit = 5; // Limite iniziale
                             $query_commenti = "SELECT r.*, u.propic 
                                             FROM recensione r 
-                                            JOIN utente u ON r.userEmail = u.email
+                                            JOIN Utente u ON r.userEmail = u.email
                                             WHERE r.idOpera = :book_id 
                                             ORDER BY r.id DESC 
                                             LIMIT :limit";

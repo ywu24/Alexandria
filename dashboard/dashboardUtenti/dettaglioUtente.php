@@ -31,6 +31,7 @@ if ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2) {
 
 	<!--script per importare parti di codice-->
 	<script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+	<script src="dettaglioPrenotazione.js"></script>
 </head>
 
 <body>
@@ -151,20 +152,31 @@ if ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2) {
 				}
 
 
-				echo
-					"<div class='book-container'>" .
-					"<div class='book-link'>
-                <img src='../../img/books/" . $row['Copertina'] . "' alt=''  class='book-cover' width='160px'>
-                <div class='book-section'>
-                    <h3>" . $row['Nome'] . "</h3>
-                    <div class='info-release'><h5>" . $row['Autore'] . "</h5>  <h5>" . $row['CasaEditrice'] . "</h5>  <h5>Stato:</h5> <h5 class='status' style='color: $color'>" . $stato . "</h5></div>
-                    <span>inizio prenotazione:</span><span>" . $inizio . "</span>
-                    <span>fine prenotazione:</span><span>" . $fine . "</span>
-                    <form action='dettaglioPrenotazione.php?id=" . $row['idPrenotazione'] . "' method='post'><button name='apri-dettaglio' style='margin-top: 20px; width: 20vh;'>Gestisci</button></form>
-				</div>
+				echo "
+    <div class='book-container' style='background:#fff; border-radius:8px; padding:15px; margin-bottom:15px; border:1px solid #eee;'>
+        <div class='row'>
+            <!-- Copertina -->
+            <div class='col-sm-2'>
+                <img src='../../img/books/" . $row['Copertina'] . "' class='img-responsive' style='max-height:140px;'>
             </div>
-				
-            </div>";
+            
+            <!-- Info Libro -->
+            <div class='col-sm-6'>
+                <h3 style='margin-top:0;'>" . $row['Nome'] . "</h3>
+                <p class='text-muted'>" . $row['Autore'] . " | " . $row['CasaEditrice'] . "</p>
+                <p>Stato: <b style='color: $color'>$stato</b></p>
+                
+                <button class='btn btn-primary' onclick='apriDettaglioPrenotazione(" . $row['idPrenotazione'] . ")'>
+                    Gestisci
+                </button>
+            </div>
+            
+            <!-- IL DESTINATARIO (targetDiv): deve avere questo ID esatto -->
+            <div class='col-sm-4' id='dettaglio-content-" . $row['idPrenotazione'] . "' style='display:none; border-left: 2px solid #f0f0f0; min-height: 140px;'>
+                <!-- Qui il JS inietterà i dati -->
+            </div>
+        </div>
+    </div>";
 			}
 			$query->closeCursor();
 		} else {

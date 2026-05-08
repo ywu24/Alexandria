@@ -34,7 +34,7 @@ $sql_stato = "CASE
 END";
 
 $params = [];
-$sql = "SELECT idPrenotazione, InizioPrenotazione, FinePrenotazione, InizioPrestito, 
+$sql = "SELECT idPrenotazione, InizioPrenotazione, FinePrenotazione, InizioPrestito, Copertina,
                FinePrestito, FineAttesa, Autore, Nome, Opera.ISBN as ISBN, email,
                ($sql_stato) as stato_calcolato 
         FROM Prenotazione 
@@ -79,7 +79,7 @@ $output = [];
 
 foreach ($results as $row) {
     // Gestione colori basata sullo stato calcolato
-    $color = "text-secondary";
+    $color = "text-muted";
     if ($row['stato_calcolato'] == "Prenotato") $color = "text-success";
     if ($row['stato_calcolato'] == "In Prestito") $color = "text-warning";
     if ($row['stato_calcolato'] == "In Ritardo") $color = "text-danger";
@@ -89,6 +89,10 @@ foreach ($results as $row) {
     $fine = $row["FinePrestito"] ?? ($row["FineAttesa"] ?? $row["FinePrenotazione"]);
 
     $output[] = [
+        
+        'idPrenotazione' => $row['idPrenotazione'], 
+        'Copertina' => $row['Copertina'],           
+
         'ISBN' => htmlspecialchars($row['ISBN']),
         'Nome' => htmlspecialchars($row['Nome']),
         'Autore' => htmlspecialchars($row['Autore']),
