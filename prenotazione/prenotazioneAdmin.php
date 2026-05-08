@@ -17,19 +17,17 @@ try {
 
 /**
  * Funzione helper per calcolare lo stato in PHP 
- * (deve essere identica alla logica che hai in getPrenotazioni.php e nel JS)
+ * (deve essere identica alla logica in getPrenotazioni.php e nel JS)
  */
 function calcolaStatoPHP($row) {
-    $oggi = time();
-    $finePren = strtotime($row['FinePrenotazione']);
-    $fineAttesa = strtotime($row['FineAttesa']);
+    $oggi = time();  
 
     if ($row["InizioPrestito"] == NULL) {
-        if ($finePren < $oggi) return ['stato' => 'Terminato', 'color' => 'text-secondary'];
+        if (strtotime($row['FinePrenotazione']) < $oggi) return ['stato' => 'Terminato', 'color' => 'text-secondary'];
         return ['stato' => 'Prenotato', 'color' => 'text-success'];
     } else {
         if ($row['FinePrestito'] == NULL) {
-            if ($oggi > $fineAttesa) return ['stato' => 'In Ritardo', 'color' => 'text-danger'];
+            if ($oggi > strtotime($row['FineAttesa'])) return ['stato' => 'In Ritardo', 'color' => 'text-danger'];
             return ['stato' => 'In Prestito', 'color' => 'text-warning'];
         }
         return ['stato' => 'Terminato', 'color' => 'text-muted'];
@@ -109,7 +107,7 @@ function calcolaStatoPHP($row) {
             <div class="book-container shadow-sm" id="container-prenotazione-<?= $id ?>">
                 <div class="row no-gutters">
                     <div class="col-md-6 left-panel">
-                        <div class="media">
+                        <div class="media" style="margin-left: 5%;">
                             <img src="../img/books/<?= $row['Copertina'] ?>" class="mr-4 shadow-sm" width="110" style="border-radius:5px">
                             <div class="media-body">
                                 <h3 class="h5 font-weight-bold" style="margin:0;"><?= htmlspecialchars($row['Nome']) ?></h3>
