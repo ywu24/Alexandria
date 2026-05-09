@@ -1,0 +1,80 @@
+/* Container principale */
+.notifiche-page-container { 
+    max-width: 800px; 
+    margin: 40px auto; 
+    padding: 20px; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card base della notifica */
+.notifica-card { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    margin-bottom: 15px; 
+    border-left: 5px solid #e0e0e0; /* Grigio per le già lette */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.notifica-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+/* NOTIFICHE NON LETTE (Bordino Rosso) */
+.notifica-card.new { 
+    border-left-color: #ff3b30 !important; /* Rosso "blindato" come il badge */
+    background: #fffafa; /* Un tocco leggerissimo di rosa per staccare */
+}
+
+/* Titolo della notifica */
+.notifica-title { 
+    font-weight: 700; 
+    font-size: 1.15rem; 
+    display: block; 
+    margin-bottom: 8px; 
+    color: #222;
+}
+
+/* Testo del messaggio */
+.notifica-card p {
+    margin: 0 0 12px 0;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Data e ora */
+.notifica-time { 
+    font-size: 0.8rem; 
+    color: #999; 
+    display: flex;
+    align-items: center;
+}
+
+/* Bottone "Vai al dettaglio" */
+.btn-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+/* Badge testuale "Nuova" (Opzionale, se vuoi aggiungere la scritta) */
+.notifica-card.new::after {
+    content: "NUOVA";
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #ff3b30;
+    letter-spacing: 1px;
+}

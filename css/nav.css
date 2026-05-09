@@ -302,10 +302,83 @@ p.logoutform{
     margin-bottom: 10px !important;
 }
 
+.sub-menu-link .badge {
+    top: 0px !important;    /* Più basso perché l'icona del menu è più grande */
+    right: 0px !important;  /* Più centrato sull'icona */
+}
+
+.sub-menu-link div {
+    position: relative; /* FONDAMENTALE per ancorare il badge */
+    display: flex;
+    align-items: center;
+}
+
+.sub-menu-icon-wrapper {
+    position: relative !important; /* Forza il badge a stare qui dentro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;  /* Stessa larghezza che hai dato alle icone nel CSS */
+    height: 45px; /* Stessa altezza che hai dato alle icone nel CSS */
+}
+
+/* --- IL BADGE NEL MENU --- */
+.sub-menu-icon-wrapper .badge {
+    position: absolute !important;
+    top: 2px !important;    /* Regola questi per centrarlo sull'icona */
+    right: 2px !important;  /* Regola questi per centrarlo sull'icona */
+    display: none;          /* Diventa 'flex' via JS */
+    
+    /* Stili estetici già definiti prima */
+    width: 18px;
+    height: 18px;
+    background-color: #ff3b30;
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 99;
+}
+
+/* --- IL BADGE NELLA NAVBAR (Quello fuori dal menu) --- */
+.li-icon {
+    position: relative !important;
+}
+
+.li-icon .badge {
+    top: -5px !important;
+    right: -5px !important;
+}
+
+/* La bolla rossa (Badge) */
+.badge {
+    position: absolute;
+    z-index: 99;
+    width: 18px;
+    height: 18px;
+    
+    display: none; /* Gestito da JS */
+    align-items: center;
+    justify-content: center;
+    
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+    color: white;
+    
+    background-color: #ff3b30;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-sizing: border-box;
+}
+
 .nav1 form p, .nav1 form span{
     align-self: center;
     text-align: start;
 }
+
 
 @media(max-width:768px){
 

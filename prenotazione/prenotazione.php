@@ -11,7 +11,7 @@ require_once("../auth/cookies.php");
 
 // Controllo accessi: se Admin, vai alla pagina Admin, se non loggato vai a index
 if (isset($_SESSION['utenza'])) {
-    if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
+    if ($_SESSION['utenza'] == 1) {
         header("Location: prenotazioneAdmin.php");
         die();
     }

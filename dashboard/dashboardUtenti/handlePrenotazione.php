@@ -9,6 +9,7 @@ $id = (int) $_POST['id'];
 $root = "../..";
 require_once("../../utils/connect.php");
 require_once("../../utils/mailer.php");
+require_once("../../utils/notifiche.php");
 require_once("../../auth/cookies.php");
 
 try {
@@ -65,6 +66,18 @@ switch (true) {
                     } else {
                         //echo "Errore nell'invio dell'email"; //per debug
                     }
+
+                    $qUser = $pdo->prepare("SELECT id FROM Utente WHERE Email = :email");
+                    $qUser->execute([':email' => $result['Email']]);
+                    $userId = $qUser->fetchColumn();
+
+                    creaNotifica(
+                        $pdo, 
+                        $userId, // L'ID dell'utente che ha fatto l'azione
+                        "Libro Ritirato " . $result['Titolo'], 
+                        "Hai ritirato con successo il libro prenotato.",
+                        $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
+                    );
                 }
             } else {
                 ####segnalare errore: prenotazione scaduta.
@@ -138,6 +151,18 @@ switch (true) {
                             } else {
                                 //echo "Errore nell'invio dell'email"; //per debug
                             }
+
+                            $qUser = $pdo->prepare("SELECT id FROM Utente WHERE Email = :email");
+                            $qUser->execute([':email' => $result['Email']]);
+                            $userId = $qUser->fetchColumn();
+
+                            creaNotifica(
+                                $pdo, 
+                                $userId, // L'ID dell'utente che ha fatto l'azione
+                                "Libro restituito" . $result['Titolo'], 
+                                "Hai restituito con successo il libro.",
+                                $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
+                            );
                         }
                     }
                 } else {
@@ -226,6 +251,16 @@ switch (true) {
                     } else {
                         //echo "Errore nell'invio dell'email"; //per debug
                     }
+
+                    creaNotifica(
+                        $pdo, 
+                        $idUtente, // L'ID dell'utente che ha fatto l'azione
+                        "Prenotazione annullata" . $result['Titolo'] . " #" . $id, 
+                        "Abbiamo annullato la tua prenotazione del libro. Per maggiori informazioni contatta il bibliotecario: " . $emailBiblio,
+                        $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
+                    );
+
+                    
                 }
 
             } else {

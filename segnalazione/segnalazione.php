@@ -3,6 +3,7 @@ session_start();
 $root = '..';
 require_once("../utils/connect.php");
 require_once("../utils/mailer.php");
+require_once("../utils/notifiche.php");
 
 $msg = "";
 
@@ -100,6 +101,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               header("Location: segnalazione.php");
               exit();
             }
+            // Crea la notifica per l'utente
+            creaNotifica(
+                $pdo, 
+                $utente['id'], // L'ID dell'utente che ha fatto l'azione
+                "Segnalazione Inviata", 
+                "Segnalazione Inviata con successo",
+                $root . "/segnalazione/segnalazione.php" // Link dove lo mandi se clicca
+            );
 
           } catch (PDOException $e) {
             throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
@@ -154,7 +163,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           header("Location: segnalazione.php");
           exit();
         }
-
       } catch (PDOException $e) {
         throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
       }
