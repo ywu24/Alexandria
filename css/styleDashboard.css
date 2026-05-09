@@ -234,18 +234,20 @@ label {
     }
 
     .btn-toggle-expand {
-        background-color: #17a2b8; /* Colore info */
+        background-color: #17a2b8;
         color: white;
         border: none;
-        border-radius: 50%; /* Diventa un cerchio */
-        width: 30px;
-        height: 30px;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
         padding: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease; /* Per l'animazione */
+        transition: all 0.3s ease;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        font-size: 14px;
+        letter-spacing: 0 !important; /* Rimuove spaziature invisibili */
     }
 
     .btn-toggle-expand:hover {
@@ -264,13 +266,6 @@ label {
             font-size: 14px; 
             padding: 8px;
         }
-}
-
-/* Ottimizzazione pulsanti per dita (Touch Target) */
-.btn-toggle-expand {
-    padding: 8px 12px;
-    line-height: 1;
-    border-radius: 50%; /* Lo rende un circolino cliccabile */
 }
 
 /* Dispositivi piccoli (Smartphone, fino a 480px) */

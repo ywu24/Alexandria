@@ -25,16 +25,12 @@ body {
   width: 100%;
 }
 
-/* Sovrascriviamo leggermente il container di bootstrap per mantenere i tuoi margini */
+/* Sovrascriviamo leggermente il container di bootstrap per mantenere margini */
 .container.py-5 {
   margin-top: 20px;
 }
 
 /* SIDEBAR (EDIT SECTION) */
-.edit-section {
-  /* Manteniamo la logica originale ma adattata alle card di Bootstrap */
-}
-
 .edit-section .card {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -57,10 +53,6 @@ body {
 }
 
 /* SETTINGS AREA (MAIN CONTENT) */
-.settings {
-  /* Rimosso flex:1 e border perché gestiti dalle colonne di Bootstrap */
-}
-
 /* Sovrascriviamo lo stile delle card per conformità */
 .settings .card {
   border-radius: 10px;
@@ -93,6 +85,17 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 12px;
+}
+
+.rounded-circle{
+  width: 130px; 
+  height: 130px; 
+  object-fit: cover; 
+  border-width: 3px !important;
+
+  text-align: center;     /* Centra in orizzontale */
+  line-height: 130px;     /* Centra in verticale (uguale all'altezza) */
+  text-indent: -16px !important; /* Browser aggiunge padding per logo immagine mancante */
 }
 
 /* PASSWORD FIELDS */
@@ -141,7 +144,7 @@ button[type="submit"], input[type="submit"].btn-primary {
     padding: 0 15px;
   }
 
-  /* La tua logica: nascondere la sidebar su mobile */
+  /* Nascondere la sidebar su mobile */
   .edit-section {
     display: none;
   }

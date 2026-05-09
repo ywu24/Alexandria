@@ -117,7 +117,7 @@ if (isset($_POST['change_password'])) {
 
 
         <div class="row justify-content-center">
-            <!-- Sidebar Navigation (Desktop Only via your CSS or d-none d-lg-block) -->
+            <!-- Sidebar Navigation -->
             <div class="col-lg-3 edit-section mb-4">
                 <div class="card shadow-sm border-0">
                     <ul class="list-group list-group-flush">
@@ -145,8 +145,7 @@ if (isset($_POST['change_password'])) {
                             <div class='edit-profile-parameter'>
                                 <!-- Immagine Profilo -->
                                 <img src='../img/users/<?php echo $userData["propic"]; ?>' alt='Profile'
-                                    class="rounded-circle mb-3 border"
-                                    style="width: 130px; height: 130px; object-fit: cover; border-width: 3px !important;">
+                                    class="rounded-circle mb-3 border">
 
                                 <div class="data-profile-info">
                                     <?php if (isset($_SESSION['nome'])): ?>
