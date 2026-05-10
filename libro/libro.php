@@ -8,6 +8,7 @@ require_once("../utils/connect.php");
 $root = '..';
 require_once("../auth/cookies.php");
 require_once("../utils/mailer.php");
+require_once("../utils/notifiche.php");
 
 
 try {
@@ -84,8 +85,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, user-scalable=no,
-    initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <title>Alexandria's Library </title>
     <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/libro.css">
@@ -221,6 +221,15 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                 } else {
                                     echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
                                 }
+
+                                // Crei la notifica per l'utente
+                                creaNotifica(
+                                    $pdo, 
+                                    $utente['id'], // L'ID dell'utente che ha fatto l'azione
+                                    "Prenotazione Confermata " . $ISBN, 
+                                    "Hai prenotato con successo il libro.",
+                                    $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
+                                );
                             }
                             $success = true;
                             #echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";
@@ -280,6 +289,15 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                 } else {
                                     echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
                                 }
+
+                                // Crea la notifica per l'utente
+                                creaNotifica(
+                                    $pdo, 
+                                    $utente['id'], // L'ID dell'utente che ha fatto l'azione
+                                    "Prenotazione Confermata " . $ISBN, 
+                                    "Hai prenotato con successo il libro.",
+                                    $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
+                                );
                             }
                             $success = true;
                             #echo "<p class= 'successo'> Prenotazione effettuata con successo </p>";

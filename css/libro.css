@@ -248,24 +248,40 @@ h2.fw-bold {
 
     /* Titoli centrati */
     .info-title { 
-        flex-direction: column; 
-        align-items: center; 
-        margin-bottom: 10px;
+        display: flex !important;
+        flex-direction: column !important; 
+        align-items: center !important; 
+        justify-content: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        margin-bottom: 15px;
     }
     
     .info-title h1 {
         font-size: 1.4rem;
         text-align: center;
+        width: 100%;
+        margin: 0;
     }
 
     .info-title h6 { 
-        margin-left: 0; 
-        margin-top: 5px;
+        margin: 5px 0 0 0 !important; /* Reset totale dei margini */
+        text-align: center !important;
+        width: 100%;
+        display: block;
     }
 
     .info-release {
         justify-content: center;
         gap: 5px;
+    }
+
+    /* Forza il centramento del contenitore info generale */
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
     }
 
     .status-container {

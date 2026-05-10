@@ -13,6 +13,8 @@ if (isset($_POST['logout'])) {
 ?>
 
 <link rel="stylesheet" href="<?php echo $root; ?>/css/nav.css">
+<script> const ROOT_URL = "<?php echo $root; ?>"; </script>
+<script src="<?php echo $root; ?>/nav/nav.js" defer></script>
 
 <nav class="nav1">
 
@@ -36,7 +38,7 @@ if (isset($_SESSION['email'])) {
     $email = $_SESSION['email'];
 
     try {
-	    $pdo = DatabaseConnection::getInstance()->getConnection();
+        $pdo = DatabaseConnection::getInstance()->getConnection();
     } catch (PDOException $e) {
         echo "Errore durante la connessione al database: " . $e->getMessage();
         exit;
@@ -61,6 +63,7 @@ if (isset($_SESSION['email'])) {
                 <img src='" . $root . "/img/library-icon.svg' class='icon svg'>
             </a>
         </li>";
+        
         if(isset($_SESSION['utenza'])){
             if($_SESSION['utenza']==1 ||$_SESSION['utenza']==2 ){
                 echo "
@@ -69,10 +72,20 @@ if (isset($_SESSION['email'])) {
                         <img src='" . $root . "/img/dashboard.svg' class='icon svg'>
                         </a>
                     </li>
-
                 ";
             }
         }
+
+        // --- INIZIO NOTIFICHE ---
+        echo "
+        <li class='li-icon'>
+            <a href='" . $root . "/notifiche/notification.php'>
+                <img src='" . $root . "/img/notification.png' class='icon svg'>
+                <span class='badge' id='notifiche-badge'>0</span>
+            </a>
+        </li>";
+        // --- FINE NOTIFICHE ---
+
         echo "
         <li class ='li-icon acc'>
             <a href='#'></a>
@@ -89,6 +102,15 @@ if (isset($_SESSION['email'])) {
                     <h4> Punti: ".$utente['punteggio']."</h4>
                 </div>
 
+                <a href='" . $root . "/notifiche/notification.php' class='sub-menu-link'>
+                <div class='sub-menu-icon-wrapper'>
+                    <img src='" . $root . "/img/notification.png' class='icon svg'>
+                    <span class='badge' id='notifiche-badge'>0</span>
+                </div>
+                    <p>Notifiche</p>
+                    <span>></span>
+                </a>
+
                 <a href='" . $root . "/prenotazione/prenotazione.php' class='sub-menu-link'>
                     <img src='" . $root . "/img/booking.png' alt=''>
                     <p>Prenotazioni</p>
@@ -101,11 +123,6 @@ if (isset($_SESSION['email'])) {
                     <span>></span>
                 </a>
 
-                <a href='" . $root . "/edit_profile/edit_profile.php' class='sub-menu-link'>
-                    <img src='" . $root . "/img/edit-profile.png' alt=''>
-                    <p>Edit Profile</p>
-                    <span>></span>
-                </a>
     ";
 
     if ($utente["Utenza"] == 1 || $utente["Utenza"] == 2) {
@@ -125,6 +142,12 @@ if (isset($_SESSION['email'])) {
             </a>";
             }
     echo "
+                <a href='" . $root . "/edit_profile/edit_profile.php' class='sub-menu-link'>
+                    <img src='" . $root . "/img/edit-profile.png' alt=''>
+                    <p>Edit Profile</p>
+                    <span>></span>
+                </a>
+
                 <a href='#' class='sub-menu-link'>
                     <form method='POST'>
                         <button name='logout' action='" . $root . "/nav/nav.php'>
@@ -177,11 +200,3 @@ if (isset($_SESSION['email'])) {
 }
 
 ?>
-
-<script>
-let subMenu = document.getElementById("subMenu");
-
-function toggleMenu() {
-    subMenu.classList.toggle("open-menu");
-}
-</script>
