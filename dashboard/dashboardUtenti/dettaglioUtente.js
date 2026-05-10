@@ -31,18 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!Array.isArray(data) || data.length === 0) {
                 container.innerHTML = `
                     <hr>
-                    <div class='alert alert-info shadow-sm' style='border-radius:15px;'>
+                    <div class='alert alert-info shadow-sm rounded-15'>
                         Nessuna prenotazione terminata trovata per questo utente.
                     </div>`;
-                btn.style.display = 'none'; // Nasconde il tasto se non c'è altro da caricare
                 return;
             }
 
-            // Titolo dello storico
             let html = "<h2 class='h4 mb-4 mt-5 font-weight-bold text-secondary text-left'>Storico Prenotazioni Terminate</h2>";
 
             data.forEach(row => {
-                // Logica Stato e Colore
                 let statoTesto = "TERMINATA";
                 let statoClasse = "text-muted";
 
@@ -54,31 +51,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dataInizio = row.InizioPrestito || row.InizioPrenotazione || "-";
                 const dataFine = row.FinePrestito || row.FinePrenotazione || "-";
 
-                // --- STRUTTURA ALLINEATA AL PHP ---
                 html += `
                 <div class="book-container shadow-sm animate-in" id="container-prenotazione-${row.idPrenotazione}">
                     <div class="row no-gutters">
-                        <!-- Pannello Sinistro: Info Libro -->
                         <div class="col-md-6 left-panel">
-                            <div class="media">
-                                <img src="../../img/books/${row.Copertina}" class="mr-4 shadow-sm" alt="Copertina">
+                            <div class="media media-book">
+                                <img src="../../img/books/${row.Copertina}" class="mr-4 shadow-sm book-cover" alt="Copertina">
                                 <div class="media-body text-left">
-                                    <h3 class="h5 font-weight-bold">${row.Nome}</h3>
+                                    <h3 class="h5 font-weight-bold book-title">${row.Nome}</h3>
                                     <p class="text-muted mb-1 small">${row.Autore}</p>
-                                    <p class="small mb-2 ${statoClasse}" style="font-weight:bold;">● ${statoTesto}</p>
+                                    <p class="small mb-2 status-badge ${statoClasse}">● ${statoTesto}</p>
                                     <div class="small text-muted">
                                         <span>Dal: ${formattaData(dataInizio)}</span><br>
                                         <span>Al: ${formattaData(dataFine)}</span>
                                     </div>
-                                    <button class="btn btn-dark btn-sm mt-3" 
-                                            onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">
+                                    <button class="btn btn-dark btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">
                                         Gestisci
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <!-- Pannello Destro: Dettaglio (nascondo il placeholder e mostro il contenuto se necessario) -->
-                        <div class="col-md-6 right-panel" id="dettaglio-content-${row.idPrenotazione}" style="display:none;"></div>
+                        <div class="col-md-6 right-panel hidden-panel" id="dettaglio-content-${row.idPrenotazione}"></div>
                         <div class="col-md-6 right-panel text-center text-muted" id="placeholder-${row.idPrenotazione}">
                             <small>Seleziona "Gestisci" per azioni</small>
                         </div>
@@ -87,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             container.innerHTML = html;
-            btn.style.display = 'none'; // Nasconde il tasto dopo il caricamento riuscito
 
         } catch (error) {
             console.error("Errore AJAX:", error);

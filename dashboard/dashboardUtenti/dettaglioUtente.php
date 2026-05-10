@@ -41,26 +41,6 @@ function calcolaStatoPHP($row)
             background-color: #f8f9fa;
         }
 
-        .book-container {
-            background: #fff;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            border: 1px solid #e0e0e0;
-            overflow: hidden;
-        }
-
-        .left-panel {
-            padding: 20px;
-            border-right: 1px solid #f0f0f0;
-        }
-
-        .right-panel {
-            padding: 20px;
-            background-color: #fafafa;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
 
         .user-summary {
             background: #fff;
@@ -81,17 +61,8 @@ function calcolaStatoPHP($row)
             animation: fadeInRight 0.4s ease-out;
         }
 
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
+       
 
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
     </style>
     <link rel="stylesheet" href="../../css/unified.css">
     <link rel="stylesheet" href="../../css/dettaglioUtenti.css">
@@ -106,7 +77,7 @@ function calcolaStatoPHP($row)
 
     <div class="container mt-5">
         <?php
-        $id_utente_get = $_GET['id'] ?? null; // Rinominata per non fare confusione
+        $id_utente_get = $_GET['id'] ?? null;
         if (!$id_utente_get) {
             header("Location: dashboardUtenti.php");
             exit;
@@ -126,6 +97,7 @@ function calcolaStatoPHP($row)
             $propic = !empty($u['propic']) ? $u['propic'] : "userDashFavicon.png";
         ?>
 
+            <!-- HEADER UTENTE -->
             <div class="row justify-content-center mb-5">
                 <div class="col-md-10">
                     <div class="user-summary shadow-sm d-flex align-items-center justify-content-between">
@@ -138,14 +110,14 @@ function calcolaStatoPHP($row)
                         </div>
                         <div class="text-right">
                             <span class="small text-muted">Punteggio</span>
-                            <div class="font-weight-bold" style="font-size: 1.2rem; color: #007bff;"><?= $u['punteggio'] ?></div>
+                            <div class="user-score"><?= $u['punteggio'] ?></div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="messages">
-                <?php if (isset($_GET['eliminato'])) echo "<p class= 'successo'>Prenotazione eliminata con successo</p>"; ?>
+                <?php if (isset($_GET['eliminato'])) echo "<p class='successo'>Prenotazione eliminata con successo</p>"; ?>
             </div>
 
             <div id="bookings-container">
@@ -167,15 +139,20 @@ function calcolaStatoPHP($row)
                     $inizio = $row["InizioPrestito"] ?? $row["InizioPrenotazione"];
                     $fine = $row["FinePrestito"] ?? ($row["InizioPrestito"] ? $row["FineAttesa"] : $row["FinePrenotazione"]);
                 ?>
-                    <div class="book-container shadow-sm" id="container-prenotazione-<?= $idPreno ?>">
+                   <div class="book-container shadow-sm" id="container-prenotazione-<?= $idPreno ?>">
                         <div class="row no-gutters">
                             <div class="col-md-6 left-panel">
-                                <div class="media" style="margin-left: 5%;">
-                                    <img src="../../img/books/<?= $row['Copertina'] ?>" class="mr-4 shadow-sm" width="110" style="border-radius:5px">
+                                <div class="media media-book">
+                                    <img src="../../img/books/<?= $row['Copertina'] ?>" class="mr-4 shadow-sm book-cover">
                                     <div class="media-body">
-                                        <h3 class="h5 font-weight-bold" style="margin:0;"><?= htmlspecialchars($row['Nome']) ?></h3>
+                                        <h3 class="h5 font-weight-bold book-title"><?= htmlspecialchars($row['Nome']) ?></h3>
                                         <p class="text-muted mb-1 small"><?= htmlspecialchars($row['Autore']) ?></p>
-                                        <p class="small mb-2 <?= $info['color'] ?>" style="font-weight:bold;">● <?= strtoupper($info['stato']) ?></p>
+                                        
+                                        <!-- CLASSE status-badge AGGIUNTA -->
+                                        <p class="small mb-2 status-badge <?= $info['color'] ?>">
+                                            ● <?= strtoupper($info['stato']) ?>
+                                        </p>
+
                                         <div class="small text-muted">
                                             <span>Dal: <?= date("d/m/Y", strtotime($inizio)) ?></span><br>
                                             <span>Al: <?= date("d/m/Y", strtotime($fine)) ?></span>
@@ -185,7 +162,7 @@ function calcolaStatoPHP($row)
                                 </div>
                             </div>
 
-                            <div class="col-md-6 right-panel" id="dettaglio-content-<?= $idPreno ?>" style="display:none;"></div>
+                            <div class="col-md-6 right-panel" id="dettaglio-content-<?= $idPreno ?>"></div>
 
                             <div class="col-md-6 right-panel text-center text-muted" id="placeholder-<?= $idPreno ?>">
                                 <small>Seleziona "Gestisci" per azioni</small>
@@ -195,12 +172,11 @@ function calcolaStatoPHP($row)
                 <?php endwhile; ?>
             </div>
 
-            <!-- CORRETTO: ID Utente passato correttamente e riferimento ID pulito -->
             <div class="text-center my-5">
                 <hr>
                 <div id="terminate-container">
-                    <button id="load-terminated" class="btn btn-outline-primary"
-                        data-id-utente="<?= $id_utente_get ?>" style="border-radius: 20px;">
+                    <button id="load-terminated" class="btn btn-outline-primary btn-terminated"
+                        data-id-utente="<?= $id_utente_get ?>">
                         Mostra prenotazioni terminate
                     </button>
                 </div>

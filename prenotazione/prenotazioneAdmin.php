@@ -43,14 +43,6 @@ function calcolaStatoPHP($row) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/unified.css">
     <link rel="stylesheet" href="../css/dettaglioUtenti.css">
-    <style>
-        body { background-color: #f8f9fa; }
-        .book-container { background: #fff; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e0e0e0; overflow: hidden; }
-        .left-panel { padding: 20px; border-right: 1px solid #f0f0f0; }
-        .right-panel { padding: 20px; background-color: #fafafa; display: flex; flex-direction: column; justify-content: center; }
-        .animate-in { animation: fadeInRight 0.4s ease-out; }
-        @keyframes fadeInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-    </style>
 </head>
 <body>
     <div id="nav-placeholder"><?php require_once("../nav/nav.php"); ?></div>
@@ -58,14 +50,14 @@ function calcolaStatoPHP($row) {
     <!-- ... (stesso inizio PHP di prima per sessione e connessione) ... -->
 
 <div class="container mt-5">
-    <h1 class="text-center mb-5" style="font-weight: 800;">Prenotazioni 📅</h1>
+    <h1 class="text-center mb-5 font-weight-extra-bold">Prenotazioni 📅</h1>
 
-    <!-- BARRA FILTRI SENZA TASTO SUBMIT -->
+    <!-- BARRA FILTRI -->
     <div class="row justify-content-center mb-5">
         <div class="col-md-10">
-            <form id="filtriForm" class="form-inline justify-content-center p-3 bg-white shadow-sm" style="border-radius: 30px; border: 1px solid #eee;">
+            <form id="filtriForm" class="form-inline justify-content-center p-3 bg-white shadow-sm filter-bar">
                 <label class="mr-2 small text-muted">Stato:</label>
-                <select name="filtro_stato" class="form-control form-control-sm border-0 font-weight-bold" style="background: none;">
+                <select name="filtro_stato" class="form-control form-control-sm border-0 font-weight-bold filter-select">
                     <option value="tutti">Tutti gli stati</option>
                     <option value="Prenotato">Prenotati</option>
                     <option value="In Prestito">In Prestito</option>
@@ -73,7 +65,7 @@ function calcolaStatoPHP($row) {
                     <option value="Terminato">Terminati</option>
                 </select>
                 
-                <div class="mx-3" style="border-left: 1px solid #ddd; height: 20px;"></div>
+                <div class="filter-divider mx-3"></div>
                 
                 <label class="mr-2 small text-muted">Dal:</label>
                 <input type="date" name="data_inizio" class="form-control form-control-sm border-0">
@@ -86,7 +78,7 @@ function calcolaStatoPHP($row) {
         </div>
     </div>
 
-    <!-- CONTENITORE POPOLATO DA PHP ALL'INIZIO -->
+    <!-- CONTENITORE PRENOTAZIONI -->
     <div id="bookings-container">
         <?php
         // Query iniziale per i primi 10
@@ -104,15 +96,15 @@ function calcolaStatoPHP($row) {
             $inizio = $row["InizioPrestito"] ?? $row["InizioPrenotazione"];
             $fine = $row["FinePrestito"] ?? ($row["InizioPrestito"] ? $row["FineAttesa"] : $row["FinePrenotazione"]);
         ?>
-            <div class="book-container shadow-sm" id="container-prenotazione-<?= $id ?>">
+           <div class="book-container shadow-sm" id="container-prenotazione-<?= $id ?>">
                 <div class="row no-gutters">
                     <div class="col-md-6 left-panel">
-                        <div class="media" style="margin-left: 5%;">
-                            <img src="../img/books/<?= $row['Copertina'] ?>" class="mr-4 shadow-sm" width="110" style="border-radius:5px">
+                        <div class="media media-book">
+                            <img src="../img/books/<?= $row['Copertina'] ?>" class="mr-4 shadow-sm book-cover">
                             <div class="media-body">
-                                <h3 class="h5 font-weight-bold" style="margin:0;"><?= htmlspecialchars($row['Nome']) ?></h3>
+                                <h3 class="h5 font-weight-bold book-title"><?= htmlspecialchars($row['Nome']) ?></h3>
                                 <p class="text-muted mb-1"><?= htmlspecialchars($row['Autore']) ?></p>
-                                <p class="small mb-2 <?= $info['color'] ?>" style="font-weight:bold;">● <?= strtoupper($info['stato']) ?></p>
+                                <p class="small mb-2 status-badge <?= $info['color'] ?>">● <?= strtoupper($info['stato']) ?></p>
                                 <div class="small text-muted">
                                     <span>Dal: <?= date("d/m/Y", strtotime($inizio)) ?></span><br>
                                     <span>Al: <?= date("d/m/Y", strtotime($fine)) ?></span><br>
@@ -122,7 +114,8 @@ function calcolaStatoPHP($row) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 right-panel" id="dettaglio-content-<?= $id ?>" style="display:none;"></div>
+                    <!-- Nota: ID e display gestiti da JS -->
+                    <div class="col-md-6 right-panel" id="dettaglio-content-<?= $id ?>"></div>
                     <div class="col-md-6 right-panel text-center text-muted" id="placeholder-<?= $id ?>">
                         <small>Seleziona "Gestisci" per azioni</small>
                     </div>

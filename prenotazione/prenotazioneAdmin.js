@@ -57,39 +57,44 @@ async function caricaPrenotazioni(append = false) {
         }
 
         prenotazioni.forEach(row => {
-            const div = document.createElement('div');
-            // Classi pulite: lo stile viene gestito dal CSS esterno/interno
-            div.className = "book-container shadow-sm animate-in";
-            div.id = `container-prenotazione-${row.idPrenotazione}`;
-            
-            div.innerHTML = `
-                <div class="row no-gutters">
-                    <!-- PARTE SINISTRA: Foto e Info -->
-                    <div class="col-md-6 left-panel">
-                        <div class="media">
-                            <img src="../img/books/${row.Copertina}" class="mr-4 shadow-sm" alt="Copertina">
-                            <div class="media-body">
-                                <h3 class="h5 font-weight-bold mb-1">${row.Nome}</h3>
-                                <p class="text-muted mb-1 small">${row.Autore}</p>
-                                <p class="small mb-2 ${row.color}" style="font-weight:bold;">● ${row.stato_calcolato.toUpperCase()}</p>
-                                <div class="small text-muted">
-                                    <span>Dal: ${row.inizio_formattato}</span><br>
-                                    <span>Al: ${row.fine_formattata}</span><br>
-                                    <span class="text-dark">User: ${row.email}</span>
-                                </div>
-                                <button class="btn btn-dark btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">Gestisci</button>
-                            </div>
+    const div = document.createElement('div');
+    div.className = "book-container shadow-sm animate-in";
+    div.id = `container-prenotazione-${row.idPrenotazione}`;
+    
+    div.innerHTML = `
+        <div class="row no-gutters">
+            <!-- PARTE SINISTRA: Foto e Info -->
+            <div class="col-md-6 left-panel">
+                <div class="media media-book">
+                    <!-- AGGIUNTA CLASSE book-cover QUI SOTTO -->
+                    <img src="../img/books/${row.Copertina}" class="mr-4 shadow-sm book-cover" alt="Copertina">
+                    <div class="media-body">
+                        <h3 class="h5 font-weight-bold book-title">${row.Nome}</h3>
+                        <p class="text-muted mb-1 small">${row.Autore}</p>
+                        
+                        <!-- RIMOZIONE INLINE STYLE: usiamo status-badge -->
+                        <p class="small mb-2 status-badge ${row.color}">
+                            ● ${row.stato_calcolato.toUpperCase()}
+                        </p>
+
+                        <div class="small text-muted">
+                            <span>Dal: ${row.inizio_formattato}</span><br>
+                            <span>Al: ${row.fine_formattata}</span><br>
+                            <span class="text-dark">User: ${row.email}</span>
                         </div>
+                        <button class="btn btn-dark btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">Gestisci</button>
                     </div>
-                    <!-- PARTE DESTRA: Spazio Gestione Dinamica -->
-                    <div class="col-md-6 right-panel" id="dettaglio-content-${row.idPrenotazione}" style="display:none;"></div>
-                    <!-- Placeholder iniziale lato destro -->
-                    <div class="col-md-6 right-panel text-center text-muted" id="placeholder-${row.idPrenotazione}">
-                        <small>Seleziona "Gestisci" per azioni</small>
-                    </div>
-                </div>`;
-            container.appendChild(div);
-        });
+                </div>
+            </div>
+            <!-- PARTE DESTRA: Spazio Gestione Dinamica -->
+            <div class="col-md-6 right-panel" id="dettaglio-content-${row.idPrenotazione}" style="display:none;"></div>
+            <!-- Placeholder iniziale lato destro -->
+            <div class="col-md-6 right-panel text-center text-muted" id="placeholder-${row.idPrenotazione}">
+                <small>Seleziona "Gestisci" per azioni</small>
+            </div>
+        </div>`;
+    container.appendChild(div);
+});
 
         if (btn) {
             btn.style.display = (prenotazioni.length === 10) ? "inline-block" : "none";
