@@ -42,6 +42,7 @@ function calcolaStatoPHP($row) {
     <title>Alexandria - Gestione Prenotazioni</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/unified.css">
+    <link rel="stylesheet" href="../css/dettaglioUtenti.css">
     <style>
         body { background-color: #f8f9fa; }
         .book-container { background: #fff; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e0e0e0; overflow: hidden; }

@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+session_start();
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -37,16 +37,64 @@ function calcolaStatoPHP($row)
     <title>Alexandria - Gestione Utente</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        body { background-color: #f8f9fa; }
-        .book-container { background: #fff; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e0e0e0; overflow: hidden; }
-        .left-panel { padding: 20px; border-right: 1px solid #f0f0f0; }
-        .right-panel { padding: 20px; background-color: #fafafa; display: flex; flex-direction: column; justify-content: center; }
-        .user-summary { background: #fff; border-radius: 30px; padding: 15px 30px; border: 1px solid #eee; margin-bottom: 40px; }
-        .user-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
-        .animate-in { animation: fadeInRight 0.4s ease-out; }
-        @keyframes fadeInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-    </style>
+        body {
+            background-color: #f8f9fa;
+        }
 
+        .book-container {
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            padding: 20px;
+            border-right: 1px solid #f0f0f0;
+        }
+
+        .right-panel {
+            padding: 20px;
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .user-summary {
+            background: #fff;
+            border-radius: 30px;
+            padding: 15px 30px;
+            border: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .animate-in {
+            animation: fadeInRight 0.4s ease-out;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../../css/unified.css">
+    <link rel="stylesheet" href="../../css/dettaglioUtenti.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- AGGIUNTI I SCRIPT MANCANTI -->
     <script src="dettaglioUtente.js"></script>
@@ -97,7 +145,7 @@ function calcolaStatoPHP($row)
             </div>
 
             <div id="messages">
-                <?php if (isset($_GET['eliminato'])) echo "<div class='alert alert-success shadow-sm' style='border-radius:15px;'>Prenotazione eliminata con successo</div>"; ?>
+                <?php if (isset($_GET['eliminato'])) echo "<p class= 'successo'>Prenotazione eliminata con successo</p>"; ?>
             </div>
 
             <div id="bookings-container">
@@ -132,7 +180,7 @@ function calcolaStatoPHP($row)
                                             <span>Dal: <?= date("d/m/Y", strtotime($inizio)) ?></span><br>
                                             <span>Al: <?= date("d/m/Y", strtotime($fine)) ?></span>
                                         </div>
-                                        <button class="btn btn-dark btn-sm mt-3"  onclick="apriDettaglioPrenotazione(<?= $idPreno ?>)">Gestisci</button>
+                                        <button class="btn btn-dark btn-sm mt-3" onclick="apriDettaglioPrenotazione(<?= $idPreno ?>)">Gestisci</button>
                                     </div>
                                 </div>
                             </div>
@@ -150,11 +198,11 @@ function calcolaStatoPHP($row)
             <!-- CORRETTO: ID Utente passato correttamente e riferimento ID pulito -->
             <div class="text-center my-5">
                 <hr>
-                <div id="terminate-container"> 
-                    <button id="load-terminated" class="btn btn-outline-primary" 
-                            data-id-utente="<?= $id_utente_get ?>" style="border-radius: 20px;"> 
-                        Mostra prenotazioni terminate 
-                    </button> 
+                <div id="terminate-container">
+                    <button id="load-terminated" class="btn btn-outline-primary"
+                        data-id-utente="<?= $id_utente_get ?>" style="border-radius: 20px;">
+                        Mostra prenotazioni terminate
+                    </button>
                 </div>
             </div>
 
@@ -168,4 +216,5 @@ function calcolaStatoPHP($row)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
+
 </html>

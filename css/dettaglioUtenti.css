@@ -1,97 +1,165 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-.user-details{
-    display:flex;
-    flex-direction: row;
-	/* align-items: center; */
-    font-family: var(--font-family-base);
+@media (max-width: 991px) {
+        html { font-size: 18px; }
+        .container { padding: 10px; max-width: 100%; }
+
+        /* Riquadro libro massimizzato */
+        .book-container { 
+            display: block; 
+            margin-bottom: 35px; 
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        /* Impilamento pannelli */
+        .left-panel, .right-panel { 
+            width: 100% !important; 
+            max-width: 100% !important; 
+            flex: 0 0 100% !important;
+            padding: 25px !important;
+            border-right: none;
+        }
+
+        .left-panel { border-bottom: 2px solid #f0f0f0; }
+
+        /* Logica Immagine e Layout Info */
+        .media { 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+        }
+        
+        .media img { 
+            /* Occupa la larghezza disponibile fino a un massimo generoso */
+            width: 85% !important; 
+            max-width: 250px !important; 
+            height: auto !important; /* Mantiene le proporzioni */
+            aspect-ratio: 2/3; /* Opzionale: aiuta a mantenere lo spazio se l'immagine carica dopo */
+            object-fit: cover; /* Riempie il box senza deformarsi */
+            margin: 0 0 25px 0 !important; 
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Nascondiamo le date sotto al libro (classe .text-muted specifica) */
+        .left-panel .media-body .text-muted.small,
+        .left-panel .media-body div.small.text-muted {
+            display: none !important;
+        }
+
+        /* Ingrandimento testi principali per riempire lo spazio visivo */
+        .media-body h3 { 
+            font-size: 2.2rem !important; 
+            font-weight: 850; 
+            line-height: 1.1;
+            margin-bottom: 10px !important;
+        }
+
+        .media-body p { 
+            font-size: 1.4rem; 
+            margin-bottom: 15px !important;
+        }
+
+        /* Badge Stato (quello col pallino) - lo teniamo visibile */
+        .media-body p[style*="font-weight:bold"],
+        .media-body p[style*="font-weight:800"] {
+            display: block !important;
+            font-size: 1.2rem !important;
+        }
+
+        /* Bottone Gestisci */
+        .btn-dark { 
+            width: 100%; 
+            padding: 18px; 
+            font-size: 1.3rem; 
+            font-weight: bold; 
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        
+        /* Titoli e Filtri */
+        h1 { font-size: 3rem !important; }
+        #filtriForm { padding: 25px !important; border-radius: 20px !important; }
+        /* 1. Il contenitore del dettaglio occupa tutta la larghezza sotto il libro */
+.right-panel[style*="display: block"] {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 30px !important;
+    background-color: #ffffff !important; /* Fondo bianco per staccare dal grigio */
+    border-top: 1px solid #eee;
 }
 
-* {
-    font-family: var(--font-family-base);
+/* 2. Titolo del pannello gestione */
+.right-panel h3 {
+    font-size: 1.8rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 20px !important;
+    color: #333;
+    text-align: left;
 }
 
-.user-details img{
-    aspect-ratio: 1/1;
-    width: 100px;
-    margin-right: 15px;
-    border-radius: 10%;
-    border: 1px solid var(--border);
+/* 3. Info Utente e scritte generiche */
+.right-panel p, 
+.right-panel div {
+    font-size: 1.2rem !important; /* Testo molto più leggibile */
+    line-height: 1.5;
 }
 
-.user-status{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+/* 4. Il box che contiene le date (Inizio/Fine) */
+.right-panel div[style*="background: #fdfdfd"],
+.right-panel div[style*="background: rgb(253, 253, 253)"] {
+    background: #f8f9fa !important;
+    padding: 20px !important;
+    border-radius: 15px !important;
+    border: 2px solid #eee !important;
+    margin: 20px 0 !important;
 }
 
-.user-status h3, .user-status h2{
-    margin: 0 !important;
+.right-panel b {
+    font-size: 1.3rem !important;
+    display: inline-block;
+    margin-top: 5px;
 }
 
-.user-status h3{
-    padding-left: 5px;
+/* 5. Lo stato (es: PRENOTATO, IN PRESTITO) */
+.right-panel span[style*="font-weight: bold"] {
+    display: block;
+    font-size: 1.4rem !important;
+    text-align: center;
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    margin: 15px 0;
 }
 
-.book-container span{
-    font-size: 16px !important;
+/* 6. I PULSANTI (Azione principale) */
+.right-panel .btn {
+    width: 100% !important; /* Occupano tutta la riga */
+    padding: 20px !important; /* Alti e facili da tappare */
+    font-size: 1.3rem !important;
+    font-weight: bold !important;
+    border-radius: 15px !important;
+    margin-bottom: 10px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.book-link form button {
-    height: 30px ;
-    width: 70px;
-    background: var(--button);
-    color: var(--white); 
-    border: none;
-    border-radius: 5px;
+/* Differenziamo i colori dei tasti per il tocco */
+.right-panel .btn-success { background-color: #28a745 !important; border: none; }
+.right-panel .btn-danger { background-color: #dc3545 !important; border: none; }
+.right-panel .btn-warning { background-color: #ffc107 !important; border: none; color: #000 !important; }
 
+/* 7. Il tasto Annulla/Chiudi in fondo */
+.right-panel .btn-link {
+    font-size: 1.1rem !important;
+    margin-top: 20px !important;
+    color: #999 !important;
+    text-decoration: underline !important;
 }
 
-.book-link form button:hover{
-    background: var(--button-hover);
+/* 8. Nascondiamo il placeholder (il testo "Seleziona per gestire") quando il dettaglio è aperto */
+.right-panel[style*="display: block"] + .right-panel.text-muted {
+    display: none !important;
+}
+    }
     
-}
-
-.book-link form{
-    padding: 5px !important;
-}
-
-div.user-details{
-    margin-top: 40px;
-    justify-content: center;
-}
-
-.book-section h3{
-    margin-bottom: 0;
-}
-
-.info-release{
-    padding: 5px 0px ;
-}
-
-
-nav h3.truncname{
-    font-size: 16px !important;
-}
-
-@media (max-width: 768px) {
-    .user-details {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .user-details img {
-        margin-right: 0; 
-        margin-bottom: 15px;
-        width: 120px; 
-    }
-
-    .user-status {
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .user-status h3 {
-        padding-left: 0;
-    }
-}
