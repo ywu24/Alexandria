@@ -4,7 +4,7 @@ require_once("../utils/connect.php");
 $root = '..';
 require_once("../auth/cookies.php");
 
-if (!isset($_SESSION['utenza']) || ($_SESSION['utenza'] != 1)) {
+if (!isset($_SESSION['utenza']) || (($_SESSION['utenza'] != 1)&& ($_SESSION['utenza'] != 2))) {
     header("Location: ../index.php");
     exit();
 }
