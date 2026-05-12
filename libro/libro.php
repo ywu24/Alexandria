@@ -222,12 +222,26 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                     echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
                                 }
 
-                                // Crei la notifica per l'utente
+                                // Crei la notifica per l'utente e bibliotecario
                                 creaNotifica(
                                     $pdo, 
                                     $utente['id'], // L'ID dell'utente che ha fatto l'azione
                                     "Prenotazione Confermata " . $ISBN, 
                                     "Hai prenotato con successo il libro.",
+                                    $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
+                                );
+
+                                $query = $pdo->prepare('SELECT id FROM Utente WHERE utenza = 2 LIMIT 1');
+                                $query->execute();
+                                $risultato = $query->fetch();
+                                $idBibliotecario = $risultato ? $risultato['id'] : null;
+                                $query->closeCursor();
+
+                                creaNotifica(
+                                    $pdo, 
+                                    $idBibliotecario, // L'ID del bibliotecario
+                                    "Prenotazione Ricevuta " . $ISBN, 
+                                    "L'utente " . $email . " ha prenotato il libro.",
                                     $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
                                 );
                             }
@@ -290,12 +304,26 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
                                     echo "<p class='errore'>Errore nell'invio dell'email</p>"; //per debug
                                 }
 
-                                // Crea la notifica per l'utente
+                                // Crea la notifica per l'utente e bibliotecario
                                 creaNotifica(
                                     $pdo, 
                                     $utente['id'], // L'ID dell'utente che ha fatto l'azione
                                     "Prenotazione Confermata " . $ISBN, 
                                     "Hai prenotato con successo il libro.",
+                                    $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
+                                );
+
+                                $query = $pdo->prepare('SELECT id FROM Utente WHERE utenza = 2 LIMIT 1');
+                                $query->execute();
+                                $risultato = $query->fetch();
+                                $idBibliotecario = $risultato ? $risultato['id'] : null;
+                                $query->closeCursor();  
+
+                                creaNotifica(
+                                    $pdo, 
+                                    $idBibliotecario, // L'ID del bibliotecario
+                                    "Prenotazione Ricevuta " . $ISBN, 
+                                    "L'utente " . $email . " ha prenotato il libro.",
                                     $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
                                 );
                             }

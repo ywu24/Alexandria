@@ -159,7 +159,7 @@ switch (true) {
                             creaNotifica(
                                 $pdo, 
                                 $userId, // L'ID dell'utente che ha fatto l'azione
-                                "Libro restituito" . $result['Titolo'], 
+                                "Libro restituito " . $result['Titolo'], 
                                 "Hai restituito con successo il libro.",
                                 $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
                             );
@@ -255,7 +255,7 @@ switch (true) {
                     creaNotifica(
                         $pdo, 
                         $idUtente, // L'ID dell'utente che ha fatto l'azione
-                        "Prenotazione annullata" . $result['Titolo'] . " #" . $id, 
+                        "Prenotazione annullata " . $result['Titolo'] . " #" . $id, 
                         "Abbiamo annullato la tua prenotazione del libro. Per maggiori informazioni contatta il bibliotecario: " . $emailBiblio,
                         $root . "/prenotazione/prenotazione.php" // Link dove lo mandi se clicca
                     );
