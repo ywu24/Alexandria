@@ -64,7 +64,7 @@ body {
     position: absolute !important;
     top: 80px;
     right: 20px;
-    z-index: 10000; /* Sopra a tutto */
+    z-index: 10;
     display: block !important;
 }
 
@@ -151,7 +151,7 @@ body {
         position: absolute !important;
         top: 80px;
         right: 20px;
-        z-index: 10000;
+        z-index: 10;
         display: block !important;
     }
 
