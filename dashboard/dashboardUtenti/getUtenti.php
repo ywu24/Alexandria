@@ -65,7 +65,7 @@ foreach ($utenti as $row) {
     
     if ($_SESSION['utenza'] == 1) {
         $html = "
-            <th scope='row' class='col-nascondi'>{$row['id']}</th>
+            <th scope='row' class='col-nascondi row-header'>{$row['id']}</th>
             <td>{$row['Nome']}</td>
             <td>{$row['Cognome']}</td>
             <td class='col-nascondi'>{$row['Email']}</td>

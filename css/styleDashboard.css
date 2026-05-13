@@ -60,7 +60,7 @@ p {
     position: absolute !important;
     top: 80px;
     right: 20px;
-    z-index: 10000; /* Sopra a tutto */
+    z-index: 10;
     display: block !important;
 }
 
@@ -125,6 +125,10 @@ label {
 .mobile-details {
     display: none;
     background-color: #f1f3f5;
+}
+
+.row-header {
+    background-color: #30303088 !important;
 }
 
 @media (min-width: 1057px) {
@@ -194,7 +198,7 @@ label {
         position: absolute !important;
         top: 80px;
         right: 20px;
-        z-index: 10000; /* Sopra a tutto */
+        z-index: 10;
         display: block !important;
     }
 
