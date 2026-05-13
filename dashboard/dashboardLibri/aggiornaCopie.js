@@ -95,19 +95,19 @@ document.addEventListener("click", async (e) => {
 
             // Layout a tendina
             const html = `
-                <tr id="${mobileRowId}" class="bg-light shadow-sm riga-mobile-info">
-                    <td colspan="3" class="p-3 border-info">
-                        <ul class="list-unstyled mb-0 text-left">
-                            <li class="mb-1"><strong>Autore:</strong> ${autore}</li>
-                            <li class="mb-1"><strong>Genere:</strong> ${genere}</li>
-                            <li class="mb-1"><strong>Anno:</strong> ${anno}</li>
-                            <li class="mb-1"><strong>Casa Editrice:</strong> ${casa}</li>
-                            <li class="mb-2 mt-3 p-2 bg-white border rounded d-flex align-items-center justify-content-between">
-                                <strong>Copie:</strong>
-                                <div>${copie}</div>
-                            </li>
-                            <li class="mt-3 text-right border-top pt-2">${azioni}</li>
-                        </ul>
+                <tr id="${mobileRowId}" class="mobile-details-row">
+                    <td colspan="3" class="p-0">
+                        <div class="p-3 bg-white border-left-info shadow-sm">
+                            <div class="detail-item"><span class="detail-label">Autore:</span> <span>${autore || 'N/D'}</span></div>
+                            <div class="detail-item"><span class="detail-label">Genere:</span> <span>${genere || 'N/D'}</span></div>
+                            <div class="detail-item"><span class="detail-label">Anno:</span> <span>${anno || 'N/D'}</span></div>
+                            <div class="detail-item"><span class="detail-label">Casa Editrice:</span> <span>${casa || 'N/D'}</span></div>
+                            <div class="detail-item"><span class="detail-label">Copie:</span> <span>${copie || 'N/D'}</span></div>
+                            <div class="mt-3 pt-2 border-top">
+                                <p class="small text-muted mb-2 text-uppercase font-weight-bold">Azioni:</p>
+                                <div class="d-flex flex-column gap-2">${azioni}</div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             `;

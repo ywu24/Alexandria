@@ -43,7 +43,7 @@ async function caricaUtenti(append = false) {
             // Aggiungiamo il pulsante di espansione per mobile alla fine della riga
             const toggleTd = document.createElement('td');
             toggleTd.className = "mobile-only text-center align-middle";
-            toggleTd.innerHTML = `<button class="btn btn-sm btn-info btn-toggle-expand">▼</button>`;
+            toggleTd.innerHTML = `<button class="btn btn-sm btn-secondary btn-info-mobile">Info</button>`;
             trMain.appendChild(toggleTd);
 
             container.appendChild(trMain);
@@ -101,17 +101,24 @@ async function caricaUtenti(append = false) {
 }
 
 document.addEventListener("click", function(e) {
-    // Gestione click sul tasto espandi (il triangolino)
-    if (e.target && e.target.classList.contains('btn-toggle-expand')) {
-        const mainRow = e.target.closest('tr');
+    const target = e.target;
+
+    // Gestione click sul tasto espandi mobile
+    if (target.classList.contains('btn-info-mobile') || target.closest('.btn-info-mobile')) {
+        const btn = target.classList.contains('btn-info-mobile') ? target : target.closest('.btn-info-mobile');
+        const mainRow = btn.closest('tr');
         const detailsRow = mainRow.nextElementSibling;
-        
+
         if (detailsRow && detailsRow.classList.contains('mobile-details-row')) {
-            const isHidden = detailsRow.style.display === "none";
-            detailsRow.style.display = isHidden ? "table-row" : "none";
-            e.target.innerText = isHidden ? "▲" : "▼";
-            e.target.classList.toggle('btn-secondary');
-            e.target.classList.toggle('btn-info');
+            if (detailsRow.style.display === 'none') {
+                detailsRow.style.display = 'table-row';
+                btn.innerHTML = 'Chiudi';
+                btn.classList.replace('btn-secondary', 'btn-dark');
+            } else {
+                detailsRow.style.display = 'none';
+                btn.innerHTML = 'Info';
+                btn.classList.replace('btn-dark', 'btn-secondary');
+            }
         }
     }
 });

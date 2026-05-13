@@ -13,11 +13,11 @@ require_once("../auth/cookies.php");
 if (isset($_SESSION['utenza'])) {
     if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
         header("Location: prenotazioneAdmin.php");
-        die();
+        exit();
     }
 } else {
     header("Location: ../index.php");
-    die();
+    exit();
 }
 ?>
 

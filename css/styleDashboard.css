@@ -127,6 +127,10 @@ label {
     background-color: #f1f3f5;
 }
 
+.row-header {
+    background-color: #30303088 !important;
+}
+
 @media (min-width: 1057px) {
     .mobile-only { display: none !important; }
     .mobile-details-row { display: none !important; }
