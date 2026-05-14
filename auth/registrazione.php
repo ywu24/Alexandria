@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['tentativi'] = 3;
         $_SESSION['reinvii'] = 1;
 
-        #echo "<p class='successo'>Email mandato all'utente/p>"; // per debug
+        echo "<p class='successo'>Email mandato all'utente/p>"; // per debug
         #sleep(2);
         header("Location: confermaRegistrazione.php");
         exit();

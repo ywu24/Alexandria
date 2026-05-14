@@ -211,8 +211,8 @@ document.addEventListener("click", async (e) => {
 
     // --- DETTAGLI PRENOTAZIONE ---
     if (target.classList.contains("dettagli")) {
-        const idCopia = target.closest("tr").dataset.id;
-        window.location.href = "gotoPrenotazione.php?id=" + idCopia;
+        window.location.href = "../../prenotazione/prenotazioneAdmin.php";
+        showMessage("oh");
     }
 });
 
