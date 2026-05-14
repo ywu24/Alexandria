@@ -212,7 +212,7 @@ document.addEventListener("click", async (e) => {
     // --- DETTAGLI PRENOTAZIONE ---
     if (target.classList.contains("dettagli")) {
         window.location.href = "../../prenotazione/prenotazioneAdmin.php";
-        showMessage("oh");
+        
     }
 });
 
