@@ -1,101 +1,33 @@
 <?php
-// LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-session_start();
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Book catalog page with search, filters, and pagination
+ */
+
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Alexandria\Services\BookService;
+
+$bookService = new BookService($pdo);
+
 $root = '..';
-require_once("../utils/connect.php");
 
-require_once("../auth/cookies.php");
-try {
-    $pdo = DatabaseConnection::getInstance()->getConnection();
-} catch (PDOException $e) {
-    echo "Errore durante la connessione al database: " . $e->getMessage();
-    exit;
-}
-
-$table = "Opera";
-$maxPerPage = 10;
-$paginationCtrls = '';
-
-function paginator($where, $additionalParams = [], $urlParams = [])
-{
-    global $pdo, $table, $maxPerPage, $paginationCtrls;
-    $pageTo = "lista.php";
-
-    $countQuery = "SELECT count(*) as tot FROM $table $where";
-    try {
-        $query = $pdo->prepare($countQuery);
-        $query->execute($additionalParams);
-        $result = $query->fetch();
-        $query->closeCursor();
-        $rowCount = $result['tot'];
-    } catch (PDOException $e) {
-        throw new Exception("Error executing count query: " . $e->getMessage());
-    }
-
-    if ($rowCount > 0) {
-        $p = isset($_GET['page']) ? $_GET['page'] : 1;
-        $page = (int) preg_replace('#[^0-9]#', '', $p);
-        $lastPage = ceil($rowCount / $maxPerPage);
-
-        if ($page < 1)
-            $page = 1;
-        elseif ($page > $lastPage)
-            $page = $lastPage;
-
-        $limit = 'LIMIT ' . $maxPerPage . ' OFFSET ' . ($page - 1) * $maxPerPage;
-
-        if ($lastPage != 1) {
-            $queryString = !empty($urlParams) ? http_build_query($urlParams) . "&" : "";
-            $baseUrl = $pageTo . "?" . $queryString;
-
-            if ($page > 1) {
-                $previous = $page - 1;
-                $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $previous . '">&laquo;</a>';
-            }
-
-            for ($i = $page - 4; $i < $page; $i++) {
-                if ($i > 0)
-                    $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $i . '">' . $i . '</a>';
-            }
-
-            $paginationCtrls .= '<a class="active">' . $page . '</a>';
-
-            for ($i = $page + 1; $i <= $lastPage; $i++) {
-                $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $i . '">' . $i . '</a>';
-                if ($i >= $page + 4)
-                    break;
-            }
-
-            if ($page != $lastPage) {
-                $next = $page + 1;
-                $paginationCtrls .= '<a href="' . $baseUrl . 'page=' . $next . '">&raquo;</a>';
-            }
-        }
-        return $limit;
-    }
-    return "LIMIT $maxPerPage";
-}
-
-$whereClause = "";
-$params = [];
+// Build filters
+$search = null;
+$genre = null;
 $urlParams = [];
+$orderBy = "ORDER BY Nome ASC";
 
 if (isset($_GET["search_btn"]) || isset($_GET["search"])) {
-    $search_text = '%' . $_GET["search"] . '%';
-    $whereClause = "WHERE Nome LIKE ? OR Autore LIKE ? OR ISBN LIKE ? OR CasaEditrice LIKE ?";
-    $params = [$search_text, $search_text, $search_text, $search_text];
-    $urlParams = ['search' => $_GET["search"]];
+    $search = $_GET["search"];
+    $urlParams = ['search' => $search];
 } elseif (isset($_GET['genere_btn'])) {
-    $genere = $_GET['genere_btn'];
-    $whereClause = "WHERE Genere = ?";
-    $params = [$genere];
-    $urlParams = ['genere_btn' => $genere];
+    $genre = $_GET['genere_btn'];
+    $urlParams = ['genere_btn' => $genre];
 }
 
-$orderBy = "ORDER BY Nome ASC";
 if (isset($_GET['sort'])) {
     if ($_GET['sort'] == 'titolo') {
         $orderBy = "ORDER BY Nome ASC";
@@ -105,16 +37,24 @@ if (isset($_GET['sort'])) {
     $urlParams['sort'] = $_GET['sort'];
 }
 
-$limit = paginator($whereClause, $params, $urlParams);
-$finalQuery = "SELECT * FROM $table $whereClause $orderBy $limit";
-try {
-    $query = $pdo->prepare($finalQuery);
-    $query->execute($params);
-    $result = $query->fetchAll();
-    $query->closeCursor();
-} catch (PDOException $e) {
-    throw new Exception("Error executing main query: " . $e->getMessage());
+// Pagination
+$countQuery = "SELECT count(*) as tot FROM Opera WHERE 1=1";
+$countParams = [];
+
+if ($search !== null) {
+    $countQuery = "SELECT count(*) as tot FROM Opera WHERE Nome LIKE ? OR Autore LIKE ? OR ISBN LIKE ? OR CasaEditrice LIKE ?";
+    $searchText = '%' . $search . '%';
+    $countParams = [$searchText, $searchText, $searchText, $searchText];
+} elseif ($genre !== null) {
+    $countQuery = "SELECT count(*) as tot FROM Opera WHERE Genere = ?";
+    $countParams = [$genre];
 }
+
+$pagination = paginate($pdo, $countQuery, $countParams, 10, 'lista.php', $urlParams);
+$limit = $pagination['limit'];
+
+// Fetch books
+$books = $bookService->search($search, $genre, $orderBy, $limit);
 ?>
 
 <!DOCTYPE html>
@@ -134,7 +74,6 @@ try {
     <link rel="stylesheet" href="../css/pages/footer.css">
     <link rel="stylesheet" href="../css/utilities.css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="lista-page">
@@ -222,64 +161,33 @@ try {
                 </div>
             </div>
 
-            <!-- Colonna Destra: INTEGRALMENTE come prima -->
+            <!-- Colonna Destra -->
             <div class="col-lg-9">
                 <div class="right-column">
                     <?php
-                    if (count($result) > 0) {
-                        foreach ($result as $row) {
-                            $id = $row['id'];
-
-                            // Controllo disponibilità in tempo reale
-                            $q = "SELECT count(idCopia) as qty FROM copiaLibro WHERE Stato = 1 AND ISBN = :isbn";
-
-                            if ($query = $pdo->prepare($q)) {
-                                $query->bindParam(':isbn', $row['ISBN']);
-                                $query->execute();
-                                $qtyRow = $query->fetch()['qty'];
-                                $query->closeCursor();
-
-                                if ($qtyRow >= 1) {
-                                    $disponibilita = "Disponibile";
-                                    $color = "var(--color-success)";
-                                } else {
-                                    $disponibilita = "Non disponibile";
-                                    $color = "var(--color-danger)";
-                                }
-
-                                $q = "SELECT AVG(Voto) as media, COUNT(*) as totale FROM recensione WHERE idOpera = :id";
-
-                                if ($query = $pdo->prepare($q)) {
-                                    $query->bindParam(':id', $id, PDO::PARAM_INT);
-                                    $query->execute();
-                                    $dati_media = $query->fetch(PDO::FETCH_ASSOC);
-
-                                    $media = $dati_media['media'] ?? 0;
-                                    $media_arrotondata = round((float) $media);
-                                    $totale_recensioni = (int) $dati_media['totale'];
-
-                                    $query->closeCursor();
-
-                                    echo "
-                                <a href='../libro/libro.php?id=$id'>
-                                    <div class='book-list hvr-float data-single-book shadow-sm mb-3'>
-                                        <img src='" . "../img/books/" . $row['Copertina'] . "' width='113' height='171' class='book-img' style='object-fit: cover;'>
-                                        <div class='container-book'>
-                                            <span class='book-link trunctitle' style='font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 5px;'>" . $row['Nome'] . "</span>
-
-                                            <div class='rating-stars' style='margin-bottom: 5px; font-size: 0.9rem;'> 
-                                                <span style='color: var(--color-accent);'>" . str_repeat("★", $media_arrotondata) . str_repeat("☆", 5 - $media_arrotondata) . "</span>
-                                                <small style='font-size: 0.75rem; color: var(--color-text-muted);'> (" . $totale_recensioni . ")</small>
-                                            </div>
-
-                                            <p class='book-authors'>" . $row['Autore'] . " | " . $row['CasaEditrice'] . " | " . $row['ISBN'] . " | " . $row['Genere'] . "</p>
-                                            <p class='desc'>" . (strlen($row['Descrizione']) > 150 ? substr($row['Descrizione'], 0, 150) . "..." : $row['Descrizione']) . "</p>
-                                            <span style='color: $color; font-weight: bold;' class='disponibilita'>$disponibilita</span>
+                    if (count($books) > 0) {
+                        foreach ($books as $row) {
+                            $id = (int) $row['id'];
+                            $availability = $bookService->getAvailability($id);
+                            $rating = $bookService->getRatingStats($id);
+                            $media_arrotondata = (int) round($rating['media']);
+                    ?>
+                            <a href='../libro/libro.php?id=<?php echo $id; ?>'>
+                                <div class='book-list hvr-float data-single-book shadow-sm mb-3'>
+                                    <img src='../img/books/<?php echo e($row['Copertina']); ?>' width='113' height='171' class='book-img' style='object-fit: cover;'>
+                                    <div class='container-book'>
+                                        <span class='book-link trunctitle' style='font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 5px;'><?php echo e($row['Nome']); ?></span>
+                                        <div class='rating-stars' style='margin-bottom: 5px; font-size: 0.9rem;'>
+                                            <span style='color: var(--color-accent);'><?php echo render_stars($media_arrotondata); ?></span>
+                                            <small style='font-size: 0.75rem; color: var(--color-text-muted);'> (<?php echo $rating['totale']; ?>)</small>
                                         </div>
+                                        <p class='book-authors'><?php echo e($row['Autore']) . ' | ' . e($row['CasaEditrice']) . ' | ' . e($row['ISBN']) . ' | ' . e($row['Genere']); ?></p>
+                                        <p class='desc'><?php echo e(strlen($row['Descrizione']) > 150 ? substr($row['Descrizione'], 0, 150) . "..." : $row['Descrizione']); ?></p>
+                                        <span style='color: <?php echo $availability['color']; ?>; font-weight: bold;' class='disponibilita'><?php echo $availability['disponibilita']; ?></span>
                                     </div>
-                                </a>";
-                                }
-                            }
+                                </div>
+                            </a>
+                    <?php
                         }
                     } else {
                         echo "<h4>Nessun libro trovato.</h4>";
@@ -288,7 +196,7 @@ try {
 
                     <div class="center" style="margin-top: 30px; display: flex; justify-content: center;">
                         <div class="pagination">
-                            <?php echo $paginationCtrls; ?>
+                            <?php echo $pagination['controls']; ?>
                         </div>
                     </div>
                 </div>
@@ -297,16 +205,27 @@ try {
     </div>
 
     <script>
-        $(document).ready(function () {
-            // Toggle sidebar filtri
-            $("#sort-by").click(function () {
-                $("#left-container").toggle();
-            });
-            // Toggle sottomenu generi
-            $("#genere-trigger").click(function () {
-                $("#genere-subwrap").slideToggle();
-            });
-        }); 
+        document.addEventListener('DOMContentLoaded', function () {
+            var sortBy = document.getElementById('sort-by');
+            var leftContainer = document.getElementById('left-container');
+            if (sortBy && leftContainer) {
+                sortBy.addEventListener('click', function () {
+                    leftContainer.style.display = leftContainer.style.display === 'none' ? 'block' : 'none';
+                });
+            }
+
+            var genereTrigger = document.getElementById('genere-trigger');
+            var genereSubwrap = document.getElementById('genere-subwrap');
+            if (genereTrigger && genereSubwrap) {
+                genereTrigger.addEventListener('click', function () {
+                    if (genereSubwrap.style.display === 'none') {
+                        genereSubwrap.style.display = 'block';
+                    } else {
+                        genereSubwrap.style.display = 'none';
+                    }
+                });
+            }
+        });
     </script>
     <?php require_once("../nav/footer.php"); ?>
 </body>

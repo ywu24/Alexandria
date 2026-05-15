@@ -75,3 +75,7 @@ try {
 require_once __DIR__ . '/Helpers/functions.php';
 require_once __DIR__ . '/Helpers/validation.php';
 require_once __DIR__ . '/Helpers/pagination.php';
+
+// View functions
+require_once __DIR__ . '/Views/components/messages.php';
+require_once __DIR__ . '/Views/components/head.php';
