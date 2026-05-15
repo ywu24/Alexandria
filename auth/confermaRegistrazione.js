@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </h4>
                     <form id="reinvio-form" action="confermaRegistrazione.php" method="POST">
                         <input type="hidden" name="reinvia" value="1">
-                        <button type="submit" style="background: none; border: none; color: #1f3a78; text-decoration: underline; cursor: pointer; font-weight: bold; font-family: 'Roboto', sans-serif; font-size: 0.85em; padding: 0;">
+                        <button type="submit" style="background: none; border: none; color: #1f3a78; text-decoration: underline; cursor: pointer; font-weight: bold; font-size: 0.85em; padding: 0;">
                             Clicca qui per reinviare
                         </button>
                     </form>
