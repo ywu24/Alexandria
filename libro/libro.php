@@ -314,10 +314,10 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
 
         if ($qty['qty'] >= 1) {
             $disponibilita = "Disponibile";
-            $color = "green";
+            $color = "var(--color-success)";
         } else {
             $disponibilita = "Non disponibile";
-            $color = "red";
+            $color = "var(--color-danger)";
         }
 
 

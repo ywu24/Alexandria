@@ -108,7 +108,7 @@ if (isset($_SESSION['login_error'])) {
 
               <?php
               if ($error == 2) {
-                echo "<h2 style='color: red;'>$err_message</h2>";
+                echo "<h2 style='color: var(--color-danger);'>$err_message</h2>";
               }
               ?>
 
@@ -119,7 +119,7 @@ if (isset($_SESSION['login_error'])) {
 
               <?php
               if ($error == 1) {
-                echo "<h2 style='color: red;'>$err_message</h2>";
+                echo "<h2 style='color: var(--color-danger);'>$err_message</h2>";
               }
               ?>
 

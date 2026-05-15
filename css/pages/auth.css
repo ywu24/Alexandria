@@ -218,6 +218,18 @@ input:focus {
   color: #721c24;
 }
 
+[data-theme="dark"] .messages .successo {
+  background-color: rgba(61, 139, 106, 0.15);
+  color: #6dd9a8;
+  border: 1px solid rgba(61, 139, 106, 0.3);
+}
+
+[data-theme="dark"] .messages .errore {
+  background-color: rgba(209, 69, 74, 0.15);
+  color: #ff8a8a;
+  border: 1px solid rgba(209, 69, 74, 0.3);
+}
+
 /* ============================================
    REGISTRATION SPECIFIC
    ============================================ */

@@ -184,10 +184,10 @@
                  <form action="confermaRegistrazione.php" method="POST">
                      <h1>Verifica la tua email</h1>
 
-                     <p style="margin-bottom: 20px; color: #555;">
-                         Abbiamo inviato un codice di conferma all'indirizzo:<br>
-                         <strong><?php echo isset($_SESSION['temp_email']) ? htmlspecialchars($_SESSION['temp_email']) : 'tua email'; ?></strong>
-                     </p>
+                      <p style="margin-bottom: 20px; color: var(--color-text-muted);">
+                          Abbiamo inviato un codice di conferma all'indirizzo:<br>
+                          <strong><?php echo isset($_SESSION['temp_email']) ? htmlspecialchars($_SESSION['temp_email']) : 'tua email'; ?></strong>
+                      </p>
 
                      <div>
                          <h3>CODICE DI CONFERMA</h3>
@@ -199,7 +199,7 @@
 
                      <br />
                      <center>
-                         <a href="registrazione.php" style="text-decoration: none; color: #333; font-size: 0.8em;">Torna alla registrazione</a>
+                          <a href="registrazione.php" style="text-decoration: none; color: var(--color-text); font-size: 0.8em;">Torna alla registrazione</a>
                      </center>
 
                      <center>

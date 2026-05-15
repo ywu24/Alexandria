@@ -137,7 +137,7 @@ try {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<body class="bg-light lista-page">
+<body class="lista-page">
     <div id="nav-placeholder">
         <?php require_once("../nav/nav.php"); ?>
     </div>
@@ -165,29 +165,42 @@ try {
         <div class="row">
             <!-- Sidebar Filtri -->
             <div class="col-lg-3 mb-4">
-                <div class="card border-0 shadow-sm overflow-hidden sticky-top"  style="top: 20px; z-index: 100;">
-                    <!-- Header Nero con iconcina blu -->
-                    <div class="card-header bg-dark text-white font-weight-bold d-flex align-items-center" id="sort-by" style="cursor:pointer;">
-                        <i class="fa fa-filter mr-2" style="color: #007bff;"></i> 
+                <div class="card border-0 shadow-sm overflow-hidden sticky-top" style="top: 20px; z-index: 100;">
+                    <!-- Header Filtri -->
+                    <div class="card-header font-weight-bold d-flex align-items-center" id="sort-by"
+                        style="cursor:pointer;">
+                        <svg class="icon" style="width:18px;height:18px;margin-right:8px;">
+                            <use href="../img/icons.svg#relevance" />
+                        </svg>
                         <span class="flex-grow-1">Filtra</span>
-                        <img src="../img/arrow.png" alt="" width="15" style="filter: invert(1);">
+                        <svg class="icon" style="width:15px;height:15px;">
+                            <use href="../img/icons.svg#arrow-down" />
+                        </svg>
                     </div>
 
                     <div class="list-group list-group-flush" id="left-container">
-                        <a href="lista.php?sort=titolo" class="list-group-item list-group-item-action d-flex align-items-center border-0 text-dark">
-                            <img src="../img/title.png" alt="" class="mr-3" width="20">
+                        <a href="lista.php?sort=titolo"
+                            class="list-group-item list-group-item-action d-flex align-items-center border-0">
+                            <svg class="icon" style="width:20px;height:20px;margin-right:12px;">
+                                <use href="../img/icons.svg#list" />
+                            </svg>
                             <h5 class="m-0 font-weight-normal" style="font-size: 1rem;">Titolo</h5>
                         </a>
 
                         <div class="list-group-item border-0" id="genere-trigger" style="cursor:pointer;">
                             <div class="d-flex align-items-center">
-                                <img src="../img/genere.png" alt="" class="mr-3" width="20">
+                                <svg class="icon" style="width:20px;height:20px;margin-right:12px;">
+                                    <use href="../img/icons.svg#genre" />
+                                </svg>
                                 <h5 class="m-0 font-weight-normal flex-grow-1" style="font-size: 1rem;">Genere</h5>
-                                <img src="../img/down-arrow.png" width="12" id="genere-arrow">
+                                <svg class="icon" style="width:12px;height:12px;" id="genere-arrow">
+                                    <use href="../img/icons.svg#arrow-down" />
+                                </svg>
                             </div>
                         </div>
 
-                        <div class="bg-light px-3 py-2" id="genere-subwrap" style="display:none;">
+                        <div class="px-3 py-2" id="genere-subwrap"
+                            style="display:none;background-color:var(--color-bg-alt);">
                             <form action="lista.php" method="get">
                                 <?php
                                 $generi = ["Romanzo Storico", "Giallo", "Biografia", "Avventura", "Azione", "Fantascienza", "Horror", "Umoristico", "Distopia"];
@@ -198,8 +211,11 @@ try {
                             </form>
                         </div>
 
-                        <a href="lista.php?sort=anno" class="list-group-item list-group-item-action d-flex align-items-center border-0 text-dark">
-                            <img src="../img/calendar.png" alt="" class="mr-3" width="20">
+                        <a href="lista.php?sort=anno"
+                            class="list-group-item list-group-item-action d-flex align-items-center border-0">
+                            <svg class="icon" style="width:20px;height:20px;margin-right:12px;">
+                                <use href="../img/icons.svg#calendar" />
+                            </svg>
                             <h5 class="m-0 font-weight-normal" style="font-size: 1rem;">Anno</h5>
                         </a>
                     </div>
@@ -225,23 +241,23 @@ try {
 
                                 if ($qtyRow >= 1) {
                                     $disponibilita = "Disponibile";
-                                    $color = "green";
+                                    $color = "var(--color-success)";
                                 } else {
                                     $disponibilita = "Non disponibile";
-                                    $color = "red";
+                                    $color = "var(--color-danger)";
                                 }
 
                                 $q = "SELECT AVG(Voto) as media, COUNT(*) as totale FROM recensione WHERE idOpera = :id";
-                                
+
                                 if ($query = $pdo->prepare($q)) {
                                     $query->bindParam(':id', $id, PDO::PARAM_INT);
                                     $query->execute();
                                     $dati_media = $query->fetch(PDO::FETCH_ASSOC);
 
                                     $media = $dati_media['media'] ?? 0;
-                                    $media_arrotondata = round((float)$media);
-                                    $totale_recensioni = (int)$dati_media['totale'];
-                                    
+                                    $media_arrotondata = round((float) $media);
+                                    $totale_recensioni = (int) $dati_media['totale'];
+
                                     $query->closeCursor();
 
                                     echo "
@@ -251,9 +267,9 @@ try {
                                         <div class='container-book'>
                                             <span class='book-link trunctitle' style='font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 5px;'>" . $row['Nome'] . "</span>
 
-                                            <div class='rating-stars' style='margin-bottom: 5px; font-size: 0.9rem;'>
-                                                <span style='color: #ffc107;'>" . str_repeat("★", $media_arrotondata) . str_repeat("☆", 5 - $media_arrotondata) . "</span>
-                                                <small class='text-muted' style='font-size: 0.75rem;'> (" . $totale_recensioni . ")</small>
+                                            <div class='rating-stars' style='margin-bottom: 5px; font-size: 0.9rem;'> 
+                                                <span style='color: var(--color-accent);'>" . str_repeat("★", $media_arrotondata) . str_repeat("☆", 5 - $media_arrotondata) . "</span>
+                                                <small style='font-size: 0.75rem; color: var(--color-text-muted);'> (" . $totale_recensioni . ")</small>
                                             </div>
 
                                             <p class='book-authors'>" . $row['Autore'] . " | " . $row['CasaEditrice'] . " | " . $row['ISBN'] . " | " . $row['Genere'] . "</p>

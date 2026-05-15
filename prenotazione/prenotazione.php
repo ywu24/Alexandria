@@ -40,15 +40,15 @@ if (isset($_SESSION['utenza'])) {
     <!-- Aggiunto stile inline per garantire il layout a due colonne simile all'admin -->
     <style>
         .book-container {
-            background: #fff;
+            background: var(--color-surface);
             border-radius: 12px;
             margin-bottom: 20px;
-            border: 1px solid #eee;
+            border: 1px solid var(--color-border);
             overflow: hidden;
         }
 
         .left-panel {
-            border-right: 1px solid #eee;
+            border-right: 1px solid var(--color-border);
             padding: 20px;
             display: flex;
         }
@@ -70,7 +70,7 @@ if (isset($_SESSION['utenza'])) {
 
         .info-meta {
             font-size: 0.9rem;
-            color: #666;
+            color: var(--color-text-muted);
             margin-bottom: 10px;
         }
 
@@ -87,8 +87,10 @@ if (isset($_SESSION['utenza'])) {
         }
 
         .icon-trash {
-            width: 20px;
-            opacity: 0.6;
+            width: 22px;
+            height: 22px;
+            color: var(--color-danger);
+            opacity: 0.7;
         }
     </style>
 
@@ -190,7 +192,10 @@ if (isset($_SESSION['utenza'])) {
                     <h4 class="h4 font-weight-bold mb-1"><?= htmlspecialchars($row['Nome']) ?></h4>
                     <?php if ($stato == "Prenotato"): ?>
                         <button class="delete-button" data-id="<?= $row['idPrenotazione'] ?>" title="Annulla">
-                            <img src="../img/trash-bin.png" class="icon-trash" style="width:22px;" alt="Elimina">
+                            <svg class="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
                         </button>
                     <?php endif; ?>
                 </div>
