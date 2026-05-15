@@ -24,7 +24,7 @@ error_reporting(E_ALL);
   <link rel="stylesheet" href="../css/pages/dashboard.css">
   <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
-  <link rel="shortcut icon" href="../img/dashboard.png" type="image/x-icon">
+  <link rel="icon" type="image/svg+xml" href="../img/dashboard.svg">
   <!--script per importare parti di codice-->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>

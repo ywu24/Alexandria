@@ -25,7 +25,7 @@ require_once("../../utils/connect.php");
     <link rel="stylesheet" href="../../css/pages/dashboard.css">
     <link rel="stylesheet" href="../../css/pages/footer.css">
     <link rel="stylesheet" href="../../css/utilities.css">
-    <link rel="shortcut icon" href="../../img/segnDashFavicon.png" type="image/x-icon">
+    <link rel="icon" type="image/svg+xml" href="../../img/segnDashFavicon.svg">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>

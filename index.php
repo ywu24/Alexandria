@@ -561,7 +561,7 @@ $genres = $genreStmt->fetchAll(PDO::FETCH_ASSOC);
                 }
 
             } else {
-                $utente = ['Nome' => '', 'Cognome' => '', 'propic' => 'userDashFavicon.png'];
+                $utente = ['Nome' => '', 'Cognome' => '', 'propic' => 'userDashFavicon.svg'];
                 $email = 'eg@example.com';
                 $pTotali = ['totali' => 0];
                 $p_inCorso = ['incorso' => 0];

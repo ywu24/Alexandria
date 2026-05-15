@@ -124,7 +124,7 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
   <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
   <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
-  <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
+  <link rel="icon" type="image/svg+xml" href="../img/feedbackFavicon.svg">
   <title>Lascia una recensione</title>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

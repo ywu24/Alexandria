@@ -33,7 +33,7 @@ if (isset($_GET['errore'])) {
     <link rel="stylesheet" href="../../css/pages/dashboard.css">
     <link rel="stylesheet" href="../../css/pages/footer.css">
     <link rel="stylesheet" href="../../css/utilities.css">
-    <link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">
+    <link rel="icon" type="image/svg+xml" href="../../img/userDashFavicon.svg">
 </head>
 <body class="dashboard-table">
     <div id="nav-placeholder">

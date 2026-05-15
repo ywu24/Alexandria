@@ -32,7 +32,7 @@ try {
     <link rel="stylesheet" href="../../css/pages/dashboard.css">
     <link rel="stylesheet" href="../../css/pages/footer.css">
     <link rel="stylesheet" href="../../css/utilities.css">
-	<link rel="shortcut icon" href="../../img/bookDashFavicon.png">
+	<link rel="icon" type="image/svg+xml" href="../../img/bookDashFavicon.svg">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="aggiornaCopie.js" defer></script>
 </head>

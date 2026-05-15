@@ -163,6 +163,10 @@
  </head>
 
  <body class="registration">
+     <button id="theme-toggle" type="button" class="auth-theme-toggle" aria-label="Toggle theme">
+         <svg class="icon icon-sun" style="display:none;"><use href="../img/icons.svg#sun"/></svg>
+         <svg class="icon icon-moon" style="display:none;"><use href="../img/icons.svg#moon"/></svg>
+     </button>
      <div class="messages">
          <?php
             if (isset($_SESSION['error_msg'])) {

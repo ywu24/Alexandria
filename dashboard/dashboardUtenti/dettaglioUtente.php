@@ -71,7 +71,7 @@ function calcolaStatoPHP($row)
                 header("Location: dashboardUtenti.php?errore=3");
                 exit;
             }
-            $propic = !empty($u['propic']) ? $u['propic'] : "userDashFavicon.png";
+            $propic = !empty($u['propic']) ? $u['propic'] : "userDashFavicon.svg";
         ?>
 
             <!-- HEADER UTENTE -->

@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../css/pages/forms.css">
   <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
-  <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
+  <link rel="icon" type="image/svg+xml" href="../img/feedbackFavicon.svg">
 </head>
 
 <body class="form-page">
