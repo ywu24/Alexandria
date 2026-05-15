@@ -7,7 +7,7 @@
     </div>
 
     <div class="footer-contact">
-      <h4>Contacts</h4>
+      <h4>Contatti</h4>
       <p><a href="mailto:wu.2106064@studenti.uniroma1.it">wu.2106064@studenti.uniroma1.it</a></p>
       <p><a href="mailto:#">[Email 2]</a></p>
       <p><a href="mailto:#">[Email 3]</a></p>
