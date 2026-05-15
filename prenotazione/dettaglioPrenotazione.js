@@ -39,7 +39,7 @@ async function apriDettaglioPrenotazione(id) {
 
                 <div class="fs-sm mb-3">
                     <p class="text-truncate mb-1"><strong>User:</strong> ${data.Email}</p>
-                    <div class="bg-white p-2 rounded border">
+                    <div class="bg-surface p-2 rounded border">
                         <div><small class="text-muted">INIZIO:</small> <b>${data.Inizio}</b></div>
                         <div><small class="text-muted">SCADENZA:</small> <b>${data.Fine}</b></div>
                     </div>

@@ -66,7 +66,7 @@ async function caricaUtenti(append = false) {
 
             trDetails.innerHTML = `
                 <td colspan="10">
-                    <div class="p-3 bg-white border-start border-info shadow-sm">
+                    <div class="p-3 bg-surface border-start border-info shadow-sm">
                         <div class="detail-item"><span class="detail-label">ID:</span> <span>${user.id || 'N/D'}</span></div>
                         <div class="detail-item"><span class="detail-label">Email:</span> <span>${user.email || 'N/D'}</span></div>
                         <div class="detail-item"><span class="detail-label">Ruolo:</span> <span>${user.ruolo || 'N/D'}</span></div>
@@ -100,19 +100,17 @@ document.addEventListener("click", function(e) {
         const mainRow = btn.closest('tr');
         const detailsRow = mainRow.nextElementSibling;
 
-        if (detailsRow && detailsRow.classList.contains('mobile-details-row')) {
-            if (detailsRow.classList.contains('d-none')) {
-                detailsRow.classList.remove('d-none');
-                detailsRow.classList.add('d-table-row');
-                btn.innerHTML = 'Chiudi';
-                btn.classList.replace('btn-secondary', 'btn-dark');
-            } else {
-                detailsRow.classList.remove('d-table-row');
-                detailsRow.classList.add('d-none');
-                btn.innerHTML = 'Info';
-                btn.classList.replace('btn-dark', 'btn-secondary');
+            if (detailsRow && detailsRow.classList.contains('mobile-details-row')) {
+                if (detailsRow.classList.contains('d-none')) {
+                    detailsRow.classList.remove('d-none');
+                    detailsRow.classList.add('d-table-row');
+                    btn.innerHTML = 'Chiudi';
+                } else {
+                    detailsRow.classList.remove('d-table-row');
+                    detailsRow.classList.add('d-none');
+                    btn.innerHTML = 'Info';
+                }
             }
-        }
     }
 });
 

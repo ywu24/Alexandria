@@ -47,7 +47,7 @@ async function caricaPrenotazioni(append = false) {
 
         if (prenotazioni.length === 0) {
             if (!append) {
-                container.innerHTML = '<div class="alert alert-light text-center w-100">Nessuna prenotazione trovata.</div>';
+                container.innerHTML = '<div class="alert alert-info text-center w-100">Nessuna prenotazione trovata.</div>';
             }
             if (btn) btn.classList.add('d-none');
             return;
@@ -74,7 +74,7 @@ async function caricaPrenotazioni(append = false) {
                                     <span>Al: ${row.fine_formattata}</span><br>
                                     <span class="text-dark">User: ${row.email}</span>
                                 </div>
-                                <button class="btn btn-dark btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">Gestisci</button>
+                                <button class="btn btn-secondary btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">Gestisci</button>
                             </div>
                         </div>
                     </div>

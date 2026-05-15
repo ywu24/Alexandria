@@ -77,12 +77,10 @@ document.addEventListener("click", async (e) => {
                 mobileRow.classList.remove('d-none');
                 mobileRow.classList.add('d-table-row');
                 btn.innerHTML = 'Chiudi';
-                btn.classList.replace('btn-secondary', 'btn-dark');
             } else {
                 mobileRow.classList.remove('d-table-row');
                 mobileRow.classList.add('d-none');
                 btn.innerHTML = 'Info';
-                btn.classList.replace('btn-dark', 'btn-secondary');
             }
         } else {
             const tds = row.querySelectorAll("td");
@@ -97,7 +95,7 @@ document.addEventListener("click", async (e) => {
             const html = `
                 <tr id="${mobileRowId}" class="mobile-details-row d-none">
                     <td colspan="3" class="p-0">
-                        <div class="p-3 bg-white border-start border-info shadow-sm">
+                        <div class="p-3 bg-surface border-start border-info shadow-sm">
                             <div class="detail-item"><span class="detail-label">Autore:</span> <span>${autore || 'N/D'}</span></div>
                             <div class="detail-item"><span class="detail-label">Genere:</span> <span>${genere || 'N/D'}</span></div>
                             <div class="detail-item"><span class="detail-label">Anno:</span> <span>${anno || 'N/D'}</span></div>
@@ -116,7 +114,6 @@ document.addEventListener("click", async (e) => {
             mobileRow.classList.remove('d-none');
             mobileRow.classList.add('d-table-row');
             btn.innerHTML = 'Chiudi';
-            btn.classList.replace('btn-secondary', 'btn-dark');
         }
         return;
     }
@@ -236,8 +233,8 @@ function renderCopie(container, copie, e) {
     }
 
     let html = `
-        <table class="table table-sm table-striped bg-white border m-0">
-            <thead class="table-light">
+        <table class="table table-sm table-striped bg-surface border m-0">
+            <thead>
                 <tr>
                     <th>ID Copia</th>
                     <th>Stato</th>

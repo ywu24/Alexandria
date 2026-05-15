@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            let html = "<h2 class='h4 mb-4 mt-5 fw-bold text-secondary text-start'>Storico Prenotazioni Terminate</h2>";
+            let html = "<h2 class='h4 mb-4 mt-5 fw-bold text-primary text-start'>Storico Prenotazioni Terminate</h2>";
 
             data.forEach(row => {
                 let statoTesto = "TERMINATA";
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <span>Dal: ${formattaData(dataInizio)}</span><br>
                                         <span>Al: ${formattaData(dataFine)}</span>
                                     </div>
-                                    <button class="btn btn-dark btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">
+                                    <button class="btn btn-secondary btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">
                                         Gestisci
                                     </button>
                                 </div>
