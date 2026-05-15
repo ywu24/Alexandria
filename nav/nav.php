@@ -12,8 +12,6 @@ if (isset($_POST['logout'])) {
 }
 ?>
 
-<link rel="stylesheet" href="<?php echo $root; ?>/css/nav.css">
-
 <nav class="nav1">
 
     <a href="<?php echo $root; ?>/index.php">

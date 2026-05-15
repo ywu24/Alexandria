@@ -115,21 +115,23 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/unified.css">
-  <link rel="stylesheet" href="../css/segnalazione.css">
-  <link rel="stylesheet" href="../css/messaggi.css">
-  <link rel="stylesheet" href="../css/recensioni.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/navigation.css">
+  <link rel="stylesheet" href="../css/pages/forms.css">
+  <link rel="stylesheet" href="../css/utilities.css">
   <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
   <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
   <title>Lascia una recensione</title>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./recensione.js" defer></script>
 </head>
 
-<body>
+<body class="form-page">
 
   <div id="nav-placeholder">
     <?php require_once("../nav/nav.php"); ?>

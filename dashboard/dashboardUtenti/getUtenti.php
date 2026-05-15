@@ -73,8 +73,8 @@ foreach ($utenti as $row) {
             <td class='col-nascondi'>{$row['punteggio']}</td>
             <td class='col-nascondi'>
                 <div class='btn_actions'>
-                    <a class='btn btn-primary' href='modificaUtente.php?id={$row['id']}'>Modifica</a>
-                    <a class='btn btn-danger' href='eliminaUtente.php?id={$row['Email']}'>Elimina</a>
+                    <a class='btn btn-primary btn-sm' href='modificaUtente.php?id={$row['id']}'>Modifica</a>
+                    <a class='btn btn-danger btn-sm' href='eliminaUtente.php?id={$row['Email']}'>Elimina</a>
                 </div>
             </td>";
     } else {
@@ -85,7 +85,7 @@ foreach ($utenti as $row) {
             <td class='col-nascondi'>{$row['punteggio']}</td>
             <td class='col-nascondi'>
                 <div class='btn_actions text-center'>
-                    <a class='btn btn-primary' href='dettaglioUtente.php?id={$row['id']}'>Prenotazioni</a>
+                    <a class='btn btn-primary btn-sm' href='dettaglioUtente.php?id={$row['id']}'>Prenotazioni</a>
                 </div>
             </td>";
     }

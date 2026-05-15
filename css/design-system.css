@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Color Palette - Library Theme */
+  --color-primary: #1a2744;
+  --color-primary-light: #2d3f5f;
+  --color-accent: #c9a84c;
+  --color-accent-hover: #b8942f;
+  --color-success: #2d6a4f;
+  --color-danger: #c1292e;
+  --color-warning: #e09f3e;
+  --color-info: #457b9d;
+
+  --color-bg: #f5f3ef;
+  --color-bg-alt: #ede8e0;
+  --color-surface: #ffffff;
+  --color-text: #1e1e1e;
+  --color-text-muted: #6b6b6b;
+  --color-border: #d4cfc4;
+
+  /* Legacy variable mappings for compatibility */
+  --text: var(--color-text);
+  --background: var(--color-bg);
+  --titolo: var(--color-accent);
+  --darkerbackground: var(--color-bg-alt);
+  --sectiontext: var(--color-primary);
+  --articletext: var(--color-text-muted);
+  --button: var(--color-primary);
+  --button-hover: var(--color-primary-light);
+  --white: var(--color-surface);
+  --border: var(--color-border);
+  --editaction: var(--color-info);
+  --editaction-hover: #3a6a8a;
+  --lightgrey: var(--color-bg);
+  --greyhome: var(--color-bg-alt);
+
+  /* Bootstrap-like legacy variables */
+  --primary-color: var(--color-primary);
+  --secondary-color: var(--color-accent);
+  --success-color: var(--color-success);
+  --warning-color: var(--color-warning);
+  --danger-color: var(--color-danger);
+  --info-color: var(--color-info);
+  --light-color: var(--color-bg);
+  --dark-color: var(--color-primary);
+  --white-color: var(--color-surface);
+  --border-color: var(--color-border);
+  --text-color: var(--color-text);
+  --text-muted: var(--color-text-muted);
+
+  /* Typography Scale */
+  --font-family-base: 'Poppins', sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Breakpoints (for reference in JS or custom media queries) */
+  --bp-sm: 576px;
+  --bp-md: 768px;
+  --bp-lg: 992px;
+  --bp-xl: 1200px;
+  --bp-xxl: 1400px;
+}
+
+/* Global Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Global font reset for all elements */
+* {
+  font-family: var(--font-family-base);
+}
+
+/* Preserve monospace for code elements */
+code,
+pre,
+kbd,
+samp {
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* Typography defaults */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Focus Ring Utility */
+.focus-ring:focus,
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-light);
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

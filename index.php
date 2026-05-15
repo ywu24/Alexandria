@@ -19,10 +19,13 @@ require_once("utils/connect.php");
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/unified.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/hover.css">
-    <link rel="stylesheet" href="css/messaggi.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/pages/home.css">
+    <link rel="stylesheet" href="css/utilities.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>HomePage - Alexandria </title>
 </head>

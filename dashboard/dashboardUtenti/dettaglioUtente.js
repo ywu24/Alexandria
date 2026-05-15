@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btn.addEventListener('click', async () => {
         const idUtente = btn.getAttribute('data-id-utente');
-        
+
         if (!idUtente) {
             console.error("ID Utente mancante nel bottone");
             return;
@@ -27,17 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error("Errore del server: " + response.status);
 
             const data = await response.json();
-            
+
             if (!Array.isArray(data) || data.length === 0) {
                 container.innerHTML = `
                     <hr>
-                    <div class='alert alert-info shadow-sm rounded-15'>
+                    <div class="alert alert-info shadow-sm rounded-lg">
                         Nessuna prenotazione terminata trovata per questo utente.
                     </div>`;
                 return;
             }
 
-            let html = "<h2 class='h4 mb-4 mt-5 font-weight-bold text-secondary text-left'>Storico Prenotazioni Terminate</h2>";
+            let html = "<h2 class='h4 mb-4 mt-5 fw-bold text-secondary text-start'>Storico Prenotazioni Terminate</h2>";
 
             data.forEach(row => {
                 let statoTesto = "TERMINATA";
@@ -53,12 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 html += `
                 <div class="book-container shadow-sm animate-in" id="container-prenotazione-${row.idPrenotazione}">
-                    <div class="row no-gutters">
+                    <div class="row g-0">
                         <div class="col-md-6 left-panel">
                             <div class="media media-book">
-                                <img src="../../img/books/${row.Copertina}" class="mr-4 shadow-sm book-cover" alt="Copertina">
-                                <div class="media-body text-left">
-                                    <h3 class="h5 font-weight-bold book-title">${row.Nome}</h3>
+                                <img src="../../img/books/${row.Copertina}" class="me-4 shadow-sm book-cover" alt="Copertina">
+                                <div class="media-body text-start">
+                                    <h3 class="h5 fw-bold book-title">${row.Nome}</h3>
                                     <p class="text-muted mb-1 small">${row.Autore}</p>
                                     <p class="small mb-2 status-badge ${statoClasse}">● ${statoTesto}</p>
                                     <div class="small text-muted">

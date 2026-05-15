@@ -7,9 +7,8 @@ async function caricaUtenti(append = false) {
 
     try {
         const formData = new FormData(form);
-        // Calcolo offset basato sulle righe già presenti
         const offset = append ? container.querySelectorAll("tr.user-main-row").length : 0;
-        
+
         formData.set('offset', offset);
         formData.set('limit', 10);
 
@@ -21,7 +20,6 @@ async function caricaUtenti(append = false) {
         const utenti = await response.json();
         console.log(utenti);
 
-        // Se non è append, stiamo facendo una nuova ricerca o ordinamento: svuota tutto
         if (!append) {
             container.innerHTML = "";
         }
@@ -30,17 +28,15 @@ async function caricaUtenti(append = false) {
             if (!append) {
                 container.innerHTML = '<tr><td colspan="10" class="text-center text-muted p-4">Nessun record trovato</td></tr>';
             }
-            if (btnAltro) btnAltro.style.display = "none";
+            if (btnAltro) btnAltro.classList.add('d-none');
             return;
         }
 
         utenti.forEach(user => {
-            // 1. Creiamo la riga principale
             const trMain = document.createElement('tr');
             trMain.className = "user-main-row";
-            trMain.innerHTML = user.html; 
-            
-            // Aggiungiamo il pulsante di espansione per mobile alla fine della riga
+            trMain.innerHTML = user.html;
+
             const toggleTd = document.createElement('td');
             toggleTd.className = "mobile-only text-center align-middle";
             toggleTd.innerHTML = `<button class="btn btn-sm btn-secondary btn-info-mobile">Info</button>`;
@@ -48,40 +44,36 @@ async function caricaUtenti(append = false) {
 
             container.appendChild(trMain);
 
-            // 2. Creiamo la riga "Dettagli" (nascosta di default via CSS)
             const trDetails = document.createElement('tr');
-            trDetails.className = "mobile-details-row";
-            trDetails.style.display = "none"; // Gestito da JS al click
-            
-            // Costruiamo il contenuto espandibile
+            trDetails.className = "mobile-details-row d-none";
+
             let azioniHtml = "";
-    
+
             if (USER_TYPE == 1) {
-                // Se ADMIN: Mostra Modifica ed Elimina
                 azioniHtml = `
                     <div class="d-flex flex-column gap-2 mt-3">
-                        <a class="btn btn-primary btn-block" href="modificaUtente.php?id=${user.id}">Modifica</a>
-                        <a class="btn btn-danger btn-block" href="eliminaUtente.php?id=${user.email}">Elimina</a>
+                        <a class="btn btn-primary w-100" href="modificaUtente.php?id=${user.id}">Modifica</a>
+                        <a class="btn btn-danger w-100" href="eliminaUtente.php?id=${user.email}">Elimina</a>
                     </div>
                 `;
             } else {
-                // Se Altro: Mostra solo Prenotazioni
                 azioniHtml = `
                     <div class="d-flex flex-column gap-2 mt-3">
-                        <a class="btn btn-primary btn-block" href="dettaglioUtente.php?id=${user.id}">Prenotazioni</a>
+                        <a class="btn btn-primary w-100" href="dettaglioUtente.php?id=${user.id}">Prenotazioni</a>
                     </div>
                 `;
             }
 
             trDetails.innerHTML = `
                 <td colspan="10">
-                    <div class="p-3 bg-white border-left-info shadow-sm">
+                    <div class="p-3 bg-white border-start border-info shadow-sm">
+                        <div class="detail-item"><span class="detail-label">ID:</span> <span>${user.id || 'N/D'}</span></div>
                         <div class="detail-item"><span class="detail-label">Email:</span> <span>${user.email || 'N/D'}</span></div>
                         <div class="detail-item"><span class="detail-label">Ruolo:</span> <span>${user.ruolo || 'N/D'}</span></div>
                         <div class="detail-item"><span class="detail-label">Punteggio:</span> <span>${user.punteggio || '0'}</span></div>
-                        
+
                         <div class="mt-3 pt-2 border-top">
-                            <p class="small text-muted mb-2 text-uppercase font-weight-bold">Azioni:</p>
+                            <p class="small text-muted mb-2 text-uppercase fw-bold">Azioni:</p>
                             ${azioniHtml}
                         </div>
                     </div>
@@ -90,9 +82,9 @@ async function caricaUtenti(append = false) {
             container.appendChild(trDetails);
         });
 
-        // Mostra il tasto Carica Altro solo se abbiamo ricevuto esattamente 10 record
         if (btnAltro) {
-            btnAltro.style.display = (utenti.length === 10) ? "block" : "none";
+            btnAltro.classList.toggle('d-none', utenti.length !== 10);
+            btnAltro.classList.toggle('d-block', utenti.length === 10);
         }
 
     } catch (error) {
@@ -103,19 +95,20 @@ async function caricaUtenti(append = false) {
 document.addEventListener("click", function(e) {
     const target = e.target;
 
-    // Gestione click sul tasto espandi mobile
     if (target.classList.contains('btn-info-mobile') || target.closest('.btn-info-mobile')) {
         const btn = target.classList.contains('btn-info-mobile') ? target : target.closest('.btn-info-mobile');
         const mainRow = btn.closest('tr');
         const detailsRow = mainRow.nextElementSibling;
 
         if (detailsRow && detailsRow.classList.contains('mobile-details-row')) {
-            if (detailsRow.style.display === 'none') {
-                detailsRow.style.display = 'table-row';
+            if (detailsRow.classList.contains('d-none')) {
+                detailsRow.classList.remove('d-none');
+                detailsRow.classList.add('d-table-row');
                 btn.innerHTML = 'Chiudi';
                 btn.classList.replace('btn-secondary', 'btn-dark');
             } else {
-                detailsRow.style.display = 'none';
+                detailsRow.classList.remove('d-table-row');
+                detailsRow.classList.add('d-none');
                 btn.innerHTML = 'Info';
                 btn.classList.replace('btn-dark', 'btn-secondary');
             }
@@ -126,22 +119,19 @@ document.addEventListener("click", function(e) {
 document.addEventListener("DOMContentLoaded", function () {
     const btnSearch = document.getElementById("searchBtn");
     const searchInput = document.getElementById("searchInput");
-    
-    // Gestione Cerca (Click e Invio)
+
     if (btnSearch) {
         btnSearch.addEventListener("click", () => caricaUtenti(false));
     }
-    
+
     if (searchInput) {
         searchInput.addEventListener("keypress", (e) => {
-            
             if (e.key === "Enter") {
                 caricaUtenti(false);
             }
         });
     }
 
-    // Gestione Ordinamento
     document.querySelectorAll(".sort_btn").forEach(btn => {
         btn.addEventListener("click", function() {
             document.getElementById("sort_type").value = this.dataset.sort;
@@ -149,12 +139,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Carica Altro
     const btnAltro = document.getElementById("caricaAltro");
     if (btnAltro) {
         btnAltro.addEventListener("click", () => caricaUtenti(true));
     }
 
-    // Caricamento iniziale automatico
     caricaUtenti(false);
 });

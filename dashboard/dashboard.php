@@ -16,15 +16,19 @@ error_reporting(E_ALL);
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Admin</title>
-  <link rel="stylesheet" href="../css/dashboard.css">
-  <link rel="stylesheet" href="../css/colors.css">
-  <link rel="stylesheet" href="../../css/messaggi.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/navigation.css">
+  <link rel="stylesheet" href="../css/pages/dashboard.css">
+  <link rel="stylesheet" href="../css/utilities.css">
   <link rel="shortcut icon" href="../img/dashboard.png" type="image/x-icon">
   <!--script per importare parti di codice-->
-  <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<body>
+<body class="dashboard-landing">
 
   <div id="nav-placeholder">
     <?php $root = "..";

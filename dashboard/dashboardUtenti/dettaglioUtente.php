@@ -35,44 +35,20 @@ function calcolaStatoPHP($row)
 <head>
     <meta charset="UTF-8">
     <title>Alexandria - Gestione Utente</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-
-        .user-summary {
-            background: #fff;
-            border-radius: 30px;
-            padding: 15px 30px;
-            border: 1px solid #eee;
-            margin-bottom: 40px;
-        }
-
-        .user-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .animate-in {
-            animation: fadeInRight 0.4s ease-out;
-        }
-
-       
-
-    </style>
-    <link rel="stylesheet" href="../../css/unified.css">
-    <link rel="stylesheet" href="../../css/dettaglioUtenti.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/design-system.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/navigation.css">
+    <link rel="stylesheet" href="../../css/pages/user-detail.css">
+    <link rel="stylesheet" href="../../css/utilities.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- AGGIUNTI I SCRIPT MANCANTI -->
     <script src="dettaglioUtente.js"></script>
     <script src="dettaglioPrenotazione.js"></script>
 </head>
 
-<body>
+<body class="user-detail">
     <div id="nav-placeholder"><?php require_once("../../nav/nav.php"); ?></div>
 
     <div class="container mt-5">
@@ -189,8 +165,7 @@ function calcolaStatoPHP($row)
         ?>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

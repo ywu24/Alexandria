@@ -4,12 +4,18 @@
 
 <head>
 	<title>Modifica libro</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../../css/design-system.css">
+	<link rel="stylesheet" href="../../css/components.css">
+	<link rel="stylesheet" href="../../css/layout.css">
+	<link rel="stylesheet" href="../../css/navigation.css">
+	<link rel="stylesheet" href="../../css/pages/forms.css">
+	<link rel="stylesheet" href="../../css/utilities.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
-<body>
+<body class="form-page">
 	<div id="nav-placeholder"><?php
 	$root = "../..";
 	require_once("../../nav/nav.php");

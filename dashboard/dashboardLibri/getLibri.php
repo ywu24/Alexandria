@@ -71,7 +71,7 @@ foreach ($libri as $row) {
         <td class='col-nascondi'>{$row['AnnoPubblicazione']}</td>
         <td class='col-nascondi'>" . htmlspecialchars($row['CasaEditrice']) . "</td>
         <td class='col-nascondi'>
-            <input type='number' value='{$row['copie']}' class='form-control-sm' style='width:60px'>
+            <input type='number' value='{$row['copie']}' class='form-control form-control-sm d-inline-block w-auto'>
             <button class='btn btn-outline-info btn-sm save'>Salva</button>
         </td>
         <td class='col-nascondi'>
@@ -82,7 +82,7 @@ foreach ($libri as $row) {
             <button class='btn btn-sm btn-secondary btn-info-mobile' type='button'>Info</button>
         </td>
     </tr>
-    <tr id='row-details-$isbn' style='display:none;' class='bg-light'>
+    <tr id='row-details-$isbn' class='bg-light d-none'>
         <td colspan='9'><div id='content-$isbn' class='p-3'>Caricamento in corso...</div></td>
     </tr>";
 

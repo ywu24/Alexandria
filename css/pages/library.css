@@ -1,0 +1,945 @@
+/* ============================================
+   PAGES/LIBRARY.CSS
+   (from lista.css + libro.css + prenotazione.css)
+   ============================================ */
+
+/* --- Base --- */
+html {
+  font-family: var(--font-family-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.3;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+}
+
+/* ============================================
+   BOOK LISTING (from lista.css)
+   ============================================ */
+body.lista-page .main-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+body.lista-page .left-column {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+body.lista-page .left-container {
+  padding: 1.2rem;
+  background-color: var(--color-surface);
+  width: 100%;
+  filter: drop-shadow(0px 2px 2px var(--color-border));
+  box-sizing: border-box;
+  border-radius: var(--radius-sm);
+}
+
+body.lista-page .left-container a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+body.lista-page .icon1 {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  object-fit: contain;
+}
+
+body.lista-page .icon-small {
+  width: 14px;
+  height: 14px;
+}
+
+body.lista-page .arrow-icon {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.3s ease;
+}
+
+body.lista-page .rotate-arrow {
+  transform: rotate(180deg);
+}
+
+body.lista-page .sort-by {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+body.lista-page .sort-by h5 {
+  margin: 0;
+  font-size: 1.1em;
+  color: var(--color-primary);
+}
+
+body.lista-page .genere-subwrap {
+  margin-left: 32px;
+  border-left: 1px solid var(--color-border);
+  padding-left: 15px;
+  margin-bottom: 10px;
+}
+
+body.lista-page .genere-sublink {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 6px 0;
+  font-family: var(--font-family-base);
+  font-size: 0.9em;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s, padding-left 0.2s;
+}
+
+body.lista-page .genere-sublink:hover {
+  color: var(--color-accent);
+  padding-left: 5px;
+}
+
+body.lista-page .filter-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  text-decoration: none;
+  color: inherit;
+  border: none;
+  background: none;
+  width: 100%;
+  cursor: pointer;
+}
+
+body.lista-page .filter-item h5 {
+  margin: 0;
+  font-weight: 500;
+  font-size: var(--text-base);
+  color: var(--color-primary);
+}
+
+body.lista-page .right-column {
+  flex-grow: 1;
+  margin-left: 40px;
+  max-width: 850px;
+}
+
+body.lista-page .right-column a {
+  text-decoration: none;
+  color: inherit;
+}
+
+body.lista-page .book-list {
+  display: flex;
+  background-color: var(--color-surface);
+  margin-bottom: 20px;
+  padding: 20px;
+  filter: drop-shadow(0px 2px 2px var(--color-border));
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: var(--radius-sm);
+}
+
+body.lista-page .book-list:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+body.lista-page .book-img {
+  border-radius: 4px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+body.lista-page .container-book {
+  margin-left: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
+}
+
+body.lista-page .book-link {
+  color: var(--color-primary);
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+body.lista-page .book-authors {
+  font-size: 0.85em;
+  font-style: italic;
+  color: var(--color-text-muted);
+  margin: 8px 0;
+}
+
+body.lista-page .desc {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.5;
+  margin-bottom: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+body.lista-page .disponibilita {
+  font-size: 0.9em;
+  margin-top: auto;
+}
+
+/* ============================================
+   BOOK DETAIL (from libro.css)
+   ============================================ */
+body.libro-detail {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+body.libro-detail .container {
+  margin-top: 14vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  margin-bottom: 2vh;
+  gap: 30px;
+}
+
+body.libro-detail .left-column img {
+  aspect-ratio: 10/16;
+  height: 540px;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+}
+
+body.libro-detail .right-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 1.5pc;
+  max-width: 500px;
+}
+
+body.libro-detail .right-column .desc {
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+body.libro-detail .div-button {
+  margin-top: auto;
+  display: flex;
+  gap: 15px;
+  padding-top: 5px;
+  transform: translateY(-8px);
+}
+
+body.libro-detail .info-title {
+  display: flex;
+  flex-direction: row;
+}
+
+body.libro-detail .info-title h1 {
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--color-primary);
+}
+
+body.libro-detail .info-title h6 {
+  font-style: oblique;
+  font-weight: lighter;
+  align-self: flex-end;
+  margin-left: 1pc;
+  color: var(--color-text-muted);
+}
+
+body.libro-detail .info-release {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+body.libro-detail .info-release h5 {
+  font-weight: 400;
+  font-style: oblique;
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+body.libro-detail .status-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+body.libro-detail .status-container h5 {
+  margin: 0 5px;
+}
+
+body.libro-detail .truncdesc {
+  overflow-y: auto;
+  max-height: 20.25rem;
+  min-height: 324px;
+  padding-right: 10px;
+}
+
+body.libro-detail .truncdesc::-webkit-scrollbar,
+body.libro-detail .review-feed::-webkit-scrollbar {
+  width: 6px;
+}
+
+body.libro-detail .truncdesc::-webkit-scrollbar-thumb,
+body.libro-detail .review-feed::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 10px;
+}
+
+/* Reviews */
+body.libro-detail hr.my-5 {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+body.libro-detail h2.fw-bold {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  max-width: 70%;
+  margin: auto;
+  color: var(--color-primary);
+}
+
+body.libro-detail .review-feed {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+body.libro-detail .review-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 5px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  max-width: 70%;
+  margin: auto auto 1.5rem auto;
+}
+
+body.libro-detail .review-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+body.libro-detail .review-body p {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+  color: var(--color-text);
+}
+
+body.libro-detail .review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+body.libro-detail .user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+body.libro-detail .user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #d1d1d1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+body.libro-detail .avatar-letter {
+  font-weight: bold;
+  color: var(--color-surface);
+  font-size: 1.2rem;
+  z-index: 1;
+}
+
+body.libro-detail .user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+body.libro-detail #scroll-trigger {
+  min-height: 60px;
+  max-width: 70%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Buttons on book detail */
+body.libro-detail .right-column button,
+body.libro-detail .pop-up button {
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  height: 50px;
+  width: 140px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+body.libro-detail .right-column button:hover {
+  background-color: var(--color-primary-light);
+}
+
+body.libro-detail .prenotazioneDisabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+body.libro-detail .no-reviews-container {
+  max-width: 70%;
+  margin: auto;
+}
+
+/* ============================================
+   RESERVATIONS (from prenotazione.css)
+   ============================================ */
+body.prenotazioni-page {
+  overflow-x: hidden;
+}
+
+body.prenotazioni-page .display-4 {
+  font-size: 2.75rem;
+  font-weight: 700;
+}
+
+body.prenotazioni-page h1 {
+  font-size: 1.5rem;
+  padding: 50px 5px;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  color: var(--color-primary);
+}
+
+body.prenotazioni-page .container {
+  width: 90vw;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+body.prenotazioni-page .book-container {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
+}
+
+body.prenotazioni-page .book-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+}
+
+body.prenotazioni-page .book-cover {
+  width: 120px;
+  height: auto;
+  aspect-ratio: 1 / 1.5;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+body.prenotazioni-page .book-section {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+body.prenotazioni-page .info-title h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
+body.prenotazioni-page .isbn-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+body.prenotazioni-page .info-meta {
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+body.prenotazioni-page .info-status {
+  font-weight: 500;
+}
+
+body.prenotazioni-page .book-dates {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-top: 5px;
+}
+
+body.prenotazioni-page .delete-button {
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+body.prenotazioni-page .icon-trash {
+  width: 24px;
+  height: 24px;
+  filter: invert(13%) sepia(65%) saturate(6668%) hue-rotate(11deg) brightness(81%) contrast(114%);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  /* Lista */
+  body.lista-page .main-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  body.lista-page .left-column {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  body.lista-page .right-column {
+    margin-left: 0;
+  }
+
+  body.lista-page #left-container {
+    display: none;
+    margin-top: 10px;
+  }
+
+  body.lista-page .book-list {
+    padding: 15px;
+  }
+
+  body.lista-page .book-img {
+    width: 80px;
+    height: 120px;
+  }
+
+  body.lista-page .container-book {
+    margin-left: 15px;
+  }
+
+  body.lista-page .book-link {
+    font-size: 1.1em;
+  }
+
+  body.lista-page .desc {
+    display: none;
+  }
+
+  body.lista-page .book-authors {
+    font-size: 0.75em;
+  }
+
+  /* Libro detail mobile */
+  body.libro-detail .container {
+    flex-direction: column;
+    margin-top: 2pc;
+    align-items: center;
+    gap: 15px;
+  }
+
+  body.libro-detail .left-column {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  body.libro-detail .left-column img {
+    width: 220px;
+    height: auto;
+    aspect-ratio: 10/16;
+    box-shadow: var(--shadow-sm);
+  }
+
+  body.libro-detail .right-column {
+    margin: 0 1pc;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  body.libro-detail .truncdesc {
+    text-align: center;
+    width: 85vw;
+    min-height: auto;
+    max-height: 200px;
+    margin-bottom: 20px;
+  }
+
+  body.libro-detail .div-button {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  body.libro-detail .div-button button {
+    width: 70vw;
+    height: 50px;
+    font-size: var(--text-base);
+  }
+
+  body.libro-detail .info-title {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  body.libro-detail .info-title h1 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  body.libro-detail .info-title h6 {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+
+  body.libro-detail .info-release {
+    justify-content: center;
+    gap: 5px;
+  }
+
+  body.libro-detail .status-container {
+    justify-content: center;
+    width: auto;
+    margin-top: 0;
+  }
+
+  body.libro-detail h2.fw-bold {
+    text-align: center;
+    font-size: 1.3rem;
+  }
+
+  body.libro-detail .rating-display {
+    justify-content: center;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+
+  body.libro-detail .review-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  body.libro-detail .user-info {
+    flex-direction: column;
+  }
+
+  body.libro-detail .no-reviews-container {
+    max-width: 100%;
+    padding: 20px 15px;
+  }
+
+  /* Prenotazione mobile */
+  body.prenotazioni-page .form-icon-back {
+    top: 5.8pc;
+    left: -1.1vw;
+  }
+
+  body.prenotazioni-page .display-4 {
+    font-size: 1.75rem;
+  }
+
+  body.prenotazioni-page h1.display-4 {
+    font-size: 1.5rem;
+  }
+
+  body.prenotazioni-page h1 {
+    font-size: 1.5rem;
+    padding: 43px 5px 18px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  body.prenotazioni-page .book-wrapper {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  body.prenotazioni-page .book-cover {
+    width: 150px;
+  }
+
+  body.prenotazioni-page .delete-button {
+    align-self: center;
+    margin-top: 10px;
+    position: relative;
+    bottom: 0;
+    right: 0;
+  }
+
+  body.prenotazioni-page .book-container {
+    padding: 20px 0;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+
+  body.prenotazioni-page .display-4 {
+    font-size: 1.1rem;
+    line-height: 1.2;
+  }
+
+  body.prenotazioni-page h1.display-4 {
+    font-size: 1.1rem;
+    line-height: 1.2;
+  }
+
+  body.prenotazioni-page h1 {
+    font-size: 1.1rem;
+    padding: 25px 5px 10px;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 550px) {
+  body.prenotazioni-page .display-4 {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  body.prenotazioni-page h1.display-4 {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  body.prenotazioni-page h1 {
+    font-size: 1rem;
+    padding: 20px 5px 8px;
+    line-height: 1.3;
+    width: 100%;
+  }
+
+  body.prenotazioni-page .form-icon-back {
+    position: absolute;
+    top: 6pc;
+    left: -0.9vw;
+    align-items: center;
+    display: flex;
+  }
+
+  body.prenotazioni-page {
+    scroll-margin-top: calc(69px + 0.5rem);
+  }
+
+  body.prenotazioni-page .delete-button {
+    align-self: center;
+    margin-top: 10px;
+    position: relative;
+    bottom: 0;
+    right: 0;
+  }
+
+  body.prenotazioni-page .container {
+    width: 90vw;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+  body.prenotazioni-page .book-section {
+    width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  body.prenotazioni-page .book-link .book-cover {
+    aspect-ratio: 1/1.6;
+    border-radius: var(--radius-sm);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5vw;
+    width: 15pc;
+  }
+
+  body.prenotazioni-page .book-section > h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  body.prenotazioni-page .book-link {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+  }
+
+  body.prenotazioni-page .info-release :not(:nth-child(3)) {
+    margin-right: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  body.prenotazioni-page .info-release {
+    display: flex;
+    padding: 5px 0;
+    justify-content: center;
+  }
+
+  body.prenotazioni-page .book-link form {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+  }
+
+  body.prenotazioni-page .book-container {
+    padding: 20px 0;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  body.libro-detail .left-column img {
+    width: 180px;
+  }
+
+  body.libro-detail .div-button button {
+    width: 85vw;
+  }
+}
+
+@media (max-width: 370px) {
+  body.prenotazioni-page {
+    scroll-margin-top: calc(69px + 0.5rem);
+    overflow-x: hidden;
+  }
+
+  body.prenotazioni-page .display-4 {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  body.prenotazioni-page h1.display-4 {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  body.prenotazioni-page h1 {
+    font-size: 0.9rem;
+    padding: 15px 5px 6px;
+    line-height: 1.3;
+    width: 100%;
+  }
+
+  body.prenotazioni-page .book-link .book-cover {
+    aspect-ratio: 1/1.6;
+    border-radius: var(--radius-sm);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5vw;
+    width: 12pc;
+  }
+
+  body.prenotazioni-page .info-release {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0;
+  }
+
+  body.prenotazioni-page .book-section {
+    width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  body.prenotazioni-page .book-link form {
+    padding-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.prenotazioni-page .book-cover {
+    margin-left: 2vw;
+  }
+
+  body.prenotazioni-page .info-release > span {
+    display: none;
+  }
+
+  body.prenotazioni-page .info-release > h5 {
+    margin-bottom: 0.5rem;
+  }
+
+  body.prenotazioni-page .delete-button {
+    align-self: center;
+    margin-top: 10px;
+    position: relative;
+    bottom: 0;
+    right: 0;
+  }
+
+  body.prenotazioni-page .book-container {
+    padding: 20px 0;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+}

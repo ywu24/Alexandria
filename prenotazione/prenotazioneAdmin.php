@@ -39,12 +39,17 @@ function calcolaStatoPHP($row) {
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alexandria - Gestione Prenotazioni</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/unified.css">
-    <link rel="stylesheet" href="../css/dettaglioUtenti.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/design-system.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/pages/user-detail.css">
+    <link rel="stylesheet" href="../css/utilities.css">
 </head>
-<body>
+<body class="user-detail">
     <div id="nav-placeholder"><?php require_once("../nav/nav.php"); ?></div>
 
     <!-- ... (stesso inizio PHP di prima per sessione e connessione) ... -->

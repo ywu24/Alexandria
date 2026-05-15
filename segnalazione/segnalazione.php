@@ -170,14 +170,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Feedback Utente | Supporto</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/unified.css">
-  <link rel="stylesheet" href="../css/segnalazione.css">
-  <link rel="stylesheet" href="../css/messaggi.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/navigation.css">
+  <link rel="stylesheet" href="../css/pages/forms.css">
+  <link rel="stylesheet" href="../css/utilities.css">
   <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
 </head>
 
-<body>
+<body class="form-page">
 
   <div id="nav-placeholder">
     <?php require_once("../nav/nav.php"); ?>
@@ -252,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
   <script src="segnalazione.js"></script>
   <script>

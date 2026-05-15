@@ -6,8 +6,8 @@ async function caricaLibri(append = false) {
     const tableBody = document.getElementById("libriTableBody");
     const searchInput = document.getElementById("searchInput");
     const loadMoreBtn = document.getElementById("loadMoreBtn");
-    
-    if (!append) currentOffset = 0; 
+
+    if (!append) currentOffset = 0;
 
     const formData = new FormData();
     formData.append('search', searchInput ? searchInput.value : "");
@@ -22,7 +22,7 @@ async function caricaLibri(append = false) {
 
         if (data.length === 0) {
             if (!append) tableBody.innerHTML = '<tr><td colspan="8" class="text-center p-4">Nessun libro trovato</td></tr>';
-            loadMoreBtn.style.display = "none";
+            loadMoreBtn.classList.add('d-none');
             return;
         }
 
@@ -31,10 +31,12 @@ async function caricaLibri(append = false) {
         });
 
         if (data.length === LIMIT) {
-            loadMoreBtn.style.display = "inline-block";
+            loadMoreBtn.classList.remove('d-none');
+            loadMoreBtn.classList.add('d-inline-block');
             currentOffset += LIMIT;
         } else {
-            loadMoreBtn.style.display = "none";
+            loadMoreBtn.classList.remove('d-inline-block');
+            loadMoreBtn.classList.add('d-none');
         }
 
     } catch (e) {
@@ -47,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("searchBtn").onclick = () => caricaLibri(false);
     document.getElementById("searchInput").onkeyup = (e) => { if (e.key === "Enter") caricaLibri(false); };
-    
+
     document.getElementById("loadMoreBtn").onclick = () => caricaLibri(true);
 
     document.querySelectorAll(".sort_btn").forEach(btn => {
@@ -71,21 +73,20 @@ document.addEventListener("click", async (e) => {
         let mobileRow = document.getElementById(mobileRowId);
 
         if (mobileRow) {
-            // Se esiste già, alterna visualizzazione
-            if (mobileRow.style.display === 'none') {
-                mobileRow.style.display = 'table-row';
+            if (mobileRow.classList.contains('d-none')) {
+                mobileRow.classList.remove('d-none');
+                mobileRow.classList.add('d-table-row');
                 btn.innerHTML = 'Chiudi';
                 btn.classList.replace('btn-secondary', 'btn-dark');
             } else {
-                mobileRow.style.display = 'none';
+                mobileRow.classList.remove('d-table-row');
+                mobileRow.classList.add('d-none');
                 btn.innerHTML = 'Info';
                 btn.classList.replace('btn-dark', 'btn-secondary');
             }
         } else {
-            // Se non esiste, crea la riga estraendo i dati dalle colonne nascoste
             const tds = row.querySelectorAll("td");
-            
-            // Indici basati sul renderRow: 
+
             const autore = tds[1] ? tds[1].innerHTML : '';
             const genere = tds[2] ? tds[2].innerHTML : '';
             const anno = tds[3] ? tds[3].innerHTML : '';
@@ -93,30 +94,31 @@ document.addEventListener("click", async (e) => {
             const copie = tds[5] ? tds[5].innerHTML : '';
             const azioni = tds[6] ? tds[6].innerHTML : '';
 
-            // Layout a tendina
             const html = `
-                <tr id="${mobileRowId}" class="mobile-details-row">
+                <tr id="${mobileRowId}" class="mobile-details-row d-none">
                     <td colspan="3" class="p-0">
-                        <div class="p-3 bg-white border-left-info shadow-sm">
+                        <div class="p-3 bg-white border-start border-info shadow-sm">
                             <div class="detail-item"><span class="detail-label">Autore:</span> <span>${autore || 'N/D'}</span></div>
                             <div class="detail-item"><span class="detail-label">Genere:</span> <span>${genere || 'N/D'}</span></div>
                             <div class="detail-item"><span class="detail-label">Anno:</span> <span>${anno || 'N/D'}</span></div>
                             <div class="detail-item"><span class="detail-label">Casa Editrice:</span> <span>${casa || 'N/D'}</span></div>
                             <div class="detail-item"><span class="detail-label">Copie:</span> <span>${copie || 'N/D'}</span></div>
                             <div class="mt-3 pt-2 border-top">
-                                <p class="small text-muted mb-2 text-uppercase font-weight-bold">Azioni:</p>
+                                <p class="small text-muted mb-2 text-uppercase fw-bold">Azioni:</p>
                                 <div class="d-flex flex-column gap-2">${azioni}</div>
                             </div>
                         </div>
                     </td>
                 </tr>
             `;
-            // Inserisci sotto la riga principale
             row.insertAdjacentHTML('afterend', html);
+            mobileRow = document.getElementById(mobileRowId);
+            mobileRow.classList.remove('d-none');
+            mobileRow.classList.add('d-table-row');
             btn.innerHTML = 'Chiudi';
             btn.classList.replace('btn-secondary', 'btn-dark');
         }
-        return; // Ferma l'esecuzione per evitare conflitti con altre logiche
+        return;
     }
 
     // --- AGGIORNA COPIE (VELOCE) ---
@@ -125,11 +127,11 @@ document.addEventListener("click", async (e) => {
         const input = row.querySelector("input[type='number']");
         const isbn = row.dataset.isbn;
         if (!confirm("Aggiornare le copie?")) return;
-        
+
         const fd = new FormData();
         fd.append("isbn", isbn);
         fd.append("copie", input.value);
-        
+
         const res = await fetch("updateCopie.php", { method: "POST", body: fd });
         const txt = await res.text();
         if (txt.includes("ok")) showMessage("Aggiornato!");
@@ -141,8 +143,9 @@ document.addEventListener("click", async (e) => {
         const targetRow = document.getElementById(`row-details-${isbn}`);
         const contentDiv = document.getElementById(`content-${isbn}`);
 
-        if (targetRow.style.display === 'table-row') {
-            targetRow.style.display = 'none';
+        if (!targetRow.classList.contains('d-none')) {
+            targetRow.classList.add('d-none');
+            targetRow.classList.remove('d-table-row');
             target.textContent = '+';
             target.classList.replace('btn-danger', 'btn-info');
         } else {
@@ -152,7 +155,8 @@ document.addEventListener("click", async (e) => {
             const res = await fetch(`get_copie.php`, { method: "POST", body: fd });
             const data = await res.json();
             renderCopie(contentDiv, data, e);
-            targetRow.style.display = 'table-row';
+            targetRow.classList.remove('d-none');
+            targetRow.classList.add('d-table-row');
             target.textContent = '-';
             target.classList.replace('btn-info', 'btn-danger');
         }
@@ -175,7 +179,6 @@ document.addEventListener("click", async (e) => {
 
     // --- NUOVA LOGICA: ELIMINA SINGOLA COPIA (ID) ---
     if (target.classList.contains("delete") || target.closest(".delete")) {
-        // Se l'utente clicca sull'icona trash dentro il bottone
         const btn = target.classList.contains("delete") ? target : target.closest(".delete");
         const row = btn.closest("tr");
         const idCopia = row.dataset.id;
@@ -190,16 +193,15 @@ document.addEventListener("click", async (e) => {
             const result = await res.text();
 
             if (result.includes("ok")) {
-                showMessage(result.slice(2)); // Toglie 'ok' e mostra il resto
-                
-                // Per aggiornare il conteggio nella riga principale, simuliamo un refresh del dettaglio
+                showMessage(result.slice(2));
+
                 const rigaDettaglio = btn.closest('tr.bg-light') || btn.closest('td').closest('tr').closest('tbody').closest('table').closest('div').closest('td').closest('tr');
                 const rigaPrincipale = rigaDettaglio.previousElementSibling;
                 const btnEspandi = rigaPrincipale.querySelector('.btn-espandi');
-                
+
                 if (btnEspandi) {
-                    btnEspandi.click(); // Chiude
-                    btnEspandi.click(); // Riapre e ricarica i dati aggiornati
+                    btnEspandi.click();
+                    btnEspandi.click();
                 }
             } else {
                 showMessage(result, "errore");
@@ -212,7 +214,6 @@ document.addEventListener("click", async (e) => {
     // --- DETTAGLI PRENOTAZIONE ---
     if (target.classList.contains("dettagli")) {
         window.location.href = "../../prenotazione/prenotazioneAdmin.php";
-        
     }
 });
 
@@ -236,11 +237,11 @@ function renderCopie(container, copie, e) {
 
     let html = `
         <table class="table table-sm table-striped bg-white border m-0">
-            <thead class="thead-light">
+            <thead class="table-light">
                 <tr>
                     <th>ID Copia</th>
                     <th>Stato</th>
-                    <th class="text-right">Azioni</th>
+                    <th class="text-end">Azioni</th>
                 </tr>
             </thead>
             <tbody>`;
@@ -248,14 +249,14 @@ function renderCopie(container, copie, e) {
     for (let copia of copie) {
         let isDisponibile = (copia.Stato == '1');
         let statoTesto = isDisponibile ? 'Disponibile' : 'In Prestito';
-        let badgeClass = isDisponibile ? 'badge-success' : 'badge-danger';
-        
+        let badgeClass = isDisponibile ? 'bg-success' : 'bg-danger';
+
         html += `<tr data-id="${copia.idCopia}">
             <td><strong>#${copia.idCopia}</strong></td>
             <td><span class="badge ${badgeClass}">${statoTesto}</span></td>
-            <td class="text-right">
+            <td class="text-end">
                 ${!isDisponibile ? '<button class="btn btn-sm btn-warning dettagli">Dettagli</button>' : ''}
-                <button class="btn btn-sm ${isDisponibile ? 'btn-outline-danger delete' : 'btn-outline-secondary'}" 
+                <button class="btn btn-sm ${isDisponibile ? 'btn-outline-danger delete' : 'btn-outline-secondary'}"
                         ${!isDisponibile ? 'disabled' : ''}
                         onclick="${!isDisponibile ? "showMessage('Impossibile eliminare una copia in prestito!', 'errore')" : ""}">
                     <i class="fas fa-trash"></i> Elimina

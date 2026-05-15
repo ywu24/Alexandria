@@ -1,0 +1,577 @@
+/* ============================================
+   PAGES/DASHBOARD.CSS
+   (from dashboard.css + styleDashboard.css + styleDashboardLibri.css + dashboardSegnalazioni.css)
+   ============================================ */
+
+/* --- Base --- */
+body {
+  background-color: var(--color-bg);
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+}
+
+/* --- Dashboard Landing (dashboard.css) --- */
+.dashboard-landing .container {
+  width: 90vw;
+  min-height: 50vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  border-radius: var(--radius-lg);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dashboard-landing .container .card-container {
+  width: 45vmin;
+  height: 40vmin;
+  border: none;
+  color: var(--color-text);
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 15px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  background-color: var(--color-surface);
+}
+
+.dashboard-landing .container a:hover div {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px);
+}
+
+.dashboard-landing .container a {
+  margin: auto 0;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.dashboard-landing .card-container img {
+  aspect-ratio: 1/1;
+  height: 50%;
+  padding: 10px;
+  margin: auto;
+  border-radius: var(--radius-sm);
+}
+
+.dashboard-landing .card-container h4 {
+  color: var(--color-primary);
+  padding: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+@media (max-width: 924px) {
+  .dashboard-landing .container {
+    flex-direction: column;
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    margin: 20px auto;
+    height: auto;
+  }
+
+  .dashboard-landing .container .card-container {
+    width: 80vw;
+    height: auto;
+    margin: 10px 0;
+  }
+
+  .dashboard-landing .card-container img {
+    height: 150px;
+    width: auto;
+  }
+}
+
+/* --- Dashboard Tables (styleDashboard.css + styleDashboardLibri.css) --- */
+.container-fluid {
+  width: 93% !important;
+}
+
+#filtriForm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+  max-width: 400px;
+}
+
+.searchbar {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+#searchBtn {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* Reset lists/margins */
+dl, ol, ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.sort_btn {
+  color: var(--color-surface);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Add button positioning */
+.btn_adduser,
+.btn_addlibro {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  z-index: 10;
+  display: block;
+}
+
+.btn_actions {
+  margin: 0 auto;
+  width: 169px;
+}
+
+/* Card overrides for dashboard tables */
+.dashboard-table .card {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface);
+}
+
+.dashboard-table .card-header {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--space-md) var(--space-lg);
+  font-weight: 600;
+}
+
+.dashboard-table .btn-primary {
+  background-color: var(--color-accent);
+  border: none;
+  transition: 0.3s;
+}
+
+.dashboard-table .btn-primary:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+}
+
+.dashboard-table .form-control:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25);
+}
+
+.dashboard-table label {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.dashboard-table .preview-image {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  margin-top: 10px;
+  border: 1px solid var(--color-border);
+}
+
+.dashboard-table .delete-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  display: none;
+  z-index: 10;
+}
+
+/* Margin overrides */
+.mt-5, .my-5 {
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6,
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 1.8rem;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-primary);
+}
+
+/* Table responsive links */
+.table-responsive a,
+.btn_addlibro {
+  text-decoration: none;
+}
+
+.table-responsive a:hover,
+.btn_addlibro:hover {
+  text-decoration: none;
+}
+
+/* Container margin fix */
+.container-fluid > .d-flex.mb-4 {
+  margin-bottom: 0.1rem;
+}
+
+.container-fluid > .d-flex.mb-4 {
+  margin-bottom: 0.5rem;
+}
+
+/* --- Reports Dashboard (dashboardSegnalazioni.css) --- */
+.reports-dashboard h2 {
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.reports-dashboard hr {
+  border-top: 2px solid var(--color-accent);
+  width: 50px;
+  margin-left: 0;
+  margin-bottom: 30px;
+}
+
+.reports-dashboard .card {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--color-surface);
+}
+
+.reports-dashboard .card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.reports-dashboard .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.reports-dashboard .card-subtitle {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 15px;
+}
+
+.reports-dashboard .card-text {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.reports-dashboard .card-link {
+  display: inline-block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.reports-dashboard .card-link:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* --- Mobile Responsive Tables --- */
+.mobile-details {
+  display: none;
+  background-color: var(--color-bg-alt);
+}
+
+/* Desktop: hide mobile-only columns */
+@media (min-width: 1057px) {
+  .mobile-only { display: none !important; }
+  .mobile-details-row { display: none !important; }
+}
+
+@media (min-width: 1121px) {
+  .mobile-only { display: none !important; }
+  .mobile-details-row { display: none !important; }
+}
+
+/* Tablet/Smartphone: show expand/collapse */
+@media (max-width: 1120px) {
+  .mobile-details-row {
+    display: table-row;
+  }
+
+  .container-fluid { width: 98% !important; }
+
+  .table .col-nascondi {
+    display: none !important;
+  }
+
+  .table tr th:not(.col-nascondi):not(.mobile-only),
+  .table tr td:not(.col-nascondi):not(.mobile-only) {
+    display: table-cell !important;
+    vertical-align: middle;
+  }
+
+  .mobile-only {
+    display: table-cell !important;
+    width: 60px !important;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .bg-light {
+    background-color: var(--color-bg-alt) !important;
+  }
+
+  #libriTableBody div[id^="content-"] {
+    border-left: 5px solid var(--color-info);
+    background-color: var(--color-surface);
+    margin: 5px;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    padding: 15px;
+  }
+
+  .searchbar {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+
+  #searchBtn {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  .container-fluid > .d-flex.mb-4 {
+    margin-bottom: 0.5rem;
+  }
+
+  .btn_addlibro {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    z-index: 10;
+    display: block;
+  }
+
+  .btn_modifica {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 1056px) {
+  .table .col-nascondi {
+    display: none !important;
+  }
+
+  .table tr th:not(.col-nascondi):not(.mobile-only),
+  .table tr td:not(.col-nascondi):not(.mobile-only) {
+    display: table-cell !important;
+    width: 40% !important;
+    vertical-align: middle;
+  }
+
+  .mobile-only.mobile-toggle-col {
+    display: table-cell !important;
+    width: 20% !important;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .mobile-details-row td,
+  .mobile-details-row th {
+    display: table-cell !important;
+    width: 100% !important;
+    padding: 0;
+    border-top: none;
+  }
+
+  .mobile-details-row div.p-3 {
+    border-left: 5px solid var(--color-info);
+    background-color: var(--color-surface);
+    margin: 10px;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .detail-item {
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .detail-label {
+    font-weight: bold;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    font-size: var(--text-xs);
+  }
+
+  .btn_adduser {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    z-index: 10;
+    display: block;
+  }
+
+  .container-fluid {
+    width: 98% !important;
+  }
+
+  .searchbar {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+
+  form.form-inline.mx-auto .btn-outline-info {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 25px;
+    margin-top: 0;
+  }
+
+  .btn_actions {
+    width: 100%;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn_actions .btn {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 0.85rem;
+  }
+
+  p.errore, p.successo {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* Smartphone Small (max-width: 480px) */
+@media (max-width: 480px) {
+  .container-fluid {
+    width: 100% !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container-fluid > p.successo,
+  .container-fluid > p.errore {
+    order: 0;
+    width: 100%;
+  }
+
+  .container-fluid > h1 {
+    order: 1;
+    margin-bottom: 15px;
+  }
+
+  .btn_adduser,
+  .btn_addlibro {
+    position: static !important;
+    order: 2;
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: center;
+    transition: none;
+  }
+
+  form#filtriForm {
+    order: 3;
+    width: 100% !important;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  form#filtriForm .searchbar {
+    width: 100% !important;
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  form#filtriForm #searchBtn {
+    width: 100% !important;
+    margin-bottom: 0;
+  }
+
+  .table-responsive {
+    order: 4;
+  }
+
+  .container-fluid > .d-flex.justify-content-center.my-5,
+  .container-fluid > .text-center.my-4 {
+    order: 5;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .btn_actions {
+    width: 100%;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn_actions .btn {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 0.85rem;
+  }
+
+  .table td, .table th {
+    font-size: 0.85rem;
+  }
+
+  /* Reports dashboard mobile */
+  .reports-dashboard .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .reports-dashboard h2 {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+  .reports-dashboard hr {
+    margin: 10px auto 30px auto;
+  }
+}
