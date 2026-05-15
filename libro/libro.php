@@ -92,7 +92,8 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/navigation.css">
-    <link rel="stylesheet" href="../css/pages/library.css">
+    <link rel="stylesheet" href="../css/pages/libro.css">
+    <link rel="stylesheet" href="../css/pages/footer.css">
     <link rel="stylesheet" href="../css/utilities.css">
 
     <!--script per importare parti di codice-->
@@ -521,6 +522,7 @@ if (isset($_GET['ajax_reviews']) && $_GET['ajax_reviews'] == '1') {
             });
         </script>
     </div>
+    <?php require_once("../nav/footer.php"); ?>
 </body>
 
 </html>

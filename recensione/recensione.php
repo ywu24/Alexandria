@@ -120,7 +120,8 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/navigation.css">
-  <link rel="stylesheet" href="../css/pages/forms.css">
+  <link rel="stylesheet" href="../css/pages/recensioni.css">
+  <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
   <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
   <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
@@ -201,7 +202,7 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
       </form>
     </div>
   </div>
-
+  <?php require_once("../nav/footer.php"); ?>
 </body>
 
 </html>

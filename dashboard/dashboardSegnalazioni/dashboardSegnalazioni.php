@@ -23,6 +23,7 @@ require_once("../../utils/connect.php");
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/navigation.css">
     <link rel="stylesheet" href="../../css/pages/dashboard.css">
+    <link rel="stylesheet" href="../../css/pages/footer.css">
     <link rel="stylesheet" href="../../css/utilities.css">
     <link rel="shortcut icon" href="../../img/segnDashFavicon.png" type="image/x-icon">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -97,5 +98,6 @@ require_once("../../utils/connect.php");
             ?>
         </div>
     </div>
+    <?php require_once("../../nav/footer.php"); ?>
 </body>
 </html>

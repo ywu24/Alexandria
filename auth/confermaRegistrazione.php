@@ -155,7 +155,9 @@
      <link rel="stylesheet" href="../css/components.css">
      <link rel="stylesheet" href="../css/layout.css">
      <link rel="stylesheet" href="../css/pages/auth.css">
+     <link rel="stylesheet" href="../css/pages/footer.css">
      <link rel="stylesheet" href="../css/utilities.css">
+     <script src="../js/theme.js"></script>
 
      <script src="confermaRegistrazione.js"></script>
  </head>
@@ -209,6 +211,7 @@
              </div>
          </div>
      </div>
+     <?php require_once("../nav/footer.php"); ?>
  </body>
 
  </html>

@@ -47,6 +47,7 @@ function calcolaStatoPHP($row) {
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/navigation.css">
     <link rel="stylesheet" href="../css/pages/user-detail.css">
+    <link rel="stylesheet" href="../css/pages/footer.css">
     <link rel="stylesheet" href="../css/utilities.css">
 </head>
 <body class="user-detail">
@@ -136,5 +137,6 @@ function calcolaStatoPHP($row) {
 
     <script src="dettaglioPrenotazione.js"></script>
     <script src="prenotazioneAdmin.js"></script>
+    <?php require_once("../nav/footer.php"); ?>
 </body>
 </html>

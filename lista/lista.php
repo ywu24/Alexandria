@@ -131,6 +131,7 @@ try {
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/navigation.css">
     <link rel="stylesheet" href="../css/pages/library.css">
+    <link rel="stylesheet" href="../css/pages/footer.css">
     <link rel="stylesheet" href="../css/utilities.css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -291,6 +292,7 @@ try {
             });
         }); 
     </script>
+    <?php require_once("../nav/footer.php"); ?>
 </body>
 
 </html>

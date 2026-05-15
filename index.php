@@ -25,6 +25,7 @@ require_once("utils/connect.php");
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/pages/home.css">
+    <link rel="stylesheet" href="css/pages/footer.css">
     <link rel="stylesheet" href="css/utilities.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>HomePage - Alexandria </title>
@@ -528,6 +529,7 @@ require_once("utils/connect.php");
     ?>
     </div>
     </div>
+    <?php require_once("nav/footer.php"); ?>
 </body>
 
 </html>

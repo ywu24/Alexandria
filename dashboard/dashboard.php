@@ -22,6 +22,7 @@ error_reporting(E_ALL);
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/navigation.css">
   <link rel="stylesheet" href="../css/pages/dashboard.css">
+  <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
   <link rel="shortcut icon" href="../img/dashboard.png" type="image/x-icon">
   <!--script per importare parti di codice-->
@@ -37,22 +38,23 @@ error_reporting(E_ALL);
   <div class="container">
     <a href="dashboardUtenti/dashboardUtenti.php">
       <div class="card-container">
-        <img src="../img/account.png" alt="">
+        <svg class="icon"><use href="../img/icons.svg#account"/></svg>
         <h4>Dashboard Utenti</h4>
       </div>
     </a>
     <a href="dashboardLibri/dashboardLibri.php">
       <div class="card-container">
-        <img src="../img/list.png" alt="">
+        <svg class="icon"><use href="../img/icons.svg#list"/></svg>
         <h4>Dashboard Libri</h4>
       </div>
     </a>
     <a href="dashboardSegnalazioni/dashboardSegnalazioni.php">
       <div class="card-container">
-        <img src="../img/warning-icon.png" alt="">
+        <svg class="icon"><use href="../img/icons.svg#warning"/></svg>
         <h4>Dashboard Segnalazioni</h4>
       </div>
     </a>
 
   </div>
+  <?php require_once('../nav/footer.php'); ?>
 </body>

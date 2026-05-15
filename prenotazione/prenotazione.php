@@ -35,6 +35,7 @@ if (isset($_SESSION['utenza'])) {
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/navigation.css">
     <link rel="stylesheet" href="../css/pages/library.css">
+    <link rel="stylesheet" href="../css/pages/footer.css">
     <link rel="stylesheet" href="../css/utilities.css">
     <!-- Aggiunto stile inline per garantire il layout a due colonne simile all'admin -->
     <style>
@@ -233,7 +234,7 @@ if (isset($_SESSION['utenza'])) {
             </div>
         </div>
     </div>
-
+    <?php require_once("../nav/footer.php"); ?>
 </body>
 
 </html>

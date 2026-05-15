@@ -25,9 +25,10 @@ session_start();//non togliere
 	<link rel="stylesheet" href="../../css/design-system.css">
 	<link rel="stylesheet" href="../../css/components.css">
 	<link rel="stylesheet" href="../../css/layout.css">
-	<link rel="stylesheet" href="../../css/navigation.css">
-	<link rel="stylesheet" href="../../css/pages/forms.css">
-	<link rel="stylesheet" href="../../css/utilities.css">
+    <link rel="stylesheet" href="../../css/navigation.css">
+    <link rel="stylesheet" href="../../css/pages/forms.css">
+    <link rel="stylesheet" href="../../css/pages/footer.css">
+    <link rel="stylesheet" href="../../css/utilities.css">
 </head>
 <body class="form-page">
 	<div id="nav-placeholder">
@@ -72,7 +73,8 @@ session_start();//non togliere
 			<input type="submit" name="submit" class="btn btn-primary" value="Aggiungi utente">
 		</form>
 	</div>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <?php require_once("../../nav/footer.php"); ?>
 </body>
 </html>

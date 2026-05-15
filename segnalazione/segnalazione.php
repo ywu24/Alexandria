@@ -176,6 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/navigation.css">
   <link rel="stylesheet" href="../css/pages/forms.css">
+  <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
   <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
 </head>
@@ -261,6 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script>
 
   </script>
+  <?php require_once("../nav/footer.php"); ?>
 </body>
 
 </html>

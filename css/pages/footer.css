@@ -1,0 +1,124 @@
+/* ============================================
+   FOOTER.CSS - Global Footer Styles
+   ============================================ */
+
+.site-footer {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  padding: var(--space-xl) 0 var(--space-md);
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.footer-brand h3 {
+  color: var(--color-accent);
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.footer-tagline {
+  font-style: italic;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-sm);
+}
+
+.footer-about {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+.footer-contact h4,
+.footer-social h4 {
+  color: var(--color-accent);
+  font-size: var(--text-md);
+  margin-bottom: var(--space-sm);
+}
+
+.footer-contact a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  transition: color 0.2s ease;
+}
+
+.footer-contact a:hover {
+  color: var(--color-accent);
+}
+
+.social-icons {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.social-icons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-surface);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.social-icons a:hover {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+.social-icons .icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  padding: 0;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: var(--space-lg);
+  margin-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-bottom p {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Force all footer text to stay light regardless of global p/h rules */
+.site-footer p,
+.site-footer h3,
+.site-footer h4 {
+  color: inherit;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    text-align: center;
+  }
+
+  .footer-about {
+    max-width: 100%;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}

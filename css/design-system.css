@@ -107,6 +107,58 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+[data-theme="dark"] {
+  --color-primary: #4a6fa5;
+  --color-primary-light: #5a83bd;
+  --color-accent: #e0b84d;
+  --color-accent-hover: #f0c96a;
+  --color-success: #3d8b6a;
+  --color-danger: #d1454a;
+  --color-warning: #f0b04a;
+  --color-info: #5a9ab8;
+
+  --color-bg: #1a1a2e;
+  --color-bg-alt: #16213e;
+  --color-surface: #0f3460;
+  --color-text: #e0e0e0;
+  --color-text-muted: #a0a0a0;
+  --color-border: #2a2a4a;
+
+  /* Legacy variable mappings for compatibility */
+  --text: var(--color-text);
+  --background: var(--color-bg);
+  --titolo: var(--color-accent);
+  --darkerbackground: var(--color-bg-alt);
+  --sectiontext: var(--color-primary);
+  --articletext: var(--color-text-muted);
+  --button: var(--color-primary);
+  --button-hover: var(--color-primary-light);
+  --white: var(--color-surface);
+  --border: var(--color-border);
+  --editaction: var(--color-info);
+  --editaction-hover: #4a8aaa;
+  --lightgrey: var(--color-bg);
+  --greyhome: var(--color-bg-alt);
+
+  /* Bootstrap-like legacy variables */
+  --primary-color: var(--color-primary);
+  --secondary-color: var(--color-accent);
+  --success-color: var(--color-success);
+  --warning-color: var(--color-warning);
+  --danger-color: var(--color-danger);
+  --info-color: var(--color-info);
+  --light-color: var(--color-bg);
+  --dark-color: var(--color-primary);
+  --white-color: var(--color-surface);
+  --border-color: var(--color-border);
+  --text-color: var(--color-text);
+  --text-muted: var(--color-text-muted);
 }
 
 /* Global font reset for all elements */

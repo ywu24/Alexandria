@@ -31,6 +31,7 @@ if (isset($_GET['errore'])) {
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/navigation.css">
     <link rel="stylesheet" href="../../css/pages/dashboard.css">
+    <link rel="stylesheet" href="../../css/pages/footer.css">
     <link rel="stylesheet" href="../../css/utilities.css">
     <link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">
 </head>
@@ -92,5 +93,6 @@ if (isset($_GET['errore'])) {
     <script>const USER_TYPE = <?php echo $_SESSION['utenza']; ?>;</script>
     <script src="dashboardUtenti.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <?php require_once("../../nav/footer.php"); ?>
 </body>
 </html>

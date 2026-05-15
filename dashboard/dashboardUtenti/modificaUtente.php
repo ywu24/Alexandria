@@ -25,9 +25,10 @@ if (isset($_GET['error'])) {
 	<link rel="stylesheet" href="../../css/design-system.css">
 	<link rel="stylesheet" href="../../css/components.css">
 	<link rel="stylesheet" href="../../css/layout.css">
-	<link rel="stylesheet" href="../../css/navigation.css">
-	<link rel="stylesheet" href="../../css/pages/forms.css">
-	<link rel="stylesheet" href="../../css/utilities.css">
+    <link rel="stylesheet" href="../../css/navigation.css">
+    <link rel="stylesheet" href="../../css/pages/forms.css">
+    <link rel="stylesheet" href="../../css/pages/footer.css">
+    <link rel="stylesheet" href="../../css/utilities.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -117,7 +118,8 @@ if (isset($_GET['error'])) {
 			<input type="hidden" name="id" value="<?php echo $id; ?>">
 			<button type="submit" class="btn btn-primary">Salva Modifiche</button>
 		</form>
-	</div>
+    </div>
+    <?php require_once("../../nav/footer.php"); ?>
 </body>
 
 </html>

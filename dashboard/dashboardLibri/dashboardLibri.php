@@ -28,9 +28,10 @@ try {
 	<link rel="stylesheet" href="../../css/design-system.css">
 	<link rel="stylesheet" href="../../css/components.css">
 	<link rel="stylesheet" href="../../css/layout.css">
-	<link rel="stylesheet" href="../../css/navigation.css">
-	<link rel="stylesheet" href="../../css/pages/dashboard.css">
-	<link rel="stylesheet" href="../../css/utilities.css">
+    <link rel="stylesheet" href="../../css/navigation.css">
+    <link rel="stylesheet" href="../../css/pages/dashboard.css">
+    <link rel="stylesheet" href="../../css/pages/footer.css">
+    <link rel="stylesheet" href="../../css/utilities.css">
 	<link rel="shortcut icon" href="../../img/bookDashFavicon.png">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="aggiornaCopie.js" defer></script>
@@ -87,11 +88,12 @@ try {
 		</div>
 	</div>
 
-	<div class="text-center my-4">
-		<button id="loadMoreBtn" class="btn btn-outline-primary shadow-sm" style="display:none;">
-			Carica Altro...
-		</button>
-	</div>
+    <div class="text-center my-4">
+        <button id="loadMoreBtn" class="btn btn-outline-primary shadow-sm" style="display:none;">
+            Carica Altro...
+        </button>
+    </div>
+    <?php require_once("../../nav/footer.php"); ?>
 </body>
 
 </html>

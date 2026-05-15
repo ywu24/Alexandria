@@ -63,6 +63,10 @@
   width: 33px;
   height: 37px;
   cursor: pointer;
+  fill: currentColor;
+  color: var(--color-primary);
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .logo {
@@ -156,7 +160,7 @@
 }
 
 .sub-menu-wrap.open-menu {
-  max-height: 450px;
+  max-height: 700px;
 }
 
 .sub-menu {
@@ -211,7 +215,8 @@
   color: var(--color-primary);
 }
 
-.sub-menu-link img {
+.sub-menu-link img,
+.sub-menu-link svg {
   display: flex;
   align-self: center;
   height: 45px;
@@ -243,7 +248,8 @@
   color: var(--color-accent);
 }
 
-.logout > img {
+.logout > img,
+.logout > svg {
   width: 42px;
   height: 43px;
   opacity: 82%;
@@ -290,6 +296,56 @@ p.logoutform {
 .nav1 form span {
   align-self: center;
   text-align: start;
+}
+
+/* Theme toggle inside sub-menu */
+.sub-menu-divider {
+  border-top: 1px solid var(--color-border);
+  margin: 10px 0;
+}
+
+.theme-toggle-row {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  width: 95%;
+  cursor: pointer;
+  text-align: start;
+  margin: 12px 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--color-primary);
+}
+
+.theme-toggle-row:hover p,
+.theme-toggle-row:hover svg {
+  color: var(--color-accent);
+}
+
+.theme-toggle-row svg {
+  flex-shrink: 0;
+}
+
+.theme-toggle-row .icon-sun,
+.theme-toggle-row .icon-moon {
+  display: flex;
+  align-self: center;
+  width: 43px;
+  height: 45px;
+  padding: 8px;
+  aspect-ratio: 1/1;
+  flex-shrink: 0;
+}
+
+.theme-toggle-row p {
+  flex: 1;
+  margin: 0;
+  font-family: var(--font-family-base);
+  font-size: 15px;
+  font-weight: 600;
+  color: inherit;
 }
 
 /* Back icon utility */
@@ -382,7 +438,8 @@ p.logoutform {
     opacity: 1;
   }
 
-  .sub-menu-link img {
+  .sub-menu-link img,
+  .sub-menu-link svg {
     height: 45px;
     width: 43px;
     padding: 8px;

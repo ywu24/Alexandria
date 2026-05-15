@@ -11,6 +11,16 @@ body {
 }
 
 /* --- Dashboard Landing (dashboard.css) --- */
+.dashboard-landing {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--color-bg);
+  position: relative;
+  min-height: calc(100vh - 56px);
+}
+
 .dashboard-landing .container {
   width: 90vw;
   min-height: 50vh;
@@ -19,10 +29,12 @@ body {
   align-items: center;
   flex-wrap: wrap;
   border-radius: var(--radius-lg);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  margin: 20px auto;
+  align-self: center;
 }
 
 .dashboard-landing .container .card-container {
@@ -51,9 +63,11 @@ body {
   color: var(--color-text);
 }
 
-.dashboard-landing .card-container img {
+.dashboard-landing .card-container img,
+.dashboard-landing .card-container svg {
   aspect-ratio: 1/1;
   height: 50%;
+  width: auto;
   padding: 10px;
   margin: auto;
   border-radius: var(--radius-sm);
@@ -67,11 +81,15 @@ body {
 }
 
 @media (max-width: 924px) {
+  .dashboard-landing {
+    min-height: auto;
+  }
+
   .dashboard-landing .container {
     flex-direction: column;
     position: relative;
-    top: 0;
-    left: 0;
+    top: auto;
+    left: auto;
     transform: none;
     margin: 20px auto;
     height: auto;

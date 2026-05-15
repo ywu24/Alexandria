@@ -1,3 +1,10 @@
+/* Sticky footer body setup */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 /* Layout & Container Utilities */
 
 .container,

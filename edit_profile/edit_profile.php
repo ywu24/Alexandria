@@ -93,6 +93,7 @@ if (isset($_POST['change_password'])) {
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/navigation.css">
     <link rel="stylesheet" href="../css/pages/forms.css">
+    <link rel="stylesheet" href="../css/pages/footer.css">
     <link rel="stylesheet" href="../css/utilities.css">
 </head>
 
@@ -254,6 +255,7 @@ if (isset($_POST['change_password'])) {
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
     </script>
+    <?php require_once("../nav/footer.php"); ?>
 </body>
 
 </html>

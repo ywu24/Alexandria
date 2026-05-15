@@ -32,9 +32,10 @@ if (isset($_SESSION['libroEsiste'])) {
 	<link rel="stylesheet" href="../../css/design-system.css">
 	<link rel="stylesheet" href="../../css/components.css">
 	<link rel="stylesheet" href="../../css/layout.css">
-	<link rel="stylesheet" href="../../css/navigation.css">
-	<link rel="stylesheet" href="../../css/pages/forms.css">
-	<link rel="stylesheet" href="../../css/utilities.css">
+    <link rel="stylesheet" href="../../css/navigation.css">
+    <link rel="stylesheet" href="../../css/pages/forms.css">
+    <link rel="stylesheet" href="../../css/pages/footer.css">
+    <link rel="stylesheet" href="../../css/utilities.css">
 </head>
 
 <body class="form-page">
@@ -165,7 +166,8 @@ if (isset($_SESSION['libroEsiste'])) {
 			var fileName = $(this).val().split("\\").pop();
 			$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 		});
-	</script>
+    </script>
+    <?php require_once("../../nav/footer.php"); ?>
 </body>
 
 </html>
