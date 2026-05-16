@@ -9,6 +9,8 @@
 use Alexandria\Services\AuthService;
 use Alexandria\Services\UserService;
 
+if (!isset($root)) $root = '';
+
 // Handle logout
 if (isset($_POST['logout'])) {
     if (defined('ALEXANDRIA_BOOTSTRAPPED') && isset($pdo)) {

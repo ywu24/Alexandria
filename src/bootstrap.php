@@ -84,3 +84,5 @@ $authService->attemptCookieLogin();
 require_once __DIR__ . '/Views/components/messages.php';
 require_once __DIR__ . '/Views/components/head.php';
 require_once __DIR__ . '/Views/components/review-card.php';
+require_once __DIR__ . '/Views/components/book-card.php';
+require_once __DIR__ . '/Views/components/star-rating.php';

@@ -171,24 +171,7 @@ $books = $bookService->search($search, $genre, $orderBy, $limit);
                             $id = (int) $row['id'];
                             $availability = $bookService->getAvailability($id);
                             $rating = $bookService->getRatingStats($id);
-                            $media_arrotondata = (int) round($rating['media']);
-                    ?>
-                            <a href='../libro/libro.php?id=<?php echo $id; ?>'>
-                                <div class='book-list hvr-float data-single-book shadow-sm mb-3'>
-                                    <img src='../img/books/<?php echo e($row['Copertina']); ?>' width='113' height='171' class='book-img' style='object-fit: cover;'>
-                                    <div class='container-book'>
-                                        <span class='book-link trunctitle' style='font-weight: bold; font-size: 1.2em; display: block; margin-bottom: 5px;'><?php echo e($row['Nome']); ?></span>
-                                        <div class='rating-stars' style='margin-bottom: 5px; font-size: 0.9rem;'>
-                                            <span style='color: var(--color-accent);'><?php echo render_stars($media_arrotondata); ?></span>
-                                            <small style='font-size: 0.75rem; color: var(--color-text-muted);'> (<?php echo $rating['totale']; ?>)</small>
-                                        </div>
-                                        <p class='book-authors'><?php echo e($row['Autore']) . ' | ' . e($row['CasaEditrice']) . ' | ' . e($row['ISBN']) . ' | ' . e($row['Genere']); ?></p>
-                                        <p class='desc'><?php echo e(strlen($row['Descrizione']) > 150 ? substr($row['Descrizione'], 0, 150) . "..." : $row['Descrizione']); ?></p>
-                                        <span style='color: <?php echo $availability['color']; ?>; font-weight: bold;' class='disponibilita'><?php echo $availability['disponibilita']; ?></span>
-                                    </div>
-                                </div>
-                            </a>
-                    <?php
+                            render_book_card($row, $availability, $rating, '../');
                         }
                     } else {
                         echo "<h4>Nessun libro trovato.</h4>";

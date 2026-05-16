@@ -25,7 +25,7 @@ if (!$authService->isAdmin() && !$authService->isLibrarian()) {
     <link rel="stylesheet" href="../css/utilities.css">
 </head>
 <body class="user-detail">
-    <div id="nav-placeholder"><?php require_once("../nav/nav.php"); ?></div>
+    <div id="nav-placeholder"><?php $root="../"; require_once("../nav/nav.php"); ?></div>
 
 <div class="container mt-5">
     <h1 class="text-center mb-5 font-weight-extra-bold">Prenotazioni</h1>

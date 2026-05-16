@@ -43,7 +43,7 @@ $root = '../..';
         <?php render_messages(); ?>
         <h1 class="text-center" style="font-size:4rem !important;">&#128100;</h1>
 
-        <!-- Form gestito interamente da getUtenti.php e JS -->
+        <!-- Form gestito interamente da dashboardUtenti.js e api/users.php -->
         <form id="filtriForm" class="form-inline mx-auto" style="width: 300px;" onsubmit="return false;">
             <input id="searchInput" class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Ricerca un utente" aria-label="Cerca">
             <input type="hidden" name="sort_type" id="sort_type" value="id">
