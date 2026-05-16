@@ -74,6 +74,7 @@ $books = $bookService->search($search, $genre, $orderBy, $limit);
     <link rel="stylesheet" href="../css/pages/footer.css">
     <link rel="stylesheet" href="../css/utilities.css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <script src="../js/lista.js"></script>
 </head>
 
 <body class="lista-page">
@@ -204,29 +205,6 @@ $books = $bookService->search($search, $genre, $orderBy, $limit);
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var sortBy = document.getElementById('sort-by');
-            var leftContainer = document.getElementById('left-container');
-            if (sortBy && leftContainer) {
-                sortBy.addEventListener('click', function () {
-                    leftContainer.style.display = leftContainer.style.display === 'none' ? 'block' : 'none';
-                });
-            }
-
-            var genereTrigger = document.getElementById('genere-trigger');
-            var genereSubwrap = document.getElementById('genere-subwrap');
-            if (genereTrigger && genereSubwrap) {
-                genereTrigger.addEventListener('click', function () {
-                    if (genereSubwrap.style.display === 'none') {
-                        genereSubwrap.style.display = 'block';
-                    } else {
-                        genereSubwrap.style.display = 'none';
-                    }
-                });
-            }
-        });
-    </script>
     <?php require_once("../nav/footer.php"); ?>
 </body>
 

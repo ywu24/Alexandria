@@ -86,6 +86,7 @@ if (isset($_POST['submit'])) {
   <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
   <script src="../js/theme.js"></script>
+  <script src="../js/utils.js"></script>
   <script src="registrazione.js"></script>
 </head>
 
