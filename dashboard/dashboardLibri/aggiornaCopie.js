@@ -11,25 +11,50 @@
 
         if (!append) currentOffset = 0;
 
-        var formData = new FormData();
-        formData.append('search', searchInput ? searchInput.value : "");
-        formData.append('sort_type', currentSort);
-        formData.append('offset', currentOffset);
+        var search = searchInput ? encodeURIComponent(searchInput.value) : "";
+        var url = '../../api/books.php?search=' + search + '&sort=' + encodeURIComponent(currentSort) + '&offset=' + currentOffset + '&limit=' + LIMIT;
 
         try {
-            var response = await fetch('getLibri.php', { method: 'POST', body: formData });
+            var response = await fetch(url);
             var data = await response.json();
 
             if (!append) tableBody.innerHTML = "";
 
-            if (data.length === 0) {
+            if (!data || data.length === 0 || data.error) {
                 if (!append) tableBody.innerHTML = '<tr><td colspan="8" class="text-center p-4">Nessun libro trovato</td></tr>';
                 loadMoreBtn.classList.add('d-none');
                 return;
             }
 
             data.forEach(function (libro) {
-                tableBody.insertAdjacentHTML('beforeend', libro.html);
+                var isbn = libro.isbn;
+                var btnElimina = libro.copies === 0
+                    ? "<button type='button' class='btn btn-danger btn-sm elimina'>Elimina</button>"
+                    : "";
+                var html = '\
+                    <tr data-isbn="' + isbn + '">\
+                        <th scope="row" class="row-header"><button class="btn btn-sm btn-info btn-espandi" type="button" data-isbn="' + isbn + '">+</button> ' + isbn + '</th>\
+                        <td>' + libro.title + '</td>\
+                        <td class="col-nascondi">' + libro.author + '</td>\
+                        <td class="col-nascondi">' + libro.genre + '</td>\
+                        <td class="col-nascondi">' + libro.year + '</td>\
+                        <td class="col-nascondi">' + libro.publisher + '</td>\
+                        <td class="col-nascondi">\
+                            <input type="number" value="' + libro.copies + '" class="form-control form-control-sm d-inline-block w-auto">\
+                            <button class="btn btn-outline-info btn-sm save">Salva</button>\
+                        </td>\
+                        <td class="col-nascondi">\
+                            <a class="btn btn-primary btn-sm btn_modifica" href="modificaLibro.php?id=' + isbn + '">Modifica</a>\
+                            ' + btnElimina + '\
+                        </td>\
+                        <td class="mobile-only">\
+                            <button class="btn btn-sm btn-secondary btn-info-mobile" type="button">Info</button>\
+                        </td>\
+                    </tr>\
+                    <tr id="row-details-' + isbn + '" class="bg-light d-none">\
+                        <td colspan="9"><div id="content-' + isbn + '" class="p-3">Caricamento in corso...</div></td>\
+                    </tr>';
+                tableBody.insertAdjacentHTML('beforeend', html);
             });
 
             if (data.length === LIMIT) {
@@ -141,9 +166,7 @@
                 target.classList.replace('btn-danger', 'btn-info');
             } else {
                 target.textContent = '...';
-                var fd = new FormData();
-                fd.append("isbn", isbn);
-                var res = await fetch('get_copie.php', { method: "POST", body: fd });
+                var res = await fetch('../../api/copies.php?isbn=' + encodeURIComponent(isbn));
                 var data = await res.json();
                 renderCopie(contentDiv, data, e);
                 targetRow.classList.remove('d-none');
@@ -208,7 +231,7 @@
     function renderCopie(container, copie, e) {
         container.innerHTML = "";
 
-        if (copie.length === 0) {
+        if (copie.length === 0 || copie.error) {
             container.innerHTML = "<div class='alert alert-info'>Nessuna copia disponibile per questo volume.</div>";
             return;
         }
@@ -226,7 +249,7 @@
 
         for (var i = 0; i < copie.length; i++) {
             var copia = copie[i];
-            var isDisponibile = (copia.Stato == '1');
+            var isDisponibile = (copia.status === 'available');
             var statoTesto = isDisponibile ? 'Disponibile' : 'In Prestito';
             var badgeClass = isDisponibile ? 'bg-success' : 'bg-danger';
 
@@ -236,8 +259,8 @@
                 : 'onclick="showMessage(\'Impossibile eliminare una copia in prestito!\', \'errore\')"';
 
             html += '\
-                <tr data-id="' + copia.idCopia + '">\
-                    <td><strong>#' + copia.idCopia + '</strong></td>\
+                <tr data-id="' + copia.id + '">\
+                    <td><strong>#' + copia.id + '</strong></td>\
                     <td><span class="badge ' + badgeClass + '">' + statoTesto + '</span></td>\
                     <td class="text-end">\
                         ' + (!isDisponibile ? '<button class="btn btn-sm btn-warning dettagli">Dettagli</button>' : '') + '\

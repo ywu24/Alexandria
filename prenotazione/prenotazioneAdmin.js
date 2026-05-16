@@ -30,14 +30,14 @@ async function caricaPrenotazioni(append = false) {
     try {
         const formData = new FormData(form);
         const offset = append ? container.querySelectorAll(".book-container").length : 0;
+        const filtro_stato = encodeURIComponent(formData.get('filtro_stato') || 'tutti');
+        const data_inizio = formData.get('data_inizio') || '';
+        const data_fine = formData.get('data_fine') || '';
+        let url = '../api/bookings.php?status=' + filtro_stato + '&sort=idPrenotazione%20DESC&limit=10&offset=' + offset;
+        if (data_inizio) url += '&from=' + encodeURIComponent(data_inizio);
+        if (data_fine) url += '&to=' + encodeURIComponent(data_fine);
 
-        formData.append('offset', offset);
-        formData.append('caricaAltro', 10);
-
-        const response = await fetch('getPrenotazioni.php', {
-            method: 'POST',
-            body: formData
-        });
+        const response = await fetch(url);
 
         if (!response.ok) throw new Error("Errore nel server");
 
@@ -56,30 +56,30 @@ async function caricaPrenotazioni(append = false) {
         prenotazioni.forEach(row => {
             const div = document.createElement('div');
             div.className = "book-container shadow-sm animate-in";
-            div.id = `container-prenotazione-${row.idPrenotazione}`;
+            div.id = `container-prenotazione-${row.id}`;
 
             div.innerHTML = `
                 <div class="row g-0">
                     <div class="col-md-6 left-panel">
                         <div class="media media-book">
-                            <img src="../img/books/${row.Copertina}" class="me-4 shadow-sm book-cover" alt="Copertina">
+                            <img src="../img/books/${row.cover}" class="me-4 shadow-sm book-cover" alt="Copertina">
                             <div class="media-body">
-                                <h3 class="h5 fw-bold book-title">${row.Nome}</h3>
-                                <p class="text-muted mb-1 small">${row.Autore}</p>
+                                <h3 class="h5 fw-bold book-title">${row.title}</h3>
+                                <p class="text-muted mb-1 small">${row.author}</p>
                                 <p class="small mb-2 status-badge ${row.color}">
-                                    ● ${row.stato_calcolato.toUpperCase()}
+                                    ● ${row.status.toUpperCase()}
                                 </p>
                                 <div class="small text-muted">
-                                    <span>Dal: ${row.inizio_formattato}</span><br>
-                                    <span>Al: ${row.fine_formattata}</span><br>
+                                    <span>Dal: ${row.start}</span><br>
+                                    <span>Al: ${row.end}</span><br>
                                     <span class="text-dark">User: ${row.email}</span>
                                 </div>
-                                <button class="btn btn-secondary btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.idPrenotazione})">Gestisci</button>
+                                <button class="btn btn-secondary btn-sm mt-3" onclick="apriDettaglioPrenotazione(${row.id})">Gestisci</button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 right-panel d-none" id="dettaglio-content-${row.idPrenotazione}"></div>
-                    <div class="col-md-6 right-panel text-center text-muted" id="placeholder-${row.idPrenotazione}">
+                    <div class="col-md-6 right-panel d-none" id="dettaglio-content-${row.id}"></div>
+                    <div class="col-md-6 right-panel text-center text-muted" id="placeholder-${row.id}">
                         <small>Seleziona "Gestisci" per azioni</small>
                     </div>
                 </div>`;

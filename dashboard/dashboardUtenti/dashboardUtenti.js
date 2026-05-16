@@ -10,14 +10,13 @@
         try {
             var formData = new FormData(form);
             var offset = append ? container.querySelectorAll("tr.user-main-row").length : 0;
+            var search = encodeURIComponent(formData.get('search') || '');
+            var utenza = formData.get('utenza') || '';
+            var sort = document.getElementById("sort_type") ? encodeURIComponent(document.getElementById("sort_type").value) : 'Nome';
+            var url = '../../api/users.php?search=' + search + '&sort=' + sort + '&offset=' + offset + '&limit=10';
+            if (utenza) url += '&utenza=' + encodeURIComponent(utenza);
 
-            formData.set('offset', offset);
-            formData.set('limit', 10);
-
-            var response = await fetch('getUtenti.php', {
-                method: 'POST',
-                body: formData
-            });
+            var response = await fetch(url);
 
             var utenti = await response.json();
 
@@ -25,7 +24,7 @@
                 container.innerHTML = "";
             }
 
-            if (utenti.length === 0) {
+            if (utenti.length === 0 || utenti.error) {
                 if (!append) {
                     container.innerHTML = '<tr><td colspan="10" class="text-center text-muted p-4">Nessun record trovato</td></tr>';
                 }
@@ -36,7 +35,37 @@
             utenti.forEach(function (user) {
                 var trMain = document.createElement('tr');
                 trMain.className = "user-main-row";
-                trMain.innerHTML = user.html;
+
+                var ruoloDesc = user.role;
+                var mainHtml = '';
+                if (USER_TYPE == 1) {
+                    mainHtml = '\
+                        <th scope="row" class="col-nascondi row-header">' + user.id + '</th>\
+                        <td>' + user.name + '</td>\
+                        <td>' + user.surname + '</td>\
+                        <td class="col-nascondi">' + user.email + '</td>\
+                        <td class="col-nascondi">' + ruoloDesc + '</td>\
+                        <td class="col-nascondi">' + user.score + '</td>\
+                        <td class="col-nascondi">\
+                            <div class="btn_actions">\
+                                <a class="btn btn-primary btn-sm" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>\
+                                <a class="btn btn-primary btn-sm" href="modificaUtente.php?id=' + user.id + '">Modifica</a>\
+                                <a class="btn btn-danger btn-sm" href="eliminaUtente.php?id=' + encodeURIComponent(user.email) + '">Elimina</a>\
+                            </div>\
+                        </td>';
+                } else {
+                    mainHtml = '\
+                        <td>' + user.name + '</td>\
+                        <td>' + user.surname + '</td>\
+                        <td class="col-nascondi">' + user.email + '</td>\
+                        <td class="col-nascondi">' + user.score + '</td>\
+                        <td class="col-nascondi">\
+                            <div class="btn_actions text-center">\
+                                <a class="btn btn-primary btn-sm" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>\
+                            </div>\
+                        </td>';
+                }
+                trMain.innerHTML = mainHtml;
 
                 var toggleTd = document.createElement('td');
                 toggleTd.className = "mobile-only text-center align-middle";
@@ -68,8 +97,8 @@
                         <div class="p-3 bg-surface border-start border-info shadow-sm">\
                             <div class="detail-item"><span class="detail-label">ID:</span> <span>' + (user.id || 'N/D') + '</span></div>\
                             <div class="detail-item"><span class="detail-label">Email:</span> <span>' + (user.email || 'N/D') + '</span></div>\
-                            <div class="detail-item"><span class="detail-label">Ruolo:</span> <span>' + (user.ruolo || 'N/D') + '</span></div>\
-                            <div class="detail-item"><span class="detail-label">Punteggio:</span> <span>' + (user.punteggio || '0') + '</span></div>\
+                            <div class="detail-item"><span class="detail-label">Ruolo:</span> <span>' + (user.role || 'N/D') + '</span></div>\
+                            <div class="detail-item"><span class="detail-label">Punteggio:</span> <span>' + (user.score || '0') + '</span></div>\
                             <div class="mt-3 pt-2 border-top">\
                                 <p class="small text-muted mb-2 text-uppercase fw-bold">Azioni:</p>\
                                 ' + azioniHtml + '\
