@@ -1,3 +1,8 @@
+/**
+ * Alexandria Library Management System
+ *
+ * @file Homepage — hero slider autoplay and stat counter animations
+ */
 (function () {
     localStorage.removeItem('reinvio_count');
     localStorage.removeItem('reg_form_nome');

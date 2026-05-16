@@ -1,3 +1,8 @@
+/**
+ * Alexandria Library Management System
+ *
+ * @file Booking detail panel — admin/librarian view of single booking with confirm/complete/cancel actions
+ */
 (function () {
     window.apriDettaglioPrenotazione = async function (id) {
         document.querySelectorAll('[id^="dettaglio-content-"]').forEach(function (el) {

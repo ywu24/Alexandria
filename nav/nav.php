@@ -3,7 +3,7 @@
  * Alexandria Library Management System
  *
  * @package Alexandria
- * @file Navigation component - compatible with both legacy pages and bootstrap-based pages
+ * @file Navigation component with user menu, search, theme toggle, and logout
  */
 
 use Alexandria\Services\AuthService;
@@ -11,29 +11,10 @@ use Alexandria\Services\UserService;
 
 if (!isset($root)) $root = '';
 
-// Handle logout
 if (isset($_POST['logout'])) {
-    if (defined('ALEXANDRIA_BOOTSTRAPPED') && isset($pdo)) {
-        $authService = new AuthService($pdo);
-        $authService->logout();
-        redirect($root . '/index.php');
-    } else {
-        setcookie('email', '', time() - 1, '/');
-        setcookie('password', '', time() - 1, '/');
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        session_destroy();
-        header('Location: ' . $root . '/index.php');
-        exit();
-    }
-}
-
-// Legacy path: old pages include connect.php and cookies.php before nav.php
-// New path: bootstrap.php already loaded everything including cookie auto-login
-if (!defined('ALEXANDRIA_BOOTSTRAPPED')) {
-    require_once($root . '/utils/connect.php');
-    require_once($root . '/auth/cookies.php');
+    $authService = new AuthService($pdo);
+    $authService->logout();
+    redirect($root . '/index.php');
 }
 ?>
 
@@ -53,30 +34,8 @@ $utenza = $_SESSION['utenza'] ?? null;
 
 if ($isLoggedIn) {
     $email = $_SESSION['email'];
-
-    if (defined('ALEXANDRIA_BOOTSTRAPPED') && isset($pdo)) {
-        $userService = new UserService($pdo);
-        $utente = $userService->getByEmail($email);
-    } else {
-        try {
-            $pdo = DatabaseConnection::getInstance()->getConnection();
-        } catch (PDOException $e) {
-            echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
-            exit;
-        }
-
-        try {
-            $q = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email');
-            $q->bindParam(':email', $email);
-            $q->execute();
-            $utente = $q->fetch();
-            $q->closeCursor();
-        } catch (PDOException $e) {
-            error_log('[nav.php] Error executing query: ' . $e->getMessage());
-            echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
-            exit;
-        }
-    }
+    $userService = new UserService($pdo);
+    $utente = $userService->getByEmail($email);
 ?>
 
     <ul>
