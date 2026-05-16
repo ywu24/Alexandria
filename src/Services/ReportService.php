@@ -96,9 +96,8 @@ class ReportService
     public function getAll(int $limit = 100): array
     {
         $query = $this->pdo->prepare(
-            "SELECT idSegnalazione, userEmail, Oggetto FROM Segnalazione ORDER BY idSegnalazione DESC LIMIT :limit"
+            "SELECT idSegnalazione, userEmail, Oggetto FROM Segnalazione ORDER BY idSegnalazione DESC LIMIT $limit"
         );
-        $query->bindValue(':limit', $limit, PDO::PARAM_INT);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }

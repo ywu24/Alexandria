@@ -66,12 +66,10 @@ if (!in_array($sort_type, $allowed_sort)) {
     $sort_type = 'idPrenotazione DESC';
 }
 
-$sql .= " ORDER BY $sort_type LIMIT :limite OFFSET :offset";
+$sql .= " ORDER BY $sort_type LIMIT $limite OFFSET $offset";
 
 $stmt = $pdo->prepare($sql);
 foreach ($params as $k => $v) $stmt->bindValue($k, $v);
-$stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

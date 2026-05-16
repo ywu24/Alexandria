@@ -300,14 +300,12 @@ class BookingService
             $sortType = 'idPrenotazione DESC';
         }
 
-        $sql .= " ORDER BY $sortType LIMIT :limite OFFSET :offset";
+        $sql .= " ORDER BY $sortType LIMIT $limit OFFSET $offset";
 
         $stmt = $this->pdo->prepare($sql);
         foreach ($params as $k => $v) {
             $stmt->bindValue($k, $v);
         }
-        $stmt->bindValue(':limite', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -328,12 +326,11 @@ class BookingService
               WHERE copiaLibro.idCopia = Prenotazione.idCopia
               AND copiaLibro.ISBN = Opera.ISBN
               AND Prenotazione.Email = :email
-              ORDER BY idPrenotazione DESC
-              LIMIT :limite";
+               ORDER BY idPrenotazione DESC
+               LIMIT $limit";
 
         $query = $this->pdo->prepare($q);
         $query->bindParam(':email', $email);
-        $query->bindValue(':limite', $limit, PDO::PARAM_INT);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }

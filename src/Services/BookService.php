@@ -439,14 +439,12 @@ class BookService
 
         $sql .= " GROUP BY Opera.ISBN";
         $sql .= ($sort === 'copie') ? " ORDER BY copie DESC" : " ORDER BY $sortColumn ASC";
-        $sql .= " LIMIT :limit OFFSET :offset";
+        $sql .= " LIMIT $limit OFFSET $offset";
 
         $stmt = $this->pdo->prepare($sql);
         foreach ($params as $k => $v) {
             $stmt->bindValue($k, $v);
         }
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

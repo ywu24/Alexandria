@@ -32,18 +32,16 @@ class ReviewService
      */
     public function getForBook(int $bookId, int $limit = 5, int $offset = 0): array
     {
-        $query = $this->pdo->prepare(
-            "SELECT r.*, u.propic 
-             FROM recensione r 
-             JOIN utente u ON r.userEmail = u.email 
-             WHERE r.idOpera = :book_id 
-             ORDER BY r.id DESC 
-             LIMIT :limit OFFSET :offset"
-        );
-        $query->bindParam(':book_id', $bookId, PDO::PARAM_INT);
-        $query->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $query->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $query->execute();
+         $query = $this->pdo->prepare(
+             "SELECT r.*, u.propic 
+              FROM recensione r 
+              JOIN utente u ON r.userEmail = u.email 
+              WHERE r.idOpera = :book_id 
+              ORDER BY r.id DESC 
+              LIMIT $limit OFFSET $offset"
+         );
+         $query->bindParam(':book_id', $bookId, PDO::PARAM_INT);
+         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 

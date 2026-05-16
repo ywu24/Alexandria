@@ -79,8 +79,10 @@ class UserService
         $where = '';
 
         if ($search !== null && $search !== '') {
-            $where = " WHERE (Nome LIKE :search OR Cognome LIKE :search OR Email LIKE :search)";
-            $params[':search'] = '%' . $search . '%';
+            $where = " WHERE (Nome LIKE :search1 OR Cognome LIKE :search2 OR Email LIKE :search3)";
+            $params[':search1'] = '%' . $search . '%';
+            $params[':search2'] = '%' . $search . '%';
+            $params[':search3'] = '%' . $search . '%';
         }
 
         if ($utenzaFilter !== null) {
@@ -93,13 +95,11 @@ class UserService
             $sortType = 'id';
         }
 
-        $sql = "SELECT * FROM Utente $where ORDER BY $sortType LIMIT :limit OFFSET :offset";
+        $sql = "SELECT * FROM Utente $where ORDER BY $sortType LIMIT $limit OFFSET $offset";
         $query = $this->pdo->prepare($sql);
         foreach ($params as $k => $v) {
             $query->bindValue($k, $v);
         }
-        $query->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $query->bindValue(':offset', $offset, PDO::PARAM_INT);
         $query->execute();
 
         return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -118,8 +118,10 @@ class UserService
         $where = '';
 
         if ($search !== null && $search !== '') {
-            $where = " WHERE (Nome LIKE :search OR Cognome LIKE :search OR Email LIKE :search)";
-            $params[':search'] = '%' . $search . '%';
+            $where = " WHERE (Nome LIKE :search1 OR Cognome LIKE :search2 OR Email LIKE :search3)";
+            $params[':search1'] = '%' . $search . '%';
+            $params[':search2'] = '%' . $search . '%';
+            $params[':search3'] = '%' . $search . '%';
         }
 
         if ($utenzaFilter !== null) {
