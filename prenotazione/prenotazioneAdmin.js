@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnCarica) {
         btnCarica.addEventListener("click", () => caricaPrenotazioni(true));
     }
+
+    caricaPrenotazioni(false);
 });
 
 async function caricaPrenotazioni(append = false) {
