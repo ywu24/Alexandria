@@ -31,7 +31,7 @@ function validate_password(string $password): bool
     if (strlen($password) < 8 || strlen($password) > 50) {
         return false;
     }
-    return preg_match('/[!#$.,:;()@%^\-&_+=\[\]|\\\/?~`]/', $password) === 1;
+    return preg_match('{[!#$.,:;()@%^\-&_+=\[\]|\\/?~`]}', $password) === 1;
 }
 
 /**

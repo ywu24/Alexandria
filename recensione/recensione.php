@@ -1,112 +1,46 @@
 <?php
-session_start();
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Review submission page for books
+ */
+
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Alexandria\Services\ReviewService;
+
+$reviewService = new ReviewService($pdo);
+
 $root = '..';
-require_once("../utils/connect.php");
 
-// Controllo ID Opera
+// Validate book ID
 if (!isset($_GET['id'])) {
-  header("Location: ../lista/lista.php");
-  exit();
+    redirect('../lista/lista.php');
 }
+$idOpera = (int) $_GET['id'];
 
-$idOpera = (int)$_GET['id'];
-
-// Istanza del database tramite PDO 
-try {
-  $pdo = DatabaseConnection::getInstance()->getConnection();
-} catch (PDOException $e) {
-  die("Errore durante la connessione al database: " . $e->getMessage());
-}
-
-if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'])) {
-  // Controllo se l'utente è loggato
-  if (!isset($_SESSION['email'])) {
-    header("Location: ../login/login.php");
-    exit();
-  }
-
-  $user_email = $_SESSION['email'];
-  $titolo = $_POST['titolo'];
-  $messaggio = $_POST['messaggio'];
-  $voto = (int)$_POST['voto'];
-
-  try {
-    #CONTROLLO CHE NON SIA GIA' STATO RECENSITO
-    $pre_sql = "SELECT 1 FROM recensione WHERE userEmail = :email AND idOpera = :idOpera LIMIT 1";
-    $stmt = $pdo->prepare($pre_sql);
-    $stmt->bindParam(':email', $user_email);
-    $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $recensione_esistente = $stmt->fetch();
-
-    if ($recensione_esistente) {
-
-      $_SESSION['error_msg'] = "hai già recensito questo libro!";
-      header("Location: ../prenotazione/prenotazione.php");
-      exit();
-    }
-    #CONTROLLO CHE ABBIA EFFETTIVAMENTE PRESO IN PRESTITO QUEL LIBRO
-    $pre_sql = "SELECT 1 
-                FROM Prenotazione 
-                JOIN copiaLibro ON Prenotazione.idCopia = copiaLibro.idCopia 
-                JOIN Opera ON copiaLibro.ISBN = Opera.ISBN 
-                WHERE Prenotazione.Email =:email 
-                AND Opera.id =:idOpera AND FinePrestito IS NOT NULL
-                ";
-    $stmt = $pdo->prepare($pre_sql);
-    $stmt->bindParam(':email', $user_email);
-    $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
-
-    // Esegui la query
-    $stmt->execute();
-
-
-    $prenotazione_esistente = $stmt->fetch();
-
-    if (! $prenotazione_esistente) {
-
-      $_SESSION['error_msg'] = "Non puoi recensire libri che non hai mai preso in prestito!";
-      header("Location: ../prenotazione/prenotazione.php");
-      exit();
+// Handle review submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['messaggio'], $_POST['voto'])) {
+    if (!isset($_SESSION['email'])) {
+        redirect('../auth/login.php');
     }
 
-    $sql = "INSERT INTO recensione (userEmail, Titolo, Messaggio, Voto, idOpera) 
-                VALUES (:email, :titolo, :messaggio, :voto, :idOpera)";
+    $user_email = $_SESSION['email'];
+    $titolo = $_POST['titolo'];
+    $messaggio = $_POST['messaggio'];
+    $voto = (int) $_POST['voto'];
 
-    $stmt = $pdo->prepare($sql);
-
-    // Binding dei parametri
-    $stmt->bindParam(':email', $user_email);
-    $stmt->bindParam(':titolo', $titolo);
-    $stmt->bindParam(':messaggio', $messaggio);
-    $stmt->bindParam(':voto', $voto, PDO::PARAM_INT);
-    $stmt->bindParam(':idOpera', $idOpera, PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
-            $sqlPunti = "UPDATE Utente SET punteggio = punteggio + 5 WHERE Email = :email";
-            $stmtPunti = $pdo->prepare($sqlPunti);
-            $stmtPunti->bindParam(':email', $user_email);
-            $stmtPunti->execute();
-            $stmtPunti->closeCursor();
-
-            $_SESSION['success_msg'] = "Recensione inviata con successo!";
-            $_SESSION['punti_guadagnati'] = true; 
-
-        } else {
-            $_SESSION['error_msg'] = "Errore durante l'invio della recensione. Riprova.";
-        }
-        
-    $stmt->closeCursor();
-
-    } catch (PDOException $e) {
-        $_SESSION['error_msg'] = "Errore database: " . $e->getMessage();
+    try {
+        $reviewService->create($user_email, $idOpera, $titolo, $messaggio, $voto);
+        flash('success', 'Recensione inviata con successo!');
+        $_SESSION['punti_guadagnati'] = true;
+    } catch (Exception $e) {
+        flash('error', $e->getMessage());
     }
 
-  header("Location: recensione.php?id=$idOpera");
-  exit();
+    redirect('recensione.php?id=' . $idOpera);
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -126,31 +60,19 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
   <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
   <link rel="icon" type="image/svg+xml" href="../img/feedbackFavicon.svg">
   <title>Lascia una recensione</title>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./recensione.js" defer></script>
 </head>
 
 <body class="form-page">
 
   <div id="nav-placeholder">
-    <?php require_once("../nav/nav.php"); ?>
+    <?php require_once('../nav/nav.php'); ?>
   </div>
 
   <div id="messages" class="container mt-3 text-center">
+    <?php render_messages(); ?>
+
     <?php
-    if (isset($_SESSION['success_msg'])) {
-      echo '<p class="successo">' . htmlspecialchars($_SESSION['success_msg']) . '</p>';
-      unset($_SESSION['success_msg']);
-    }
-
-    if (isset($_SESSION['error_msg'])) {
-      echo '<p class="errore">' . htmlspecialchars($_SESSION['error_msg']) . '</p>';
-      unset($_SESSION['error_msg']);
-    }
-
-    // Controlliamo se dobbiamo attivare il trigger per i punti
     if (isset($_SESSION['punti_guadagnati'])) {
         echo '<script> const puntiGuadagnati = true; </script>';
         unset($_SESSION['punti_guadagnati']);
@@ -194,7 +116,7 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
 
         <div class="form-group">
           <label for="messaggio"><strong>Scrivi la tua recensione:</strong></label>
-          <textarea class="form-control" id="messaggio" name="messaggio" rows="5" maxlength="500" placeholder="Cosa ti è piaciuto o non ti è piaciuto?" required></textarea>
+          <textarea class="form-control" id="messaggio" name="messaggio" rows="5" maxlength="500" placeholder="Cosa ti e piaciuto o non ti e piaciuto?" required></textarea>
           <small class="text-muted" id="messaggio-counter">Caratteri rimanenti: 500</small>
         </div>
 
@@ -202,7 +124,7 @@ if (isset($_POST['titolo']) && isset($_POST['messaggio']) && isset($_POST['voto'
       </form>
     </div>
   </div>
-  <?php require_once("../nav/footer.php"); ?>
+  <?php require_once('../nav/footer.php'); ?>
 </body>
 
 </html>

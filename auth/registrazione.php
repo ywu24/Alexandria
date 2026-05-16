@@ -1,117 +1,73 @@
 <?php
-//LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Registration page with email confirmation
+ */
 
-function generaCodice($lunghezza = 8)
-{
-  // Definiamo i caratteri permessi (abbiamo tolto 0, O, 1, I per evitare confusioni)
-  $caratteri = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-  $codice = '';
-  $max = strlen($caratteri) - 1;
+require_once __DIR__ . '/../src/bootstrap.php';
 
-  for ($i = 0; $i < $lunghezza; $i++) {
-    // random_int è sicuro a livello crittografico
-    $codice .= $caratteri[random_int(0, $max)];
-  }
+use Alexandria\Services\AuthService;
+use Alexandria\Services\NotificationService;
 
-  return $codice;
-}
+$authService = new AuthService($pdo);
+$notificationService = new NotificationService();
 
-// Utilizzo:
-session_start();
 $root = '..';
-require_once("../utils/connect.php");
-require_once("cookies.php");
-require_once("../utils/mailer.php");
-// check to see if there is a user already logged in, if so redirect them 
-if (isset($_SESSION['email'])) {
-  header("Location: ../index.php");
-  exit; // redirect the user to the home page
+
+if ($authService->isAuthenticated()) {
+    redirect('../index.php');
 }
 
 if (isset($_POST['submit'])) {
-  if (
-    !isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['nome']) || !isset($_POST['cognome']) || !isset($_POST['passwordAgain']) ||
-    empty($_POST['email']) || empty($_POST['password']) || empty($_POST['nome']) || empty($_POST['cognome']) || empty($_POST['passwordAgain'])
-  ) {
-    $_SESSION['error_msg'] = "Non possono esserci campi vuoti ";
-    header("Location: registrazione.php");
-    exit();
-  }
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-  $nome = $_POST['nome'];
-  $cognome = $_POST['cognome'];
-  $passwordAgain = $_POST['passwordAgain'];
-  $codice = "";
-  if ($password != $passwordAgain) {
-    $_SESSION['error_msg'] = 'Le due password non corrispondono!';
-    header("Location: registrazione.php");
-    exit();
-  }
-  try {
-    $dbConnection = DatabaseConnection::getInstance();
-    $pdo = $dbConnection->getConnection();
-  } catch (Exception $e) {
-    error_log('[registrazione.php] DB connection failed: ' . $e->getMessage());
-    $_SESSION['error_msg'] = 'Service unavailable please try again later';
-    header("Location: registrazione.php");
-    exit();
-  }
+    $required = ['email', 'password', 'nome', 'cognome', 'passwordAgain'];
+    $missing = validate_required($required, $_POST);
 
-  if ($query = $pdo->prepare('SELECT Email FROM Utente WHERE Email = :email')) {
-    $query->bindParam(':email', $email);
-    $query->execute();
-    $result = $query->fetch();
-    $query->closeCursor();
-    if ($result) {
-      $_SESSION['error_msg'] = "Utente già registrato";
-      header("Location: registrazione.php");
-      exit();
-    } else {
-      $codice = generaCodice();
-      if (
-        sendEmail(
-          $email,
-          $_POST['nome'] . ' ' . $_POST['cognome'],
-          'Conferma Registrazione',
-          '<h2>Conferma la registrazione!</h2>
-                        <p>Ciao, ' . $_POST['nome'] . ' ' . $_POST['cognome'] . '</br> conferma la tua mail inserendo questo codice sul sito:</p>
-                        <ul>
-                            <li>La tua email: ' . $email . '</li>
-                            <li>Il codice di conferma: ' . $codice . '</li>
-                            
-                        </ul>'
-        )
-      ) {
+    if (!empty($missing)) {
+        flash('error', 'Non possono esserci campi vuoti');
+        redirect('registrazione.php');
+    }
+
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $nome = $_POST['nome'];
+    $cognome = $_POST['cognome'];
+    $passwordAgain = $_POST['passwordAgain'];
+
+    if ($password !== $passwordAgain) {
+        flash('error', 'Le due password non corrispondono!');
+        redirect('registrazione.php');
+    }
+
+    if ($authService->emailExists($email)) {
+        flash('error', 'Utente gia registrato');
+        redirect('registrazione.php');
+    }
+
+    $codice = $authService->generateConfirmationCode();
+
+    $sent = $notificationService->sendConfirmationEmail(
+        $email,
+        $nome . ' ' . $cognome,
+        $codice
+    );
+
+    if ($sent) {
         $_SESSION['temp_email'] = $email;
         $_SESSION['temp_password'] = $password;
         $_SESSION['temp_nome'] = $nome;
         $_SESSION['temp_cognome'] = $cognome;
         $_SESSION['passwordAgain'] = $passwordAgain;
         $_SESSION['codice'] = $codice;
-        $_SESSION['codice_scadenza'] = time() + 600; // Valido per 10 minuti (600 secondi)
+        $_SESSION['codice_scadenza'] = time() + 600;
         $_SESSION['tentativi'] = 3;
         $_SESSION['reinvii'] = 1;
-
-        #echo "<p class='successo'>Email mandato all'utente/p>"; // per debug
-        #sleep(2);
-        header("Location: confermaRegistrazione.php");
-        exit();
-      } else {
-        $_SESSION['error_msg'] = "Errore nell'invio dell'email";
-        header("Location: registrazione.php");
-        exit();
-      }
+        redirect('confermaRegistrazione.php');
+    } else {
+        flash('error', 'Errore nell\'invio dell\'email');
+        redirect('registrazione.php');
     }
-
-  } else {
-    $_SESSION['error_msg'] = "Errore, operazione fallita";
-    header("Location: registrazione.php");
-    exit();
-  }
 }
 ?>
 <!DOCTYPE html>
@@ -139,23 +95,13 @@ if (isset($_POST['submit'])) {
     <svg class="icon icon-moon" style="display:none;"><use href="../img/icons.svg#moon"/></svg>
   </button>
   <div id="messages">
-    <?php
-    if (isset($_SESSION['success_msg'])) {
-      echo "<p class='successo'>" . $_SESSION['success_msg'] . "</p>";
-      unset($_SESSION['success_msg']);
-    } else if (isset($_SESSION['error_msg'])) {
-      echo "<p class='errore'>" . $_SESSION['error_msg'] . "</p>";
-      unset($_SESSION['error_msg']);
-    }
-    ?>
+    <?php render_messages(); ?>
   </div>
   <div class="container">
     <div class="left"></div>
 
     <div class="right">
       <div class="right-content">
-
-        <!-- L'attributo action è stato modificato in confermaRegistrazione.php -->
         <form action="registrazione.php" method="POST" id="myform">
           <h1>Crea un account</h1>
           <div>
@@ -173,9 +119,7 @@ if (isset($_POST['submit'])) {
           <div>
             <h3>PASSWORD</h3>
             <input type="password" name="password" placeholder="Inserisci la tua password" required />
-            <h4>La password deve avere lunghezza compresa tra 8 e 50 caratteri e contenere almeno un carattere speciale,
-              es.
-              !#$.,:;()</h4>
+            <h4>La password deve avere lunghezza compresa tra 8 e 50 caratteri e contenere almeno un carattere speciale, es. !#$.,:;()</h4>
           </div>
           <div>
             <h3>CONFERMA PASSWORD</h3>
@@ -186,13 +130,13 @@ if (isset($_POST['submit'])) {
           <a href="login.php" class="login-link">Hai già un account? Accedi qui</a>
 
           <div style="text-align: center;">
-            <h4 class="privacy">Privacy · Termini e Condizioni</h4>
+            <h4 class="privacy">Privacy &middot; Termini e Condizioni</h4>
           </div>
         </form>
       </div>
     </div>
   </div>
-  <?php require_once("../nav/footer.php"); ?>
+  <?php require_once('../nav/footer.php'); ?>
 </body>
 
 </html>

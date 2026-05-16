@@ -1,81 +1,57 @@
 <?php
-session_start();
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Login page with email/password authentication
+ */
+
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Alexandria\Services\AuthService;
+
+$authService = new AuthService($pdo);
 
 $root = '..';
+
+if ($authService->isAuthenticated()) {
+    redirect('../index.php');
+}
+
+$domain = 'alexandria.it';
 $error = -1;
+$err_message = '';
 $message = '<a href="registrazione.php">Crea un account</a>';
-$domain = 'alexandria.it'; //NOTE: placeholder
-
-try {
-  require_once("../utils/connect.php");
-  $database = DatabaseConnection::getInstance();
-  $pdo = $database->getConnection();
-  require_once("cookies.php");
-} catch (Exception $e) {
-  error_log('[login.php] DB connection failed: ' . $e->getMessage());
-  $error = 3;
-  $err_message = 'Service unavailable, please try again later';
-}
-
-if (isset($_SESSION['email'])) {
-  header("Location: ../index.php");
-  exit; // redirect the user to the home page
-}
 
 if ($error === -1 && isset($_POST['submit'])) {
-  try {
-    $query = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email');
-    $query->bindParam(':email', $_POST['email']);
-    $query->execute();
-    $result = $query->fetch();
-    $query->closeCursor();
-    if ($result) {
-      $user = $result;
-      if (password_verify($_POST['password'], $user['Password'])) {
-        $_SESSION['email'] = $user['Email'];
-        $_SESSION['nome'] = $user['Nome'];
-        $_SESSION['cognome'] = $user['Cognome'];
-        $_SESSION['utenza'] = $user['Utenza'];
-        setcookie('email', $user['Email'], time() + 60 * 60 * 24 * 90, '/', $domain);
-        setcookie('password', $user['Password'], time() + 60 * 60 * 24 * 90, '/', $domain);
-        // $message = '<h2>Accesso effettuato, puoi ora <a style="color: #2ac32d;" href="index.php">Navigare</a></h2>';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
+    $user = $authService->authenticate($email, $password);
+
+    if ($user) {
+        $authService->login($user, $domain);
         if ($user['Utenza'] == 1 || $user['Utenza'] == 2) {
-          //se utente admin, portare alla pagina dashboard
-          header("Location: ../dashboard/dashboard.php");
+            redirect('../dashboard/dashboard.php');
         } else {
-          header("Location: ../index.php");
+            redirect('../index.php');
         }
-        exit;
-
-      } else {
-        $_SESSION['login_error'] = ['type' => 1, 'msg' => "Incorrect password"];
-        header("Location: login.php");
-        exit;
-      }
     } else {
-      $_SESSION['login_error'] = ['type' => 2, 'msg' => "User does not exist"];
-      header("Location: login.php");
-      exit;
+        
+        $_SESSION['login_error'] = ['type' => 1, 'msg' => 'Incorrect user or password'];
+        redirect('login.php');
     }
-
-  } catch (Exception $e) {
-    error_log('[login.php] Query failed: ' . $e->getMessage());
-    $_SESSION['login_error'] = ['type' => 1, 'msg' => 'Something went wrong, please try again later'];
-    header("Location: login.php");
-    exit;
-  }
 }
 
 if (isset($_SESSION['login_error'])) {
-  $error = $_SESSION['login_error']['type'];
-  $err_message = $_SESSION['login_error']['msg'];
-  unset($_SESSION['login_error']);
+    $error = $_SESSION['login_error']['type'];
+    $err_message = $_SESSION['login_error']['msg'];
+    unset($_SESSION['login_error']);
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
   <meta charset="UTF-8" />
@@ -109,41 +85,26 @@ if (isset($_SESSION['login_error'])) {
             <div class="field">
               <h3>EMAIL</h3>
               <input type="text" name="email" placeholder="Inserisci il tuo indirizzo email" required />
-
-              <?php
-              if ($error == 2) {
-                echo "<h2 style='color: var(--color-danger);'>$err_message</h2>";
-              }
-              ?>
-
             </div>
             <div class="field">
               <h3>PASSWORD</h3>
               <input type="password" name="password" placeholder="Inserisci la tua password" required />
-
-              <?php
-              if ($error == 1) {
-                echo "<h2 style='color: var(--color-danger);'>$err_message</h2>";
-              }
-              ?>
-
+              <?php if ($error == 1): ?>
+                <h2 style="color: var(--color-danger);"><?php echo e($err_message); ?></h2>
+              <?php endif; ?>
             </div>
           </div>
           <input type="submit" name="submit" class="submit" value="Accedi" />
           <br />
-
-          <?php
-          echo $message;
-          ?>
-
+          <?php echo $message; ?>
           <div style="text-align: center;">
-            <h4 class="privacy">Privacy · Termini e Condizioni</h4>
+            <h4 class="privacy">Privacy &middot; Termini e Condizioni</h4>
           </div>
         </form>
       </div>
     </div>
   </div>
-  <?php require_once("../nav/footer.php"); ?>
+  <?php require_once('../nav/footer.php'); ?>
 </body>
 
 </html>

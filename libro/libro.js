@@ -1,13 +1,41 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // --- Modal logic ---
+    const modal = document.querySelector("#modal");
+    const openModal = document.querySelector(".open-button");
+    const closeModal = document.querySelector(".close-button");
+
+    if (modal && openModal) {
+        openModal.addEventListener("click", () => {
+            modal.showModal();
+        });
+    }
+
+    if (modal && closeModal) {
+        closeModal.addEventListener("click", () => {
+            modal.close();
+        });
+    }
+
+    // --- Premium slider logic ---
+    const slider = document.getElementById('slider');
+    const sliderValue = document.getElementById('sliderValue');
+
+    if (slider && sliderValue) {
+        slider.addEventListener('input', function() {
+            sliderValue.textContent = slider.value;
+        });
+    }
+
+    // --- Infinite scroll reviews ---
     const container = document.getElementById('reviews-container');
     const trigger = document.getElementById('scroll-trigger');
-    
+
     if (!trigger || !container) return;
 
     const spinner = trigger.querySelector('.spinner-border');
     const bookId = container.dataset.bookId;
-    
-    let offset = 5; 
+
+    let offset = 5;
     let isFetching = false;
     let allLoaded = false;
 
@@ -16,17 +44,17 @@ document.addEventListener("DOMContentLoaded", function() {
             loadMoreReviews();
         }
     }, {
-        root: container, // Specifica che lo scroll è dentro il div
-        threshold: 0.5   
-    }); 
+        root: container,
+        threshold: 0.5
+    });
 
     observer.observe(trigger);
 
     function loadMoreReviews() {
         isFetching = true;
-        if(spinner) spinner.classList.remove('d-none'); 
+        if (spinner) spinner.classList.remove('d-none');
 
-        const fetchUrl = `?id=${bookId}&ajax_reviews=1&offset=${offset}`;
+        const fetchUrl = `../api/reviews.php?id=${bookId}&offset=${offset}`;
 
         fetch(fetchUrl)
             .then(response => response.text())
@@ -34,23 +62,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 isFetching = false;
                 const cleanHtml = html.trim();
 
-                // Caso: Non ci sono più recensioni
                 if (cleanHtml === '') {
                     allLoaded = true;
-                    observer.disconnect(); // Smette di osservare immediatamente
-                    
-                    // Trasforma il trigger nel messaggio di fine
+                    observer.disconnect();
                     trigger.innerHTML = '<div class="py-3 text-muted small fw-bold">Hai raggiunto la fine delle recensioni.</div>';
                 } else {
-                    // Nascondi spinner
-                    if(spinner) spinner.classList.add('d-none');
-                    
-                    // Inserisce le nuove card PRIMA dello spinner (lo spinge giù)
+                    if (spinner) spinner.classList.add('d-none');
                     trigger.insertAdjacentHTML('beforebegin', cleanHtml);
-                    
                     offset += 5;
 
-                    // Controllo di sicurezza: se dopo il caricamento il trigger è ancora visibile
                     setTimeout(() => {
                         const rect = trigger.getBoundingClientRect();
                         const contRect = container.getBoundingClientRect();
@@ -63,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => {
                 console.error("Errore AJAX:", error);
                 isFetching = false;
-                if(spinner) spinner.classList.add('d-none');
+                if (spinner) spinner.classList.add('d-none');
             });
     }
 });
