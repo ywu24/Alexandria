@@ -77,7 +77,6 @@ if (!$isLoggedIn) {
     <link rel="stylesheet" href="css/pages/home.css">
     <link rel="stylesheet" href="css/pages/footer.css">
     <link rel="stylesheet" href="css/utilities.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>HomePage - Alexandria </title>
 </head>
 

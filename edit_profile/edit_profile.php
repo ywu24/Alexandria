@@ -195,19 +195,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/utils.js"></script>
     <script src="edit_profile.js"></script>
-    <script>
-        document.querySelectorAll('.custom-file-input').forEach(input => {
-            input.addEventListener('change', function() {
-                const fileName = this.value.split("\\").pop();
-                const label = this.nextElementSibling;
-                if (label) {
-                    label.classList.add('selected');
-                    label.textContent = fileName;
-                }
-            });
-        });
-    </script>
     <?php require_once('../nav/footer.php'); ?>
 </body>
 

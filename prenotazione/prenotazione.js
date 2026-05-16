@@ -107,11 +107,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function showMessage(text, type = "successo") {
-    const div = document.getElementById("messages");
-    const p = document.createElement("p");
-    p.textContent = text;
-    p.classList.add(type);
-    div.appendChild(p);
-    setTimeout(() => { p.remove(); }, 4000);
-}

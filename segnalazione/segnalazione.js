@@ -10,21 +10,24 @@ function previewImage(event) {
     var input = event.target;
     var preview = document.getElementById('image-preview');
     var trash = document.getElementById('trash-btn');
-    var label = $(input).siblings(".custom-file-label");
+    var label = input.nextElementSibling;
 
     if (input.files && input.files[0]) {
-        var reader = new FileReader();
         var fileName = input.files[0].name;
 
-        label.addClass("selected").html(fileName);
+        if (label && label.classList.contains('custom-file-label')) {
+            label.classList.add('selected');
+            label.textContent = fileName;
+        }
 
+        var reader = new FileReader();
         reader.onload = function (e) {
             preview.src = e.target.result;
             preview.classList.remove('d-none');
             preview.classList.add('d-inline-block');
             trash.classList.remove('d-none');
             trash.classList.add('d-block');
-        }
+        };
         reader.readAsDataURL(input.files[0]);
     }
 }
@@ -33,7 +36,7 @@ function deleteImage() {
     var preview = document.getElementById('image-preview');
     var input = document.getElementById('file');
     var trash = document.getElementById('trash-btn');
-    var label = $(".custom-file-label");
+    var label = document.querySelector('.custom-file-label');
 
     preview.src = '#';
     preview.classList.remove('d-inline-block');
@@ -41,5 +44,8 @@ function deleteImage() {
     trash.classList.remove('d-block');
     trash.classList.add('d-none');
     input.value = '';
-    label.removeClass("selected").html("Scegli file...");
+    if (label) {
+        label.classList.remove('selected');
+        label.textContent = 'Scegli file...';
+    }
 }

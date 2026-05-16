@@ -35,7 +35,7 @@ $root = '../..';
     <link rel="stylesheet" href="../../css/pages/footer.css">
     <link rel="stylesheet" href="../../css/utilities.css">
     <link rel="icon" type="image/svg+xml" href="../../img/bookDashFavicon.svg">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../js/utils.js" defer></script>
     <script src="aggiornaCopie.js" defer></script>
 </head>
 

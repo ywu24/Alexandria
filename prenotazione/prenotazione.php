@@ -93,6 +93,7 @@ $bookings = $bookingService->getByUser($email);
             opacity: 0.7;
         }
     </style>
+    <script src="../js/utils.js"></script>
     <script src="prenotazione.js"></script>
 </head>
 
