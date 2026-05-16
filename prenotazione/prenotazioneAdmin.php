@@ -56,7 +56,7 @@ function calcolaStatoPHP($row) {
     <!-- ... (stesso inizio PHP di prima per sessione e connessione) ... -->
 
 <div class="container mt-5">
-    <h1 class="text-center mb-5 font-weight-extra-bold">Prenotazioni 📅</h1>
+    <h1 class="text-center mb-5 font-weight-extra-bold">Prenotazioni</h1>
 
     <!-- BARRA FILTRI -->
     <div class="row justify-content-center mb-5">
