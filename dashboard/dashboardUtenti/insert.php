@@ -1,51 +1,45 @@
 <?php
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Dashboard
+ * @file Handles user insertion by admin
+ */
 
-/*
-NOTA: al momento questo metodo è insicuro: chiunque potrebbe fare richiesta ad insert.php con post per aggiungere utenti.
-Controllare se l'utente che è loggato è autorizzato a farlo (utenza == 1)
-*/
+require_once __DIR__ . '/../../src/bootstrap.php';
 
-$table = "Utente";
-require_once("../../utils/connect.php");
-if (empty($_POST['nome']) || empty($_POST['cognome']) || empty($_POST['email']) || empty($_POST['email']) || empty($_POST['password'])) {
-    header("Location: aggiungiUtente.php?error=1");
-    exit();
+use Alexandria\Services\AuthService;
+use Alexandria\Services\UserService;
 
-} else {
-
-    $nome = $_POST['nome'];
-    $cognome = $_POST['cognome'];
-    $email = $_POST['email'];
-    $ruolo = '4';
-    if (!empty($_POST['ruolo']))
-        $ruolo = $_POST['ruolo'];
-    $password = $_POST['password'];
-    $password = password_hash($password, PASSWORD_BCRYPT);
-
-    #echo $nome." ".$cognome." ".$email." ".$ruolo." ".$password;
-
-    try {
-        $pdo = DatabaseConnection::getInstance()->getConnection();
-    } catch (PDOException $e) {
-        echo "Errore durante la connessione al database: " . $e->getMessage();
-        exit;
-    }
-
-    try {
-        $query = $pdo->prepare("INSERT INTO $table (`Nome`, `Cognome`, `Email`,`Utenza`, `Password`) 
-                                VALUES (:nome, :cognome, :email, :ruolo, :password)");
-        $query->bindParam(':nome', $nome);
-        $query->bindParam(':cognome', $cognome);
-        $query->bindParam(':email', $email);
-        $query->bindParam(':ruolo', $ruolo);
-        $query->bindParam(':password', $password);
-        $query->execute();
-        $query->closeCursor();
-        header("Location: dashboardUtenti.php?aggiunto=1");
-        exit;
-    } catch (PDOException $e) {
-        header("Location: aggiungiUtente.php?error=2");
-        exit;
-    }
+$authService = new AuthService($pdo);
+if (!$authService->isAdmin()) {
+    redirect('dashboardUtenti.php');
 }
-?>
+
+if (empty($_POST['nome']) || empty($_POST['cognome']) || empty($_POST['email']) || empty($_POST['password'])) {
+    redirect('aggiungiUtente.php?error=1');
+}
+
+$userService = new UserService($pdo);
+
+$nome = $_POST['nome'];
+$cognome = $_POST['cognome'];
+$email = $_POST['email'];
+$ruolo = !empty($_POST['ruolo']) ? $_POST['ruolo'] : '4';
+$password = $_POST['password'];
+
+try {
+    $userService->insert([
+        'email' => $email,
+        'nome' => $nome,
+        'cognome' => $cognome,
+        'password' => $password,
+        'utenza' => $ruolo,
+    ]);
+    redirect('dashboardUtenti.php?aggiunto=1');
+} catch (RuntimeException $e) {
+    redirect('aggiungiUtente.php?error=2');
+} catch (PDOException $e) {
+    redirect('aggiungiUtente.php?error=2');
+}

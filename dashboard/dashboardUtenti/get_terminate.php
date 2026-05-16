@@ -1,81 +1,52 @@
 <?php
-$root = "../..";
-session_start();
-require_once("../../utils/connect.php");
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Dashboard
+ * @file AJAX endpoint for terminated bookings with review status
+ */
+
+require_once __DIR__ . '/../../src/bootstrap.php';
+
+use Alexandria\Services\AuthService;
+use Alexandria\Services\BookingService;
+use Alexandria\Services\UserService;
+
+header('Content-Type: application/json');
+
+$authService = new AuthService($pdo);
+
 if (!isset($_POST['idUtente']) && !isset($_POST['email'])) {
-    exit;
-}
-$email = "";
-$idUtente = 0;
-try {
-    $pdo = DatabaseConnection::getInstance()->getConnection();
-} catch (PDOException $e) {
-    echo "Errore durante la connessione al database: " . $e->getMessage();
+    echo json_encode([]);
     exit;
 }
 
+$userService = new UserService($pdo);
+$bookingService = new BookingService($pdo);
+
+$email = '';
 if (isset($_POST['idUtente'])) {
-    $idUtente = $_POST['idUtente'];
-
-    // Recupero l'email dell'utente
-    if ($query = $pdo->prepare('SELECT Email FROM Utente WHERE id = :id')) {
-        $query->bindParam(':id', $idUtente);
-        $query->execute();
-        $email = $query->fetch()['Email'];
-        $query->closeCursor();
-    } else {
-        throw new Exception("Errore nella preparazione della query: " . $pdo->errorInfo()[2]);
+    $user = $userService->getById((int) $_POST['idUtente']);
+    if ($user) {
+        $email = $user['Email'];
     }
 } else {
     $email = $_POST['email'];
 }
+
+// Access control
+if (!$authService->isAdmin() && !$authService->isLibrarian()) {
+    if ($authService->getCurrentUserEmail() !== $email) {
+        http_response_code(403);
+        echo json_encode(["error" => "Accesso Negato"]);
+        exit;
+    }
+}
+
 try {
-    if ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2) {
-        if ($_SESSION['email'] != $email) {
-            http_response_code(500);
-            echo json_encode(["error" => "Accesso Negato" ]);
-        }
-    }
-    //$email = $_SESSION['email'];
-
-    $idUtente = 0;
-    $sql2 = "SELECT idOpera FROM recensione WHERE userEmail = :userEmail";
-    $query2 = $pdo->prepare($sql2);
-    $query2->bindParam(':userEmail', $email);
-    $query2->execute();
-
-    // FETCH_COLUMN crea un array piatto, es: [1, 5, 12, 22]
-    $recensiti = $query2->fetchAll(PDO::FETCH_COLUMN, 0);
-    $query2->closeCursor();
-
-    // 2. Esegui la Query 1: Prenotazioni terminate
-    $sql = "SELECT idPrenotazione, InizioPrestito, FinePrestito, FineAttesa, Copertina, Nome, Autore, CasaEditrice, id as idOpera, Opera.ISBN as ISBN
-            FROM Prenotazione, copiaLibro, Opera 
-            WHERE copiaLibro.idCopia = Prenotazione.idCopia 
-            AND Opera.ISBN = copiaLibro.ISBN 
-            AND Prenotazione.Email = :email 
-            AND FinePrestito IS NOT NULL
-            ORDER BY Prenotazione.idPrenotazione DESC";
-
-    if ($query = $pdo->prepare($sql)) {
-        $query->bindParam(':email', $email);
-        $query->execute();
-
-        $terminate = [];
-        foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
-
-            if (in_array($row['idOpera'], $recensiti)) {
-                $row['recensito'] = 1;
-            } else {
-                $row['recensito'] = 0;
-            }
-            $terminate[] = $row;
-        }
-        $query->closeCursor();
-
-        // Ritorna il JSON completo
-        echo json_encode($terminate);
-    }
+    $terminate = $bookingService->getTerminatedByEmail($email);
+    echo json_encode($terminate);
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["error" => $e->getMessage()]);

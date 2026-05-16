@@ -52,6 +52,7 @@ async function caricaUtenti(append = false) {
             if (USER_TYPE == 1) {
                 azioniHtml = `
                     <div class="d-flex flex-column gap-2 mt-3">
+                        <a class="btn btn-primary w-100" href="dettaglioUtente.php?id=${user.id}">Prenotazioni</a>
                         <a class="btn btn-primary w-100" href="modificaUtente.php?id=${user.id}">Modifica</a>
                         <a class="btn btn-danger w-100" href="eliminaUtente.php?id=${user.email}">Elimina</a>
                     </div>

@@ -1,36 +1,21 @@
 <?php
-session_start();
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Dashboard
+ * @file Checks if a book exists by ISBN and redirects to add form
+ */
+
+require_once __DIR__ . '/../../src/bootstrap.php';
+
+use Alexandria\Services\BookService;
 
 if (isset($_POST['check'])) {
-    // Connessione al database
-    require_once("../../utils/connect.php");
+    $isbn = $_POST['isbn-check'] ?? '';
+    $bookService = new BookService($pdo);
+    $exists = $bookService->getByIsbn($isbn) !== null;
 
-    $isbn = $_POST['isbn-check'];
-
-    // Controllo se il libro esiste già nel database
-    try {
-        $pdo = DatabaseConnection::getInstance()->getConnection();
-        if ($query = $pdo->prepare('SELECT * FROM Opera WHERE ISBN = :isbn')) {
-            $query->bindParam(':isbn', $isbn);
-            $query->execute();
-
-            $exists = $query->fetch() ? true : false;
-            $query->closeCursor();
-            $_SESSION['libroEsiste'] = $exists;
-
-            if ($exists) {
-                header("Location: aggiungiLibro.php");
-                exit;
-            } else {
-                header("Location: aggiungiLibro.php");
-                exit;
-            }
-        } else {
-            echo "Errore nella preparazione della query.";
-        }
-
-    } catch (PDOException $e) {
-        echo "Errore durante controllo: " . $e->getMessage();
-    }
+    $_SESSION['libroEsiste'] = $exists;
+    redirect('aggiungiLibro.php');
 }
-?>

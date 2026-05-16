@@ -1,60 +1,41 @@
 <?php
-// Debug 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Dashboard
+ * @file Handles saving book edits
+ */
 
-session_start();
-require_once("../../utils/connect.php");
+require_once __DIR__ . '/../../src/bootstrap.php';
 
-// Recupero dati dalla POST
-$isbn_old = $_POST["id"]; // L'ISBN originale usato come identificatore
-$isbn_new = $_POST["isbn"]; // Il nuovo ISBN (se modificato)
-$titolo = $_POST["titolo"];
-$autore = $_POST["autore"];
-$genere = $_POST["genere"];
-$desc = $_POST["desc"];
-$casaed = $_POST["casaed"];
-$annopub = $_POST["annopub"];
+use Alexandria\Services\BookService;
+
+$bookService = new BookService($pdo);
+
+$isbnOld = $_POST['id'] ?? '';
+$isbnNew = $_POST['isbn'] ?? '';
+$titolo = $_POST['titolo'] ?? '';
+$autore = $_POST['autore'] ?? '';
+$genere = $_POST['genere'] ?? '';
+$desc = $_POST['desc'] ?? '';
+$casaed = $_POST['casaed'] ?? '';
+$annopub = $_POST['annopub'] ?? '';
 
 try {
-    // Otteniamo l'istanza della connessione PDO
-    $pdo = DatabaseConnection::getInstance()->getConnection();
-
-    // Prepariamo la query con i segnaposto nominati
-    $sql = "UPDATE Opera 
-            SET ISBN = :isbn_new, 
-                Nome = :titolo, 
-                Autore = :autore, 
-                Genere = :genere, 
-                Descrizione = :descr, 
-                CasaEditrice = :casaed, 
-                AnnoPubblicazione = :annopub 
-            WHERE ISBN = :isbn_old";
-
-    $stmt = $pdo->prepare($sql);
-
-    // Esecuzione con binding dei parametri
-    $stmt->execute([
-        ':isbn_new' => $isbn_new,
-        ':titolo'   => $titolo,
-        ':autore'   => $autore,
-        ':genere'   => $genere,
-        ':descr'    => $desc,
-        ':casaed'   => $casaed,
-        ':annopub'  => $annopub,
-        ':isbn_old' => $isbn_old
+    $bookService->update($isbnOld, [
+        'isbn' => $isbnNew,
+        'nome' => $titolo,
+        'autore' => $autore,
+        'genere' => $genere,
+        'descrizione' => $desc,
+        'casaed' => $casaed,
+        'annopub' => $annopub,
     ]);
 
-    // Se l'esecuzione va a buon fine
-    $_SESSION['success_msg'] = "Libro aggiornato con successo!";
-    header("Location: dashboardLibri.php");
-    exit;
-
+    flash('success', 'Libro aggiornato con successo!');
+    redirect('dashboardLibri.php');
 } catch (PDOException $e) {
-    // Gestione errore (es: ISBN duplicato o errore di sintassi)
-    $_SESSION['error_msg'] = "Errore durante l'aggiornamento: " . $e->getMessage();
-    header("Location: dashboardLibri.php?errore=1");
-    exit;
+    flash('error', 'Errore durante l\'aggiornamento: ' . $e->getMessage());
+    redirect('dashboardLibri.php?errore=1');
 }
-?>

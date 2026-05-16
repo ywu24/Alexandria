@@ -135,7 +135,7 @@ function calcolaStatoPHP($row) {
     </div>
 </div>
 
-    <script src="dettaglioPrenotazione.js"></script>
+    <script src="../js/dettaglioPrenotazione.js"></script>
     <script src="prenotazioneAdmin.js"></script>
     <?php require_once("../nav/footer.php"); ?>
 </body>

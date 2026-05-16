@@ -1,87 +1,74 @@
 <?php
-session_start();
-require_once("../../utils/connect.php");
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Dashboard
+ * @file AJAX endpoint for user table data
+ */
+
+require_once __DIR__ . '/../../src/bootstrap.php';
+
+use Alexandria\Services\AuthService;
+use Alexandria\Services\UserService;
 
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['utenza']) || ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2)) {
+$authService = new AuthService($pdo);
+if (!$authService->isAdmin() && !$authService->isLibrarian()) {
     exit(json_encode([]));
 }
 
-$pdo = DatabaseConnection::getInstance()->getConnection();
+$userService = new UserService($pdo);
 
 $search = isset($_POST['search']) ? trim($_POST['search']) : '';
 $sort = $_POST['sort_type'] ?? 'id';
-$limit = isset($_POST['limit']) ? (int)$_POST['limit'] : 10;
-$offset = isset($_POST['offset']) ? (int)$_POST['offset'] : 0;
+$limit = isset($_POST['limit']) ? (int) $_POST['limit'] : 10;
+$offset = isset($_POST['offset']) ? (int) $_POST['offset'] : 0;
 
-$allowed_sort = ['id', 'Nome', 'Cognome', 'Email', 'Utenza', 'punteggio'];
-if (!in_array($sort, $allowed_sort)) $sort = 'id';
-
-// 2. Costruzione Query
-$sql = "SELECT id, Nome, Cognome, Email, punteggio, Utenza FROM Utente WHERE 1=1";
-
-if ($search !== '') {
-    $sql .= " AND (
-        id LIKE :s1 OR 
-        Nome LIKE :s2 OR 
-        Cognome LIKE :s3 OR 
-        Email LIKE :s4 OR
-        CONCAT(Nome, ' ', Cognome) LIKE :s5
-    )";
+$utenzaFilter = null;
+if (isset($_POST['utenza']) && $_POST['utenza'] !== '') {
+    $utenzaFilter = (int) $_POST['utenza'];
 }
 
-$direction = ($sort === 'punteggio') ? 'DESC' : 'ASC';
-$sql .= " ORDER BY $sort $direction LIMIT :limit OFFSET :offset";
-
 try {
-    $stmt = $pdo->prepare($sql);
-    
-    if ($search !== '') {
-        $st = "%$search%";
-        // Bindiamo lo stesso valore a placeholder diversi
-        $stmt->bindValue(':s1', $st, PDO::PARAM_STR);
-        $stmt->bindValue(':s2', $st, PDO::PARAM_STR);
-        $stmt->bindValue(':s3', $st, PDO::PARAM_STR);
-        $stmt->bindValue(':s4', $st, PDO::PARAM_STR);
-        $stmt->bindValue(':s5', $st, PDO::PARAM_STR);
-    }
-    
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-    
-    $stmt->execute();
-    $utenti = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    $utenti = $userService->getUsers(
+        $search !== '' ? $search : null,
+        $sort,
+        $limit,
+        $offset,
+        $utenzaFilter
+    );
 } catch (PDOException $e) {
     exit(json_encode([["html" => "<td>Errore SQL: " . $e->getMessage() . "</td>"]]));
 }
 
+$ruoli = [1 => "Admin", 2 => "Bibliotecario", 3 => "Premium", 4 => "Standard"];
 $response = [];
+
 foreach ($utenti as $row) {
-    
-    $ruoli = [1 => "Admin", 2 => "Bibliotecario", 3 => "Docente", 4 => "Cittadino"];
     $desc = $ruoli[$row['Utenza']] ?? "N/A";
-    
-    if ($_SESSION['utenza'] == 1) {
+
+    if ($authService->isAdmin()) {
         $html = "
             <th scope='row' class='col-nascondi row-header'>{$row['id']}</th>
-            <td>{$row['Nome']}</td>
-            <td>{$row['Cognome']}</td>
-            <td class='col-nascondi'>{$row['Email']}</td>
-            <td class='col-nascondi'>{$desc}</td>
+            <td>" . e($row['Nome']) . "</td>
+            <td>" . e($row['Cognome']) . "</td>
+            <td class='col-nascondi'>" . e($row['Email']) . "</td>
+            <td class='col-nascondi'>$desc</td>
             <td class='col-nascondi'>{$row['punteggio']}</td>
             <td class='col-nascondi'>
                 <div class='btn_actions'>
+                    <a class='btn btn-primary btn-sm' href='dettaglioUtente.php?id={$row['id']}'>Prenotazioni</a>
                     <a class='btn btn-primary btn-sm' href='modificaUtente.php?id={$row['id']}'>Modifica</a>
                     <a class='btn btn-danger btn-sm' href='eliminaUtente.php?id={$row['Email']}'>Elimina</a>
                 </div>
             </td>";
     } else {
         $html = "
-            <td>{$row['Nome']}</td>
-            <td>{$row['Cognome']}</td>
-            <td class='col-nascondi'>{$row['Email']}</td>
+            <td>" . e($row['Nome']) . "</td>
+            <td>" . e($row['Cognome']) . "</td>
+            <td class='col-nascondi'>" . e($row['Email']) . "</td>
             <td class='col-nascondi'>{$row['punteggio']}</td>
             <td class='col-nascondi'>
                 <div class='btn_actions text-center'>
@@ -89,6 +76,7 @@ foreach ($utenti as $row) {
                 </div>
             </td>";
     }
+
     $response[] = [
         'html'      => $html,
         'id'        => $row['id'],

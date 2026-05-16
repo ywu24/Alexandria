@@ -1,247 +1,131 @@
 <?php
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Dashboard
+ * @file AJAX endpoint for booking actions (confirm, complete, cancel)
+ */
+
+require_once __DIR__ . '/../../src/bootstrap.php';
+require_once __DIR__ . '/../../utils/mailer.php';
+
+use Alexandria\Services\BookingService;
+
+header('Content-Type: application/json');
+
+function sendResponse(bool $success, string $message, array $extra = []): void
+{
+    echo json_encode(array_merge(['success' => $success, 'message' => $message], $extra));
+    exit;
+}
+
+function sendError(string $message, int $httpCode = 400): void
+{
+    http_response_code($httpCode);
+    echo json_encode(['success' => false, 'message' => $message]);
+    exit;
+}
+
 if (!isset($_POST['id'])) {
-    echo "Errore: prenotazione non definita";
-    exit;
+    sendError('Errore: prenotazione non definita');
 }
-$giorniPrenotazione = 30;
 
+$bookingService = new BookingService($pdo);
 $id = (int) $_POST['id'];
-$root = "../..";
-require_once("../../utils/connect.php");
-require_once("../../utils/mailer.php");
-require_once("../../auth/cookies.php");
 
-try {
-    $pdo = DatabaseConnection::getInstance()->getConnection();
-} catch (PDOException $e) {
-    echo "Errore durante la connessione al database: " . $e->getMessage();
-    exit;
+if (isset($_POST['conferma'])) {
+    try {
+        if ($bookingService->confirm($id)) {
+            // Email notification
+            $booking = $bookingService->getById($id);
+            if ($booking) {
+                sendEmail(
+                    $booking['Email'],
+                    $booking['Email'],
+                    'Libro Ritirato',
+                    '<h2>Hai ritirato il libro ' . $booking['Nome'] . '</h2>
+                    <p>Informazioni sul prestito:</p>
+                    <ul>
+                        <li>ISBN: ' . $booking['ISBN'] . '</li>
+                        <li>ID Copia: ' . $booking['idCopia'] . '</li>
+                        <li>ID Prenotazione: ' . $id . '</li>
+                        <li>Data inizio prestito: ' . $booking['InizioPrestito'] . '</li>
+                        <li>Data fine prestito: ' . $booking['FineAttesa'] . '</li>
+                    </ul>'
+                );
+            }
+
+            sendResponse(true, 'Prestito confermato con successo!');
+        } else {
+            sendResponse(false, 'Errore: prenotazione scaduta o non trovata.');
+        }
+    } catch (Exception $e) {
+        sendError('Errore: ' . $e->getMessage(), 500);
+    }
+} elseif (isset($_POST['termina'])) {
+    try {
+        $result = $bookingService->complete($id);
+
+        if ($result['success'] && !$result['late']) {
+            // Email notification for on-time return
+            $booking = $bookingService->getById($id);
+            if ($booking) {
+                sendEmail(
+                    $booking['Email'],
+                    $booking['Email'],
+                    'Libro Restituito',
+                    '<h2>Hai restituito il libro ' . $booking['Nome'] . '</h2>
+                    <p>Informazioni sul prestito:</p>
+                    <ul>
+                        <li>ISBN: ' . $booking['ISBN'] . '</li>
+                        <li>ID Copia: ' . $booking['idCopia'] . '</li>
+                        <li>ID Prenotazione: ' . $id . '</li>
+                        <li>Data inizio prestito: ' . $booking['InizioPrestito'] . '</li>
+                        <li>Data fine prestito: ' . $booking['FineAttesa'] . '</li>
+                        <li>Data restituzione: ' . $booking['FinePrestito'] . '</li>
+                    </ul>'
+                );
+            }
+        }
+
+        sendResponse($result['success'], $result['message'], ['late' => $result['late'] ?? false]);
+    } catch (Exception $e) {
+        sendError('Errore: ' . $e->getMessage(), 500);
+    }
+} elseif (isset($_POST['elimina'])) {
+    try {
+        $result = $bookingService->adminCancel($id);
+
+        if (!$result['success']) {
+            sendResponse(false, 'Errore: prenotazione non trovata');
+        }
+
+        // Email notification
+        if ($result['bookingData']) {
+            $emailBiblio = getenv('EMAIL_BIBLIO') ?: '';
+            sendEmail(
+                $result['bookingData']['Email'] ?? '',
+                $result['bookingData']['Email'] ?? '',
+                'Prenotazione Annullata',
+                '<h2>Abbiamo annullato la tua prenotazione del libro ' . $result['bookingData']['Titolo'] . '</h2>
+                <p>Informazioni sulla prenotazione:</p>
+                <ul>
+                    <li>ISBN: ' . $result['bookingData']['ISBN'] . '</li>
+                    <li>ID Copia: ' . $result['bookingData']['idCopia'] . '</li>
+                    <li>ID Prenotazione: ' . $id . '</li>
+                    <li>Data inizio prenotazione: ' . $result['bookingData']['InizioPrenotazione'] . '</li>
+                    <li>Data fine prenotazione: ' . $result['bookingData']['FinePrenotazione'] . '</li>
+                </ul>
+                <br>
+                <p>Per maggiori informazioni, si prega di contattare il bibliotecario (' . $emailBiblio . ').</p>'
+            );
+        }
+
+        sendResponse(true, 'Prenotazione eliminata con successo!');
+    } catch (Exception $e) {
+        sendError('Errore durante l\'eliminazione: ' . $e->getMessage(), 500);
+    }
+} else {
+    sendError('ID = ' . $id);
 }
-
-switch (true) {
-    case isset($_POST['conferma']):
-        #echo "ID = " . $id;
-        try {
-            $query = $pdo->prepare("UPDATE Prenotazione SET InizioPrestito = CURDATE() WHERE idPrenotazione = :id AND CURDATE()<=FinePrenotazione");
-            $query->bindParam(':id', $id);
-            $query->execute();
-            if ($query->rowCount() > 0) {
-                $query = $pdo->prepare("UPDATE `Prenotazione` SET `FineAttesa` = ADDDATE(CURDATE(), INTERVAL :giorni DAY) WHERE `Prenotazione`.`idPrenotazione` = :id");
-                $query->bindParam(':giorni', $giorniPrenotazione);
-                $query->bindParam(':id', $id);
-                $query->execute();
-                $query->closeCursor();
-                echo "ok";
-
-                //email 
-                $query = $pdo->prepare("SELECT Email, Prenotazione.idPrenotazione AS idPrenotazione, Prenotazione.idCopia AS idCopia, Opera.ISBN AS ISBN, Opera.Nome AS Titolo, InizioPrestito, FineAttesa
-                                        FROM Prenotazione, Opera, copiaLibro 
-                                        WHERE Prenotazione.idCopia = copiaLibro.idCopia 
-                                        AND copiaLibro.ISBN = Opera.ISBN
-                                        AND idPrenotazione = :id");
-                $query->bindParam(':id', $id);
-                $query->execute();
-                $result = $query->fetch();
-                $query->closeCursor();
- 
-                if ($result) {
-                    if (
-                        sendEmail(
-                            $result['Email'],
-                            $result['Email'],
-                            'Libro Ritirato',
-                            '<h2>Hai ritirato il libro ' . $result['Titolo'] . '</h2>
-                                    <p>Informazioni sul prestito:</p>
-                                    <ul>
-                                        <li>ISBN: ' . $result['ISBN'] . '</li>
-                                        <li>ID Copia: ' . $result['idCopia'] . '</li>
-                                        <li>ID Prenotazione: ' . $result['idPrenotazione'] . '</li>
-                                        <li>Data inizio prestito: ' . $result['InizioPrestito'] . '</li>
-                                        <li>Data fine prestito: ' . $result['FineAttesa'] . '</li>
-                                    </ul>'
-                        )
-                    ) {
-                        echo "Email mandato al bibliotecario"; // per debug
-                    } else {
-                        //echo "Errore nell'invio dell'email"; //per debug
-                    }
-                }
-            } else {
-                ####segnalare errore: prenotazione scaduta.
-                echo "Errore prenotazione Scaduta?";
-            }
-        } catch (Exception $e) {
-            echo "Errore " . $e->getMessage();
-        }
-        break;
-    case isset($_POST['termina']):
-        try {
-            $query = $pdo->prepare("UPDATE Prenotazione SET FinePrestito = CURDATE() WHERE idPrenotazione = :id");
-            $query->bindParam(':id', $id);
-            $query->execute();
-            if ($query->rowCount() > 0) {
-                $query = $pdo->prepare("UPDATE copiaLibro, Prenotazione SET copiaLibro.Stato = '1' WHERE copiaLibro.idCopia = Prenotazione.idCopia AND Prenotazione.idPrenotazione = :id");
-                $query->bindParam(':id', $id);
-                $query->execute();
-                $query->closeCursor();
-
-                $queryInfo = $pdo->prepare("SELECT Email, FineAttesa FROM Prenotazione WHERE idPrenotazione = :id");
-                $queryInfo->bindParam(':id', $id);
-                $queryInfo->execute();
-                $info = $queryInfo->fetch();
-                $queryInfo->closeCursor();
-
-                if ($info) {
-                    // Controlla se la data odierna supera la data massima di attesa
-                    if (strtotime(date('Y-m-d')) > strtotime($info['FineAttesa'])) {
-                        
-                        // C'è stato un ritardo: togliamo 10 punti
-                        $queryPunti = $pdo->prepare("UPDATE Utente SET punteggio = punteggio - 10 WHERE Email = :email");
-                        $queryPunti->bindParam(':email', $info['Email']);
-                        $queryPunti->execute();
-                        $queryPunti->closeCursor();
-                        
-                        echo "ok prestito terminato con ritardo. 10 punti sottratti!";
-                    } else {
-                        // Nessun ritardo
-                        echo "ok prestito terminato con successo!";
-                        //email 
-                        $query = $pdo->prepare("SELECT Email, Prenotazione.idPrenotazione AS idPrenotazione, Prenotazione.idCopia AS idCopia, Opera.ISBN AS ISBN, Opera.Nome AS Titolo, InizioPrestito, FineAttesa, FinePrestito
-                                                FROM Prenotazione, Opera, copiaLibro 
-                                                WHERE Prenotazione.idCopia = copiaLibro.idCopia 
-                                                AND copiaLibro.ISBN = Opera.ISBN
-                                                AND idPrenotazione = :id");
-                        $query->bindParam(':id', $id);
-                        $query->execute();
-                        $result = $query->fetch();
-                        $query->closeCursor();
-        
-                        if ($result) {
-                            if (
-                                sendEmail(
-                                    $result['Email'],
-                                    $result['Email'],
-                                    'Libro Restituito',
-                                    '<h2>Hai restituito il libro ' . $result['Titolo'] . '</h2>
-                                            <p>Informazioni sul prestito:</p>
-                                            <ul>
-                                                <li>ISBN: ' . $result['ISBN'] . '</li>
-                                                <li>ID Copia: ' . $result['idCopia'] . '</li>
-                                                <li>ID Prenotazione: ' . $result['idPrenotazione'] . '</li>
-                                                <li>Data inizio prestito: ' . $result['InizioPrestito'] . '</li>
-                                                <li>Data fine prestito: ' . $result['FineAttesa'] . '</li>
-                                                <li>Data restituzione: ' . $result['FinePrestito'] . '</li>
-                                            </ul>'
-                                )
-                            ) {
-                                echo "Email mandato al bibliotecario"; // per debug
-                            } else {
-                                //echo "Errore nell'invio dell'email"; //per debug
-                            }
-                        }
-                    }
-                } else {
-                    echo "Errore: " . $id;
-                }
-            }
-        } catch (Exception $e) {
-            echo "Errore " . $e->getMessage();
-        }
-        break;
-    case isset($_POST['elimina']):
-        try {
-            $pdo->beginTransaction(); //inizia la transazione atomica
-
-            $query = $pdo->prepare('SELECT idCopia, Email FROM Prenotazione WHERE idPrenotazione = :id');
-            $query->bindParam(':id', $id);
-            $query->execute();
-            $row = $query->fetch();
-            $query->closeCursor();
-
-            if ($row) {
-                $idCopia = $row['idCopia'];
-                $email = $row['Email'];
-
-                $query = $pdo->prepare("SELECT id FROM Utente WHERE Email=  :email");
-                $query->bindParam(':email', $email);
-                $query->execute();
-                $result = $query->fetch();
-                $query->closeCursor();
-
-                $idUtente = $result['id'];
-
-                // 1. Salviamo i dati della prenotazione per l'email prima di eliminarla
-
-                $query = $pdo->prepare("SELECT Prenotazione.idCopia AS idCopia, Opera.ISBN AS ISBN, Opera.Nome AS Titolo, InizioPrenotazione, FinePrenotazione
-                                        FROM Prenotazione, Opera, copiaLibro 
-                                        WHERE Prenotazione.idCopia = copiaLibro.idCopia 
-                                        AND copiaLibro.ISBN = Opera.ISBN
-                                        AND idPrenotazione = :id");
-                $query->bindParam(':id', $id);
-                $query->execute();
-                $result = $query->fetch();
-                $query->closeCursor();
-
-                // 2. Eliminiamo la prenotazione
-
-                $query = $pdo->prepare("DELETE FROM Prenotazione WHERE idPrenotazione = :id");
-                $query->bindParam(':id', $id);
-                $query->execute();
-                $query->closeCursor();
-
-                // 3. Riportiamo la copia del libro a 'disponibile' (Stato 1)
-
-                $query = $pdo->prepare("UPDATE copiaLibro SET Stato = '1' WHERE idCopia = :idCopia");
-                $query->bindParam(':idCopia', $idCopia);
-                $query->execute();
-                $query->closeCursor();
-
-                echo "ok " . $idUtente;
-
-                //email 
-                
-                if ($result) {
-                    $emailBiblio = getenv('EMAIL_BIBLIO') ? getenv('EMAIL_BIBLIO') : '';
-
-                    if (
-                        sendEmail(
-                            $email,
-                            $email,
-                            'Prenotazione Annullata',
-                            '<h2>Abbiamo annullato la tua prenotazione del libro ' . $result['Titolo'] . '</h2>
-                                    <p>Informazioni sulla prenotazione:</p>
-                                    <ul>
-                                        <li>ISBN: ' . $result['ISBN'] . '</li>
-                                        <li>ID Copia: ' . $result['idCopia'] . '</li>
-                                        <li>ID Prenotazione: ' . $id . '</li>
-                                        <li>Data inizio prenotazione: ' . $result['InizioPrenotazione'] . '</li>
-                                        <li>Data fine prenotazione: ' . $result['FinePrenotazione'] . '</li>
-                                    </ul>
-                                    <br>
-                                    <p>Per maggiori informazioni, si prega di contattare il bibliotecario (' . $emailBiblio . ').</p>
-                                    '
-                        )
-                    ) {
-                        echo "Email mandata al bibliotecario"; // per debug
-                    } else {
-                        //echo "Errore nell'invio dell'email"; //per debug
-                    }
-                }
-
-            } else {
-                echo "Errore: prenotazione non trovata";
-            }
-
-            $pdo->commit(); //committa tutto a partire da beginTransaction()
-        } catch (Exception $e) {
-            if ($pdo->inTransaction()) {
-                $pdo->rollBack();
-            }
-            echo "Errore durante l'eliminazione: " . $e->getMessage();
-        }
-        break;
-    default:
-        echo "ID = " . $id;
-        break;
-}
-?>

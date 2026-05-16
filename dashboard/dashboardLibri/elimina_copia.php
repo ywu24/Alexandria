@@ -1,36 +1,32 @@
 <?php
-session_start();
-$root = "../..";
-require_once("../../auth/cookies.php");
-require_once("../../utils/connect.php");
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Dashboard
+ * @file AJAX endpoint for deleting a single book copy
+ */
 
-if ($_SESSION['utenza'] == 1 || $_SESSION['utenza'] == 2) {
-} else {
-    header("Location: ../../index.php");
+require_once __DIR__ . '/../../src/bootstrap.php';
+
+use Alexandria\Services\AuthService;
+use Alexandria\Services\BookService;
+
+$authService = new AuthService($pdo);
+if (!$authService->isAdmin() && !$authService->isLibrarian()) {
+    redirect('../../index.php');
+}
+
+if (!isset($_POST['id'])) {
+    echo 'Errore: ID mancante';
     exit;
 }
-if (isset($_POST['id'])) {
 
-    try {
-        $pdo = DatabaseConnection::getInstance()->getConnection();
-    } catch (PDOException $e) {
-        echo "Errore durante la connessione al database: " . $e->getMessage();
-        exit;
-    }
+$bookService = new BookService($pdo);
+$id = (int) $_POST['id'];
 
-    $id = (int) $_POST['id'];
-    try {
-        $query = $pdo->prepare("DELETE FROM copiaLibro WHERE idCopia= :id AND Stato=1");
-        $query->bindParam(':id', $id);
-        $result = $query->execute();
-        if ($query->rowCount() <= 0) {  //rowCount restituisce il numero di righe affette dall'ultima query (DELETE, INSERT, o UPDATE)
-            echo "Errore nell'eliminazione del libro con id " . $id;
-            exit;
-        }
-        echo "okLibro con id " . $id . " eliminato con successo!";
-    } catch (Exception $e) {
-        echo "Errore nell'eliminazione del libro con id " . $id . ", " . $e->getMessage();
-        exit;
-    }
+if ($bookService->deleteCopy($id)) {
+    echo "okLibro con id $id eliminato con successo!";
+} else {
+    echo "Errore nell'eliminazione del libro con id $id";
 }
-?>

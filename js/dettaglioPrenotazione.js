@@ -11,7 +11,16 @@ async function apriDettaglioPrenotazione(id) {
         targetDiv.classList.remove('d-none');
         targetDiv.innerHTML = '<p class="text-muted small">Caricamento...</p>';
 
-        const response = await fetch(`../dashboard/dashboardUtenti/dettaglioPrenotazione.php?id=${id}`);
+        // Determine the correct path based on current location
+        const currentPath = window.location.pathname;
+        let basePath = '';
+        if (currentPath.includes('prenotazione')) {
+            basePath = '../dashboard/dashboardUtenti/';
+        } else if (currentPath.includes('dashboardUtenti')) {
+            basePath = '';
+        }
+
+        const response = await fetch(`${basePath}dettaglioPrenotazione.php?id=${id}`);
         const data = await response.json();
 
         let pulsantiAzione = '';
@@ -74,7 +83,16 @@ async function eseguiAzione(id, azione) {
         formData.append('id', id);
         formData.append(azione, 'true');
 
-        const response = await fetch(`../dashboard/dashboardUtenti/handlePrenotazione.php`, {
+        // Determine the correct path based on current location
+        const currentPath = window.location.pathname;
+        let basePath = '';
+        if (currentPath.includes('prenotazione')) {
+            basePath = '../dashboard/dashboardUtenti/';
+        } else if (currentPath.includes('dashboardUtenti')) {
+            basePath = '';
+        }
+
+        const response = await fetch(`${basePath}handlePrenotazione.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -82,13 +100,14 @@ async function eseguiAzione(id, azione) {
             body: formData.toString()
         });
 
-        const result = await response.text();
+        const result = await response.json();
         console.log("Risposta server:", result);
 
-        if (result.includes("ok")) {
+        if (result.success) {
+            alert(result.message);
             location.reload();
         } else {
-            alert("Errore dal server: " + result);
+            alert("Errore dal server: " + result.message);
         }
     } catch (error) {
         console.error("Errore durante l'invio:", error);

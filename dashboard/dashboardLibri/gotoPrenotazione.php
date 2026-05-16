@@ -1,50 +1,32 @@
 <?php
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Dashboard
+ * @file Redirects from copy ID to booking detail page
+ */
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-$root= "../..";
-session_start();
-require_once("../../auth/cookies.php");
-require_once("../../utils/connect.php");
+require_once __DIR__ . '/../../src/bootstrap.php';
 
+use Alexandria\Services\AuthService;
+use Alexandria\Services\BookingService;
 
-if (!isset($_SESSION['utenza']) || ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2)) {
-    header("Location: ../../index.php");
-    exit();
+$authService = new AuthService($pdo);
+if (!$authService->isAdmin() && !$authService->isLibrarian()) {
+    redirect('../../index.php');
 }
-
 
 if (!isset($_GET['id'])) {
-    header("Location: dashboardLibri.php");
-    exit();
+    redirect('dashboardLibri.php');
 }
 
-$id = $_GET['id'];
+$bookingService = new BookingService($pdo);
+$bookingId = $bookingService->getByCopyId((int) $_GET['id']);
 
-try {
-    $pdo = DatabaseConnection::getInstance()->getConnection();
-} catch (PDOException $e) {
-    echo "Errore durante la connessione al database: " . $e->getMessage();
-    exit;
+if ($bookingId) {
+    redirect('../dashboardUtenti/dettaglioPrenotazione.php?id=' . $bookingId);
+} else {
+    flash('error', 'Nessuna prenotazione trovata per questa copia.');
+    redirect('dashboardLibri.php');
 }
-
-try {
-
-    $query = $pdo->prepare("SELECT idPrenotazione FROM Prenotazione WHERE idCopia = :id AND FinePrestito IS NULL");
-    $query->bindParam(':id', $id);
-    $query->execute();
-    $result = $query->fetch();
-
-    if ($result) {
-        header("Location: ../dashboardUtenti/dettaglioPrenotazione.php?id=" . $result['idPrenotazione']);
-        exit();
-    } else {
-        $_SESSION['error_msg'] = "Nessuna prenotazione trovata per questa copia.";
-        header("Location: dashboardLibri.php");
-        exit();
-    }
-} catch (Exception $e) {
-    echo "Errore di sistema: " . $e->getMessage();
-}
-?>

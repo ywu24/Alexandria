@@ -394,4 +394,188 @@ class BookingService
             throw new RuntimeException('Errore durante l\'annullamento: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Get active booking ID by copy ID
+     *
+     * @param int $copyId Copy ID
+     * @return int|null Booking ID or null
+     */
+    public function getByCopyId(int $copyId): ?int
+    {
+        $query = $this->pdo->prepare("SELECT idPrenotazione FROM Prenotazione WHERE idCopia = :id AND FinePrestito IS NULL");
+        $query->bindParam(':id', $copyId);
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        return $result ? (int) $result['idPrenotazione'] : null;
+    }
+
+    /**
+     * Confirm a booking (start the loan)
+     *
+     * @param int $bookingId Booking ID
+     * @param int $loanDays Loan duration in days
+     * @return bool True on success
+     */
+    public function confirm(int $bookingId, int $loanDays = 30): bool
+    {
+        $query = $this->pdo->prepare("UPDATE Prenotazione SET InizioPrestito = CURDATE() WHERE idPrenotazione = :id AND CURDATE() <= FinePrenotazione");
+        $query->bindParam(':id', $bookingId, PDO::PARAM_INT);
+        $query->execute();
+
+        if ($query->rowCount() <= 0) {
+            return false;
+        }
+
+        $query = $this->pdo->prepare("UPDATE Prenotazione SET FineAttesa = ADDDATE(CURDATE(), INTERVAL :giorni DAY) WHERE idPrenotazione = :id");
+        $query->bindParam(':giorni', $loanDays, PDO::PARAM_INT);
+        $query->bindParam(':id', $bookingId, PDO::PARAM_INT);
+        $query->execute();
+        return true;
+    }
+
+    /**
+     * Complete a booking (return the book)
+     *
+     * @param int $bookingId Booking ID
+     * @return array ['success' => bool, 'late' => bool, 'message' => string]
+     */
+    public function complete(int $bookingId): array
+    {
+        $this->pdo->beginTransaction();
+
+        try {
+            $query = $this->pdo->prepare("UPDATE Prenotazione SET FinePrestito = CURDATE() WHERE idPrenotazione = :id");
+            $query->bindParam(':id', $bookingId, PDO::PARAM_INT);
+            $query->execute();
+
+            if ($query->rowCount() <= 0) {
+                $this->pdo->rollBack();
+                return ['success' => false, 'late' => false, 'message' => 'Errore: prenotazione non trovata'];
+            }
+
+            // Free the copy
+            $query = $this->pdo->prepare("UPDATE copiaLibro, Prenotazione SET copiaLibro.Stato = '1' WHERE copiaLibro.idCopia = Prenotazione.idCopia AND Prenotazione.idPrenotazione = :id");
+            $query->bindParam(':id', $bookingId, PDO::PARAM_INT);
+            $query->execute();
+
+            // Check if late
+            $queryInfo = $this->pdo->prepare("SELECT Email, FineAttesa FROM Prenotazione WHERE idPrenotazione = :id");
+            $queryInfo->bindParam(':id', $bookingId, PDO::PARAM_INT);
+            $queryInfo->execute();
+            $info = $queryInfo->fetch(PDO::FETCH_ASSOC);
+
+            $late = false;
+            if ($info && strtotime(date('Y-m-d')) > strtotime($info['FineAttesa'])) {
+                $queryPunti = $this->pdo->prepare("UPDATE Utente SET punteggio = punteggio - 10 WHERE Email = :email");
+                $queryPunti->bindParam(':email', $info['Email']);
+                $queryPunti->execute();
+                $late = true;
+            }
+
+            $this->pdo->commit();
+            return [
+                'success' => true,
+                'late' => $late,
+                'message' => $late ? 'ok prestito terminato con ritardo. 10 punti sottratti!' : 'ok prestito terminato con successo!',
+            ];
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            throw new RuntimeException('Errore durante la chiusura: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Admin cancel a booking with full details return
+     *
+     * @param int $bookingId Booking ID
+     * @return array ['success' => bool, 'userId' => int|null, 'bookingData' => array|null]
+     */
+    public function adminCancel(int $bookingId): array
+    {
+        $this->pdo->beginTransaction();
+
+        try {
+            $query = $this->pdo->prepare('SELECT idCopia, Email FROM Prenotazione WHERE idPrenotazione = :id');
+            $query->bindParam(':id', $bookingId, PDO::PARAM_INT);
+            $query->execute();
+            $row = $query->fetch(PDO::FETCH_ASSOC);
+
+            if (!$row) {
+                $this->pdo->rollBack();
+                return ['success' => false, 'userId' => null, 'bookingData' => null];
+            }
+
+            $idCopia = $row['idCopia'];
+            $email = $row['Email'];
+
+            // Get user ID
+            $query = $this->pdo->prepare("SELECT id FROM Utente WHERE Email = :email");
+            $query->bindParam(':email', $email);
+            $query->execute();
+            $user = $query->fetch(PDO::FETCH_ASSOC);
+            $idUtente = $user ? (int) $user['id'] : 0;
+
+            // Get booking details for email
+            $query = $this->pdo->prepare("SELECT Prenotazione.idCopia, Opera.ISBN, Opera.Nome as Titolo, InizioPrenotazione, FinePrenotazione
+                                          FROM Prenotazione, Opera, copiaLibro
+                                          WHERE Prenotazione.idCopia = copiaLibro.idCopia
+                                          AND copiaLibro.ISBN = Opera.ISBN
+                                          AND idPrenotazione = :id");
+            $query->bindParam(':id', $bookingId, PDO::PARAM_INT);
+            $query->execute();
+            $bookingData = $query->fetch(PDO::FETCH_ASSOC);
+
+            // Delete booking
+            $delete = $this->pdo->prepare("DELETE FROM Prenotazione WHERE idPrenotazione = :id");
+            $delete->bindParam(':id', $bookingId, PDO::PARAM_INT);
+            $delete->execute();
+
+            // Free copy
+            $update = $this->pdo->prepare("UPDATE copiaLibro SET Stato = '1' WHERE idCopia = :idCopia");
+            $update->bindParam(':idCopia', $idCopia, PDO::PARAM_INT);
+            $update->execute();
+
+            $this->pdo->commit();
+            return ['success' => true, 'userId' => $idUtente, 'bookingData' => $bookingData];
+        } catch (PDOException $e) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+            throw new RuntimeException('Errore durante l\'eliminazione: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Get terminated bookings for a user with review status
+     *
+     * @param string $email User email
+     * @return array Booking records with 'recensito' flag
+     */
+    public function getTerminatedByEmail(string $email): array
+    {
+        $sql2 = "SELECT idOpera FROM recensione WHERE userEmail = :userEmail";
+        $query2 = $this->pdo->prepare($sql2);
+        $query2->bindParam(':userEmail', $email);
+        $query2->execute();
+        $recensiti = $query2->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        $sql = "SELECT idPrenotazione, InizioPrestito, FinePrestito, FineAttesa, Copertina, Nome, Autore, CasaEditrice, Opera.id as idOpera, Opera.ISBN
+                FROM Prenotazione
+                JOIN copiaLibro ON copiaLibro.idCopia = Prenotazione.idCopia
+                JOIN Opera ON Opera.ISBN = copiaLibro.ISBN
+                WHERE Prenotazione.Email = :email AND FinePrestito IS NOT NULL
+                ORDER BY Prenotazione.idPrenotazione DESC";
+
+        $query = $this->pdo->prepare($sql);
+        $query->bindParam(':email', $email);
+        $query->execute();
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($results as &$row) {
+            $row['recensito'] = in_array($row['idOpera'], $recensiti, false) ? 1 : 0;
+        }
+
+        return $results;
+    }
 }
