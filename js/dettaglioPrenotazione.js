@@ -18,14 +18,14 @@
             targetDiv.innerHTML = '<p class="text-muted small">Caricamento...</p>';
 
             var currentPath = window.location.pathname;
-            var basePath = '';
+            var apiPath = '';
             if (currentPath.includes('prenotazione')) {
-                basePath = '../dashboard/dashboardUtenti/';
+                apiPath = '../api/';
             } else if (currentPath.includes('dashboardUtenti')) {
-                basePath = '';
+                apiPath = '../../api/';
             }
 
-            var response = await fetch(basePath + 'dettaglioPrenotazione.php?id=' + id);
+            var response = await fetch(apiPath + 'booking-detail.php?id=' + id);
             var data = await response.json();
 
             var pulsantiAzione = '';
@@ -83,14 +83,14 @@
             formData.append(azione, 'true');
 
             var currentPath = window.location.pathname;
-            var basePath = '';
+            var apiPath = '';
             if (currentPath.includes('prenotazione')) {
-                basePath = '../dashboard/dashboardUtenti/';
+                apiPath = '../api/';
             } else if (currentPath.includes('dashboardUtenti')) {
-                basePath = '';
+                apiPath = '../../api/';
             }
 
-            var response = await fetch(basePath + 'handlePrenotazione.php', {
+            var response = await fetch(apiPath + 'handle-booking.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()

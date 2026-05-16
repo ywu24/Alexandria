@@ -1,3 +1,8 @@
+/**
+ * Alexandria Library Management System
+ *
+ * @file Shared JS utilities — showMessage, debounce, $, and $$ for use across pages
+ */
 (function () {
     window.showMessage = function (text, type) {
         if (type === void 0) { type = 'successo'; }

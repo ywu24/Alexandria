@@ -1,7 +1,12 @@
+/**
+ * Alexandria Library Management System
+ *
+ * @file Theme toggle — dark/light mode with localStorage persistence and system preference detection
+ */
 (function () {
-  const storedTheme = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+  var storedTheme = localStorage.getItem('theme');
+  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var theme = storedTheme || (prefersDark ? 'dark' : 'light');
 
   document.documentElement.setAttribute('data-theme', theme);
 
