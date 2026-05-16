@@ -1,15 +1,25 @@
 <?php
-session_start(); //non togliere
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Main dashboard landing page with links to sub-dashboards
+ */
 
-//LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require_once __DIR__ . '/../src/bootstrap.php';
 
+use Alexandria\Services\AuthService;
 
+$authService = new AuthService($pdo);
+
+if (!$authService->isAdmin() && !$authService->isLibrarian()) {
+    redirect('../index.php');
+}
+
+$root = '..';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
   <meta charset="UTF-8">
@@ -25,15 +35,13 @@ error_reporting(E_ALL);
   <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
   <link rel="icon" type="image/svg+xml" href="../img/dashboard.svg">
-  <!--script per importare parti di codice-->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="dashboard-landing">
 
   <div id="nav-placeholder">
-    <?php $root = "..";
-    require_once('../nav/nav.php'); ?>
+    <?php $root = '..'; require_once('../nav/nav.php'); ?>
   </div>
   <div class="container">
     <a href="dashboardUtenti/dashboardUtenti.php">

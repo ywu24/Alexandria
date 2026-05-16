@@ -1,202 +1,203 @@
 <?php
-require_once( $root . "/utils/connect.php");
-require_once($root . "/auth/cookies.php");
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Navigation component - compatible with both legacy pages and bootstrap-based pages
+ */
 
+use Alexandria\Services\AuthService;
+use Alexandria\Services\UserService;
+
+// Handle logout
 if (isset($_POST['logout'])) {
-    setcookie("email", "", time() - 1, '/');
-    setcookie("password", "", time() - 1, '/');
-    session_start();
-    session_destroy();
-    header("Location: " . $root . "/index.php");
-    exit();
+    if (defined('ALEXANDRIA_BOOTSTRAPPED') && isset($pdo)) {
+        $authService = new AuthService($pdo);
+        $authService->logout();
+        redirect($root . '/index.php');
+    } else {
+        setcookie('email', '', time() - 1, '/');
+        setcookie('password', '', time() - 1, '/');
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        session_destroy();
+        header('Location: ' . $root . '/index.php');
+        exit();
+    }
+}
+
+// Legacy path: old pages include connect.php and cookies.php before nav.php
+// New path: bootstrap.php already loaded everything including cookie auto-login
+if (!defined('ALEXANDRIA_BOOTSTRAPPED')) {
+    require_once($root . '/utils/connect.php');
+    require_once($root . '/auth/cookies.php');
 }
 ?>
 
 <nav class="nav1">
-
     <a href="<?php echo $root; ?>/index.php">
         <img src="<?php echo $root; ?>/img/logo.png" class="logo">
     </a>
 
-    <?php
-
-    echo "
-    <form method='get' action='" . $root . "/lista/lista.php' class='search-form'>
-        <input type='search' name='search' placeholder='Search...'>
-        <button type='submit' name='search_btn'>
-        </button>
-    </form>";
-    ?>
+    <form method="get" action="<?php echo $root; ?>/lista/lista.php" class="search-form">
+        <input type="search" name="search" placeholder="Search...">
+        <button type="submit" name="search_btn"></button>
+    </form>
 
 <?php
+$isLoggedIn = isset($_SESSION['email']);
+$utenza = $_SESSION['utenza'] ?? null;
 
-if (isset($_SESSION['email'])) {
+if ($isLoggedIn) {
     $email = $_SESSION['email'];
 
-    try {
-	    $pdo = DatabaseConnection::getInstance()->getConnection();
-    } catch (PDOException $e) {
-        echo "Errore durante la connessione al database: " . $e->getMessage();
-        exit;
-    }
-
-    try {
-        $q = $pdo->prepare('SELECT * FROM Utente WHERE Email=:email');
-        $q->bindParam(':email', $email);
-        $q->execute();
-        $utente = $q->fetch();
-        $q->closeCursor();
-    } catch (PDOException $e) {
-        error_log('[nav.php] Error executing query: ' . $e->getMessage());
-        echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
-        exit;
-    }
-
-    echo "
-    <ul>
-        <li class='li-icon'>
-            <a href='" . $root . "/lista/lista.php'>
-                <svg class='icon'><use href='" . $root . "/img/icons.svg#library'/></svg>
-            </a>
-        </li>";
-        if(isset($_SESSION['utenza'])){
-            if($_SESSION['utenza']==1 ||$_SESSION['utenza']==2 ){
-                echo "
-                    <li class ='li-icon'>
-                        <a href='" . $root . "/dashboard/dashboard.php'>
-                        <svg class='icon'><use href='" . $root . "/img/icons.svg#dashboard'/></svg>
-                        </a>
-                    </li>
-
-                ";
-            }
+    if (defined('ALEXANDRIA_BOOTSTRAPPED') && isset($pdo)) {
+        $userService = new UserService($pdo);
+        $utente = $userService->getByEmail($email);
+    } else {
+        try {
+            $pdo = DatabaseConnection::getInstance()->getConnection();
+        } catch (PDOException $e) {
+            echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
+            exit;
         }
-        echo "
-        <li class ='li-icon acc'>
-            <a href='#'></a>
-            <svg class='icon' onclick='toggleMenu()'><use href='" . $root . "/img/icons.svg#account'/></svg>
-        </li>
-    </ul>
 
-        <div class='sub-menu-wrap' id='subMenu'>
-            <div class='sub-menu'>
-
-                <div class='user-info'>
-                    <img src='" . $root ."/img/users/". $utente["propic"] . "'>
-                    <h3 style='font-size: 1.2rem;'>" . $utente["Nome"] . " " . $utente["Cognome"] . "</h3>
-                    <h4> Punti: ".$utente['punteggio']."</h4>
-                </div>
-
-                <a href='" . $root . "/prenotazione/prenotazione.php' class='sub-menu-link'>
-                    <svg class='icon'><use href='" . $root . "/img/icons.svg#booking'/></svg>
-                    <p>Prenotazioni</p>
-                    <span>></span>
-                </a>
-
-                <a href='" . $root . "/lista/lista.php' class='sub-menu-link'>
-                    <svg class='icon'><use href='" . $root . "/img/icons.svg#library'/></svg>
-                    <p>Lista Libri</p>
-                    <span>></span>
-                </a>
-
-                <a href='" . $root . "/edit_profile/edit_profile.php' class='sub-menu-link'>
-                    <svg class='icon'><use href='" . $root . "/img/icons.svg#edit-profile'/></svg>
-                    <p>Edit Profile</p>
-                    <span>></span>
-                </a>
-    ";
-
-    if ($utente["Utenza"] == 1 || $utente["Utenza"] == 2) {
-        echo "
-        <a href='" . $root . "/dashboard/dashboard.php' class='sub-menu-link'>
-            <svg class='icon'><use href='" . $root . "/img/icons.svg#dashboard'/></svg>
-            <p>Dashboard</p>
-            <span>></span>
-        </a>";
+        try {
+            $q = $pdo->prepare('SELECT * FROM Utente WHERE Email = :email');
+            $q->bindParam(':email', $email);
+            $q->execute();
+            $utente = $q->fetch();
+            $q->closeCursor();
+        } catch (PDOException $e) {
+            error_log('[nav.php] Error executing query: ' . $e->getMessage());
+            echo '<h2 style="color: red;">Service unavailable, please try again later</h2>';
+            exit;
+        }
     }
-
-    if ($utente["Utenza"] == 3 || $utente["Utenza"] == 4) {
-                echo "<a href='" . $root . "/segnalazione/segnalazione.php' class='sub-menu-link'>
-                <svg class='icon'><use href='" . $root . "/img/icons.svg#feedback'/></svg>
-                <p>Segnalazione</p>
-                <span>></span>
-            </a>";
-            }
-    echo "
-                <a href='#' class='sub-menu-link'>
-                    <form method='POST'>
-                        <button name='logout' action='" . $root . "/nav/nav.php'>
-                            <svg class='icon'><use href='" . $root . "/img/icons.svg#logout'/></svg>
-                            <p class='logoutform'>Logout</p>
-                            <span>></span>
-                        </button>
-                    </form>
-                </a>
-
-                <div class='sub-menu-divider'></div>
-
-                <button id='theme-toggle' type='button' class='sub-menu-link theme-toggle-row' aria-label='Toggle theme'>
-                    <svg class='icon icon-sun'><use href='" . $root . "/img/icons.svg#sun'/></svg>
-                    <svg class='icon icon-moon' style='display:none;'><use href='" . $root . "/img/icons.svg#moon'/></svg>
-                    <p>Cambia Tema</p>
-                </button>
-            </div>
-        </div>
-    </nav>";
-
-} else {
-
-    echo "
-    <ul>
-
-        <li class='li-icon'>
-            <a href='" . $root . "/lista/lista.php'>
-                <svg class='icon'><use href='" . $root . "/img/icons.svg#library'/></svg>
-            </a>
-        </li>
-
-        <li>
-            <svg class='icon' onclick='toggleMenu()'><use href='" . $root . "/img/icons.svg#account'/></svg>
-        </li>
-
-    </ul>
-
-        <div class='sub-menu-wrap' id='subMenu'>
-            <div class='sub-menu'>
-
-                <a href='" . $root . "/auth/login.php' class='sub-menu-link'>
-                    <svg class='icon'><use href='" . $root . "/img/icons.svg#login'/></svg>
-                    <p>Login</p>
-                    <span>></span>
-                </a>
-
-                <a href='" . $root . "/auth/registrazione.php' class='sub-menu-link'>
-                    <svg class='icon'><use href='" . $root . "/img/icons.svg#register'/></svg>
-                    <p>Register</p>
-                    <span>></span>
-                </a>
-
-                <div class='sub-menu-divider'></div>
-
-                <button id='theme-toggle' type='button' class='sub-menu-link theme-toggle-row' aria-label='Toggle theme'>
-                    <svg class='icon icon-sun'><use href='" . $root . "/img/icons.svg#sun'/></svg>
-                    <svg class='icon icon-moon' style='display:none;'><use href='" . $root . "/img/icons.svg#moon'/></svg>
-                    <p>Cambia Tema</p>
-                </button>
-
-            </div>
-        </div>
-
-    </nav>";
-}
-
 ?>
 
-<script src="<?php echo $root; ?>/js/theme.js"></script>
-<script>
-let subMenu = document.getElementById("subMenu");
+    <ul>
+        <li class="li-icon">
+            <a href="<?php echo $root; ?>/lista/lista.php">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#library"/></svg>
+            </a>
+        </li>
+        <?php if ($utenza == 1 || $utenza == 2): ?>
+        <li class="li-icon">
+            <a href="<?php echo $root; ?>/dashboard/dashboard.php">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#dashboard"/></svg>
+            </a>
+        </li>
+        <?php endif; ?>
+        <li class="li-icon acc">
+            <a href="#"></a>
+            <svg class="icon" onclick="toggleMenu()"><use href="<?php echo $root; ?>/img/icons.svg#account"/></svg>
+        </li>
+    </ul>
 
-function toggleMenu() {
-    subMenu.classList.toggle("open-menu");
-}
-</script>
+    <div class="sub-menu-wrap" id="subMenu">
+        <div class="sub-menu">
+            <div class="user-info">
+                <img src="<?php echo $root; ?>/img/users/<?php echo $utente['propic'] ?? 'userDashFavicon.svg'; ?>">
+                <h3 style="font-size: 1.2rem;"><?php echo ($utente['Nome'] ?? '') . ' ' . ($utente['Cognome'] ?? ''); ?></h3>
+                <h4>Punti: <?php echo $utente['punteggio'] ?? 0; ?></h4>
+            </div>
+
+            <a href="<?php echo $root; ?>/prenotazione/prenotazione.php" class="sub-menu-link">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#booking"/></svg>
+                <p>Prenotazioni</p>
+                <span>&gt;</span>
+            </a>
+
+            <a href="<?php echo $root; ?>/lista/lista.php" class="sub-menu-link">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#library"/></svg>
+                <p>Lista Libri</p>
+                <span>&gt;</span>
+            </a>
+
+            <a href="<?php echo $root; ?>/edit_profile/edit_profile.php" class="sub-menu-link">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#edit-profile"/></svg>
+                <p>Edit Profile</p>
+                <span>&gt;</span>
+            </a>
+
+            <?php if ($utenza == 1 || $utenza == 2): ?>
+            <a href="<?php echo $root; ?>/dashboard/dashboard.php" class="sub-menu-link">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#dashboard"/></svg>
+                <p>Dashboard</p>
+                <span>&gt;</span>
+            </a>
+            <?php endif; ?>
+
+            <?php if ($utenza == 3 || $utenza == 4): ?>
+            <a href="<?php echo $root; ?>/segnalazione/segnalazione.php" class="sub-menu-link">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#feedback"/></svg>
+                <p>Segnalazione</p>
+                <span>&gt;</span>
+            </a>
+            <?php endif; ?>
+
+            <a href="#" class="sub-menu-link">
+                <form method="POST">
+                    <button name="logout" action="<?php echo $root; ?>/nav/nav.php">
+                        <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#logout"/></svg>
+                        <p class="logoutform">Logout</p>
+                        <span>&gt;</span>
+                    </button>
+                </form>
+            </a>
+
+            <div class="sub-menu-divider"></div>
+
+            <button id="theme-toggle" type="button" class="sub-menu-link theme-toggle-row" aria-label="Toggle theme">
+                <svg class="icon icon-sun"><use href="<?php echo $root; ?>/img/icons.svg#sun"/></svg>
+                <svg class="icon icon-moon" style="display:none;"><use href="<?php echo $root; ?>/img/icons.svg#moon"/></svg>
+                <p>Cambia Tema</p>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<?php } else { ?>
+
+    <ul>
+        <li class="li-icon">
+            <a href="<?php echo $root; ?>/lista/lista.php">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#library"/></svg>
+            </a>
+        </li>
+        <li>
+            <svg class="icon" onclick="toggleMenu()"><use href="<?php echo $root; ?>/img/icons.svg#account"/></svg>
+        </li>
+    </ul>
+
+    <div class="sub-menu-wrap" id="subMenu">
+        <div class="sub-menu">
+            <a href="<?php echo $root; ?>/auth/login.php" class="sub-menu-link">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#login"/></svg>
+                <p>Login</p>
+                <span>&gt;</span>
+            </a>
+
+            <a href="<?php echo $root; ?>/auth/registrazione.php" class="sub-menu-link">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#register"/></svg>
+                <p>Register</p>
+                <span>&gt;</span>
+            </a>
+
+            <div class="sub-menu-divider"></div>
+
+            <button id="theme-toggle" type="button" class="sub-menu-link theme-toggle-row" aria-label="Toggle theme">
+                <svg class="icon icon-sun"><use href="<?php echo $root; ?>/img/icons.svg#sun"/></svg>
+                <svg class="icon icon-moon" style="display:none;"><use href="<?php echo $root; ?>/img/icons.svg#moon"/></svg>
+                <p>Cambia Tema</p>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<?php } ?>
+
+<script src="<?php echo $root; ?>/js/theme.js"></script>
+<script src="<?php echo $root; ?>/js/navigation.js"></script>
