@@ -1,4 +1,12 @@
 <?php
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage Bookings
+ * @file Booking admin management page - displays and filters bookings via API
+ */
+
 require_once __DIR__ . '/../src/bootstrap.php';
 
 use Alexandria\Services\AuthService;

@@ -35,7 +35,6 @@ $root = '..';
   <link rel="stylesheet" href="../css/pages/footer.css">
   <link rel="stylesheet" href="../css/utilities.css">
   <link rel="icon" type="image/svg+xml" href="../img/dashboard.svg">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="dashboard-landing">

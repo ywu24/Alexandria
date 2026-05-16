@@ -166,16 +166,9 @@ $root = '../..';
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-        document.querySelector('.custom-file-input')?.addEventListener('change', function() {
-            const fileName = this.value.split('\\').pop();
-            this.nextElementSibling.classList.add('selected');
-            this.nextElementSibling.textContent = fileName;
-        });
-    </script>
+    <script src="aggiungiLibro.js" defer></script>
     <?php require_once("../../nav/footer.php"); ?>
 </body>
 

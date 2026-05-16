@@ -41,7 +41,6 @@ $root = '../..';
     <link rel="stylesheet" href="../../css/utilities.css">
     <link rel="icon" type="image/svg+xml" href="../../img/segnDashFavicon.svg">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="bg-light reports-dashboard">

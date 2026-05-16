@@ -69,17 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['mes
     <?php require_once('../nav/nav.php'); ?>
   </div>
 
-  <div id="messages" class="container mt-3 text-center">
+  <div id="messages" class="container mt-3 text-center" data-punti-guadagnati="<?php echo isset($_SESSION['punti_guadagnati']) ? '1' : '0'; unset($_SESSION['punti_guadagnati']); ?>">
     <?php render_messages(); ?>
-
-    <?php
-    if (isset($_SESSION['punti_guadagnati'])) {
-        echo '<script> const puntiGuadagnati = true; </script>';
-        unset($_SESSION['punti_guadagnati']);
-    } else {
-        echo '<script> const puntiGuadagnati = false; </script>';
-    }
-    ?>
   </div>
 
   <div class="centered-form">
