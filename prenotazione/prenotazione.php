@@ -97,8 +97,8 @@ CSS
 
     <div class="container mt-5">
         <div class="text-center mb-5">
-            <h1 class="display-4 font-weight-bold">Le Mie Prenotazioni</h1>
-            <p class="lead text-muted">Gestisci i tuoi prestiti e visualizza lo storico</p>
+            <h1 class="display-4 font-weight-bold">Prestiti e Prenotazioni</h1>
+            <p class="lead text-muted">Gestisci i tuoi prestiti/prenotazioni e visualizza lo storico</p>
         </div>
 
         <div id="bookings-container">
@@ -162,7 +162,7 @@ CSS
         <div class="mt-5 mb-5 border-top pt-4">
             <div id="terminate-container" class="text-center">
                 <button id="load-terminated" class="btn btn-outline-secondary px-5" data-id-utente="<?php echo e($email); ?>" style="border-radius: 25px;">
-                    Mostra prenotazioni terminate
+                    Mostra prestiti conclusi
                 </button>
             </div>
         </div>

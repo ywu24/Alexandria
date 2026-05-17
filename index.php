@@ -93,7 +93,7 @@ if ($utenza == 1 || $utenza == 2) {
                     <?php if (!$isLoggedIn): ?>
                         <a href="auth/login.php" class="btn btn-outline-primary btn-lg">Inizia</a>
                     <?php else: ?>
-                        <a href="prenotazione/prenotazione.php" class="btn btn-outline-primary btn-lg">Le Mie Prenotazioni</a>
+                        <a href="prenotazione/prenotazione.php" class="btn btn-outline-primary btn-lg">I Miei Prestiti</a>
                     <?php endif; ?>
                 </div>
             </div>
