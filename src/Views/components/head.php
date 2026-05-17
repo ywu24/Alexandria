@@ -18,7 +18,7 @@
  * @param string $rootPath Root path prefix (e.g., '.' or '..')
  * @return void
  */
-function render_head(string $title, array $extraCss = [], array $extraJs = [], string $rootPath = '.'): void
+function render_head(string $title, array $extraCss = [], array $extraJs = [], string $rootPath = '.', string $inlineStyles = ''): void
 {
     $cssFiles = array_merge([
         'css/design-system.css',
@@ -27,6 +27,13 @@ function render_head(string $title, array $extraCss = [], array $extraJs = [], s
         'css/navigation.css',
         'css/utilities.css',
     ], $extraCss);
+
+    $prefixPath = function (string $path) use ($rootPath): string {
+        if (str_starts_with($path, '//') || str_starts_with($path, 'http')) {
+            return $path;
+        }
+        return $rootPath . '/' . $path;
+    };
 
 ?>
 <head>
@@ -37,11 +44,14 @@ function render_head(string $title, array $extraCss = [], array $extraJs = [], s
     <title><?php echo e($title); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <?php foreach ($cssFiles as $css): ?>
-    <link rel="stylesheet" href="<?php echo $rootPath; ?>/<?php echo $css; ?>">
+    <link rel="stylesheet" href="<?php echo $prefixPath($css); ?>">
 <?php endforeach; ?>
 <?php foreach ($extraJs as $js): ?>
-    <script src="<?php echo $rootPath; ?>/<?php echo $js; ?>"></script>
+    <script src="<?php echo $prefixPath($js); ?>"></script>
 <?php endforeach; ?>
+<?php if ($inlineStyles !== ''): ?>
+    <style><?php echo $inlineStyles; ?></style>
+<?php endif; ?>
 </head>
 <?php
 }

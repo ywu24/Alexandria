@@ -34,18 +34,7 @@ $bookings = $bookingService->getByUser($email);
 <html lang="it">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Mie Prenotazioni | Alexandria</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/design-system.css">
-    <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/navigation.css">
-    <link rel="stylesheet" href="../css/pages/library.css">
-    <link rel="stylesheet" href="../css/pages/footer.css">
-    <link rel="stylesheet" href="../css/utilities.css">
-    <style>
+    <?php render_head('Le Mie Prenotazioni | Alexandria', ['css/pages/library.css', 'css/pages/footer.css'], ['js/utils.js', 'prenotazione/prenotazione.js'], '..', <<<CSS
         .book-container {
             background: var(--color-surface);
             border-radius: 12px;
@@ -92,9 +81,8 @@ $bookings = $bookingService->getByUser($email);
             color: var(--color-danger);
             opacity: 0.7;
         }
-    </style>
-    <script src="../js/utils.js"></script>
-    <script src="prenotazione.js"></script>
+CSS
+    ); ?>
 </head>
 
 <body class="prenotazioni-page">
