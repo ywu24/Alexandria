@@ -64,7 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['segnalazione'])) {
     <?php require_once('../nav/nav.php'); ?>
   </div>
 
-  <?php render_messages(); ?>
+  <div id="messages">
+            <?php render_messages(); ?>
+  </div>
 
   <main class="container py-5">
     <div class="row justify-content-center">

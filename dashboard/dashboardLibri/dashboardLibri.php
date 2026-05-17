@@ -37,18 +37,19 @@ $root = '../..';
     </div>
 
     <div class="container-fluid py-5">
-        <div id="messages mb-4">
+        <div id="messages">
         <?php render_messages(); ?>
         </div>
 
         <div class="mb-5 text-center">
             <h1 class="text-center mb-5 font-weight-extra-bold">Dashboard Libri</h1>
+            <p class="lead text-muted">Gestione del catalogo libri, disponibilità e monitoraggio delle copie</p>
         </div>
 
-        <form id="filtriForm" class="form-inline mx-auto" style="width: 300px;" onsubmit="return false;">
+        <form id="filtriForm" class="form-inline mx-auto mb-4" onsubmit="return false;">
             <input id="searchInput" class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Cerca Libro" aria-label="Cerca">
             <input type="hidden" name="sort_type" id="sort_type" value="id">
-            <button id="searchBtn" class="btn btn-outline-info my-2 my-sm-0" type="button">Cerca</button>
+            <button id="searchBtn" class="btn btn-outline-info" type="button">Cerca</button>
         </form>
 
         <?php if ($authService->isAdmin()): ?>
@@ -82,7 +83,7 @@ $root = '../..';
         </div>
     </div>
 
-    <div class="text-center my-4">
+    <div class="d-flex justify-content-center w-100 my-4">
         <button id="loadMoreBtn" class="btn btn-outline-primary shadow-sm" style="display:none;">
             Carica Altro...
         </button>

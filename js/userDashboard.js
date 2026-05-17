@@ -2,7 +2,7 @@
     async function caricaUtenti(append) {
         if (append === void 0) { append = false; }
         var container = document.getElementById("userTableBody");
-        var btnAltro = document.getElementById("caricaAltro");
+        var btnAltro = document.getElementById("loadMoreBtn");
         var form = document.getElementById("filtriForm");
 
         if (!container) return;
@@ -181,7 +181,7 @@
             });
         });
 
-        var btnAltro = document.getElementById("caricaAltro");
+        var btnAltro = document.getElementById("loadMoreBtn");
         if (btnAltro) {
             btnAltro.addEventListener("click", function () { caricaUtenti(true); });
         }

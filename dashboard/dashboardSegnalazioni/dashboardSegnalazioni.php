@@ -48,7 +48,7 @@ $root = '../..';
         </div>
 
         <!-- Messaggi Flash -->
-        <div class="messages mb-4">
+        <div id="messages">
             <?php render_messages(); ?>
         </div>
 

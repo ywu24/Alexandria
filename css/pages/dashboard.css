@@ -121,15 +121,9 @@ body {
 }
 
 .searchbar {
-  margin-top: 10px;
-  margin-bottom: 20px;
   flex-grow: 1;
 }
 
-#searchBtn {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
 
 /* Reset lists/margins */
 dl, ol, ul {

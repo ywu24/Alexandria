@@ -140,7 +140,9 @@ $reviews = $reviewService->getForBook($book_id, 5, 0);
             <?php require_once('../nav/nav.php'); ?>
         </div>
 
-        <?php render_messages(); ?>
+        <div id="messages">
+            <?php render_messages(); ?>
+        </div>
 
         <main>
             <div class="container">

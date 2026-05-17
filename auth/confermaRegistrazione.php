@@ -150,7 +150,7 @@ if (isset($_POST['reinvia'])) {
         <svg class="icon icon-sun" style="display:none;"><use href="../img/icons.svg#sun"/></svg>
         <svg class="icon icon-moon" style="display:none;"><use href="../img/icons.svg#moon"/></svg>
     </button>
-    <div class="messages">
+    <div id="messages">
         <?php render_messages(); ?>
     </div>
 

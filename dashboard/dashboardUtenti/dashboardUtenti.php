@@ -34,34 +34,35 @@ $root = '../..';
     </div>
 
     <div class="container-fluid py-5">
-        <div class="messages mb-4">
+        <div id="messages">
             <?php render_messages(); ?>
         </div>
         <div class="mb-5 text-center">
             <h1 class="text-center mb-5 font-weight-extra-bold">Dashboard Utenti</h1>
+            <p class="lead text-muted">Gestione e monitoraggio degli utenti iscritti alla biblioteca</p>
         </div>
 
         <!-- Form gestito interamente da dashboardUtenti.js e api/users.php -->
-        <form id="filtriForm" class="form-inline mx-auto" style="width: 300px;" onsubmit="return false;">
+        <form id="filtriForm" class="form-inline mx-auto mb-4" onsubmit="return false;">
             <input id="searchInput" class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Cerca Utente" aria-label="Cerca">
             <input type="hidden" name="sort_type" id="sort_type" value="id">
-            <button id="searchBtn" class="btn btn-outline-info my-2 my-sm-0" type="button">Cerca</button>
+            <button id="searchBtn" class="btn btn-outline-info" type="button">Cerca</button>
         </form>
 
         <?php if ($authService->isAdmin()): ?>
-            <a href="aggiungiUtente.php" class="btn btn_adduser btn-success">Aggiungi utente</a>
+            <a href="aggiungiUtente.php" class="btn btn_adduser btn-success">Aggiungi Utente</a>
         <?php endif; ?>
 
         <div class="table-responsive">
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col" class='col-nascondi'>#<button class="sort_btn" data-sort="id">&ensp; &#x25B2;</button></th>
-                        <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&ensp; &#x25B2;</button></th>
-                        <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&ensp; &#x25B2;</button></th>
-                        <th scope="col" class='col-nascondi'>Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
-                        <th scope="col" class='col-nascondi'>Ruolo<button class="sort_btn" data-sort="Utenza">&ensp; &#x25B2;</button></th>
-                        <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
+                        <th scope="col" class='col-nascondi'>#<button class="sort_btn" data-sort="id">&#9650;</button></th>
+                        <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&#9650;</button></th>
+                        <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&#9650;</button></th>
+                        <th scope="col" class='col-nascondi'>Email<button class="sort_btn" data-sort="Email">&#9650;</button></th>
+                        <th scope="col" class='col-nascondi'>Ruolo<button class="sort_btn" data-sort="Utenza">&#9650;</button></th>
+                        <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&#9650;</button></th>
                         <th scope="col" class='col-nascondi'>Azioni</th>
                         <th scope="col" class="mobile-only mobile-toggle-col">Info</th>
                     </tr>
@@ -72,11 +73,11 @@ $root = '../..';
             </table>
         </div>
 
-       <div class="d-flex justify-content-center w-100 my-5">
-    <button id="caricaAltro" class="btn btn-outline-primary shadow-sm" style="display:none; min-width: 200px;">
-        Carica Altro...
-    </button>
-</div>
+    <div class="d-flex justify-content-center w-100 my-4">
+        <button id="loadMoreBtn" class="btn btn-outline-primary shadow-sm" style="display:none;">
+            Carica Altro...
+        </button>
+    </div>
     </div>
     <script>const USER_TYPE = <?php echo (int) ($authService->getCurrentUserType() ?? 0); ?>;</script>
     <?php require_once('../../nav/footer.php'); ?>
