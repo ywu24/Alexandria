@@ -44,6 +44,7 @@ body {
 .form-page .form-control:focus {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25);
+  color: var(--color-text)  
 }
 
 .form-page label, .form-page .form-label {

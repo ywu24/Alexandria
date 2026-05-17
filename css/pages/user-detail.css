@@ -8,6 +8,10 @@ body {
   font-family: var(--font-family-base);
 }
 
+.form-control:focus {
+  color: var(--color-text);
+}
+
 /* ============================================
    USER DETAIL (from dettaglioUtenti.css)
    ============================================ */

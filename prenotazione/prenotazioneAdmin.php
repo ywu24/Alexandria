@@ -37,7 +37,7 @@ $root = '..';
     <!-- BARRA FILTRI -->
     <div class="row justify-content-center mb-5">
         <div class="col-md-10">
-            <form id="filtriForm" class="form-inline justify-content-center p-3 bg-white shadow-sm filter-bar">
+            <form id="filtriForm" class="form-inline justify-content-center p-3 shadow-sm filter-bar">
                 <label class="mr-2 small text-muted">Stato:</label>
                 <select name="filtro_stato" class="form-control form-control-sm border-0 font-weight-bold filter-select">
                     <option value="tutti">Tutti gli stati</option>
@@ -46,8 +46,6 @@ $root = '..';
                     <option value="In Ritardo">In Ritardo</option>
                     <option value="Terminato">Terminati</option>
                 </select>
-                
-                <div class="filter-divider mx-3"></div>
                 
                 <label class="mr-2 small text-muted">Dal:</label>
                 <input type="date" name="data_inizio" class="form-control form-control-sm border-0">
