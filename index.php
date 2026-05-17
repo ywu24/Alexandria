@@ -158,66 +158,84 @@ if ($utenza == 1 || $utenza == 2) {
              ============================================ -->
         <?php if ($isLoggedIn && ($utenza != 1 && $utenza != 2)): ?>
         <section class="account-section <?php echo $userBG; ?>">
-                <div class='info-account'>
-                    <a href='prenotazione/prenotazione.php'>
-                        <div class='info-prenotazioni'>
-                            <h2 class='ultime-prenotazioni'>Ultimi Prestiti</h2>
-                            <?php if (count($recentBookings) > 0): ?>
-                                <?php foreach ($recentBookings as $prenotazione):
-                                    $status = $bookingService->calculateStatus($prenotazione);
-                                ?>
-                                    <div class='book-prenotation'>
-                                        <img src='img/books/<?php echo e($prenotazione['Copertina']); ?>' alt='' class='cover'>
-                                        <div class='book-right-column'>
+            <div class="section-header">
+                <h2>Il Tuo Account</h2>
+                <p>Gestisci i tuoi prestiti e prenotazioni</p>
+            </div>
+            <div class='account-container'>
+                <div class='recent-bookings'>
+                    <div class='bookings-header'>
+                        <h3>Ultimi Prestiti</h3>
+                        <a href='prenotazione/prenotazione.php' class='view-all'>Vedi Tutti</a>
+                    </div>
+                    <?php if (count($recentBookings) > 0): ?>
+                        <div class='bookings-list'>
+                            <?php foreach ($recentBookings as $prenotazione):
+                                $status = $bookingService->calculateStatus($prenotazione);
+                            ?>
+                                <div class='booking-card'>
+                                    <div class='booking-cover'>
+                                        <img src='img/books/<?php echo e($prenotazione['Copertina']); ?>' alt='Copertina del libro'>
+                                    </div>
+                                    <div class='booking-info'>
+                                        <div class='booking-meta'>
                                             <h4><?php echo e($prenotazione['Nome']); ?></h4>
-                                            <span><?php echo e($prenotazione['Autore']); ?></span>
-                                            <span style='font-weight: bold; margin-top: 9px; color: <?php echo $status['color']; ?>'><?php echo $status['status']; ?></span>
-                                            <div class='inizio-fine'>
-                                                <span>Inizio Prenotazione</span>
-                                                <span><?php echo e($prenotazione['InizioPrenotazione']); ?></span>
+                                            <span class='booking-author'><?php echo e($prenotazione['Autore']); ?></span>
+                                        </div>
+                                        <div class='booking-status' style='color: <?php echo $status['color']; ?>'>
+                                            <span class='status-indicator'></span>
+                                            <span><?php echo $status['status']; ?></span>
+                                        </div>
+                                        <div class='booking-dates'>
+                                            <div class='date-item'>
+                                                <span class='date-label'>Inizio</span>
+                                                <span class='date-value'><?php echo e($prenotazione['InizioPrenotazione']); ?></span>
                                             </div>
-                                            <div class='inizio-fine'>
-                                                <span>Fine Prenotazione</span>
-                                                <span><?php echo e($prenotazione['FinePrenotazione']); ?></span>
+                                            <div class='date-item'>
+                                                <span class='date-label'>Fine</span>
+                                                <span class='date-value'><?php echo e($prenotazione['FinePrenotazione']); ?></span>
                                             </div>
                                         </div>
                                     </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <div class='book-prenotation'>
-                                    <div>
-                                        <h4>Non hai prenotato nessun libro</h4>
-                                    </div>
                                 </div>
-                            <?php endif; ?>
+                            <?php endforeach; ?>
                         </div>
-                    </a>
+                    <?php else: ?>
+                        <div class='no-bookings'>
+                            <div class='no-bookings-icon'>
+                                <svg><use href="img/icons.svg#booking"/></svg>
+                            </div>
+                            <h4>Non hai ancora prenotato nessun libro</h4>
+                            <p>Esplora la nostra collezione e prenota il tuo primo libro!</p>
+                            <a href='lista/lista.php' class='btn btn-primary'>Sfoglia Libri</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
-            <div class='<?php echo $accountClass; ?>'>
-                <div class='account-status-acc'>
-                    <span>Le tue statistiche</span>
-                    <div class='account-status-prenotazioni'>
-                        <div class='numero-prenotazioni'>
-                            <h3>Totali</h3>
-                            <span><?php echo $bookingStats['totali']; ?></span>
+                <div class='account-stats'>
+                    <div class='stats-header'>
+                        <h3>Le tue statistiche</h3>
+                    </div>
+                    <div class='stats-grid'>
+                        <div class='stat-item'>
+                            <div class='stat-value'><?php echo $bookingStats['totali']; ?></div>
+                            <div class='stat-label'>Totali</div>
                         </div>
-                        <div class='numero-prenotazioni'>
-                            <h3>Prenotazioni</h3>
-                            <span><?php echo $bookingStats['prenotati']; ?></span>
+                        <div class='stat-item'>
+                            <div class='stat-value'><?php echo $bookingStats['prenotati']; ?></div>
+                            <div class='stat-label'>Prenotazioni</div>
                         </div>
-                        <div class='numero-prenotazioni'>
-                            <h3>Prestiti in Corso</h3>
-                            <span><?php echo $bookingStats['inCorso']; ?></span>
+                        <div class='stat-item'>
+                            <div class='stat-value'><?php echo $bookingStats['inCorso']; ?></div>
+                            <div class='stat-label'>Prestiti in Corso</div>
                         </div>
-                        <div class='numero-prenotazioni'>
-                            <h3>Prestiti Conclusi</h3>
-                            <span><?php echo $bookingStats['riconsegnate']; ?></span>
+                        <div class='stat-item'>
+                            <div class='stat-value'><?php echo $bookingStats['riconsegnate']; ?></div>
+                            <div class='stat-label'>Prestiti Conclusi</div>
                         </div>
                     </div>
                 </div>
             </div>
-            
         </section>
         <?php endif; ?>
 
