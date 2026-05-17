@@ -109,7 +109,7 @@
 .fs-xl { font-size: var(--text-xl) !important; }
 
 /* Color utilities */
-.text-primary { color: var(--color-primary) !important; }
+.text-primary { color: var(--color-text) !important; }
 .text-accent { color: var(--color-accent) !important; }
 .text-success { color: var(--color-success) !important; }
 .text-danger { color: var(--color-danger) !important; }

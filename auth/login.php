@@ -21,7 +21,6 @@ if ($authService->isAuthenticated()) {
 $domain = 'alexandria.it';
 $error = -1;
 $err_message = '';
-$message = '<a href="registrazione.php">Crea un account</a>';
 
 if ($error === -1 && isset($_POST['submit'])) {
     $email = $_POST['email'] ?? '';
@@ -62,40 +61,51 @@ if (isset($_SESSION['login_error'])) {
 </head>
 
 <body>
-  <button id="theme-toggle" type="button" class="auth-theme-toggle" aria-label="Toggle theme">
-    <svg class="icon icon-sun" style="display:none;"><use href="../img/icons.svg#sun"/></svg>
-    <svg class="icon icon-moon" style="display:none;"><use href="../img/icons.svg#moon"/></svg>
-  </button>
-  <div class="container">
-    <div class="left"></div>
+  <div id="nav-placeholder">
+    <?php require_once('../nav/nav.php'); ?>
+  </div>
 
-    <div class="right">
-      <div class="right-content">
-        <form action="login.php" id="myform" method="POST">
-          <h1>Accedi</h1>
-          <div class="inputs">
-            <div class="field">
-              <h3>EMAIL</h3>
-              <input type="text" name="email" placeholder="Inserisci il tuo indirizzo email" required />
+  <main class="auth-main">
+    <div class="auth-container">
+      <div class="card auth-card">
+        <div class="card-body">
+          <form action="login.php" id="myform" method="POST">
+            <div class="text-center mb-lg">
+              <h1>Accedi</h1>
+              <p class="text-muted">Bentornato! Inserisci i tuoi dati per accedere</p>
             </div>
-            <div class="field">
-              <h3>PASSWORD</h3>
-              <input type="password" name="password" placeholder="Inserisci la tua password" required />
+
+            <div class="form-group">
+              <label class="form-label">EMAIL</label>
+              <input type="email" name="email" class="form-control" placeholder="Inserisci il tuo indirizzo email" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">PASSWORD</label>
+              <input type="password" name="password" class="form-control" placeholder="Inserisci la tua password" required />
               <?php if ($error == 1): ?>
-                <h2 style="color: var(--color-danger);"><?php echo e($err_message); ?></h2>
+                <div class="alert alert-danger mt-sm">
+                  <?php echo e($err_message); ?>
+                </div>
               <?php endif; ?>
             </div>
-          </div>
-          <input type="submit" name="submit" class="submit" value="Accedi" />
-          <br />
-          <?php echo $message; ?>
-          <div style="text-align: center;">
-            <h4 class="privacy">Privacy &middot; Termini e Condizioni</h4>
-          </div>
-        </form>
+
+            <div class="text-center">
+              <button type="submit" name="submit" class="btn btn-primary btn-lg w-100">Accedi</button>
+            </div>
+
+            <div class="auth-footer text-center">
+              <p>Non hai un account? <a href="registrazione.php">Crea un account</a></p>
+              <div class="privacy">
+                <p class="text-muted">Privacy &middot; Termini e Condizioni</p>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
+
   <?php require_once('../nav/footer.php'); ?>
 </body>
 

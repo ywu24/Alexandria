@@ -213,6 +213,7 @@
 }
 
 .form-control:focus {
+  background-color: var(--color-bg-alt);
   border-color: var(--color-accent);
   box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25);
   outline: none;
@@ -221,6 +222,15 @@
 .form-control::placeholder {
   color: var(--color-text-muted);
   opacity: 1;
+}
+
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover, 
+.form-control:-webkit-autofill:focus, 
+.form-control:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 100px var(--color-bg-alt) inset !important;
+  -webkit-text-fill-color: var(--color-text) !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 .form-label {
