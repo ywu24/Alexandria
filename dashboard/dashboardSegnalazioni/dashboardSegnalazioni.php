@@ -43,7 +43,7 @@ $root = '../..';
     <div class="container py-5">
         <!-- Titolo Centrato Uniformato -->
         <div class="mb-5 text-center">
-            <h1 class="display-4 font-weight-bold">Segnalazioni Utenti</h1>
+            <h1 class="text-center mb-5 font-weight-extra-bold">Segnalazioni Utenti</h1>
             <p class="lead text-muted">Gestione e monitoraggio delle problematiche riscontrate dai lettori</p>
         </div>
 

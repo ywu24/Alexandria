@@ -33,13 +33,17 @@ $root = '../..';
         <?php require_once('../../nav/nav.php'); ?>
     </div>
 
-    <div class="container-fluid">
-        <?php render_messages(); ?>
-        <h1 class="text-center" style="font-size:4rem !important;">&#128100;</h1>
+    <div class="container-fluid py-5">
+        <div class="messages mb-4">
+            <?php render_messages(); ?>
+        </div>
+        <div class="mb-5 text-center">
+            <h1 class="text-center mb-5 font-weight-extra-bold">Dashboard Utenti</h1>
+        </div>
 
         <!-- Form gestito interamente da dashboardUtenti.js e api/users.php -->
         <form id="filtriForm" class="form-inline mx-auto" style="width: 300px;" onsubmit="return false;">
-            <input id="searchInput" class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Ricerca un utente" aria-label="Cerca">
+            <input id="searchInput" class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Cerca Utente" aria-label="Cerca">
             <input type="hidden" name="sort_type" id="sort_type" value="id">
             <button id="searchBtn" class="btn btn-outline-info my-2 my-sm-0" type="button">Cerca</button>
         </form>
@@ -52,23 +56,14 @@ $root = '../..';
             <table class="table table-striped table-hover table-bordered">
                 <thead class="thead-dark">
                     <tr>
-                        <?php if ($authService->isAdmin()): ?>
-                            <th scope="col" class='col-nascondi'>#<button class="sort_btn" data-sort="id">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&ensp; &#x25B2;</button></th>
-                            <th scope="col" class='col-nascondi'>Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
-                            <th scope="col" class='col-nascondi'>Ruolo<button class="sort_btn" data-sort="Utenza">&ensp; &#x25B2;</button></th>
-                            <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
-                            <th scope="col" class='col-nascondi'>Azioni</th>
-                            <th scope="col" class="mobile-only mobile-toggle-col">Info</th>
-                        <?php else: ?>
-                            <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&ensp; &#x25B2;</button></th>
-                            <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&ensp; &#x25B2;</button></th>
-                            <th scope="col" class='col-nascondi'>Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
-                            <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
-                            <th scope="col" class="col-nascondi text-center">Azioni</th>
-                            <th scope="col" class="mobile-only mobile-toggle-col">Info</th>
-                        <?php endif; ?>
+                        <th scope="col" class='col-nascondi'>#<button class="sort_btn" data-sort="id">&ensp; &#x25B2;</button></th>
+                        <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&ensp; &#x25B2;</button></th>
+                        <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&ensp; &#x25B2;</button></th>
+                        <th scope="col" class='col-nascondi'>Email<button class="sort_btn" data-sort="Email">&ensp; &#x25B2;</button></th>
+                        <th scope="col" class='col-nascondi'>Ruolo<button class="sort_btn" data-sort="Utenza">&ensp; &#x25B2;</button></th>
+                        <th scope="col" class='col-nascondi'>Punteggio<button class="sort_btn" data-sort="punteggio">&ensp; &#x25B2;</button></th>
+                        <th scope="col" class='col-nascondi'>Azioni</th>
+                        <th scope="col" class="mobile-only mobile-toggle-col">Info</th>
                     </tr>
                 </thead>
                 <tbody id="userTableBody">

@@ -36,19 +36,20 @@ $root = '../..';
         <?php require_once('../../nav/nav.php'); ?>
     </div>
 
-    <div id="messages"></div>
-
-    <div class="container-fluid">
-        <h1 class="text-center" style="font-size:4rem !important;">&#128218;</h1>
-
-        <div class="d-flex justify-content-between mb-4">
-            <!-- Cerca gestito da JS -->
-            <div class="form-inline mx-auto">
-                <input class="form-control mr-sm-2 searchbar" type="search" id="searchInput"
-                    placeholder="Cerca libro...">
-                <button class="btn btn-outline-info" id="searchBtn" type="button">Cerca</button>
-            </div>
+    <div class="container-fluid py-5">
+        <div id="messages mb-4">
+        <?php render_messages(); ?>
         </div>
+
+        <div class="mb-5 text-center">
+            <h1 class="text-center mb-5 font-weight-extra-bold">Dashboard Libri</h1>
+        </div>
+
+        <form id="filtriForm" class="form-inline mx-auto" style="width: 300px;" onsubmit="return false;">
+            <input id="searchInput" class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Cerca Libro" aria-label="Cerca">
+            <input type="hidden" name="sort_type" id="sort_type" value="id">
+            <button id="searchBtn" class="btn btn-outline-info my-2 my-sm-0" type="button">Cerca</button>
+        </form>
 
         <?php if ($authService->isAdmin()): ?>
             <a href="aggiungiLibro.php" class="btn btn_addlibro btn-success">Aggiungi Libro</a>

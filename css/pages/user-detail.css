@@ -77,10 +77,6 @@ body {
   display: inline-block;
 }
 
-.user-detail .font-weight-extra-bold {
-  font-weight: 800;
-}
-
 /* Panels */
 .user-detail .left-panel {
   padding: 20px;
