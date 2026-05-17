@@ -66,18 +66,7 @@ if (!$isLoggedIn) {
 <html lang="it">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/design-system.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/navigation.css">
-    <link rel="stylesheet" href="css/pages/home.css">
-    <link rel="stylesheet" href="css/pages/footer.css">
-    <link rel="stylesheet" href="css/utilities.css">
-    <title>HomePage - Alexandria </title>
+    <?php render_head('HomePage - Alexandria', ['css/pages/home.css', 'css/pages/footer.css'], [], '.'); ?>
 </head>
 
 <body>
