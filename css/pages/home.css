@@ -32,6 +32,14 @@
   margin: 0 auto;
 }
 
+.bg1 {
+  background-color: var(--color-bg);
+}
+
+.bg2 {
+  background-color: var(--color-bg-alt);
+}
+
 /* ------------------------------------
    Hero Section
    ------------------------------------ */
@@ -109,7 +117,6 @@
    ------------------------------------ */
 .featured-section {
   padding: var(--space-2xl) 0;
-  background-color: var(--color-bg);
 }
 
 /* ------------------------------------
@@ -314,7 +321,6 @@
    ------------------------------------ */
 .stats-section {
   padding: var(--space-2xl) var(--space-md);
-  background-color: var(--color-bg-alt);
 }
 
 .stats-grid {
@@ -374,7 +380,6 @@
    ------------------------------------ */
 .genres-section {
   padding: var(--space-2xl) var(--space-md);
-  background-color: var(--color-bg);
 }
 
 .genres-grid {
@@ -436,7 +441,6 @@
    ------------------------------------ */
 .account-section {
   padding: var(--space-2xl) var(--space-md);
-  background-color: var(--color-bg-alt);
 }
 
 .info-account {

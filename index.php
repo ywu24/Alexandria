@@ -39,13 +39,16 @@ $user = null;
 $recentBookings = [];
 $bookingStats = ['totali' => 0, 'inCorso' => 0, 'riconsegnate' => 0, 'prenotati' => 0];
 
+$statsBG = 'bg2';
+$genreBG = 'bg1';
 if ($isLoggedIn) {
     $user = $userService->getByEmail($email);
-    $isAdmin = ($utenza == 1 || $utenza == 2);
-    $bookingStats = $statsService->getUserBookingStats($email, $isAdmin);
-
-    if (!$isAdmin) {
+    if (!($utenza == 1 || $utenza == 2)) {
+        $bookingStats = $statsService->getUserBookingStats($email);
         $recentBookings = $bookingService->getRecentForUser($email, 2);
+        $userBG = 'bg2';
+        $statsBG = 'bg1';
+        $genreBG = 'bg2';
     }
 }
 
@@ -99,7 +102,7 @@ if ($utenza == 1 || $utenza == 2) {
         <!-- ============================================
              FEATURED BOOKS CAROUSEL
              ============================================ -->
-        <section class="featured-section">
+        <section class="featured-section bg1">
             <div class="section-header">
                 <h2>Libri in Evidenza</h2>
                 <p>Scopri le ultime novità della nostra collezione</p>
@@ -151,62 +154,10 @@ if ($utenza == 1 || $utenza == 2) {
         </section>
 
         <!-- ============================================
-             QUICK STATS SECTION
-             ============================================ -->
-        <section class="stats-section">
-            <div class="section-header">
-                <h2>La Biblioteca In Cifre</h2>
-                <p>I numeri chiave della nostra collezione</p>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <svg class="stat-icon"><use href="img/icons.svg#library"/></svg>
-                    <div class="stat-number" data-target="<?php echo $totalBooks; ?>">0</div>
-                    <div class="stat-label">Libri Totali</div>
-                </div>
-                <div class="stat-card">
-                    <svg class="stat-icon"><use href="img/icons.svg#account"/></svg>
-                    <div class="stat-number" data-target="<?php echo $activeUsers; ?>">0</div>
-                    <div class="stat-label">Utenti Attivi</div>
-                </div>
-                <div class="stat-card">
-                    <svg class="stat-icon"><use href="img/icons.svg#booking"/></svg>
-                    <div class="stat-number" data-target="<?php echo $booksBorrowed; ?>">0</div>
-                    <div class="stat-label">Prestiti Effettuati</div>
-                </div>
-                <div class="stat-card">
-                    <svg class="stat-icon"><use href="img/icons.svg#genre"/></svg>
-                    <div class="stat-number" data-target="<?php echo $genresAvailable; ?>">0</div>
-                    <div class="stat-label">Generi Disponibili</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================
-             CATEGORIES / GENRES GRID
-             ============================================ -->
-        <section class="genres-section">
-            <div class="section-header">
-                <h2>Esplora per Genere</h2>
-                <p>Scegli la tua prossima lettura</p>
-            </div>
-            <div class="genres-grid">
-                <?php foreach ($genres as $genre): ?>
-                    <a href="lista/lista.php?genere=<?php echo urlencode($genre['Genere']); ?>" class="genre-card">
-                        <svg class="genre-icon"><use href="img/icons.svg#genre"/></svg>
-                        <h4 class="genre-name"><?php echo e($genre['Genere']); ?></h4>
-                        <span class="genre-count"><?php echo $genre['count']; ?> libri</span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        </section>
-
-        <!-- ============================================
              USER ACCOUNT PANEL
              ============================================ -->
-        <?php if ($isLoggedIn): ?>
-        <section class="account-section">
-            <?php if ($utenza != 1 && $utenza != 2): ?>
+        <?php if ($isLoggedIn && ($utenza != 1 && $utenza != 2)): ?>
+        <section class="account-section <?php echo $userBG; ?>">
                 <div class='info-account'>
                     <a href='prenotazione/prenotazione.php'>
                         <div class='info-prenotazioni'>
@@ -242,32 +193,26 @@ if ($utenza == 1 || $utenza == 2) {
                         </div>
                     </a>
                 </div>
-            <?php endif; ?>
 
-            
             <div class='<?php echo $accountClass; ?>'>
                 <div class='account-status-acc'>
-                    <span>Bentornato</span>
-                    <h2><?php echo e($user['Nome'] ?? '') . ' ' . e($user['Cognome'] ?? ''); ?></h2>
-                    <img src='./img/users/<?php echo e($user['propic'] ?? 'userDashFavicon.svg'); ?>' alt=''>
-                    <span><?php echo e($email); ?></span>
-                    <span>---------- Prenotazioni ----------</span>
+                    <span>Le tue statistiche</span>
                     <div class='account-status-prenotazioni'>
                         <div class='numero-prenotazioni'>
                             <h3>Totali</h3>
                             <span><?php echo $bookingStats['totali']; ?></span>
                         </div>
                         <div class='numero-prenotazioni'>
-                            <h3>Prestiti In corso</h3>
+                            <h3>Prenotazioni</h3>
+                            <span><?php echo $bookingStats['prenotati']; ?></span>
+                        </div>
+                        <div class='numero-prenotazioni'>
+                            <h3>Prestiti in Corso</h3>
                             <span><?php echo $bookingStats['inCorso']; ?></span>
                         </div>
                         <div class='numero-prenotazioni'>
-                            <h3>Prestiti Riconsegnati</h3>
+                            <h3>Prestiti Conclusi</h3>
                             <span><?php echo $bookingStats['riconsegnate']; ?></span>
-                        </div>
-                        <div class='numero-prenotazioni'>
-                            <h3>Prenotazioni</h3>
-                            <span><?php echo $bookingStats['prenotati']; ?></span>
                         </div>
                     </div>
                 </div>
@@ -275,6 +220,57 @@ if ($utenza == 1 || $utenza == 2) {
             
         </section>
         <?php endif; ?>
+
+        <!-- ============================================
+             QUICK STATS SECTION
+             ============================================ -->
+        <section class="stats-section <?php echo $statsBG ?>">
+            <div class="section-header">
+                <h2>La Biblioteca In Cifre</h2>
+                <p>I numeri chiave della nostra collezione</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <svg class="stat-icon"><use href="img/icons.svg#library"/></svg>
+                    <div class="stat-number" data-target="<?php echo $totalBooks; ?>">0</div>
+                    <div class="stat-label">Libri Totali</div>
+                </div>
+                <div class="stat-card">
+                    <svg class="stat-icon"><use href="img/icons.svg#account"/></svg>
+                    <div class="stat-number" data-target="<?php echo $activeUsers; ?>">0</div>
+                    <div class="stat-label">Utenti Attivi</div>
+                </div>
+                <div class="stat-card">
+                    <svg class="stat-icon"><use href="img/icons.svg#booking"/></svg>
+                    <div class="stat-number" data-target="<?php echo $booksBorrowed; ?>">0</div>
+                    <div class="stat-label">Prestiti Effettuati</div>
+                </div>
+                <div class="stat-card">
+                    <svg class="stat-icon"><use href="img/icons.svg#genre"/></svg>
+                    <div class="stat-number" data-target="<?php echo $genresAvailable; ?>">0</div>
+                    <div class="stat-label">Generi Disponibili</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             CATEGORIES / GENRES GRID
+             ============================================ -->
+        <section class="genres-section <?php echo $genreBG ?>">
+            <div class="section-header">
+                <h2>Esplora per Genere</h2>
+                <p>Scegli la tua prossima lettura</p>
+            </div>
+            <div class="genres-grid">
+                <?php foreach ($genres as $genre): ?>
+                    <a href="lista/lista.php?genere=<?php echo urlencode($genre['Genere']); ?>" class="genre-card">
+                        <svg class="genre-icon"><use href="img/icons.svg#genre"/></svg>
+                        <h4 class="genre-name"><?php echo e($genre['Genere']); ?></h4>
+                        <span class="genre-count"><?php echo $genre['count']; ?> libri</span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </section>
 
     </main>
 
