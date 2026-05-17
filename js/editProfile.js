@@ -1,7 +1,7 @@
 /**
  * Alexandria Library Management System
  *
- * @file Profile edit page — password confirmation, file input label, account deletion
+ * @file Profile edit page — password confirmation
  */
 
 (function () {
@@ -24,20 +24,5 @@
                 }
             });
         }
-
-        document.querySelectorAll('.custom-file-input').forEach(function (input) {
-            input.addEventListener('change', function () {
-                var fileName = this.value.split("\\").pop();
-                var label = this.nextElementSibling;
-                if (label) {
-                    label.classList.add('selected');
-                    label.textContent = fileName;
-                }
-            });
-        });
     });
-
-    window.confirmDelete = function () {
-        return confirm("Sei assolutamente sicuro? Questa azione è irreversibile e cancellerà tutti i tuoi dati.");
-    };
 })();
