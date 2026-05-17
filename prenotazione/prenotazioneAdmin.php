@@ -15,6 +15,8 @@ $authService = new AuthService($pdo);
 if (!$authService->isAdmin() && !$authService->isLibrarian()) {
     redirect('../index.php');
 }
+
+$root = '..';
 ?>
 
 <!DOCTYPE html>
