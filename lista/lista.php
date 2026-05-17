@@ -178,11 +178,7 @@ $books = $bookService->search($search, $genre, $orderBy, $limit);
                     }
                     ?>
 
-                    <div class="center" style="margin-top: 30px; display: flex; justify-content: center;">
-                        <div class="pagination">
-                            <?php echo $pagination['controls']; ?>
-                        </div>
-                    </div>
+                    <?php render_pagination($pagination); ?>
                 </div>
             </div>
         </div>

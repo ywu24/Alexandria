@@ -9,11 +9,6 @@
 
         document.addEventListener('click', async function (event) {
 
-            if (event.target.classList.contains('btn-gestisci')) {
-                var idPrenotazione = event.target.getAttribute('data-id');
-                window.location.href = '../dashboard/dashboardUtenti/dettaglioPrenotazione.php?id=' + encodeURIComponent(idPrenotazione);
-            }
-
             var deleteBtn = event.target.closest('.delete-button');
             if (deleteBtn) {
                 var idPrenotazione = deleteBtn.getAttribute('data-id');
