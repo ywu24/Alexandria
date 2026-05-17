@@ -55,7 +55,7 @@ if (isset($_SESSION['login_error'])) {
 <head>
   <?php render_head('Accedi',
       ['css/pages/auth.css', 'css/pages/footer.css'],
-      ['js/theme.js', 'js/login.js'],
+      ['js/login.js'],
       '..'
   ); ?>
 </head>

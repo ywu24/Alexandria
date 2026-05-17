@@ -35,13 +35,23 @@ if (isset($_POST['submit'])) {
     $cognome = $_POST['cognome'];
     $passwordAgain = $_POST['passwordAgain'];
 
-    if ($password !== $passwordAgain) {
-        flash('error', 'Le due password non corrispondono!');
+    if (!validate_email($email)) {
+        flash('error', 'Email non valida');
         redirect('registrazione.php');
+    }
+    
+    if ($password !== $passwordAgain) {
+        flash('error', 'Le password non coincidono');
+        redirect('registrazione.php');
+    }
+    
+    if (!validate_password($password)) {
+       flash('error', 'La password non rispetta i requisiti minimi di sicurezza');
+       redirect('registrazione.php');
     }
 
     if ($authService->emailExists($email)) {
-        flash('error', 'Utente gia registrato');
+        flash('error', 'Utente già registrato');
         redirect('registrazione.php');
     }
 
@@ -76,58 +86,74 @@ if (isset($_POST['submit'])) {
 <head>
   <?php render_head('Registrazione',
       ['css/pages/auth.css', 'css/pages/footer.css'],
-      ['js/theme.js', 'js/utils.js', 'js/registration.js'],
+      ['js/utils.js', 'js/registration.js'],
       '..'
   ); ?>
 </head>
 
-<body class="registration">
-  <button id="theme-toggle" type="button" class="auth-theme-toggle" aria-label="Toggle theme">
-    <svg class="icon icon-sun" style="display:none;"><use href="../img/icons.svg#sun"/></svg>
-    <svg class="icon icon-moon" style="display:none;"><use href="../img/icons.svg#moon"/></svg>
-  </button>
-  <div id="messages">
-    <?php render_messages(); ?>
+<body>
+  <div id="nav-placeholder">
+    <?php require_once('../nav/nav.php'); ?>
   </div>
-  <div class="container">
-    <div class="left"></div>
 
-    <div class="right">
-      <div class="right-content">
-        <form action="registrazione.php" method="POST" id="myform">
-          <h1>Crea un account</h1>
-          <div>
-            <h3>NOME</h3>
-            <input type="text" name="nome" placeholder="Inserisci il tuo nome" required />
-          </div>
-          <div>
-            <h3>COGNOME</h3>
-            <input type="text" name="cognome" placeholder="Inserisci il tuo cognome" required />
-          </div>
-          <div>
-            <h3>EMAIL</h3>
-            <input type="email" name="email" placeholder="Inserisci il tuo indirizzo email" required />
-          </div>
-          <div>
-            <h3>PASSWORD</h3>
-            <input type="password" name="password" placeholder="Inserisci la tua password" required />
-            <h4>La password deve avere lunghezza compresa tra 8 e 50 caratteri e contenere almeno un carattere speciale, es. !#$.,:;()</h4>
-          </div>
-          <div>
-            <h3>CONFERMA PASSWORD</h3>
-            <input type="password" name="passwordAgain" placeholder="Conferma la tua password" required />
-          </div>
-          <input type="submit" class="submit" name="submit" value="Registrami" />
+  <main class="auth-main">
+    <div class="auth-container">
+      <div class="card auth-card">
+        <div class="card-body">
+          <form action="registrazione.php" method="POST" id="myform">
+            <div class="text-center mb-lg">
+              <h1>Crea un account</h1>
+              <p class="text-muted">Unisciti alla nostra comunità per accedere a tutti i servizi</p>
+            </div>
 
-          <a href="login.php" class="login-link">Hai già un account? Accedi qui</a>
+            <div id="messages">
+              <?php render_messages(); ?>
+            </div>
 
-          <div style="text-align: center;">
-            <h4 class="privacy">Privacy &middot; Termini e Condizioni</h4>
-          </div>
-        </form>
+            <div class="form-group">
+              <label class="form-label">NOME</label>
+              <input type="text" name="nome" class="form-control" placeholder="Inserisci il tuo nome" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">COGNOME</label>
+              <input type="text" name="cognome" class="form-control" placeholder="Inserisci il tuo cognome" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">EMAIL</label>
+              <input type="email" name="email" class="form-control" placeholder="Inserisci il tuo indirizzo email" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">PASSWORD</label>
+              <input type="password" name="password" class="form-control" placeholder="Inserisci la tua password" required />
+              <p class="text-muted" style="font-size: 0.85rem; margin-top: 5px;">
+                La password deve avere lunghezza compresa tra 8 e 50 caratteri e contenere almeno un carattere speciale, es. !#$.,:;()
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">CONFERMA PASSWORD</label>
+              <input type="password" name="passwordAgain" class="form-control" placeholder="Conferma la tua password" required />
+            </div>
+
+            <div class="text-center">
+              <button type="submit" name="submit" class="btn btn-primary btn-lg w-100">Registrami</button>
+            </div>
+
+            <div class="auth-footer text-center">
+              <p>Hai già un account? <a href="login.php">Accedi qui</a></p>
+              <div class="privacy">
+                <p class="text-muted">Privacy &middot; Termini e Condizioni</p>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
+
   <?php require_once('../nav/footer.php'); ?>
 </body>
 
