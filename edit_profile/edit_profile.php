@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
 <html lang="it">
 
 <head>
-    <?php render_head('Edit Profile', ['css/pages/forms.css', 'css/pages/footer.css'], [], '..'); ?>
+    <?php render_head('Edit Profile', ['css/pages/forms.css', 'css/pages/footer.css'], ['js/utils.js'], '..'); ?>
 </head>
 
 <body class="bg-light edit-profile">
@@ -63,7 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     </div>
 
     <div class="container py-5">
-        <?php render_messages(); ?>
+        <div id="messages">
+            <?php render_messages(); ?>
+        </div>
         <div class="row justify-content-center">
             <!-- Sidebar Navigation -->
             <div class="col-lg-3 mb-4">
@@ -215,8 +217,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/utils.js"></script>
-    <script src="../js/editProfile.js"></script>
     <?php require_once('../nav/footer.php'); ?>
 </body>
 

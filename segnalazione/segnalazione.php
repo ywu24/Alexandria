@@ -61,71 +61,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <?php render_messages(); ?>
 
-  <div class="container py-5">
+  <main class="container py-5">
     <div class="row justify-content-center">
       <div class="col-lg-7">
 
-        <div class="text-center mb-4">
-          <h1 class="display-4">Feedback Utente</h1>
-          <p class="text-muted">Inviaci i tuoi suggerimenti o segnala un problema</p>
+        <div class="text-center mb-5">
+          <h1 class="display-5 fw-bold">Feedback Utente</h1>
+          <p class="text-muted">Inviaci i tuoi suggerimenti o segnala un problema per aiutarci a migliorare</p>
         </div>
 
-        <div class="card">
-          <div class="card-header font-weight-bold">
-            Modulo di Segnalazione
+        <div class="card shadow-sm">
+          <div class="card-header text-center py-3 text-white">
+            <h5 class="mb-0">Modulo di Segnalazione</h5>
           </div>
-          <div class="card-body">
+          <div class="card-body p-4">
             <form action="segnalazione.php" method="POST" enctype="multipart/form-data">
 
-              <div class="form-group">
-                <label for="oggetto">Oggetto</label>
+              <div class="mb-4">
+                <label for="oggetto" class="form-label">Oggetto</label>
                 <input type="text" class="form-control" id="oggetto" name="oggetto" maxlength="50"
                   placeholder="Di cosa si tratta?" required>
-                <div class="text-right">
+                <div class="text-end mt-1">
                   <small class="text-muted" id="oggetto-counter">Caratteri rimanenti: 50</small>
                 </div>
               </div>
 
-              <div class="form-group">
-                <label for="messaggio">Messaggio</label>
+              <div class="mb-4">
+                <label for="messaggio" class="form-label">Messaggio</label>
                 <textarea class="form-control" id="messaggio" name="messaggio" rows="5" maxlength="250"
                   placeholder="Descrivi qui la tua segnalazione..." required></textarea>
-                <div class="text-right">
+                <div class="text-end mt-1">
                   <small class="text-muted" id="messaggio-counter">Caratteri rimanenti: 250</small>
                 </div>
               </div>
 
-              <div class="form-group mb-4">
-                <label for="file">Screenshot (facoltativo)</label>
-                <div class="custom-file mb-2">
-                  <input type="file" class="custom-file-input" id="file" name="screenshot" accept="image/*"
-                    onchange="previewImage(event)">
-                  <label class="custom-file-label" for="file">Scegli file...</label>
-                </div>
-                <small class="text-muted d-block mb-3">Formati: jpg, jpeg, png (Max 5MB)</small>
+              <div class="mb-4">
+                <label for="file" class="form-label">Screenshot (facoltativo)</label>
+                <input type="file" class="form-control" id="file" name="screenshot" accept="image/*"
+                  onchange="previewImage(event)">
+                <div class="form-text mb-3">Formati supportati: jpg, jpeg, png (Max 5MB)</div>
 
-                <div class="position-relative text-center">
+                <div class="preview-image-container text-center mx-auto">
                   <i id="trash-btn" class="delete-icon fas fa-trash bg-danger text-white rounded-pill p-2"
                     onclick="deleteImage()" title="Rimuovi Screenshot"></i>
-                  <img id="image-preview" class="preview-image" src="#" alt="Anteprima" style="display: none;">
+                  <img id="image-preview" class="preview-image d-none" src="#" alt="Anteprima">
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-primary btn-block btn-lg">
-                Invia Segnalazione
-              </button>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  Invia Segnalazione
+                </button>
+              </div>
 
             </form>
           </div>
         </div>
 
         <div class="text-center mt-4">
-          <a href="../index.php" class="text-secondary text-decoration-none">&larr; Torna alla Home</a>
+          <a href="../index.php" class="text-decoration-none text-muted">
+            <i class="fas fa-arrow-left me-1"></i> Torna alla Home
+          </a>
         </div>
 
       </div>
     </div>
-  </div>
+  </main>
 
   <?php require_once('../nav/footer.php'); ?>
 </body>

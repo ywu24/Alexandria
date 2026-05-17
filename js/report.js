@@ -5,12 +5,22 @@
  */
 
 (function () {
-    document.getElementById('oggetto').addEventListener('input', function () {
-        document.getElementById('oggetto-counter').innerText = 'Caratteri rimanenti: ' + (50 - this.value.length);
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const oggetto = document.getElementById('oggetto');
+        const oggettoCounter = document.getElementById('oggetto-counter');
+        if (oggetto && oggettoCounter) {
+            oggetto.addEventListener('input', function () {
+                oggettoCounter.innerText = 'Caratteri rimanenti: ' + (50 - this.value.length);
+            });
+        }
 
-    document.getElementById('messaggio').addEventListener('input', function () {
-        document.getElementById('messaggio-counter').innerText = 'Caratteri rimanenti: ' + (250 - this.value.length);
+        const messaggio = document.getElementById('messaggio');
+        const messaggioCounter = document.getElementById('messaggio-counter');
+        if (messaggio && messaggioCounter) {
+            messaggio.addEventListener('input', function () {
+                messaggioCounter.innerText = 'Caratteri rimanenti: ' + (250 - this.value.length);
+            });
+        }
     });
 
     window.previewImage = function (event) {
