@@ -38,7 +38,7 @@ $root = '../..';
 <head>
     <?php render_head('Aggiungi Libro | Dashboard',
         ['css/pages/forms.css', 'css/pages/footer.css'],
-        ['dashboard/dashboardLibri/aggiungiLibro.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+        ['js/aggiungiLibro.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
         '../..'
     ); ?>
 </head>

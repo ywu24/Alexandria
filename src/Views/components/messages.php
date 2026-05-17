@@ -24,20 +24,3 @@ function render_messages(): void
         echo '<p class="errore">' . e($error) . '</p>';
     }
 }
-
-/**
- * Render legacy session messages (for pages not yet refactored)
- *
- * @return void
- */
-function render_legacy_messages(): void
-{
-    if (isset($_SESSION['success_msg'])) {
-        echo '<p class="successo">' . e($_SESSION['success_msg']) . '</p>';
-        unset($_SESSION['success_msg']);
-    }
-    if (isset($_SESSION['error_msg'])) {
-        echo '<p class="errore">' . e($_SESSION['error_msg']) . '</p>';
-        unset($_SESSION['error_msg']);
-    }
-}

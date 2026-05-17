@@ -70,7 +70,7 @@ if (!$isLoggedIn) {
 </head>
 
 <body>
-    <script src="homepage.js"></script>
+    <script src="js/homepage.js"></script>
 
     <div id="nav-placeholder">
         <?php require_once("nav/nav.php"); ?>

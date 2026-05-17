@@ -140,7 +140,7 @@ if (isset($_POST['reinvia'])) {
 <head>
     <?php render_head('Conferma Registrazione',
         ['css/pages/auth.css', 'css/pages/footer.css'],
-        ['js/theme.js', 'auth/confermaRegistrazione.js'],
+        ['js/theme.js', 'js/confermaRegistrazione.js'],
         '..'
     ); ?>
 </head>

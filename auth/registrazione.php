@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
 <head>
   <?php render_head('Registrazione',
       ['css/pages/auth.css', 'css/pages/footer.css'],
-      ['js/theme.js', 'js/utils.js', 'auth/registrazione.js'],
+      ['js/theme.js', 'js/utils.js', 'js/registrazione.js'],
       '..'
   ); ?>
 </head>

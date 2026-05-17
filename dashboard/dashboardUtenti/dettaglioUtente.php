@@ -48,7 +48,7 @@ $root = '../..';
 <head>
     <?php render_head('Alexandria - Gestione Utente',
         ['css/pages/user-detail.css', 'css/pages/footer.css'],
-        ['dashboard/dashboardUtenti/dettaglioUtente.js', 'js/dettaglioPrenotazione.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+        ['js/dettaglioUtente.js', 'js/dettaglioPrenotazione.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
         '../..'
     ); ?>
 </head>

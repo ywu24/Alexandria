@@ -130,7 +130,7 @@ $reviews = $reviewService->getForBook($book_id, 5, 0);
 <html lang="it">
 
 <head>
-    <?php render_head("Alexandria's Library", ['css/pages/libro.css', 'css/pages/footer.css'], ['libro/libro.js'], '..'); ?>
+    <?php render_head("Alexandria's Library", ['css/pages/libro.css', 'css/pages/footer.css'], ['js/libro.js'], '..'); ?>
 </head>
 
 <body class="libro-detail">
