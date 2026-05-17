@@ -49,16 +49,10 @@ if ($isLoggedIn) {
     }
 }
 
-$accountClass = $isLoggedIn ? 'account-status' : 'account-status-2 blur';
-$accountHref = $isLoggedIn ? "href='edit_profile/edit_profile.php'" : "href='auth/login.php'";
-
-if ($isLoggedIn && ($utenza == 1 || $utenza == 2)) {
+if ($utenza == 1 || $utenza == 2) {
     $accountClass = 'account-status-2';
-}
-
-if (!$isLoggedIn) {
-    $user = ['Nome' => '', 'Cognome' => '', 'propic' => 'userDashFavicon.svg'];
-    $email = 'eg@example.com';
+} else {
+    $accountClass = 'account-status';
 }
 ?>
 
@@ -210,8 +204,9 @@ if (!$isLoggedIn) {
         <!-- ============================================
              USER ACCOUNT PANEL
              ============================================ -->
+        <?php if ($isLoggedIn): ?>
         <section class="account-section">
-            <?php if ($isLoggedIn && $utenza != 1 && $utenza != 2): ?>
+            <?php if ($utenza != 1 && $utenza != 2): ?>
                 <div class='info-account'>
                     <a href='prenotazione/prenotazione.php'>
                         <div class='info-prenotazioni'>
@@ -247,64 +242,39 @@ if (!$isLoggedIn) {
                         </div>
                     </a>
                 </div>
-            <?php elseif ($isLoggedIn && ($utenza == 1 || $utenza == 2)): ?>
-                <div class='info-account'>
-                    <a href='prenotazione/prenotazione.php'>
-                        <div class='info-prenotazioni'>
-                            <h2 class='ultime-prenotazioni'>Ultimi Prestiti</h2>
-                            <div class='book-prenotation'>
-                                <div>
-                                    <h4>Non hai prenotato nessun libro</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            <?php else: ?>
-                <div class='info-account'>
-                    <a href='prenotazione/prenotazione.php'>
-                        <div class='info-prenotazioni'>
-                            <h2 class='ultime-prenotazioni'>Ultimi Prestiti</h2>
-                            <div class='book-prenotation'>
-                                <div>
-                                    <h4>Non hai prenotato nessun libro</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
             <?php endif; ?>
 
-            <a <?php echo $accountHref; ?>>
-                <div class='<?php echo $accountClass; ?>'>
-                    <div class='account-status-acc'>
-                        <span>Bentornato</span>
-                        <h2><?php echo e($user['Nome'] ?? '') . ' ' . e($user['Cognome'] ?? ''); ?></h2>
-                        <img src='./img/users/<?php echo e($user['propic'] ?? 'userDashFavicon.svg'); ?>' alt=''>
-                        <span><?php echo e($email); ?></span>
-                        <span>---------- Prenotazioni ----------</span>
+            
+            <div class='<?php echo $accountClass; ?>'>
+                <div class='account-status-acc'>
+                    <span>Bentornato</span>
+                    <h2><?php echo e($user['Nome'] ?? '') . ' ' . e($user['Cognome'] ?? ''); ?></h2>
+                    <img src='./img/users/<?php echo e($user['propic'] ?? 'userDashFavicon.svg'); ?>' alt=''>
+                    <span><?php echo e($email); ?></span>
+                    <span>---------- Prenotazioni ----------</span>
+                    <div class='account-status-prenotazioni'>
+                        <div class='numero-prenotazioni'>
+                            <h3>Totali</h3>
+                            <span><?php echo $bookingStats['totali']; ?></span>
+                        </div>
+                        <div class='numero-prenotazioni'>
+                            <h3>Prestiti In corso</h3>
+                            <span><?php echo $bookingStats['inCorso']; ?></span>
+                        </div>
+                        <div class='numero-prenotazioni'>
+                            <h3>Prestiti Riconsegnati</h3>
+                            <span><?php echo $bookingStats['riconsegnate']; ?></span>
+                        </div>
+                        <div class='numero-prenotazioni'>
+                            <h3>Prenotazioni</h3>
+                            <span><?php echo $bookingStats['prenotati']; ?></span>
+                        </div>
                     </div>
                 </div>
-            </a>
-            <div class='account-status-prenotazioni'>
-                <div class='numero-prenotazioni'>
-                    <h3>Totali</h3>
-                    <span><?php echo $bookingStats['totali']; ?></span>
-                </div>
-                <div class='numero-prenotazioni'>
-                    <h3>Prestiti In corso</h3>
-                    <span><?php echo $bookingStats['inCorso']; ?></span>
-                </div>
-                <div class='numero-prenotazioni'>
-                    <h3>Prestiti Riconsegnati</h3>
-                    <span><?php echo $bookingStats['riconsegnate']; ?></span>
-                </div>
-                <div class='numero-prenotazioni'>
-                    <h3>Prenotazioni</h3>
-                    <span><?php echo $bookingStats['prenotati']; ?></span>
-                </div>
             </div>
+            
         </section>
+        <?php endif; ?>
 
     </main>
 
