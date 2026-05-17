@@ -21,7 +21,7 @@
 
 .section-header h2 {
   font-size: var(--text-2xl);
-  color: var(--color-primary);
+  color: var(--color-text);
   margin-bottom: var(--space-sm);
 }
 
@@ -109,7 +109,7 @@
 .hero-cta .btn-outline-primary:hover {
   border-color: var(--color-accent);
   background-color: var(--color-accent);
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 /* ------------------------------------
@@ -152,7 +152,7 @@
   white-space: nowrap;
   max-width: 200px;
   display: block;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .book-slider .slider__item-content .right-column .info-release {
@@ -362,7 +362,7 @@
 .stat-number {
   font-size: var(--text-3xl);
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-text);
   line-height: 1.2;
   margin-bottom: var(--space-xs);
 }
@@ -426,7 +426,7 @@
 
 .genre-name {
   font-size: var(--text-lg);
-  color: var(--color-primary);
+  color: var(--color-text);
   margin-bottom: var(--space-xs);
   text-align: center;
 }
@@ -475,7 +475,7 @@
 
 .bookings-header h3 {
   font-size: var(--text-xl);
-  color: var(--color-primary);
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -529,7 +529,7 @@
 
 .booking-meta h4 {
   font-size: var(--text-lg);
-  color: var(--color-primary);
+  color: var(--color-text);
   margin: 0 0 var(--space-xs);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -609,7 +609,7 @@
 }
 
 .no-bookings h4 {
-  color: var(--color-primary);
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -625,7 +625,7 @@
 
 .stats-header h3 {
   font-size: var(--text-xl);
-  color: var(--color-primary);
+  color: var(--color-text);
   margin: 0 0 var(--space-lg);
   text-align: center;
 }
@@ -846,7 +846,7 @@
 
   a {
     text-decoration: none;
-    color: var(--color-primary);
+    color: var(--color-text);
     justify-content: center;
     display: flex;
   }
@@ -1027,7 +1027,7 @@
   .account-status-acc h2 {
     text-align: center;
     font-size: 5vw;
-    color: var(--color-primary);
+    color: var(--color-text);
   }
 
   .account-status-prenotazioni {

@@ -81,7 +81,7 @@ body.lista-page .sort-by {
 body.lista-page .sort-by h5 {
   margin: 0;
   font-size: 1.1em;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 body.lista-page .genere-subwrap {
@@ -126,7 +126,7 @@ body.lista-page .filter-item h5 {
   margin: 0;
   font-weight: 500;
   font-size: var(--text-base);
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 body.lista-page .right-column {
@@ -169,7 +169,7 @@ body.lista-page .container-book {
 }
 
 body.lista-page .book-link {
-  color: var(--color-primary);
+  color: var(--color-text);
   font-size: 1.3em;
   font-weight: bold;
 }
@@ -254,7 +254,7 @@ body.libro-detail .info-title h1 {
   font-weight: 600;
   font-size: 1.5rem;
   margin: 0;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 body.libro-detail .info-title h6 {
@@ -320,7 +320,7 @@ body.libro-detail h2.fw-bold {
   margin-bottom: 1.5rem;
   max-width: 70%;
   margin: auto;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 body.libro-detail .review-feed {
@@ -412,7 +412,7 @@ body.libro-detail .right-column button,
 body.libro-detail .pop-up button {
   border: none;
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-text);
   height: 50px;
   width: 140px;
   border-radius: var(--radius-lg);
@@ -452,7 +452,7 @@ body.prenotazioni-page h1 {
   margin: 0;
   width: 100%;
   text-align: center;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 body.prenotazioni-page .container {
@@ -496,7 +496,7 @@ body.prenotazioni-page .book-section {
 body.prenotazioni-page .info-title h3 {
   margin: 0;
   font-size: 1.25rem;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 body.prenotazioni-page .isbn-label {

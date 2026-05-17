@@ -79,7 +79,7 @@
 
 .btn-warning {
   background-color: var(--color-warning);
-  color: var(--color-primary);
+  color: var(--color-text);
   border-color: var(--color-warning);
 }
 
@@ -165,7 +165,7 @@
   font-size: var(--text-lg);
   font-weight: 600;
   margin-bottom: var(--space-sm);
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .card-subtitle {
@@ -227,7 +227,7 @@
   display: inline-block;
   margin-bottom: var(--space-sm);
   font-weight: 500;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .form-group {
@@ -455,7 +455,7 @@ p.successo {
 .badge-warning,
 .bg-warning {
   background-color: var(--color-warning) !important;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .badge-info,
@@ -558,7 +558,7 @@ p.successo {
 
 .pop-up h4 {
   line-height: 25px;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .prenotation-info {

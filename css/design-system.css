@@ -114,21 +114,21 @@ body {
    DARK THEME
    ============================================ */
 [data-theme="dark"] {
-  --color-primary: #1a2e4a;
-  --color-primary-light: #2a4064;
-  --color-accent: #d4af37;
-  --color-accent-hover: #b8960f;
-  --color-success: #2d6a4f;
-  --color-danger: #c1292e;
-  --color-warning: #e09f3e;
-  --color-info: #457b9d;
+  --color-primary:       #2d4a70;
+  --color-primary-light: #3a5f8a;
+  --color-accent:        #d4af37;  /* gold unchanged */
+  --color-accent-hover:  #eac84c;  /* lighter on dark */
+  --color-success:       #2d6a4f;
+  --color-danger:        #c1292e;
+  --color-warning:       #e09f3e;
+  --color-info:          #457b9d;
 
-  --color-bg: #0f1419;
-  --color-bg-alt: #1a2e4a;
-  --color-surface: #1e293b;
-  --color-text: #e2e8f0;
-  --color-text-muted: #94a3b8;
-  --color-border: #334155;
+  --color-bg:            #0e1117;  /* deep navy-ink */
+  --color-bg-alt:        #161c27;  /* sidebar / alt panels */
+  --color-surface:       #1d2535;  /* cards / modals */
+  --color-text:          #e8e4dc;  /* warm off-white */
+  --color-text-muted:    #9a9690;  /* mid warm-gray */
+  --color-border:        #2e3748;  /* subtle blue-gray */
 
   /* Legacy variable mappings for compatibility */
   --text: var(--color-text);

@@ -25,7 +25,11 @@ if (isset($_POST['logout'])) {
 
     <form method="get" action="<?php echo $root; ?>/lista/lista.php" class="search-form">
         <input type="search" name="search" placeholder="Search...">
-        <button type="submit" name="search_btn"></button>
+        <button type="submit" name="search_btn">
+            <svg width="20" height="20" aria-hidden="true">
+                <use href="<?php echo $root; ?>/img/icons.svg#search"></use>
+            </svg>
+        </button>
     </form>
 
 <?php

@@ -20,7 +20,7 @@ body {
 
 .form-page .card-header {
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-text);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: var(--space-md) var(--space-lg);
   font-weight: 600;
@@ -96,7 +96,7 @@ body {
   display: block;
   margin-bottom: 15px;
   font-weight: bold;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .form-container input[type="text"],
@@ -193,7 +193,7 @@ body {
 
 .edit-profile .settings .card-header {
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-text);
   font-size: var(--text-base);
   padding: var(--space-md) var(--space-lg);
   font-weight: 600;
@@ -208,7 +208,7 @@ body {
 
 .edit-profile .data-profile-info h4 {
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 /* Profile picture */

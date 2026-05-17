@@ -74,7 +74,7 @@ body {
 }
 
 .dashboard-landing .card-container h4 {
-  color: var(--color-primary);
+  color: var(--color-text);
   padding: 20px;
   text-align: center;
   font-weight: 600;
@@ -174,7 +174,7 @@ p {
 
 .dashboard-table .card-header {
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-text);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: var(--space-md) var(--space-lg);
   font-weight: 600;
@@ -229,7 +229,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-base);
   font-weight: 500;
   line-height: 1.2;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 /* Table responsive links */
@@ -255,7 +255,7 @@ h1, h2, h3, h4, h5, h6 {
 /* --- Reports Dashboard (dashboardSegnalazioni.css) --- */
 .reports-dashboard h2 {
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-text);
   margin-bottom: 10px;
 }
 
