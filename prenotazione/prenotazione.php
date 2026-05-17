@@ -92,7 +92,7 @@ CSS
     </div>
 
     <div id="messages" class="container mt-3">
-        <?php render_legacy_messages(); ?>
+        <?php render_messages(); ?>
     </div>
 
     <div class="container mt-5">

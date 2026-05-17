@@ -138,19 +138,11 @@ if (isset($_POST['reinvia'])) {
 <html lang="it">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Conferma Registrazione</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/design-system.css">
-    <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/pages/auth.css">
-    <link rel="stylesheet" href="../css/pages/footer.css">
-    <link rel="stylesheet" href="../css/utilities.css">
-    <script src="../js/theme.js"></script>
-    <script src="confermaRegistrazione.js"></script>
+    <?php render_head('Conferma Registrazione',
+        ['css/pages/auth.css', 'css/pages/footer.css'],
+        ['js/theme.js', 'auth/confermaRegistrazione.js'],
+        '..'
+    ); ?>
 </head>
 
 <body class="registration">

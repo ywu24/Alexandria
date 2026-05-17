@@ -36,17 +36,11 @@ $root = '../..';
 <html lang="it">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aggiungi Libro | Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/design-system.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/layout.css">
-    <link rel="stylesheet" href="../../css/navigation.css">
-    <link rel="stylesheet" href="../../css/pages/forms.css">
-    <link rel="stylesheet" href="../../css/pages/footer.css">
-    <link rel="stylesheet" href="../../css/utilities.css">
+    <?php render_head('Aggiungi Libro | Dashboard',
+        ['css/pages/forms.css', 'css/pages/footer.css'],
+        ['dashboard/dashboardLibri/aggiungiLibro.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+        '../..'
+    ); ?>
 </head>
 
 <body class="form-page">
@@ -166,9 +160,6 @@ $root = '../..';
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="aggiungiLibro.js" defer></script>
     <?php require_once("../../nav/footer.php"); ?>
 </body>
 

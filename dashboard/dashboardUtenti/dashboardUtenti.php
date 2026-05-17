@@ -21,22 +21,16 @@ $root = '../..';
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Utenti</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/design-system.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/layout.css">
-    <link rel="stylesheet" href="../../css/navigation.css">
-    <link rel="stylesheet" href="../../css/pages/dashboard.css">
-    <link rel="stylesheet" href="../../css/pages/footer.css">
-    <link rel="stylesheet" href="../../css/utilities.css">
+    <?php render_head('Dashboard Utenti',
+        ['css/pages/dashboard.css', 'css/pages/footer.css'],
+        ['dashboard/dashboardUtenti/dashboardUtenti.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+        '../..'
+    ); ?>
     <link rel="icon" type="image/svg+xml" href="../../img/userDashFavicon.svg">
 </head>
 <body class="dashboard-table">
     <div id="nav-placeholder">
-        <?php $root = '../..'; require_once('../../nav/nav.php'); ?>
+        <?php require_once('../../nav/nav.php'); ?>
     </div>
 
     <div class="container-fluid">
@@ -90,8 +84,6 @@ $root = '../..';
 </div>
     </div>
     <script>const USER_TYPE = <?php echo (int) ($authService->getCurrentUserType() ?? 0); ?>;</script>
-    <script src="dashboardUtenti.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <?php $root = '../..'; require_once('../../nav/footer.php'); ?>
+    <?php require_once('../../nav/footer.php'); ?>
 </body>
 </html>

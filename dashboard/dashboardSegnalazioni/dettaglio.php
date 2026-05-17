@@ -37,22 +37,15 @@ $root = '../..';
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dettaglio Segnalazione - Alexandria's Library</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/design-system.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/layout.css">
-    <link rel="stylesheet" href="../../css/navigation.css">
-    <link rel="stylesheet" href="../../css/pages/forms.css">
-    <link rel="stylesheet" href="../../css/pages/footer.css">
-    <link rel="stylesheet" href="../../css/utilities.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <?php render_head('Dettaglio Segnalazione - Alexandria\'s Library',
+        ['css/pages/forms.css', 'css/pages/footer.css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'],
+        [],
+        '../..'
+    ); ?>
 </head>
 <body class="bg-light form-page">
    <div id="nav-placeholder">
-    <?php $root = '../..'; require_once('../../nav/nav.php'); ?>
+    <?php require_once('../../nav/nav.php'); ?>
    </div>
 
 <div class="container py-5">
@@ -114,6 +107,6 @@ $root = '../..';
 <?php endif; ?>
 
 </div>
-<?php $root = '../..'; require_once('../../nav/footer.php'); ?>
+<?php require_once('../../nav/footer.php'); ?>
 </body>
 </html>

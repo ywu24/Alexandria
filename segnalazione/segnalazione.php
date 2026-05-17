@@ -45,17 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="it">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feedback Utente | Supporto</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/design-system.css">
-  <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/layout.css">
-  <link rel="stylesheet" href="../css/navigation.css">
-  <link rel="stylesheet" href="../css/pages/forms.css">
-  <link rel="stylesheet" href="../css/pages/footer.css">
-  <link rel="stylesheet" href="../css/utilities.css">
+  <?php render_head('Feedback Utente | Supporto',
+      ['css/pages/forms.css', 'css/pages/footer.css'],
+      ['segnalazione/segnalazione.js', 'https://kit.fontawesome.com/455452defb.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+      '..'
+  ); ?>
   <link rel="icon" type="image/svg+xml" href="../img/feedbackFavicon.svg">
 </head>
 
@@ -133,9 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
-  <script src="segnalazione.js"></script>
   <?php require_once('../nav/footer.php'); ?>
 </body>
 

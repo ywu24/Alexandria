@@ -22,25 +22,18 @@ $root = '..';
 <html lang="it">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/design-system.css">
-  <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/layout.css">
-  <link rel="stylesheet" href="../css/navigation.css">
-  <link rel="stylesheet" href="../css/pages/dashboard.css">
-  <link rel="stylesheet" href="../css/pages/footer.css">
-  <link rel="stylesheet" href="../css/utilities.css">
+  <?php render_head('Dashboard Admin',
+      ['css/pages/dashboard.css', 'css/pages/footer.css'],
+      [],
+      '..'
+  ); ?>
   <link rel="icon" type="image/svg+xml" href="../img/dashboard.svg">
 </head>
 
 <body class="dashboard-landing">
 
   <div id="nav-placeholder">
-    <?php $root = '..'; require_once('../nav/nav.php'); ?>
+    <?php require_once('../nav/nav.php'); ?>
   </div>
   <div class="container">
     <a href="dashboardUtenti/dashboardUtenti.php">

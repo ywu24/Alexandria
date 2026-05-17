@@ -73,11 +73,11 @@ if (!$isLoggedIn) {
     <script src="homepage.js"></script>
 
     <div id="nav-placeholder">
-        <?php $root = '.'; require_once("nav/nav.php"); ?>
+        <?php require_once("nav/nav.php"); ?>
     </div>
 
     <div id="messages">
-        <?php render_legacy_messages(); ?>
+        <?php render_messages(); ?>
     </div>
 
     <main class="home-main">

@@ -20,20 +20,14 @@ if (!$authService->isAdmin() && !$authService->isLibrarian()) {
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexandria - Gestione Prenotazioni</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/design-system.css">
-    <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/navigation.css">
-    <link rel="stylesheet" href="../css/pages/user-detail.css">
-    <link rel="stylesheet" href="../css/pages/footer.css">
-    <link rel="stylesheet" href="../css/utilities.css">
+    <?php render_head('Alexandria - Gestione Prenotazioni',
+        ['css/pages/user-detail.css', 'css/pages/footer.css'],
+        ['js/dettaglioPrenotazione.js', 'prenotazione/prenotazioneAdmin.js'],
+        '..'
+    ); ?>
 </head>
 <body class="user-detail">
-    <div id="nav-placeholder"><?php $root="../"; require_once("../nav/nav.php"); ?></div>
+    <div id="nav-placeholder"><?php require_once("../nav/nav.php"); ?></div>
 
 <div class="container mt-5">
     <h1 class="text-center mb-5 font-weight-extra-bold">Prenotazioni</h1>
@@ -76,8 +70,6 @@ if (!$authService->isAdmin() && !$authService->isLibrarian()) {
     </div>
 </div>
 
-    <script src="../js/dettaglioPrenotazione.js"></script>
-    <script src="prenotazioneAdmin.js"></script>
     <?php require_once("../nav/footer.php"); ?>
 </body>
 </html>

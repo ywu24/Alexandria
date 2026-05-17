@@ -46,18 +46,11 @@ $root = '../..';
 <html lang="it">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Alexandria - Gestione Utente</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/design-system.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/layout.css">
-    <link rel="stylesheet" href="../../css/navigation.css">
-    <link rel="stylesheet" href="../../css/pages/user-detail.css">
-    <link rel="stylesheet" href="../../css/pages/footer.css">
-    <link rel="stylesheet" href="../../css/utilities.css">
-    <script src="dettaglioUtente.js"></script>
-    <script src="../../js/dettaglioPrenotazione.js"></script>
+    <?php render_head('Alexandria - Gestione Utente',
+        ['css/pages/user-detail.css', 'css/pages/footer.css'],
+        ['dashboard/dashboardUtenti/dettaglioUtente.js', 'js/dettaglioPrenotazione.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+        '../..'
+    ); ?>
 </head>
 
 <body class="user-detail">
@@ -137,7 +130,6 @@ $root = '../..';
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <?php require_once("../../nav/footer.php"); ?>
 </body>
 

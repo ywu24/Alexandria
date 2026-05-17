@@ -47,20 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['mes
 <html lang="it">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/design-system.css">
-  <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/layout.css">
-  <link rel="stylesheet" href="../css/navigation.css">
-  <link rel="stylesheet" href="../css/pages/recensioni.css">
-  <link rel="stylesheet" href="../css/pages/footer.css">
-  <link rel="stylesheet" href="../css/utilities.css">
-  <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
+  <?php render_head('Lascia una recensione',
+      ['css/pages/recensioni.css', 'css/pages/footer.css'],
+      ['recensione/recensione.js', 'https://kit.fontawesome.com/455452defb.js'],
+      '..'
+  ); ?>
   <link rel="icon" type="image/svg+xml" href="../img/feedbackFavicon.svg">
-  <title>Lascia una recensione</title>
-  <script src="./recensione.js" defer></script>
 </head>
 
 <body class="form-page">
