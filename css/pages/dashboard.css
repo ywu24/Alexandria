@@ -227,6 +227,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Table responsive links */
+.col-copie {
+  width: 120px;
+  text-align: center;
+  vertical-align: middle !important;
+}
+.copie-cell-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.input-copie {
+  width: 60px !important;
+  text-align: center;
+  padding: 2px 5px;
+}
 .table-responsive a,
 .btn_addlibro {
   text-decoration: none;

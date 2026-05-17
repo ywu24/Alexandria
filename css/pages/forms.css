@@ -46,9 +46,20 @@ body {
   box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25);
 }
 
-.form-page label {
+.form-page label, .form-page .form-label {
   font-weight: 600;
   color: var(--color-text-muted);
+}
+
+.form-page .btn-outline-secondary {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  transition: 0.3s;
+}
+
+.form-page .btn-outline-secondary:hover {
+  background-color: var(--color-border);
+  color: var(--color-text);
 }
 
 .form-page .preview-image {

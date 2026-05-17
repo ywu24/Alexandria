@@ -70,8 +70,7 @@ $root = '../..';
                                 data-sort="AnnoPubblicazione">&#9650;</button></th>
                         <th scope="col" class="col-nascondi">Casa Editrice <button class="sort_btn"
                                 data-sort="Genere">&#9650;</button></th>
-                        <th scope="col" class="col-nascondi">Copie <button class="sort_btn" data-sort="copie">&#9650;</button>
-                        </th>
+                        <th scope="col" class="col-nascondi col-copie">Copie <button class="sort_btn" data-sort="copie">&#9650;</button></th>
                         <th scope="col" class="col-nascondi">Azioni </th>
                         <th scope="col" class="mobile-only">Info</th>
                     </tr>
