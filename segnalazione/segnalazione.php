@@ -16,11 +16,16 @@ $notificationService = new NotificationService();
 
 $root = '..';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['segnalazione'])) {
     $user_email = $_SESSION['email'] ?? '';
     $oggetto = $_POST['oggetto'] ?? '';
     $messaggio = $_POST['messaggio'] ?? '';
     $file = $_FILES['screenshot'] ?? null;
+
+    if (empty($oggetto) || empty($messaggio)) { 
+        flash('error', 'Oggetto o messaggio mancante');
+        redirect('segnalazione.php');
+    }
 
     try {
         $result = $reportService->create($user_email, $oggetto, $messaggio, $file);
@@ -109,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </div>
 
               <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary btn-lg">
+                <button type="submit" name="segnalazione" class="btn btn-primary btn-lg">
                   Invia Segnalazione
                 </button>
               </div>

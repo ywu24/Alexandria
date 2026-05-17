@@ -175,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
                             <p class="text-muted mb-0 small">L'eliminazione è irreversibile. Tutti i tuoi dati verranno cancellati.</p>
                             <p class="text-muted mb-0 small fw-bold">Possibile solo se non si hanno prestiti o prenotazioni attivi.</p>
                         </div>
-                        <?php if ($_SESSION['utenza'] == 2): ?>
+                        <?php if ($_SESSION['utenza'] == 2 || $_SESSION['utenza'] == 1): ?>
                             <button type="button" class="btn btn-danger disabled">
                                 Elimina Account
                             </button>

@@ -41,9 +41,10 @@ $bookingStats = ['totali' => 0, 'inCorso' => 0, 'riconsegnate' => 0, 'prenotati'
 
 $statsBG = 'bg2';
 $genreBG = 'bg1';
+$isAdminLibrarian = ($utenza == 1 || $utenza == 2);
 if ($isLoggedIn) {
     $user = $userService->getByEmail($email);
-    if (!($utenza == 1 || $utenza == 2)) {
+    if (!$isAdminLibrarian) {
         $bookingStats = $statsService->getUserBookingStats($email);
         $recentBookings = $bookingService->getRecentForUser($email, 2);
         $userBG = 'bg2';
@@ -52,7 +53,7 @@ if ($isLoggedIn) {
     }
 }
 
-if ($utenza == 1 || $utenza == 2) {
+if ($isAdminLibrarian) {
     $accountClass = 'account-status-2';
 } else {
     $accountClass = 'account-status';
@@ -92,6 +93,8 @@ if ($utenza == 1 || $utenza == 2) {
                     <a href="lista/lista.php" class="btn btn-primary btn-lg">Sfoglia Libri</a>
                     <?php if (!$isLoggedIn): ?>
                         <a href="auth/login.php" class="btn btn-outline-primary btn-lg">Inizia</a>
+                    <?php elseif ($isAdminLibrarian): ?>
+                        <a href="prenotazione/prenotazioneAdmin.php" class="btn btn-outline-primary btn-lg">Gestisci Prestiti Utenti</a>
                     <?php else: ?>
                         <a href="prenotazione/prenotazione.php" class="btn btn-outline-primary btn-lg">I Miei Prestiti</a>
                     <?php endif; ?>
@@ -102,6 +105,7 @@ if ($utenza == 1 || $utenza == 2) {
         <!-- ============================================
              FEATURED BOOKS CAROUSEL
              ============================================ -->
+        <?php if (!$isAdminLibrarian): ?>   
         <section class="featured-section bg1">
             <div class="section-header">
                 <h2>Libri in Evidenza</h2>
@@ -152,6 +156,7 @@ if ($utenza == 1 || $utenza == 2) {
                 </section>
             </div>
         </section>
+        <?php endif; ?>  
 
         <!-- ============================================
              USER ACCOUNT PANEL
@@ -274,6 +279,7 @@ if ($utenza == 1 || $utenza == 2) {
         <!-- ============================================
              CATEGORIES / GENRES GRID
              ============================================ -->
+        <?php if (!$isAdminLibrarian): ?>
         <section class="genres-section <?php echo $genreBG ?>">
             <div class="section-header">
                 <h2>Esplora per Genere</h2>
@@ -289,6 +295,7 @@ if ($utenza == 1 || $utenza == 2) {
                 <?php endforeach; ?>
             </div>
         </section>
+        <?php endif; ?>
 
     </main>
 

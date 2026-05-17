@@ -54,6 +54,12 @@ $root = '..';
         <h4>Dashboard Segnalazioni</h4>
       </div>
     </a>
+    <a href="../prenotazione/prenotazioneAdmin.php">
+      <div class="card-container">
+        <svg class="icon"><use href="../img/icons.svg#booking"/></svg>
+        <h4>Dashboard Prenotazioni</h4>
+      </div>
+    </a>
 
   </div>
   <?php require_once('../nav/footer.php'); ?>

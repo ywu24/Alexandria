@@ -68,12 +68,14 @@ if ($isLoggedIn) {
                 <h3 style="font-size: 1.2rem;"><?php echo ($utente['Nome'] ?? '') . ' ' . ($utente['Cognome'] ?? ''); ?></h3>
                 <h4>Punti: <?php echo $utente['punteggio'] ?? 0; ?></h4>
             </div>
-
+            
+            <?php if ($utenza == 3 || $utenza == 4): ?>
             <a href="<?php echo $root; ?>/prenotazione/prenotazione.php" class="sub-menu-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#booking"/></svg>
                 <p>Prenotazioni</p>
                 <span>&gt;</span>
             </a>
+            <?php endif; ?>
 
             <a href="<?php echo $root; ?>/lista/lista.php" class="sub-menu-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#library"/></svg>
