@@ -1,54 +1,60 @@
 <?php
-session_start(); //non togliere
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Main dashboard landing page with links to sub-dashboards
+ */
 
-//LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require_once __DIR__ . '/../src/bootstrap.php';
 
+use Alexandria\Services\AuthService;
 
+$authService = new AuthService($pdo);
+
+if (!$authService->isAdmin() && !$authService->isLibrarian()) {
+    redirect('../index.php');
+}
+
+$root = '..';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin</title>
-  <link rel="stylesheet" href="../css/dashboard.css">
-  <link rel="stylesheet" href="../css/colors.css">
-  <link rel="stylesheet" href="../../css/messaggi.css">
-  <link rel="shortcut icon" href="../img/dashboard.png" type="image/x-icon">
-  <!--script per importare parti di codice-->
-  <script src="https://code.jquery.com/jquery-1.12.2.js"></script>
+  <?php render_head('Dashboard Admin',
+      ['css/pages/dashboard.css', 'css/pages/footer.css'],
+      [],
+      '..'
+  ); ?>
+  <link rel="icon" type="image/svg+xml" href="../img/dashboard.svg">
 </head>
 
-<body>
+<body class="dashboard-landing">
 
   <div id="nav-placeholder">
-    <?php $root = "..";
-    require_once('../nav/nav.php'); ?>
+    <?php require_once('../nav/nav.php'); ?>
   </div>
   <div class="container">
     <a href="dashboardUtenti/dashboardUtenti.php">
       <div class="card-container">
-        <img src="../img/account.png" alt="">
+        <svg class="icon"><use href="../img/icons.svg#account"/></svg>
         <h4>Dashboard Utenti</h4>
       </div>
     </a>
     <a href="dashboardLibri/dashboardLibri.php">
       <div class="card-container">
-        <img src="../img/list.png" alt="">
+        <svg class="icon"><use href="../img/icons.svg#list"/></svg>
         <h4>Dashboard Libri</h4>
       </div>
     </a>
     <a href="dashboardSegnalazioni/dashboardSegnalazioni.php">
       <div class="card-container">
-        <img src="../img/warning-icon.png" alt="">
+        <svg class="icon"><use href="../img/icons.svg#warning"/></svg>
         <h4>Dashboard Segnalazioni</h4>
       </div>
     </a>
 
   </div>
+  <?php require_once('../nav/footer.php'); ?>
 </body>

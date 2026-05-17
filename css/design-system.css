@@ -1,0 +1,338 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Color Palette - Library Theme */
+  --color-primary: #243b5d;
+  --color-primary-light: #2d4a70;
+  --color-accent: #d4af37;
+  --color-accent-hover: #b8960f;
+  --color-success: #2d6a4f;
+  --color-danger: #c1292e;
+  --color-warning: #e09f3e;
+  --color-info: #457b9d;
+
+  --color-bg: #f5f3ef;
+  --color-bg-alt: #ede8e0;
+  --color-surface: #ffffff;
+  --color-text: #1e1e1e;
+  --color-text-muted: #6b6b6b;
+  --color-border: #d4cfc4;
+
+  /* Legacy variable mappings for compatibility */
+  --text: var(--color-text);
+  --background: var(--color-bg);
+  --titolo: var(--color-accent);
+  --darkerbackground: var(--color-bg-alt);
+  --sectiontext: var(--color-primary);
+  --articletext: var(--color-text-muted);
+  --button: var(--color-primary);
+  --button-hover: var(--color-primary-light);
+  --white: var(--color-surface);
+  --border: var(--color-border);
+  --editaction: var(--color-info);
+  --editaction-hover: #3a6a8a;
+  --lightgrey: var(--color-bg);
+  --greyhome: var(--color-bg-alt);
+
+  /* Bootstrap-like legacy variables */
+  --primary-color: var(--color-primary);
+  --secondary-color: var(--color-accent);
+  --success-color: var(--color-success);
+  --warning-color: var(--color-warning);
+  --danger-color: var(--color-danger);
+  --info-color: var(--color-info);
+  --light-color: var(--color-bg);
+  --dark-color: var(--color-primary);
+  --white-color: var(--color-surface);
+  --border-color: var(--color-border);
+  --text-color: var(--color-text);
+  --text-muted: var(--color-text-muted);
+
+  /* Typography Scale */
+  --font-family-base: 'Poppins', sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Breakpoints (for reference in JS or custom media queries) */
+  --bp-sm: 576px;
+  --bp-md: 768px;
+  --bp-lg: 992px;
+  --bp-xl: 1200px;
+  --bp-xxl: 1400px;
+}
+
+/* Global Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+[data-theme="dark"] {
+  --color-primary: #4a6fa5;
+  --color-primary-light: #5a83bd;
+  --color-accent: #f0c94a;
+  --color-accent-hover: #ffd966;
+  --color-success: #3d8b6a;
+  --color-danger: #d1454a;
+  --color-warning: #f0b04a;
+  --color-info: #5a9ab8;
+
+  --color-bg: #1a1a2e;
+  --color-bg-alt: #16213e;
+  --color-surface: #0f3460;
+  --color-text: #e0e0e0;
+  --color-text-muted: #a0a0a0;
+  --color-border: #2a2a4a;
+
+  /* Legacy variable mappings for compatibility */
+  --text: var(--color-text);
+  --background: var(--color-bg);
+  --titolo: var(--color-accent);
+  --darkerbackground: var(--color-bg-alt);
+  --sectiontext: var(--color-primary);
+  --articletext: var(--color-text-muted);
+  --button: var(--color-primary);
+  --button-hover: var(--color-primary-light);
+  --white: var(--color-surface);
+  --border: var(--color-border);
+  --editaction: var(--color-info);
+  --editaction-hover: #4a8aaa;
+  --lightgrey: var(--color-bg);
+  --greyhome: var(--color-bg-alt);
+
+  /* Bootstrap-like legacy variables */
+  --primary-color: var(--color-primary);
+  --secondary-color: var(--color-accent);
+  --success-color: var(--color-success);
+  --warning-color: var(--color-warning);
+  --danger-color: var(--color-danger);
+  --info-color: var(--color-info);
+  --light-color: var(--color-bg);
+  --dark-color: var(--color-primary);
+  --white-color: var(--color-surface);
+  --border-color: var(--color-border);
+  --text-color: var(--color-text);
+  --text-muted: var(--color-text-muted);
+}
+
+/* Global font reset for all elements */
+* {
+  font-family: var(--font-family-base);
+}
+
+/* Preserve monospace for code elements */
+code,
+pre,
+kbd,
+samp {
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* Typography defaults */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Focus Ring Utility */
+.focus-ring:focus,
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-light);
+}
+
+/* ============================================
+   BOOTSTRAP COMPATIBILITY OVERRIDES
+   ============================================ */
+
+/* Light theme Bootstrap utility fixes */
+.text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+.text-dark {
+  color: var(--color-text) !important;
+}
+
+.bg-light {
+  background-color: var(--color-bg-alt) !important;
+}
+
+.border {
+  border-color: var(--color-border) !important;
+}
+
+.border-left {
+  border-left-color: var(--color-border) !important;
+}
+
+.list-group-item {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.list-group-item-action:hover,
+.list-group-item-action:focus {
+  background-color: var(--color-bg-alt);
+  color: var(--color-text);
+}
+
+.btn-outline-secondary {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--color-bg-alt);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+/* Dark theme Bootstrap utility overrides */
+[data-theme="dark"] .text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+[data-theme="dark"] .text-dark {
+  color: var(--color-text) !important;
+}
+
+[data-theme="dark"] .bg-light {
+  background-color: var(--color-bg-alt) !important;
+}
+
+[data-theme="dark"] .border {
+  border-color: var(--color-border) !important;
+}
+
+[data-theme="dark"] .border-left {
+  border-left-color: var(--color-border) !important;
+}
+
+[data-theme="dark"] .list-group-item {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .list-group-item-action:hover,
+[data-theme="dark"] .list-group-item-action:focus {
+  background-color: var(--color-bg-alt);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+  background-color: var(--color-bg-alt);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .alert-danger {
+  background-color: rgba(209, 69, 74, 0.15);
+  color: #ff8a8a;
+  border-left-color: var(--color-danger);
+}
+
+[data-theme="dark"] .alert-success {
+  background-color: rgba(61, 139, 106, 0.15);
+  color: #6dd9a8;
+  border-left-color: var(--color-success);
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,54 +1,50 @@
 <?php
-session_start();
-$root = "../..";
-require_once("../../utils/connect.php");
-require_once("../../auth/cookies.php");
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file User management dashboard - lists users with search and pagination
+ */
 
-if (!isset($_SESSION['utenza']) || ($_SESSION['utenza'] != 1 && $_SESSION['utenza'] != 2)) {
-    header("Location: ../../index.php");
-    exit;
+require_once __DIR__ . '/../../src/bootstrap.php';
+
+use Alexandria\Services\AuthService;
+
+$authService = new AuthService($pdo);
+
+if (!$authService->isAdmin() && !$authService->isLibrarian()) {
+    redirect('../../index.php');
 }
 
-// Visualizzazione messaggi GET (mantenuti per redirect da altre pagine)
-$feedback = "";
-if (isset($_GET['aggiunto'])) $feedback = '<p class="successo">Utente aggiunto con successo!</p>';
-if (isset($_GET['rimosso'])) $feedback = '<p class="successo">Utente rimosso con successo!</p>';
-if (isset($_GET['aggiornato'])) $feedback = '<p class="successo">Utente aggiornato con successo!</p>';
-if (isset($_GET['errore'])) {
-    $err = $_GET['errore'];
-    $feedback = '<p class="errore">Operazione non riuscita (Codice: '.htmlspecialchars($err).')</p>';
-}
+$root = '../..';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Utenti</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/unified.css">
-    <link rel="stylesheet" href="../../css/styleDashboard.css">
-    <link rel="stylesheet" href="../../css/colors.css">
-    <link rel="stylesheet" href="../../css/messaggi.css">
-    <link rel="shortcut icon" href="../../img/userDash.png" type="image/x-icon">
+    <?php render_head('Dashboard Utenti',
+        ['css/pages/dashboard.css', 'css/pages/footer.css'],
+        ['js/userDashboard.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+        '../..'
+    ); ?>
+    <link rel="icon" type="image/svg+xml" href="../../img/userDashFavicon.svg">
 </head>
-<body>
+<body class="dashboard-table">
     <div id="nav-placeholder">
         <?php require_once('../../nav/nav.php'); ?>
     </div>
 
     <div class="container-fluid">
-        <?php echo $feedback; ?>
-        <h1 class="text-center" style="font-size:4rem !important;">👤</h1>
-        
-        <!-- Form gestito interamente da getUtenti.php e JS -->
+        <?php render_messages(); ?>
+        <h1 class="text-center" style="font-size:4rem !important;">&#128100;</h1>
+
+        <!-- Form gestito interamente da dashboardUtenti.js e api/users.php -->
         <form id="filtriForm" class="form-inline mx-auto" style="width: 300px;" onsubmit="return false;">
             <input id="searchInput" class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Ricerca un utente" aria-label="Cerca">
             <input type="hidden" name="sort_type" id="sort_type" value="id">
             <button id="searchBtn" class="btn btn-outline-info my-2 my-sm-0" type="button">Cerca</button>
         </form>
 
-        <?php if ($_SESSION['utenza'] == 1): ?>
+        <?php if ($authService->isAdmin()): ?>
             <a href="aggiungiUtente.php" class="btn btn_adduser btn-success">Aggiungi utente</a>
         <?php endif; ?>
 
@@ -56,7 +52,7 @@ if (isset($_GET['errore'])) {
             <table class="table table-striped table-hover table-bordered">
                 <thead class="thead-dark">
                     <tr>
-                        <?php if ($_SESSION['utenza'] == 1): ?>
+                        <?php if ($authService->isAdmin()): ?>
                             <th scope="col" class='col-nascondi'>#<button class="sort_btn" data-sort="id">&ensp; &#x25B2;</button></th>
                             <th scope="col">Nome<button class="sort_btn" data-sort="Nome">&ensp; &#x25B2;</button></th>
                             <th scope="col">Cognome<button class="sort_btn" data-sort="Cognome">&ensp; &#x25B2;</button></th>
@@ -80,17 +76,14 @@ if (isset($_GET['errore'])) {
                 </tbody>
             </table>
         </div>
-        
+
        <div class="d-flex justify-content-center w-100 my-5">
     <button id="caricaAltro" class="btn btn-outline-primary shadow-sm" style="display:none; min-width: 200px;">
         Carica Altro...
     </button>
 </div>
     </div>
-    <script>const USER_TYPE = <?php echo $_SESSION['utenza']; ?>;</script>
-    <script src="dashboardUtenti.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>const USER_TYPE = <?php echo (int) ($authService->getCurrentUserType() ?? 0); ?>;</script>
+    <?php require_once('../../nav/footer.php'); ?>
 </body>
 </html>

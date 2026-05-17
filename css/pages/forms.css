@@ -1,0 +1,303 @@
+/* ============================================
+   PAGES/FORMS.CSS
+   (from aggiungiLibro.css + segnalazione.css + edit_profile.css)
+   ============================================ */
+
+body {
+  background-color: var(--color-bg);
+  font-family: var(--font-family-base);
+}
+
+/* ============================================
+   FORM CARDS (aggiungiLibro + segnalazione)
+   ============================================ */
+.form-page .card {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface);
+}
+
+.form-page .card-header {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--space-md) var(--space-lg);
+  font-weight: 600;
+}
+
+.form-page .card-body {
+  padding: var(--space-lg);
+}
+
+.form-page .btn-primary {
+  background-color: var(--color-accent);
+  border: none;
+  transition: 0.3s;
+}
+
+.form-page .btn-primary:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+}
+
+.form-page .form-control:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25);
+}
+
+.form-page label {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.form-page .preview-image {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  margin-top: 10px;
+  border: 1px solid var(--color-border);
+}
+
+.form-page .preview-image-container {
+  position: relative;
+  margin-top: 10px;
+  max-width: 300px;
+}
+
+.form-page .preview-image-container img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.form-page .delete-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  display: none;
+  z-index: 10;
+}
+
+/* Form container (segnalazione) */
+.form-container {
+  border: 2px solid var(--color-border);
+  padding: var(--space-md);
+  margin: var(--space-lg) auto;
+  max-width: 500px;
+  box-sizing: border-box;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.form-container input[type="text"],
+.form-container textarea {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 2px solid var(--color-border);
+  box-sizing: border-box;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-base);
+}
+
+.form-container textarea {
+  resize: none;
+}
+
+.form-container .textarea_label {
+  margin-top: 20px;
+}
+
+.form-container input[type="submit"] {
+  background-color: var(--color-success);
+  font-weight: bold;
+  color: var(--color-surface);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-container input[type="submit"]:hover {
+  background-color: #225c44;
+}
+
+/* ============================================
+   EDIT PROFILE
+   ============================================ */
+.edit-profile body {
+  background-color: var(--color-bg);
+}
+
+.edit-profile ul {
+  list-style: none;
+}
+
+.edit-profile a {
+  text-decoration: none;
+  color: var(--color-accent);
+}
+
+.edit-profile .safe-area {
+  width: 100%;
+}
+
+.edit-profile .container.py-5 {
+  margin-top: 20px;
+}
+
+/* Sidebar */
+.edit-profile .edit-section .card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: none;
+  background-color: var(--color-surface);
+}
+
+.edit-profile .edit-section .section {
+  padding: 15px 20px;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.edit-profile .edit-section .section:hover {
+  background-color: var(--color-bg-alt);
+}
+
+.edit-profile .edit-section span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+/* Settings area */
+.edit-profile .settings .card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: none;
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+
+.edit-profile .settings .card-header {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  font-size: var(--text-base);
+  padding: var(--space-md) var(--space-lg);
+  font-weight: 600;
+}
+
+/* Profile info */
+.edit-profile .settings-profile-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-profile .data-profile-info h4 {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* Profile picture */
+.edit-profile .edit-profile-parameter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.edit-profile .rounded-circle {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-width: 3px;
+  text-align: center;
+  line-height: 130px;
+  text-indent: -16px;
+}
+
+/* Password fields */
+.edit-profile .password {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  font-family: var(--font-family-base);
+}
+
+.edit-profile .password:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25);
+  outline: none;
+}
+
+.edit-profile .section-title1 {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Buttons */
+.edit-profile button[type="submit"],
+.edit-profile input[type="submit"].btn-primary {
+  border-radius: var(--radius-sm);
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+/* Scrollbar for settings */
+.edit-profile .settings::-webkit-scrollbar {
+  width: 6px;
+}
+
+.edit-profile .settings::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .edit-profile .container {
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  .edit-profile .edit-section {
+    display: none;
+  }
+
+  .edit-profile .settings {
+    width: 100%;
+  }
+
+  .edit-profile .settings-profile-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .edit-profile .password {
+    width: 100%;
+  }
+
+  .edit-profile #messages {
+    padding: 0 15px;
+  }
+}

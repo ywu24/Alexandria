@@ -1,165 +1,43 @@
 <?php
-session_start();
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Report submission page with optional screenshot upload
+ */
+
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Alexandria\Services\ReportService;
+use Alexandria\Services\NotificationService;
+
+$reportService = new ReportService($pdo);
+$notificationService = new NotificationService();
+
 $root = '..';
-require_once("../utils/connect.php");
-require_once("../utils/mailer.php");
-
-$msg = "";
-
-if (isset($_SESSION['success_msg'])) {
-  $msg = '<div class="messages fade show" >
-            <p class= "successo">
-            <strong>Successo!:</strong> ' . $_SESSION['success_msg'] . '
-          </p>
-        </div>';
-  unset($_SESSION['success_msg']);
-}
-
-if (isset($_SESSION['error_msg'])) {
-  $msg = '<div class="messages fade show" >
-            <p class= "errore">
-            <strong>Errore:</strong> ' . $_SESSION['error_msg'] . '
-          </p>
-        </div>';
-  unset($_SESSION['error_msg']);
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-  $user_email = $_SESSION['email'];
-  $oggetto = addslashes($_POST['oggetto']);
-  $messaggio = addslashes($_POST['messaggio']);
-
-  if (isset($_FILES['screenshot'])) {
+    $user_email = $_SESSION['email'] ?? '';
+    $oggetto = $_POST['oggetto'] ?? '';
+    $messaggio = $_POST['messaggio'] ?? '';
+    $file = $_FILES['screenshot'] ?? null;
 
     try {
-      $pdo = DatabaseConnection::getInstance()->getConnection();
-    } catch (PDOException $e) {
-      echo "Errore durante la connessione al database: " . $e->getMessage();
-      exit;
+        $result = $reportService->create($user_email, $oggetto, $messaggio, $file);
+
+        $notificationService->notifyReport(
+            $user_email,
+            $oggetto,
+            $messaggio,
+            $result['imgSegn']
+        );
+
+        flash('success', 'Segnalazione' . ($result['imgSegn'] ? ' e screenshot' : '') . ' inviata con successo');
+        redirect('segnalazione.php');
+    } catch (Exception $e) {
+        flash('error', $e->getMessage());
+        redirect('segnalazione.php');
     }
-
-    $file = $_FILES['screenshot'];
-    $file_name = $file['name'];
-    $file_tmp = $file['tmp_name'];
-    $file_size = $file['size'];
-    $file_error = $file['error'];
-
-    $file_ext = explode('.', $file_name);
-    $file_ext = strtolower(end($file_ext));
-
-    $base = pathinfo($file_name, PATHINFO_FILENAME);
-    $file_name_new = preg_replace('/\s+/', '', $base) . uniqid() . '.' . $file_ext;
-
-    $file_destination = '../img/segnalazioni/' . $file_name_new;
-
-    if ($file_error === 0) {
-      $allowed = array('jpg', 'jpeg', 'png');
-      if (in_array($file_ext, $allowed)) {
-        if ($file_size <= 5000000) {
-          move_uploaded_file($file_tmp, $file_destination);
-          $imgSegn = $file_name_new;
-
-          try {
-            $query = $pdo->prepare("INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio, imgSegn) VALUES (:email, :oggetto, :messaggio, :imgSegn)");
-            $query->bindParam(':email', $user_email);
-            $query->bindParam(':oggetto', $oggetto);
-            $query->bindParam(':messaggio', $messaggio);
-            $query->bindParam(':imgSegn', $imgSegn);
-            $query->execute();
-            $query->closeCursor();
-
-            // mandare email della segnalazione al bibliotecario:
-            $email_biblio = getenv('EMAIL_BIBLIO');
-            if ($email_biblio) {
-              if (
-                sendEmail(
-                  $email_biblio,
-                  'Bibliotecario',
-                  'Nuova segnalazione da ' . $user_email,
-                  '<h2>È stata effettuata una nuova segnalazione!</h2>
-                                    <p>Informazioni sulla segnalazione:</p>
-                                    <ul>
-                                        <li>Email Utente: ' . $user_email . '</li>
-                                        <li>Oggetto: ' . $oggetto . '</li>
-                                        <li>Messaggio: <p>' . $messaggio . '</p></li>
-                                        <li>Immagine: ' . $imgSegn . '</li>
-                                    </ul>'
-                )
-              ) {
-                $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
-                header("Location: segnalazione.php");
-                exit();
-              } else {
-                $_SESSION["error_msg"] = "Errore nell'invio dell'email al bibliotecario";
-                header("Location: segnalazione.php");
-                exit();
-              }
-            } else {
-              $_SESSION['success_msg'] = "Segnalazione e screenshot inviati con successo";
-              header("Location: segnalazione.php");
-              exit();
-            }
-
-          } catch (PDOException $e) {
-            throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
-          }
-        } else {
-          $_SESSION['error_msg'] = "Il file è troppo grande (max 5MB)";
-          header("Location: segnalazione.php");
-          exit();
-        }
-      } else {
-        $_SESSION['error_msg'] = "Formato non supportato (solo jpg, jpeg, png)";
-        header("Location: segnalazione.php");
-        exit();
-      }
-    } else {
-      try {
-        $query = $pdo->prepare("INSERT INTO Segnalazione (userEmail, Oggetto, Messaggio) VALUES (:email, :oggetto, :messaggio)");
-        $query->bindParam(':email', $user_email);
-        $query->bindParam(':oggetto', $oggetto);
-        $query->bindParam(':messaggio', $messaggio);
-        $query->execute();
-        $query->closeCursor();
-
-        // mandare email della segnalazione al bibliotecario:
-        $email_biblio = getenv('EMAIL_BIBLIO');
-        if ($email_biblio) {
-          if (
-            sendEmail(
-              $email_biblio,
-              'Bibliotecario',
-              'Nuova segnalazione da ' . $user_email,
-              '<h2>È stata effettuata una nuova segnalazione!</h2>
-                                    <p>Informazioni sulla segnalazione:</p>
-                                    <ul>
-                                        <li>Email Utente: ' . $user_email . '</li>
-                                        <li>Oggetto: ' . $oggetto . '</li>
-                                        <li>Messaggio: <p>' . $messaggio . '</p></li>
-                                        <li>Immagine: Nessuna</li>
-                                    </ul>'
-            )
-          ) {
-            $_SESSION['success_msg'] = "Segnalazione inviato con successo";
-            header("Location: segnalazione.php");
-            exit();
-          } else {
-            $_SESSION["error_msg"] = "Errore nell'invio dell'email al bibliotecario";
-            header("Location: segnalazione.php");
-            exit();
-          }
-        } else {
-          $_SESSION['success_msg'] = "Segnalazione inviato con successo";
-          header("Location: segnalazione.php");
-          exit();
-        }
-
-      } catch (PDOException $e) {
-        throw new Exception("Errore durante l'invio della segnalazione: " . $e->getMessage());
-      }
-    }
-  }
 }
 ?>
 
@@ -167,36 +45,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="it">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feedback Utente | Supporto</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/unified.css">
-  <link rel="stylesheet" href="../css/segnalazione.css">
-  <link rel="stylesheet" href="../css/messaggi.css">
-  <link rel="icon" type="image/x-icon" href="../img/feedbackFavicon.png">
+  <?php render_head('Feedback Utente | Supporto',
+      ['css/pages/forms.css', 'css/pages/footer.css'],
+      ['js/report.js', 'https://kit.fontawesome.com/455452defb.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+      '..'
+  ); ?>
+  <link rel="icon" type="image/svg+xml" href="../img/feedbackFavicon.svg">
 </head>
 
-<body>
+<body class="form-page">
 
   <div id="nav-placeholder">
-    <?php require_once("../nav/nav.php"); ?>
+    <?php require_once('../nav/nav.php'); ?>
   </div>
-  <?php echo $msg; ?>
+
+  <?php render_messages(); ?>
+
   <div class="container py-5">
     <div class="row justify-content-center">
       <div class="col-lg-7">
 
         <div class="text-center mb-4">
-          <h1 class="display-4">💬 Feedback Utente</h1>
+          <h1 class="display-4">Feedback Utente</h1>
           <p class="text-muted">Inviaci i tuoi suggerimenti o segnala un problema</p>
         </div>
 
-
-
         <div class="card">
           <div class="card-header font-weight-bold">
-            📩 Modulo di Segnalazione
+            Modulo di Segnalazione
           </div>
           <div class="card-body">
             <form action="segnalazione.php" method="POST" enctype="multipart/form-data">
@@ -220,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </div>
 
               <div class="form-group mb-4">
-                <label for="file">🖼️ Screenshot (facoltativo)</label>
+                <label for="file">Screenshot (facoltativo)</label>
                 <div class="custom-file mb-2">
                   <input type="file" class="custom-file-input" id="file" name="screenshot" accept="image/*"
                     onchange="previewImage(event)">
@@ -244,20 +120,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="text-center mt-4">
-          <a href="../index.php" class="text-secondary text-decoration-none">← Torna alla Home</a>
+          <a href="../index.php" class="text-secondary text-decoration-none">&larr; Torna alla Home</a>
         </div>
 
       </div>
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="https://kit.fontawesome.com/455452defb.js" crossorigin="anonymous"></script>
-  <script src="segnalazione.js"></script>
-  <script>
-
-  </script>
+  <?php require_once('../nav/footer.php'); ?>
 </body>
 
 </html>

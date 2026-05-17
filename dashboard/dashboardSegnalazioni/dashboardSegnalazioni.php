@@ -1,32 +1,41 @@
-<?php 
-// LEVARE QUESTA SEZIONE dopo, ma per debuggare serve!!
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-session_start();
-$root = "../..";
-require_once("../../auth/cookies.php");
-require_once("../../utils/connect.php");
+<?php
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @file Report management dashboard - lists all user reports
+ */
+
+require_once __DIR__ . '/../../src/bootstrap.php';
+
+use Alexandria\Services\AuthService;
+use Alexandria\Services\ReportService;
+
+$authService = new AuthService($pdo);
+
+if (!$authService->isAdmin() && !$authService->isLibrarian()) {
+    redirect('../../index.php');
+}
+
+$reportService = new ReportService($pdo);
+$reports = $reportService->getAll(100);
+
+$root = '../..';
 ?>
 
 <!DOCTYPE html>
 <html lang="it">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Segnalazioni - Alexandria's Library</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/colors.css">
-    <link rel="stylesheet" href="../../css/messaggi.css">
-    <link rel="stylesheet" href="../../css/dashboardSegnalazioni.css">
-    <link rel="shortcut icon" href="../../img/segnDashFavicon.png" type="image/x-icon">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <?php render_head('Dashboard Segnalazioni - Alexandria\'s Library',
+        ['css/pages/dashboard.css', 'css/pages/footer.css', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'],
+        [],
+        '../..'
+    ); ?>
+    <link rel="icon" type="image/svg+xml" href="../../img/segnDashFavicon.svg">
 </head>
 
-<body class="bg-light">
+<body class="bg-light reports-dashboard">
     <div id="nav-placeholder">
         <?php require_once('../../nav/nav.php'); ?>
     </div>
@@ -38,61 +47,37 @@ require_once("../../utils/connect.php");
             <p class="lead text-muted">Gestione e monitoraggio delle problematiche riscontrate dai lettori</p>
         </div>
 
-        <!-- Messaggi di Feedback (Ripristinati come in precedenza) -->
+        <!-- Messaggi Flash -->
         <div class="messages mb-4">
-            <?php
-            if(isset($_SESSION['errore'])){
-                echo "<p class='errore'>ERRORE: ".$_SESSION['errore'] ."</p>";
-                unset($_SESSION['errore']);
-            }
-            else if(isset($_SESSION['successo'])){
-                echo "<p class='successo'>".$_SESSION['successo'] ."</p>";
-                unset($_SESSION['successo']);
-            }
-            ?>
+            <?php render_messages(); ?>
         </div>
 
         <div class="row">
-            <?php
-            try {
-                $pdo = DatabaseConnection::getInstance()->getConnection();
-            } catch (PDOException $e) {
-                echo "<div class='col-12'><p class='errore'>Errore durante la connessione al database.</p></div>";
-                exit;
-            }
-
-            try {
-                $sql = "SELECT idSegnalazione, userEmail, Oggetto FROM Segnalazione ORDER BY idSegnalazione DESC";
-                $query = $pdo->prepare($sql);
-                $query->execute();
-
-                if ($query->rowCount() > 0) {
-                    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                        echo "
-                        <div class='col-md-6 mb-4'>
-                            <div class='card h-100 border-0 shadow-sm'>
-                                <div class='card-header bg-dark text-white font-weight-bold d-flex justify-content-between align-items-center'>
-                                    <span>Segnalazione n° " . $row['idSegnalazione'] . "</span>
-                                    <i class='fa fa-exclamation-circle text-warning'></i>
-                                </div>
-                                <div class='card-body'>
-                                    <h6 class='card-subtitle mb-3 text-primary font-weight-bold'>" . $row['userEmail'] . "</h6>
-                                    <p class='card-text text-secondary'><strong>Oggetto:</strong> " . $row['Oggetto'] . "</p>
-                                </div>
-                                <div class='card-footer bg-white border-0 pb-3'>
-                                    <a href='dettaglio.php?id=" . $row['idSegnalazione'] . "' class='btn btn-outline-primary btn-block shadow-none'>Visualizza Dettagli</a>
-                                </div>
-                            </div>
-                        </div>";
-                    }
-                } else {
-                    echo "<div class='col-12 text-center py-5'><h4 class='text-muted font-weight-light'>Nessuna segnalazione trovata.</h4></div>";
-                }
-            } catch (Exception $e) {
-                echo "<div class='col-12'><p class='errore'>Errore durante il recupero delle segnalazioni.</p></div>";
-            }
-            ?>
+            <?php if (count($reports) > 0): ?>
+                <?php foreach ($reports as $row): ?>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-dark text-white font-weight-bold d-flex justify-content-between align-items-center">
+                            <span>Segnalazione n° <?php echo (int) $row['idSegnalazione']; ?></span>
+                            <i class="fa fa-exclamation-circle text-warning"></i>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-3 text-primary font-weight-bold"><?php echo e($row['userEmail']); ?></h6>
+                            <p class="card-text text-secondary"><strong>Oggetto:</strong> <?php echo e($row['Oggetto']); ?></p>
+                        </div>
+                        <div class="card-footer bg-white border-0 pb-3">
+                            <a href="dettaglio.php?id=<?php echo (int) $row['idSegnalazione']; ?>" class="btn btn-outline-primary btn-block shadow-none">Visualizza Dettagli</a>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12 text-center py-5">
+                    <h4 class="text-muted font-weight-light">Nessuna segnalazione trovata.</h4>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
+    <?php require_once('../../nav/footer.php'); ?>
 </body>
 </html>
