@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <?php render_head('Feedback Utente | Supporto',
       ['css/pages/forms.css', 'css/pages/footer.css'],
-      ['js/segnalazione.js', 'https://kit.fontawesome.com/455452defb.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+      ['js/report.js', 'https://kit.fontawesome.com/455452defb.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
       '..'
   ); ?>
   <link rel="icon" type="image/svg+xml" href="../img/feedbackFavicon.svg">

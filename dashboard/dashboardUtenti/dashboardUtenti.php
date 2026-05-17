@@ -23,7 +23,7 @@ $root = '../..';
 <head>
     <?php render_head('Dashboard Utenti',
         ['css/pages/dashboard.css', 'css/pages/footer.css'],
-        ['js/dashboardUtenti.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+        ['js/userDashboard.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
         '../..'
     ); ?>
     <link rel="icon" type="image/svg+xml" href="../../img/userDashFavicon.svg">

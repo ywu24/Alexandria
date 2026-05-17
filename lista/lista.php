@@ -61,7 +61,7 @@ $books = $bookService->search($search, $genre, $orderBy, $limit);
 <html lang="it">
 
 <head>
-    <?php render_head("Alexandria's Library", ['css/pages/library.css', 'css/pages/footer.css', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'], ['js/lista.js'], '..'); ?>
+    <?php render_head("Alexandria's Library", ['css/pages/library.css', 'css/pages/footer.css', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'], ['js/list.js'], '..'); ?>
 </head>
 
 <body class="lista-page">

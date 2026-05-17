@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/utils.js"></script>
-    <script src="js/edit_profile.js"></script>
+    <script src="js/editProfile.js"></script>
     <?php require_once('../nav/footer.php'); ?>
 </body>
 

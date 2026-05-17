@@ -22,7 +22,7 @@ if (!$authService->isAdmin() && !$authService->isLibrarian()) {
 <head>
     <?php render_head('Alexandria - Gestione Prenotazioni',
         ['css/pages/user-detail.css', 'css/pages/footer.css'],
-        ['js/dettaglioPrenotazione.js', 'js/prenotazioneAdmin.js'],
+        ['js/reservationDetail.js', 'js/adminReservation.js'],
         '..'
     ); ?>
 </head>

@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['mes
 <head>
   <?php render_head('Lascia una recensione',
       ['css/pages/recensioni.css', 'css/pages/footer.css'],
-      ['js/recensione.js', 'https://kit.fontawesome.com/455452defb.js'],
+      ['js/review.js', 'https://kit.fontawesome.com/455452defb.js'],
       '..'
   ); ?>
   <link rel="icon" type="image/svg+xml" href="../img/feedbackFavicon.svg">

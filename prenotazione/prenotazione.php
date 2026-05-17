@@ -34,7 +34,7 @@ $bookings = $bookingService->getByUser($email);
 <html lang="it">
 
 <head>
-    <?php render_head('Le Mie Prenotazioni | Alexandria', ['css/pages/library.css', 'css/pages/footer.css'], ['js/utils.js', 'js/prenotazione.js'], '..', <<<CSS
+    <?php render_head('Le Mie Prenotazioni | Alexandria', ['css/pages/library.css', 'css/pages/footer.css'], ['js/utils.js', 'js/reservation.js'], '..', <<<CSS
         .book-container {
             background: var(--color-surface);
             border-radius: 12px;
