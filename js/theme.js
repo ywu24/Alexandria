@@ -4,12 +4,6 @@
  * @file Theme toggle — dark/light mode with localStorage persistence and system preference detection
  */
 (function () {
-  var storedTheme = localStorage.getItem('theme');
-  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  var theme = storedTheme || (prefersDark ? 'dark' : 'light');
-
-  document.documentElement.setAttribute('data-theme', theme);
-
   document.addEventListener('DOMContentLoaded', function () {
     const toggleBtn = document.getElementById('theme-toggle');
     if (!toggleBtn) return;
