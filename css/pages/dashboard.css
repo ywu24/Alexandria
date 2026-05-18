@@ -74,7 +74,7 @@ body {
 }
 
 .dashboard-landing .card-container h4 {
-  color: var(--color-primary);
+  color: var(--color-text);
   padding: 20px;
   text-align: center;
   font-weight: 600;
@@ -108,6 +108,42 @@ body {
 }
 
 /* --- Dashboard Tables (styleDashboard.css + styleDashboardLibri.css) --- */
+/* Dark mode table overrides */
+[data-theme="dark"] .table {
+  --bs-table-bg: var(--color-surface);
+  --bs-table-color: var(--color-text);
+  --bs-table-border-color: var(--color-border);
+  --bs-table-striped-bg: var(--color-bg-alt);
+  --bs-table-hover-bg: var(--color-bg-alt);
+  --bs-table-active-bg: var(--color-primary);
+  --bs-table-active-color: var(--color-text);
+}
+
+[data-theme="dark"] .thead-dark th {
+  background-color: var(--color-primary) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .table td, 
+[data-theme="dark"] .table th {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: var(--color-bg-alt) !important;
+  --bs-table-accent-bg: var(--color-bg-alt) !important;
+  box-shadow: inset 0 0 0 9999px var(--color-bg-alt) !important;
+}
+
+[data-theme="dark"] .table-hover > tbody > tr:hover > * {
+  background-color: var(--color-bg-alt) !important;
+  --bs-table-accent-bg: var(--color-bg-alt) !important;
+  box-shadow: inset 0 0 0 9999px var(--color-bg-alt) !important;
+}
+
 .container-fluid {
   width: 93% !important;
 }
@@ -121,15 +157,9 @@ body {
 }
 
 .searchbar {
-  margin-top: 10px;
-  margin-bottom: 20px;
   flex-grow: 1;
 }
 
-#searchBtn {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
 
 /* Reset lists/margins */
 dl, ol, ul {
@@ -174,7 +204,7 @@ p {
 
 .dashboard-table .card-header {
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-text);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: var(--space-md) var(--space-lg);
   font-weight: 600;
@@ -229,10 +259,26 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-base);
   font-weight: 500;
   line-height: 1.2;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 /* Table responsive links */
+.col-copie {
+  width: 120px;
+  text-align: center;
+  vertical-align: middle !important;
+}
+.copie-cell-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.input-copie {
+  width: 60px !important;
+  text-align: center;
+  padding: 2px 5px;
+}
 .table-responsive a,
 .btn_addlibro {
   text-decoration: none;
@@ -255,7 +301,7 @@ h1, h2, h3, h4, h5, h6 {
 /* --- Reports Dashboard (dashboardSegnalazioni.css) --- */
 .reports-dashboard h2 {
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-text);
   margin-bottom: 10px;
 }
 

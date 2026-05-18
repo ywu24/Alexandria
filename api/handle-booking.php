@@ -64,9 +64,9 @@ if (isset($_POST['conferma'])) {
                 );
             }
 
-            sendBookingResponse(true, 'Prestito confermato con successo!');
+            sendBookingResponse(true, 'Prestito confermato con successo');
         } else {
-            sendBookingResponse(false, 'Errore: prenotazione scaduta o non trovata.');
+            sendBookingResponse(false, 'Errore: prenotazione scaduta o non trovata');
         }
     } catch (Exception $e) {
         sendBookingError('Errore: ' . $e->getMessage(), 500);
@@ -128,7 +128,7 @@ if (isset($_POST['conferma'])) {
             );
         }
 
-        sendBookingResponse(true, 'Prenotazione eliminata con successo!');
+        sendBookingResponse(true, 'Prenotazione eliminata con successo');
     } catch (Exception $e) {
         sendBookingError('Errore durante l\'eliminazione: ' . $e->getMessage(), 500);
     }

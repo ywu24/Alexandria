@@ -52,7 +52,9 @@ $root = '../..';
     </div>
     <div class="container">
         <h2>Gestione Utente</h2>
-        <?php render_messages(); ?>
+        <div id="messages">
+            <?php render_messages(); ?>
+        </div>
         <form action="salvaModifiche.php" method="post">
             <div class="form-group">
                 <label for="nome">Nome:</label>

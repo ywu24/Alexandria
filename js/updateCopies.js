@@ -40,8 +40,10 @@
                         <td class="col-nascondi">' + libro.year + '</td>\
                         <td class="col-nascondi">' + libro.publisher + '</td>\
                         <td class="col-nascondi">\
-                            <input type="number" value="' + libro.copies + '" class="form-control form-control-sm d-inline-block w-auto">\
-                            <button class="btn btn-outline-info btn-sm save">Salva</button>\
+                            <div class="copie-cell-wrapper">\
+                                <input type="number" value="' + libro.copies + '" class="form-control form-control-sm d-inline-block w-auto input-copie">\
+                                <button class="btn btn-outline-info btn-sm save">Salva</button>\
+                            </div>\
                         </td>\
                         <td class="col-nascondi">\
                             <a class="btn btn-primary btn-sm btn_modifica" href="modificaLibro.php?id=' + isbn + '">Modifica</a>\

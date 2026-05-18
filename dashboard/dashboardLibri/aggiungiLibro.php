@@ -19,11 +19,11 @@ if (!$authService->isAdmin() && !$authService->isLibrarian()) {
 $msg = '';
 if (isset($_SESSION['libroEsiste'])) {
     if ($_SESSION['libroEsiste']) {
-        $msg = '<div class="messages">
+        $msg = '<div id="messages">
                     <p class="successo"> Trovato! Il libro esiste già nel DataBase.</p>
                 </div>';
     } else {
-        $msg = '<div class="messages" role="alert">
+        $msg = '<div id="messages" role="alert">
                     <p class="errore"> Il libro non è presente. Compila tutti i campi.</p>
                 </div>';
     }

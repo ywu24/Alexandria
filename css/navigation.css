@@ -11,6 +11,9 @@
   padding: 0;
   flex-shrink: 0;
   align-self: flex-start;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 #nav-placeholder *,
@@ -42,13 +45,13 @@
 /* Main navbar */
 .nav1 {
   width: 100%;
-  height: 56px;
-  padding: 25px;
+  height: 60px;
+  padding: 0 25px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
-  border-bottom: 1px solid var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
   z-index: 999;
   box-shadow: var(--shadow-sm);
   background-color: var(--color-surface);
@@ -64,9 +67,14 @@
   height: 37px;
   cursor: pointer;
   fill: currentColor;
-  color: var(--color-primary);
+  color: var(--color-text);
   display: inline-block;
   vertical-align: middle;
+  transition: color 0.2s ease;
+}
+
+.icon:hover {
+  color: var(--color-accent);
 }
 
 .logo {
@@ -76,29 +84,31 @@
 .nav1 ul li {
   display: inline-block;
   list-style: none;
-  margin: 0 20px;
+  margin: 0 15px;
   float: right;
+  position: relative;
 }
 
 .nav1 ul li a {
   text-decoration: none;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 /* Search bar */
 .nav1 form {
-  color: var(--color-primary);
+  color: var(--color-text);
   display: flex;
   padding: 2px;
   border-radius: var(--radius-lg);
-  height: 35px;
+  height: 40px;
   margin: 0;
   width: 500px;
   justify-content: space-between;
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
 }
 
 .nav1 form:not(.nav1 .sub-menu-wrap form) {
-  border: 2px solid var(--color-text-muted);
   justify-content: center;
   position: absolute;
   left: 50%;
@@ -116,10 +126,11 @@
   width: 100%;
   box-shadow: none;
   font-family: var(--font-family-base);
+  color: var(--color-text);
 }
 
 .nav1 form input[type="search"]::placeholder {
-  color: #bbb;
+  color: var(--color-text-muted);
 }
 
 .nav1 form button[type="submit"] {
@@ -130,10 +141,12 @@
   margin: 0;
   border: 1px solid transparent;
   border-radius: inherit;
-  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat center;
   cursor: pointer;
   opacity: 0.7;
   box-shadow: none;
+  color: var(--color-text);
+  background-color: transparent;
+  transition: opacity 0.2s ease;
 }
 
 .nav1 form button[type="submit"]:hover {
@@ -176,6 +189,7 @@
   display: flex;
   align-items: center;
   padding-bottom: 20px;
+  gap: 10px;
 }
 
 .user-info .truncname {
@@ -184,24 +198,33 @@
   font-family: var(--font-family-base);
 }
 
-.user-info img {
+.user-avatar {
   aspect-ratio: 1/1;
   width: 50px;
-  margin-right: 10px;
+  height: 50px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
+  object-fit: cover;
 }
 
-.user-info h3 {
+.user-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.user-name {
   margin: 0;
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-text);
+  font-size: 1.2rem;
 }
 
-.user-info h4 {
-  margin-left: auto;
+.user-points {
+  margin: 0;
   font-size: 0.8em;
   color: var(--color-text-muted);
+  align-self: flex-end;
 }
 
 .sub-menu-link {
@@ -212,7 +235,15 @@
   outline: none;
   width: 95%;
   text-align: start;
-  color: var(--color-primary);
+  color: var(--color-text);
+  padding: 8px 0;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sub-menu-link:hover {
+  background-color: var(--color-bg-alt);
+  color: var(--color-accent);
 }
 
 .sub-menu-link img,
@@ -229,8 +260,8 @@
   width: 100%;
   font-family: var(--font-family-base);
   font-size: 15px;
-  color: var(--color-primary);
-  font-weight: 600;
+  color: var(--color-text);
+  font-weight: 500;
   transition: 0.2s;
   margin: 0;
 }
@@ -239,7 +270,7 @@
   font-size: 15px;
   font-family: var(--font-family-base);
   transition: transform 0.2s;
-  color: var(--color-primary);
+  color: var(--color-text);
   font-weight: 700;
 }
 
@@ -261,7 +292,7 @@
   white-space: nowrap;
   max-width: 350px;
   display: block;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .nav1 form button {
@@ -271,6 +302,7 @@
   border: none;
   cursor: pointer;
   outline: none;
+  color: inherit;
 }
 
 .nav1 form .logout {
@@ -316,7 +348,7 @@ p.logoutform {
   padding: 0;
   font-family: inherit;
   font-size: inherit;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .theme-toggle-row:hover p,
@@ -424,15 +456,15 @@ p.logoutform {
     outline: none;
   }
 
-  .nav1 form button[type="submit"] {
-    width: 36px;
-    height: 100%;
-    border: none;
-    cursor: pointer;
-    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236e6e6e' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat center;
-    background-size: 16px;
-    opacity: 0.7;
-  }
+   .nav1 form button[type="submit"] {
+     width: 36px;
+     height: 100%;
+     border: none;
+     cursor: pointer;
+     background-size: 16px;
+     opacity: 0.7;
+     color: var(--color-text);
+   }
 
   .nav1 form button[type="submit"]:hover {
     opacity: 1;
@@ -450,8 +482,8 @@ p.logoutform {
     width: 100%;
     font-family: var(--font-family-base);
     font-size: 15px;
-    color: var(--color-primary);
-    font-weight: 600;
+    color: var(--color-text);
+    font-weight: 500;
     margin: 0;
   }
 

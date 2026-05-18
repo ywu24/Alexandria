@@ -67,7 +67,7 @@
 
 .info-title h1 {
   font-size: var(--text-2xl);
-  color: var(--color-primary);
+  color: var(--color-text);
   margin: 0;
   line-height: 1.2;
 }
@@ -240,7 +240,7 @@
   height: 48px;
   border-radius: 50%;
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;

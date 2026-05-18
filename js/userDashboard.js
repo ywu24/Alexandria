@@ -2,7 +2,7 @@
     async function caricaUtenti(append) {
         if (append === void 0) { append = false; }
         var container = document.getElementById("userTableBody");
-        var btnAltro = document.getElementById("caricaAltro");
+        var btnAltro = document.getElementById("loadMoreBtn");
         var form = document.getElementById("filtriForm");
 
         if (!container) return;
@@ -36,7 +36,6 @@
                 var trMain = document.createElement('tr');
                 trMain.className = "user-main-row";
 
-                var ruoloDesc = user.role;
                 var mainHtml = '';
                 if (USER_TYPE == 1) {
                     mainHtml = '\
@@ -44,24 +43,36 @@
                         <td>' + user.name + '</td>\
                         <td>' + user.surname + '</td>\
                         <td class="col-nascondi">' + user.email + '</td>\
-                        <td class="col-nascondi">' + ruoloDesc + '</td>\
+                        <td class="col-nascondi">' + user.role + '</td>\
                         <td class="col-nascondi">' + user.score + '</td>\
                         <td class="col-nascondi">\
-                            <div class="btn_actions">\
-                                <a class="btn btn-primary btn-sm" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>\
+                            <div class="btn_actions">';
+
+                    if (user.role_id == 3 || user.role_id == 4) {
+                        mainHtml += '\
+                                <a class="btn btn-primary btn-sm" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>';
+                    }
+                    mainHtml += '\
                                 <a class="btn btn-primary btn-sm" href="modificaUtente.php?id=' + user.id + '">Modifica</a>\
                                 <a class="btn btn-danger btn-sm" href="eliminaUtente.php?id=' + encodeURIComponent(user.email) + '">Elimina</a>\
                             </div>\
                         </td>';
                 } else {
                     mainHtml = '\
+                        <th scope="row" class="col-nascondi row-header">' + user.id + '</th>\
                         <td>' + user.name + '</td>\
                         <td>' + user.surname + '</td>\
                         <td class="col-nascondi">' + user.email + '</td>\
+                        <td class="col-nascondi">' + user.role + '</td>\
                         <td class="col-nascondi">' + user.score + '</td>\
                         <td class="col-nascondi">\
-                            <div class="btn_actions text-center">\
-                                <a class="btn btn-primary btn-sm" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>\
+                            <div class="btn_actions text-center">';
+                    
+                    if (user.role_id == 3 || user.role_id == 4) {
+                        mainHtml += '\
+                                <a class="btn btn-primary btn-sm" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>';
+                    }
+                    mainHtml += '\
                             </div>\
                         </td>';
                 }
@@ -80,15 +91,23 @@
 
                 if (USER_TYPE == 1) {
                     azioniHtml = '\
-                        <div class="d-flex flex-column gap-2 mt-3">\
-                            <a class="btn btn-primary w-100" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>\
+                        <div class="d-flex flex-column gap-2 mt-3">';
+                    if (user.role_id == 3 || user.role_id == 4) {
+                        azioniHtml += '\
+                            <a class="btn btn-primary w-100" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>';
+                    }
+                    azioniHtml += '\
                             <a class="btn btn-primary w-100" href="modificaUtente.php?id=' + user.id + '">Modifica</a>\
                             <a class="btn btn-danger w-100" href="eliminaUtente.php?id=' + user.email + '">Elimina</a>\
                         </div>';
                 } else {
                     azioniHtml = '\
-                        <div class="d-flex flex-column gap-2 mt-3">\
-                            <a class="btn btn-primary w-100" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>\
+                        <div class="d-flex flex-column gap-2 mt-3">';
+                    if (user.role_id == 3 || user.role_id == 4) {
+                        azioniHtml += '\
+                            <a class="btn btn-primary w-100" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>';
+                    }
+                    azioniHtml += '\
                         </div>';
                 }
 
@@ -162,7 +181,7 @@
             });
         });
 
-        var btnAltro = document.getElementById("caricaAltro");
+        var btnAltro = document.getElementById("loadMoreBtn");
         if (btnAltro) {
             btnAltro.addEventListener("click", function () { caricaUtenti(true); });
         }

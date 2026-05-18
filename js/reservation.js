@@ -51,7 +51,7 @@
 
                     var data = await response.json();
                     if (data.length === 0) {
-                        container.innerHTML = "<div class='alert alert-info'>Nessuna prenotazione terminata trovata.</div>";
+                        container.innerHTML = "<div class='alert alert-info'>Nessun prestito concluso trovato.</div>";
                     } else {
                         var html = "<h3 class='mb-4 mt-2'>Prenotazioni Terminate</h3>";
 

@@ -45,7 +45,7 @@
 
 .btn-secondary {
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: rgba(255, 255, 255, 0.85) !important;
   border-color: var(--color-primary);
 }
 
@@ -79,7 +79,7 @@
 
 .btn-warning {
   background-color: var(--color-warning);
-  color: var(--color-primary);
+  color: var(--color-text);
   border-color: var(--color-warning);
 }
 
@@ -165,7 +165,7 @@
   font-size: var(--text-lg);
   font-weight: 600;
   margin-bottom: var(--space-sm);
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .card-subtitle {
@@ -213,6 +213,7 @@
 }
 
 .form-control:focus {
+  background-color: var(--color-bg-alt);
   border-color: var(--color-accent);
   box-shadow: 0 0 0 0.2rem rgba(201, 168, 76, 0.25);
   outline: none;
@@ -223,11 +224,20 @@
   opacity: 1;
 }
 
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover, 
+.form-control:-webkit-autofill:focus, 
+.form-control:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 100px var(--color-bg-alt) inset !important;
+  -webkit-text-fill-color: var(--color-text) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .form-label {
   display: inline-block;
   margin-bottom: var(--space-sm);
   font-weight: 500;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .form-group {
@@ -377,6 +387,168 @@
   background-color: rgba(240, 176, 74, 0.15);
 }
 
+/* ------------------------------------
+   Toast Notifications
+   ------------------------------------ */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 300px;
+  max-width: 420px;
+  padding: 14px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  border-left: 5px solid transparent;
+  animation: toastSlideIn 0.35s ease-out;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.toast.toast-hiding {
+  animation: toastSlideOut 0.3s ease-in forwards;
+}
+
+.toast-success {
+  border-left-color: var(--color-success);
+}
+
+.toast-success .toast-icon {
+  color: var(--color-success);
+}
+
+.toast-error {
+  border-left-color: var(--color-danger);
+}
+
+.toast-error .toast-icon {
+  color: var(--color-danger);
+}
+
+.toast-warning {
+  border-left-color: var(--color-warning);
+}
+
+.toast-warning .toast-icon {
+  color: var(--color-warning);
+}
+
+.toast-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.toast-message {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.toast-close:hover {
+  color: var(--color-text);
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------
+   Custom Confirm Dialog
+   ------------------------------------ */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: confirmFadeIn 0.2s ease-out;
+}
+
+.confirm-overlay.confirm-hiding {
+  animation: confirmFadeOut 0.15s ease-in forwards;
+}
+
+.confirm-dialog {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  max-width: 400px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.confirm-dialog p {
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-actions .btn {
+  min-width: 100px;
+}
+
+@keyframes confirmFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes confirmFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 /* Legacy message classes (used in PHP) */
 p.errore,
 p.successo {
@@ -455,7 +627,7 @@ p.successo {
 .badge-warning,
 .bg-warning {
   background-color: var(--color-warning) !important;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .badge-info,
@@ -558,7 +730,7 @@ p.successo {
 
 .pop-up h4 {
   line-height: 25px;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .prenotation-info {

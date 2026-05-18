@@ -41,14 +41,14 @@ class StatsService
     }
 
     /**
-     * Get number of currently borrowed books
+     * Get number of total borrowed books (both active and finished)
      *
      * @return int
      */
     public function getBooksBorrowed(): int
     {
         return (int) $this->pdo->query(
-            "SELECT COUNT(*) FROM Prenotazione WHERE InizioPrestito IS NOT NULL AND FinePrestito IS NULL"
+            "SELECT COUNT(*) FROM Prenotazione WHERE InizioPrestito IS NOT NULL"
         )->fetchColumn();
     }
 
@@ -81,18 +81,12 @@ class StatsService
      * Get user's booking statistics
      *
      * @param string $email User email
-     * @param bool $isAdmin Whether the user is an admin (includes all bookings)
      * @return array ['totali', 'inCorso', 'riconsegnate', 'prenotati']
      */
-    public function getUserBookingStats(string $email, bool $isAdmin = false): array
+    public function getUserBookingStats(string $email): array
     {
-        if ($isAdmin) {
-            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = :email";
-        } else {
-            $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = :email AND FinePrestito IS NULL";
-        }
-
-        $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = :email AND FinePrestito IS NULL";
+        $totali = "SELECT count(idPrenotazione) as totali FROM Prenotazione WHERE Email = :email";
+        $inCorso = "SELECT count(idPrenotazione) as incorso FROM Prenotazione WHERE Email = :email AND InizioPrestito IS NOT NULL AND FinePrestito IS NULL";
         $prenotazioni = "SELECT count(idPrenotazione) as prenotati FROM Prenotazione WHERE Email = :email AND InizioPrestito IS NULL";
         $riconsegnate = "SELECT count(idPrenotazione) as riconsegnate FROM Prenotazione WHERE Email = :email AND FinePrestito IS NOT NULL";
 
@@ -100,27 +94,57 @@ class StatsService
         $query->bindParam(':email', $email);
         $query->execute();
         $pTotali = $query->fetch(PDO::FETCH_ASSOC);
+        $query->closeCursor();
 
         $query = $this->pdo->prepare($inCorso);
         $query->bindParam(':email', $email);
         $query->execute();
         $p_inCorso = $query->fetch(PDO::FETCH_ASSOC);
+        $query->closeCursor();
 
         $query = $this->pdo->prepare($riconsegnate);
         $query->bindParam(':email', $email);
         $query->execute();
         $p_riconsegnate = $query->fetch(PDO::FETCH_ASSOC);
+        $query->closeCursor();
 
         $query = $this->pdo->prepare($prenotazioni);
         $query->bindParam(':email', $email);
         $query->execute();
         $p_prenotati = $query->fetch(PDO::FETCH_ASSOC);
+        $query->closeCursor();
 
         return [
             'totali' => (int) ($pTotali['totali'] ?? 0),
             'inCorso' => (int) ($p_inCorso['incorso'] ?? 0),
             'riconsegnate' => (int) ($p_riconsegnate['riconsegnate'] ?? 0),
             'prenotati' => (int) ($p_prenotati['prenotati'] ?? 0),
+        ];
+    }
+
+    /**
+     * Get global booking statistics for admin dashboard
+     *
+     * @return array ['totale', 'prenotati', 'in_prestito', 'in_ritardo', 'terminati']
+     */
+    public function getGlobalBookingStats(): array
+    {
+        $sql = "SELECT 
+            COUNT(*) as totale,
+            SUM(CASE WHEN InizioPrestito IS NULL THEN 1 ELSE 0 END) as prenotati,
+            SUM(CASE WHEN InizioPrestito IS NOT NULL AND FinePrestito IS NULL AND NOW() <= FineAttesa THEN 1 ELSE 0 END) as in_prestito,
+            SUM(CASE WHEN InizioPrestito IS NOT NULL AND FinePrestito IS NULL AND NOW() > FineAttesa THEN 1 ELSE 0 END) as in_ritardo,
+            SUM(CASE WHEN FinePrestito IS NOT NULL THEN 1 ELSE 0 END) as terminati
+        FROM Prenotazione";
+        
+        $result = $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+        
+        return [
+            'totale' => (int) ($result['totale'] ?? 0),
+            'prenotati' => (int) ($result['prenotati'] ?? 0),
+            'in_prestito' => (int) ($result['in_prestito'] ?? 0),
+            'in_ritardo' => (int) ($result['in_ritardo'] ?? 0),
+            'terminati' => (int) ($result['terminati'] ?? 0),
         ];
     }
 }

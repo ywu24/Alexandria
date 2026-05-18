@@ -36,19 +36,21 @@ $root = '../..';
         <?php require_once('../../nav/nav.php'); ?>
     </div>
 
-    <div id="messages"></div>
-
-    <div class="container-fluid">
-        <h1 class="text-center" style="font-size:4rem !important;">&#128218;</h1>
-
-        <div class="d-flex justify-content-between mb-4">
-            <!-- Cerca gestito da JS -->
-            <div class="form-inline mx-auto">
-                <input class="form-control mr-sm-2 searchbar" type="search" id="searchInput"
-                    placeholder="Cerca libro...">
-                <button class="btn btn-outline-info" id="searchBtn" type="button">Cerca</button>
-            </div>
+    <div class="container-fluid py-5">
+        <div id="messages">
+        <?php render_messages(); ?>
         </div>
+
+        <div class="mb-5 text-center">
+            <h1 class="text-center mb-5 font-weight-extra-bold">Dashboard Libri</h1>
+            <p class="lead text-muted">Gestione del catalogo libri, disponibilità e monitoraggio delle copie</p>
+        </div>
+
+        <form id="filtriForm" class="form-inline mx-auto mb-4" onsubmit="return false;">
+            <input id="searchInput" class="form-control mr-sm-2 searchbar" type="search" name="search" placeholder="Cerca Libro" aria-label="Cerca">
+            <input type="hidden" name="sort_type" id="sort_type" value="id">
+            <button id="searchBtn" class="btn btn-outline-info" type="button">Cerca</button>
+        </form>
 
         <?php if ($authService->isAdmin()): ?>
             <a href="aggiungiLibro.php" class="btn btn_addlibro btn-success">Aggiungi Libro</a>
@@ -68,8 +70,7 @@ $root = '../..';
                                 data-sort="AnnoPubblicazione">&#9650;</button></th>
                         <th scope="col" class="col-nascondi">Casa Editrice <button class="sort_btn"
                                 data-sort="Genere">&#9650;</button></th>
-                        <th scope="col" class="col-nascondi">Copie <button class="sort_btn" data-sort="copie">&#9650;</button>
-                        </th>
+                        <th scope="col" class="col-nascondi col-copie">Copie <button class="sort_btn" data-sort="copie">&#9650;</button></th>
                         <th scope="col" class="col-nascondi">Azioni </th>
                         <th scope="col" class="mobile-only">Info</th>
                     </tr>
@@ -81,7 +82,7 @@ $root = '../..';
         </div>
     </div>
 
-    <div class="text-center my-4">
+    <div class="d-flex justify-content-center w-100 my-4">
         <button id="loadMoreBtn" class="btn btn-outline-primary shadow-sm" style="display:none;">
             Carica Altro...
         </button>

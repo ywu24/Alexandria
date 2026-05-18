@@ -65,7 +65,7 @@ class BookService
     public function exists(int $id): bool
     {
         $query = $this->pdo->prepare(
-            "SELECT count(idCopia) as qty FROM copiaLibro, Opera WHERE id = :book_id AND Opera.ISBN = copiaLibro.ISBN"
+            "SELECT count(id) as qty FROM Opera WHERE id = :book_id"
         );
         $query->bindParam(':book_id', $id);
         $query->execute();

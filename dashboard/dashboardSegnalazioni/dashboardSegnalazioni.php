@@ -43,12 +43,12 @@ $root = '../..';
     <div class="container py-5">
         <!-- Titolo Centrato Uniformato -->
         <div class="mb-5 text-center">
-            <h1 class="display-4 font-weight-bold">Segnalazioni Utenti</h1>
+            <h1 class="text-center mb-5 font-weight-extra-bold">Segnalazioni Utenti</h1>
             <p class="lead text-muted">Gestione e monitoraggio delle problematiche riscontrate dai lettori</p>
         </div>
 
         <!-- Messaggi Flash -->
-        <div class="messages mb-4">
+        <div id="messages">
             <?php render_messages(); ?>
         </div>
 
@@ -65,7 +65,7 @@ $root = '../..';
                             <h6 class="card-subtitle mb-3 text-primary font-weight-bold"><?php echo e($row['userEmail']); ?></h6>
                             <p class="card-text text-secondary"><strong>Oggetto:</strong> <?php echo e($row['Oggetto']); ?></p>
                         </div>
-                        <div class="card-footer bg-white border-0 pb-3">
+                        <div class="card-footer border-0 pb-3">
                             <a href="dettaglio.php?id=<?php echo (int) $row['idSegnalazione']; ?>" class="btn btn-outline-primary btn-block shadow-none">Visualizza Dettagli</a>
                         </div>
                     </div>

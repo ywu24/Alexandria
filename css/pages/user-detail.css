@@ -8,6 +8,10 @@ body {
   font-family: var(--font-family-base);
 }
 
+.form-control:focus {
+  color: var(--color-text);
+}
+
 /* ============================================
    USER DETAIL (from dettaglioUtenti.css)
    ============================================ */
@@ -68,17 +72,13 @@ body {
 
 .user-detail .book-title {
   margin: 0;
-  color: var(--color-primary);
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .user-detail .status-badge {
   font-weight: bold;
   display: inline-block;
-}
-
-.user-detail .font-weight-extra-bold {
-  font-weight: 800;
 }
 
 /* Panels */
