@@ -13,6 +13,14 @@ body {
 }
 
 /* ============================================
+   for prenotazioniAdmin.php
+   ============================================ */
+
+.stats {
+  color: var(--color-text);
+}
+
+/* ============================================
    USER DETAIL (from dettaglioUtenti.css)
    ============================================ */
 .user-detail .user-summary,

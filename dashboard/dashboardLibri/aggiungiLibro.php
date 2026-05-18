@@ -36,9 +36,10 @@ $root = '../..';
 <html lang="it">
 
 <head>
-    <?php render_head('Aggiungi Libro | Dashboard',
+    <?php render_head(
+        'Aggiungi Libro | Dashboard',
         ['css/pages/forms.css', 'css/pages/footer.css'],
-        ['js/addBook.js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'],
+        ['https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', 'js/report.js'],
         '../..'
     ); ?>
 </head>
@@ -68,7 +69,8 @@ $root = '../..';
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">ISBN</span>
                                 </div>
-                                <input type="text" name="isbn-check" class="form-control" placeholder="Inserisci ISBN per controllare..." required>
+                                <input type="text" name="isbn-check" class="form-control"
+                                    placeholder="Inserisci ISBN per controllare..." required>
                                 <div class="input-group-append">
                                     <button type="submit" name="check" class="btn btn-secondary">Controlla</button>
                                 </div>
@@ -85,19 +87,22 @@ $root = '../..';
                         <form action="insertLibro.php" method="post" enctype="multipart/form-data">
 
                             <div class="form-group">
-                                <label for="isbn">ISBN (Conferma)</label>
-                                <input type="text" name="isbn" id="isbn" class="form-control" placeholder="es. 9788804668237" required>
+                                <label for="isbn">ISBN</label>
+                                <input type="text" name="isbn" id="isbn" class="form-control"
+                                    placeholder="es. 9788804668237" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="titolo">Titolo Libro</label>
-                                <input type="text" name="titolo" id="titolo" class="form-control" placeholder="Il nome dell'opera" required>
+                                <label for="titolo">Titolo</label>
+                                <input type="text" name="titolo" id="titolo" class="form-control"
+                                    placeholder="Il nome dell'opera" required>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 form-group">
                                     <label for="autore">Autore</label>
-                                    <input type="text" class="form-control" id="autore" name="autore" placeholder="Nome e Cognome" required>
+                                    <input type="text" class="form-control" id="autore" name="autore"
+                                        placeholder="Nome e Cognome" required>
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label for="genere">Genere</label>
@@ -118,7 +123,8 @@ $root = '../..';
 
                             <div class="form-group">
                                 <label for="desc">Descrizione / Trama</label>
-                                <textarea rows="4" class="form-control" name="desc" placeholder="Breve riassunto del libro..." required></textarea>
+                                <textarea rows="4" class="form-control" name="desc"
+                                    placeholder="Breve riassunto del libro..." required></textarea>
                             </div>
 
                             <div class="row">
@@ -128,32 +134,43 @@ $root = '../..';
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="annopub">Anno</label>
-                                    <input type="text" class="form-control" id="annopub" name="annopub" maxlength="4" placeholder="AAAA" required>
+                                    <input type="text" class="form-control" id="annopub" name="annopub" maxlength="4"
+                                        placeholder="AAAA" required>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="qty">Copie</label>
-                                    <input type="number" class="form-control" id="qty" name="qty" value="1" min="1" max="50" required>
+                                    <input type="number" class="form-control" id="qty" name="qty" value="1" min="1"
+                                        max="50" required>
                                 </div>
                             </div>
+
 
                             <div class="form-group mb-4">
-                                <label for="image">Immagine di Copertina</label>
+                                <label for="image" class="form-label">Immagine di Copertina</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image" id="image">
-                                    <label class="custom-file-label" for="image">Scegli file...</label>
+                                    <input type="file" class="form-control" id="file" name="image" id="image" accept="image/*"
+                                    onchange="previewImage(event)">
+                                </div>
+        
+                                <div class="preview-image-container text-center mx-auto">
+                                    <i id="trash-btn"
+                                        class="delete-icon fas fa-trash bg-danger text-white rounded-pill p-2"
+                                        onclick="deleteImage()" title="Rimuovi Immagine"></i>
+                                    <img id="image-preview" class="preview-image d-none" src="#" alt="Anteprima">
                                 </div>
                             </div>
-
-                            <button type="submit" name="btnOpera" class="btn btn-primary btn-block btn-lg">
-                                Salva Opera nel Database
-                            </button>
-
+                            <div class="btn-container">
+                                <button type="submit" name="btnOpera" class="btn btn-primary btn-block btn-lg">
+                                    Salva Opera nel Database
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
 
                 <div class="text-center mt-4">
-                    <a href="dashboardLibri.php" class="text-secondary text-decoration-none">&larr; Torna alla Dashboard</a>
+                    <a href="dashboardLibri.php" class="text-secondary text-decoration-none">&larr; Torna alla
+                        Dashboard</a>
                 </div>
 
             </div>

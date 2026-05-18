@@ -34,7 +34,7 @@ $root = '../..';
     <div class="container mt-5">
         <h1>Aggiungi utente</h1>
         <?php render_messages(); ?>
-        <form action="insert.php" method="post">
+        <form action="insert.php" method="post" class="myForm">
             <div class="form-group">
                 <label for="nome">Nome</label>
                 <input type="text" name="nome" id="nome" class="form-control" required>

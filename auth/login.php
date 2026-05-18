@@ -54,13 +54,13 @@ if (isset($_SESSION['login_error'])) {
 
 <head>
   <?php render_head('Accedi',
-      ['css/pages/auth.css', 'css/pages/footer.css'],
+      ['css/pages/auth.css', 'css/pages/forms.css', 'css/pages/footer.css'],
       ['js/login.js'],
       '..'
   ); ?>
 </head>
 
-<body>
+<body class="form-page">
   <div id="nav-placeholder">
     <?php require_once('../nav/nav.php'); ?>
   </div>

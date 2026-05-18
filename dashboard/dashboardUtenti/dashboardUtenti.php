@@ -72,12 +72,11 @@ $root = '../..';
                 </tbody>
             </table>
         </div>
-
+    </div>
     <div class="d-flex justify-content-center w-100 my-4">
         <button id="loadMoreBtn" class="btn btn-outline-primary shadow-sm" style="display:none;">
             Carica Altro...
         </button>
-    </div>
     </div>
     <script>const USER_TYPE = <?php echo (int) ($authService->getCurrentUserType() ?? 0); ?>;</script>
     <?php require_once('../../nav/footer.php'); ?>
