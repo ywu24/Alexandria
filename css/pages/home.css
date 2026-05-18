@@ -683,12 +683,18 @@
   .booking-card {
     flex-direction: column;
   }
+  
+  .booking-cover {
+    display: flex;
+    justify-content: center;
+  }
 
   .booking-cover img {
-    width: 100%;
+    width: 65%;
     height: auto;
-    max-height: 240px;
+    max-height: 280px;
     margin-bottom: var(--space-md);
+    ;
   }
 
   .booking-dates {
@@ -823,13 +829,18 @@
   }
 
   .slider-dots {
-    margin-top: 465px;
+    margin-top: 165px;
+  }
+
+  .book-slider .slider__item-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .book-slider .slider__item-content .right-column {
     display: flex;
     flex-direction: column;
-    width: 100%;
     overflow: hidden;
   }
 
@@ -858,17 +869,16 @@
   }
 
   .section.slider {
-    max-width: 40vw;
-    margin-right: auto;
-    display: inline-table;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .book-slider {
     width: 100vw;
     margin-left: auto;
     margin-right: auto;
-    justify-content: space-around;
-    display: grid;
+    justify-content: center;
+    display: flex;
     overflow: hidden;
     padding-bottom: 61vw;
   }
@@ -877,6 +887,10 @@
     padding-top: 40px;
     padding-bottom: 40px;
     height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .slider__holder {

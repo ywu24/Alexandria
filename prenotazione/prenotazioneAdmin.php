@@ -47,31 +47,31 @@ $stats = $statsService->getGlobalBookingStats();
         <div class="col-6 col-md-3 col-lg-2 mb-3">
             <div class="card text-center p-3 shadow-sm">
                 <div class="text-muted small font-weight-bold text-uppercase">Totale</div>
-                <div class="h3 mb-0 font-weight-bold" id="statsTotale"><?php echo $stats['totale'] ?? 0; ?></div>
+                <div class="h3 stats mb-0 font-weight-bold" id="statsTotale"><?php echo $stats['totale'] ?? 0; ?></div>
             </div>
         </div>
         <div class="col-6 col-md-3 col-lg-2 mb-3">
             <div class="card text-center p-3 shadow-sm">
                 <div class="text-success small font-weight-bold text-uppercase">Prenotati</div>
-                <div class="h3 mb-0 font-weight-bold" id="statsPrenotati"><?php echo $stats['prenotati'] ?? 0; ?></div>
+                <div class="h3 stats mb-0 font-weight-bold" id="statsPrenotati"><?php echo $stats['prenotati'] ?? 0; ?></div>
             </div>
         </div>
         <div class="col-6 col-md-3 col-lg-2 mb-3">
             <div class="card text-center p-3 shadow-sm">
                 <div class="text-warning small font-weight-bold text-uppercase">In Prestito</div>
-                <div class="h3 mb-0 font-weight-bold" id="statsInPrestito"><?php echo $stats['in_prestito'] ?? 0; ?></div>
+                <div class="h3 stats mb-0 font-weight-bold" id="statsInPrestito"><?php echo $stats['in_prestito'] ?? 0; ?></div>
             </div>
         </div>
         <div class="col-6 col-md-3 col-lg-2 mb-3">
             <div class="card text-center p-3 shadow-sm">
                 <div class="text-danger small font-weight-bold text-uppercase">In Ritardo</div>
-                <div class="h3 mb-0 font-weight-bold" id="statsInRitardo"><?php echo $stats['in_ritardo'] ?? 0; ?></div>
+                <div class="h3 stats mb-0 font-weight-bold" id="statsInRitardo"><?php echo $stats['in_ritardo'] ?? 0; ?></div>
             </div>
         </div>
         <div class="col-6 col-md-3 col-lg-2 mb-3">
             <div class="card text-center p-3 shadow-sm">
                 <div class="text-muted small font-weight-bold text-uppercase">Terminati</div>
-                <div class="h3 mb-0 font-weight-bold" id="statsTerminati"><?php echo $stats['terminati'] ?? 0; ?></div>
+                <div class="h3 stats mb-0 font-weight-bold" id="statsTerminati"><?php echo $stats['terminati'] ?? 0; ?></div>
             </div>
         </div>
     </div>

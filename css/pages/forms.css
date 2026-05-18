@@ -9,6 +9,18 @@ body {
 }
 
 /* ============================================
+   aggiungiUtente, modificaUtente, aggiungiLibro
+   ============================================ */
+.myForm {
+  margin-bottom: 30px;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================================
    FORM CARDS (aggiungiLibro + segnalazione)
    ============================================ */
 .form-page .card {

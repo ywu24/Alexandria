@@ -55,7 +55,7 @@ $root = '../..';
         <div id="messages">
             <?php render_messages(); ?>
         </div>
-        <form action="salvaModifiche.php" method="post">
+        <form action="salvaModifiche.php" method="post" class="myForm">
             <div class="form-group">
                 <label for="nome">Nome:</label>
                 <input type="text" class="form-control" id="nome" name="nome" value="<?php echo e($nome); ?>">

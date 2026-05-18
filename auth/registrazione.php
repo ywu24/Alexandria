@@ -85,13 +85,13 @@ if (isset($_POST['submit'])) {
 
 <head>
   <?php render_head('Registrazione',
-      ['css/pages/auth.css', 'css/pages/footer.css'],
+      ['css/pages/auth.css', 'css/pages/forms.css', 'css/pages/footer.css'],
       ['js/utils.js', 'js/registration.js'],
       '..'
   ); ?>
 </head>
 
-<body>
+<body class="form-page">
   <div id="nav-placeholder">
     <?php require_once('../nav/nav.php'); ?>
   </div>
