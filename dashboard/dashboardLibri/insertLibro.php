@@ -42,7 +42,11 @@ if (isset($_POST['btnOpera'])) {
 
         // Controllo errori caricamento
         if ($file['error'] === 0 && in_array($file_ext, ['jpg', 'jpeg', 'png']) && $file['size'] <= 5000000) {
-            move_uploaded_file($file_tmp, $file_destination);
+            if (!move_uploaded_file($file_tmp, $file_destination)) {
+                throw new RuntimeException('Errore nel caricamento della copertina. Verificare i permessi della cartella img/books/.');
+            }
+        } elseif ($file['error'] !== UPLOAD_ERR_NO_FILE) {
+            throw new RuntimeException('File copertina non valido. Formati ammessi: jpg, jpeg, png. Dimensione max: 5MB.');
         }
 
     
