@@ -46,7 +46,7 @@ function render_review_card(array $review, string $imgPrefix = '../'): void
         </div>
     </div>
     <div class="review-body">
-        <p><?php echo nl2br(e($messaggio)); ?></p>
+        <p class="text-break"><?php echo nl2br(e($messaggio)); ?></p>
     </div>
 </div>
 <?php

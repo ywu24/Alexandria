@@ -63,10 +63,10 @@ $root = '../..';
                         </div>
                         <div class="card-body">
                             <h6 class="card-subtitle mb-3 text-primary font-weight-bold"><?php echo e($row['userEmail']); ?></h6>
-                            <p class="card-text text-secondary"><strong>Oggetto:</strong> <?php echo e($row['Oggetto']); ?></p>
+                            <p class="card-text text-secondary text-break"><strong>Oggetto:</strong> <?php echo e($row['Oggetto']); ?></p>
                         </div>
                         <div class="card-footer border-0 pb-3">
-                            <a href="dettaglio.php?id=<?php echo (int) $row['idSegnalazione']; ?>" class="btn btn-outline-primary btn-block shadow-none">Visualizza Dettagli</a>
+                            <a href="dettaglioSegnalazione.php?id=<?php echo (int) $row['idSegnalazione']; ?>" class="btn btn-outline-primary btn-block shadow-none">Visualizza Dettagli</a>
                         </div>
                     </div>
                 </div>

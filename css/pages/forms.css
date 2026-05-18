@@ -20,6 +20,10 @@ body {
   justify-content: center;
 }
 
+.card .card-header {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
 /* ============================================
    FORM CARDS (aggiungiLibro + segnalazione)
    ============================================ */

@@ -45,7 +45,7 @@ function render_book_card(array $book, array $availability, array $rating, strin
                     <small style="font-size: 0.75rem; color: var(--color-text-muted);"> (<?php echo $reviewCount; ?>)</small>
                 </div>
                 <p class="book-authors"><?php echo $author . ' | ' . $publisher . ' | ' . $isbn . ' | ' . $genre; ?></p>
-                <p class="desc"><?php echo $truncatedDesc; ?></p>
+                <p class="desc text-break"><?php echo $truncatedDesc; ?></p>
                 <span style="color: <?php echo $dispColor; ?>; font-weight: bold;" class="disponibilita"><?php echo $dispText; ?></span>
             </div>
         </div>

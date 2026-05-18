@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['mes
 
 <head>
   <?php render_head('Lascia una recensione',
-      ['css/pages/recensioni.css', 'css/pages/footer.css'],
+      ['css/pages/recensioni.css', 'css/pages/footer.css', 'css/pages/forms.css'],
       ['js/review.js', 'https://kit.fontawesome.com/455452defb.js'],
       '..'
   ); ?>
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['mes
   </div>
 
   <div class="centered-form">
-    <div class="form-container mt-4 mb-5 p-4 bg-white shadow rounded" style="max-width: 600px; margin: 0 auto;">
+    <div class="form-container mt-4 mb-5 p-4 shadow rounded" style="max-width: 600px; margin: 0 auto;">
       <h2 class="text-center mb-4"><i class="fas fa-star text-warning"></i> La tua recensione</h2>
 
       <form action="recensione.php?id=<?php echo $idOpera; ?>" method="POST">
