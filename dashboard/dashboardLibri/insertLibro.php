@@ -21,30 +21,31 @@ $bookService = new BookService($pdo);
 
 // --- LOGICA INSERIMENTO OPERA ---
 if (isset($_POST['btnOpera'])) {
-    $titolo = $_POST['titolo'];
-    $autore = $_POST['autore'];
-    $casa_editrice = $_POST['casaed'];
-    $isbn = $_POST['isbn'];
-    $genere = $_POST['genere'];
-    $descrizione = $_POST['desc'];
-    $anno_pubblicazione = $_POST['annopub'];
-    $copie = (int) $_POST['qty'];
-
-    // Gestione File
-    $file = $_FILES['image'];
-    $file_name = $file['name'];
-    $file_tmp = $file['tmp_name'];
-    $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-    $file_name_new = str_replace(' ', '', $titolo) . uniqid() . '.' . $file_ext;
-    $file_destination = '../../img/books/' . $file_name_new;
-    $copertina = $file_name_new;
-
-    // Controllo errori caricamento
-    if ($file['error'] === 0 && in_array($file_ext, ['jpg', 'jpeg', 'png']) && $file['size'] <= 5000000) {
-        move_uploaded_file($file_tmp, $file_destination);
-    }
-
     try {
+        $titolo = $_POST['titolo'];
+        $autore = $_POST['autore'];
+        $casa_editrice = $_POST['casaed'];
+        $isbn = $_POST['isbn'];
+        $genere = $_POST['genere'];
+        $descrizione = $_POST['desc'];
+        $anno_pubblicazione = $_POST['annopub'];
+        $copie = (int) $_POST['qty'];
+
+        // Gestione File
+        $file = $_FILES['image'];
+        $file_name = $file['name'];
+        $file_tmp = $file['tmp_name'];
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        $file_name_new = str_replace(' ', '', $titolo) . uniqid() . '.' . $file_ext;
+        $file_destination = '../../img/books/' . $file_name_new;
+        $copertina = $file_name_new;
+
+        // Controllo errori caricamento
+        if ($file['error'] === 0 && in_array($file_ext, ['jpg', 'jpeg', 'png']) && $file['size'] <= 5000000) {
+            move_uploaded_file($file_tmp, $file_destination);
+        }
+
+    
         $bookService->insert([
             'isbn' => $isbn,
             'nome' => $titolo,
