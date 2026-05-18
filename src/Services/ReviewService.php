@@ -35,7 +35,7 @@ class ReviewService
          $query = $this->pdo->prepare(
              "SELECT r.*, u.propic 
               FROM recensione r 
-              JOIN utente u ON r.userEmail = u.email 
+              JOIN Utente u ON r.userEmail = u.email 
               WHERE r.idOpera = :book_id 
               ORDER BY r.id DESC 
               LIMIT $limit OFFSET $offset"
