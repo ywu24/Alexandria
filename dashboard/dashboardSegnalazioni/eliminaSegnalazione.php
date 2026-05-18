@@ -31,9 +31,9 @@ try {
         redirect('dashboardSegnalazioni.php');
     } else {
         flash('error', 'Errore durante l\'eliminazione della segnalazione');
-        redirect('dettaglio.php?id=' . $id);
+        redirect('dettaglioSegnalazione.php?id=' . $id);
     }
 } catch (PDOException $e) {
     flash('error', 'Errore durante l\'esecuzione della query: ' . $e->getMessage());
-    redirect('dettaglio.php?id=' . $id);
+    redirect('dettaglioSegnalazione.php?id=' . $id);
 }

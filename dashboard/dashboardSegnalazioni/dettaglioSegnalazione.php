@@ -57,7 +57,7 @@ $root = '../..';
     $imgHtml = '';
     if (!empty($report['imgSegn'])) {
         $imgHtml = "
-        <div class='p-3 bg-white border-top text-center'>
+        <div class='p-3 border-top text-center'>
             <p class='text-muted small mb-2'>Allegato:</p>
             <img src='../../img/segnalazioni/" . e($report['imgSegn']) . "' class='img-fluid rounded shadow-sm' alt='Immagine segnalazione' style='max-height: 400px;'>
         </div>";

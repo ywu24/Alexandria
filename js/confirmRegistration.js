@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </h3>
                 <div id="dynamic-content">
                     <h4 class="text-muted fst-italic fw-bold">
-                        Attaccate ar cazzo (aspetta qualche secondo).
+                        Aspetta qualche secondo.
                     </h4>
                 </div>
             </div>

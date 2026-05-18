@@ -66,7 +66,7 @@ $root = '../..';
                             <p class="card-text text-secondary"><strong>Oggetto:</strong> <?php echo e($row['Oggetto']); ?></p>
                         </div>
                         <div class="card-footer border-0 pb-3">
-                            <a href="dettaglio.php?id=<?php echo (int) $row['idSegnalazione']; ?>" class="btn btn-outline-primary btn-block shadow-none">Visualizza Dettagli</a>
+                            <a href="dettaglioSegnalazione.php?id=<?php echo (int) $row['idSegnalazione']; ?>" class="btn btn-outline-primary btn-block shadow-none">Visualizza Dettagli</a>
                         </div>
                     </div>
                 </div>

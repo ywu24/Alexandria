@@ -30,7 +30,7 @@ if (!$user) {
 
 $nome = $user['Nome'];
 $cognome = $user['Cognome'];
-$email = $user['Email'];
+$emailUtente = $user['Email'];
 $ruolo = $user['Utenza'];
 
 $root = '../..';
@@ -61,7 +61,7 @@ $root = '../..';
                         <div id="messages">
                             <?php render_messages(); ?>
                         </div>
-                        <form action="salvaModifiche.php" method="post">
+                        <form action="salvaModifiche.php" method="post" autocomplete="off">
                             <div class="mb-3">
                                 <label for="nome" class="form-label">Nome</label>
                                 <input type="text" class="form-control" id="nome" name="nome" value="<?php echo e($nome); ?>">
@@ -72,23 +72,21 @@ $root = '../..';
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="email" name="email" value="<?php echo e($email); ?>">
+                                <input type="text" class="form-control" id="email" name="email" value="<?php echo e($emailUtente); ?>" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="ruolo" class="form-label">Ruolo</label>
+                            <div class="mb-3">
+                                <label for="ruolo" class="form-label">Ruolo</label>
                                     <select class="form-control" id="ruolo" name="ruolo">
                                         <option <?php if ($ruolo == 4) echo "selected"; ?> value="4">Standard</option>
                                         <option <?php if ($ruolo == 3) echo "selected"; ?> value="3">Premium</option>
                                         <option <?php if ($ruolo == 2) echo "selected"; ?> value="2">Bibliotecario</option>
                                         <option <?php if ($ruolo == 1) echo "selected"; ?> value="1">Admin</option>
                                     </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="password" class="form-label">Password</label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control" id="password" name="password" value=""
-                                        placeholder="Opzionale. Lasciare vuoto per non cambiare.">
-                                </div>
+                                        placeholder="Opzionale. Lasciare vuoto per non cambiare." autocomplete="new-password">
                             </div>
                             <input type="hidden" name="id" value="<?php echo (int) $user['id']; ?>">
                             <div class="d-flex justify-content-between align-items-center mt-4">

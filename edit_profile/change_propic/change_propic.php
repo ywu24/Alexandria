@@ -1,17 +1,23 @@
 <?php
-session_start();
+/**
+ * Alexandria Library Management System
+ *
+ * @package Alexandria
+ * @subpackage edit_profile
+ * @file Change profile picture handling file
+ */
+
+require_once __DIR__ . '/../../src/bootstrap.php';
+
 $root = '../..';
-require_once("../../utils/connect.php");
-require_once("../../auth/cookies.php");
 $email = $_SESSION['email'];
 
 if (isset($_POST['propicIns'])) {
 
     if (!isset($_FILES['image']) || $_FILES['image']['error'] === 4) {
         // nessun file selezionato
-        $_SESSION['error_msg'] = "Nessuna immagine selezionata.";
-        header("Location: ../edit_profile.php");
-        exit();
+        flash('error', 'Nessun file selezionato');
+        redirect('../edit_profile.php');
     }
 
     //Recupera i dati del file inviato
@@ -39,25 +45,23 @@ if (isset($_POST['propicIns'])) {
             // Verifica che la dimensione del file non superi un limite specificato
             if ($file_size <= 5000000) {
                 // Carica il file
-                move_uploaded_file($file_tmp, $file_destination);
-                echo 'Il file ' . $file_name . ' è stato caricato con successo.';
+                if (!move_uploaded_file($file_tmp, $file_destination)) {
+                    throw new RuntimeException('Errore nel caricamento della copertina. Verificare i permessi della cartella img/books/.');
+                }
             } else {
-                echo 'Il file ' . $file_name . ' è troppo grande. Il limite massimo è 5 MB.';
+                flash('error', 'Il file è troppo grande. Il limite massimo è 5 MB.');
+                redirect('../edit_profile.php');
             }
         } else {
-            echo 'Il file ' . $file_name . ' non è supportato. I formati supportati sono: jpg, jpeg e png.';
+            flash('error', 'Il file non è supportato. I formati supportati sono: jpg, jpeg e png.');
+            redirect('../edit_profile.php');
         }
     } else {
-        echo 'Si è verificato un errore durante il caricamento del file ' . $file_name . '.';
+        flash('error', 'Si è verificato un errore durante il caricamento del file.');
+        redirect('../edit_profile.php');
     }
     $propic = $file_name_new;
 
-    try {
-        $pdo = DatabaseConnection::getInstance()->getConnection();
-    } catch (PDOException $e) {
-        echo "Errore durante la connessione al database: " . $e->getMessage();
-        exit;
-    }
     $sql = "UPDATE `Utente` SET propic = :propic WHERE `Utente`.`Email` = :email";
     try {
         $query = $pdo->prepare($sql);
@@ -65,10 +69,10 @@ if (isset($_POST['propicIns'])) {
         $query->bindParam(':email', $email);
         $query->execute();
         $query->closeCursor();
-        $_SESSION['success_msg'] = "Immagine cambiata con successo.";
-        header("Location: ../edit_profile.php");
-        exit;
+        flash('success', "Immagine cambiata con successo.");
+        redirect('../edit_profile.php');
     } catch (PDOException $e) {
-        echo "Error: " . $sql . "<br>" . $e->getMessage();
+        flash('error', "Error: " . $sql . "<br>" . $e->getMessage());
+        redirect('../edit_profile.php');
     }
 }

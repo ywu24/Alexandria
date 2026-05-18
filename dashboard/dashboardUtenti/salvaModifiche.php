@@ -42,6 +42,7 @@ try {
     }
 
     $userService->updateById($id, $data);
+    flash('success', 'Dati utente aggiornati con successo');
     redirect('dashboardUtenti.php?aggiornato=1');
 } catch (PDOException $e) {
     redirect("modificaUtente.php?error=2&id=$id");
