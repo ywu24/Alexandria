@@ -1,52 +1,77 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const storageKey = "reinvio_count";
-    const reinvioContainer = document.querySelector('.reinvio');
+    var reinviaBtn = document.getElementById('reinvia-link');
+    var reinviaForm = document.getElementById('reinvia-form');
+    var countdownEl = document.getElementById('countdown-timer');
+    var statusEl = document.getElementById('reinvia-status');
 
-    if (!reinvioContainer) return;
+    if (!reinviaBtn || !reinviaForm) return;
 
-    setTimeout(function () {
-        reinvioContainer.innerHTML = `
-            <div class="mt-4 w-100">
-                <h3 class="text-danger fw-bold fs-6 mb-1">
-                    PROBLEMI CON LA MAIL?
-                </h3>
-                <div id="dynamic-content">
-                    <h4 class="text-muted fst-italic fw-bold">
-                        Aspetta qualche secondo.
-                    </h4>
-                </div>
-            </div>
-        `;
-    }, 2000);
+    var remainingSends = parseInt(reinviaBtn.dataset.remainingSends) || 0;
+    var cooldownUntil = parseInt(reinviaBtn.dataset.cooldownUntil) || 0;
+    var cooldownTimer = null;
 
-    setTimeout(function () {
-        let inviiEffettuati = localStorage.getItem(storageKey) || 0;
-        const dynamicContent = document.getElementById('dynamic-content');
+    function updateUI() {
+        var now = Math.floor(Date.now() / 1000);
+        var remaining = cooldownUntil - now;
 
-        if (inviiEffettuati > 2) {
-            dynamicContent.innerHTML = `
-                <h4 class="mb-2 text-muted fst-normal fw-normal">
-                    Limite rinvii raggiunto, torna indietro e verifica che i dati inseriti siano corretti.
-                </h4>`;
-            return;
+        if (remaining > 0) {
+            reinviaBtn.disabled = true;
+            if (countdownEl) {
+                countdownEl.textContent = 'Potrai chiedere reinvio in ' + remaining + ' secondi';
+                countdownEl.style.display = 'block';
+            }
+        } else {
+            reinviaBtn.disabled = (remainingSends <= 0);
+            if (countdownEl) {
+                countdownEl.style.display = 'none';
+            }
+            if (cooldownTimer) {
+                clearInterval(cooldownTimer);
+                cooldownTimer = null;
+            }
         }
 
-        if (dynamicContent) {
-            dynamicContent.innerHTML = `
-                <h4 class="mb-2 text-muted fst-normal fw-normal">
-                    Controlla la cartella Spam o prova a richiedere un nuovo invio.
-                </h4>
-                <form id="reinvio-form" action="confermaRegistrazione.php" method="POST">
-                    <input type="hidden" name="reinvia" value="1">
-                    <button type="submit" class="btn btn-link p-0 text-primary fw-bold fs-sm">
-                        Clicca qui per reinviare
-                    </button>
-                </form>
-            `;
+        if (statusEl) {
+            statusEl.textContent = 'Reinvii rimasti: ' + remainingSends + '/3';
         }
-        document.getElementById('reinvio-form').addEventListener('submit', function() {
-            inviiEffettuati++;
-            localStorage.setItem(storageKey, inviiEffettuati);
+    }
+
+    if (cooldownUntil > Math.floor(Date.now() / 1000)) {
+        updateUI();
+        cooldownTimer = setInterval(updateUI, 1000);
+    } else {
+        updateUI();
+    }
+
+    reinviaBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        if (reinviaBtn.disabled) return;
+
+        if (remainingSends <= 0) return;
+
+        var formData = new FormData(reinviaForm);
+        formData.append('ajax', '1');
+
+        fetch(reinviaForm.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            if (data.success) {
+                remainingSends = data.remaining;
+                cooldownUntil = Math.floor(Date.now() / 1000) + 15;
+                reinviaBtn.dataset.remainingSends = remainingSends;
+                reinviaBtn.dataset.cooldownUntil = cooldownUntil;
+
+                if (cooldownTimer) clearInterval(cooldownTimer);
+                updateUI();
+                cooldownTimer = setInterval(updateUI, 1000);
+            }
+        })
+        .catch(function () {
+            console.error('Errore reinvio');
         });
-    }, 12000);
+    });
 });

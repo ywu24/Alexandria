@@ -71,8 +71,8 @@ if (isset($_POST['submit'])) {
         $_SESSION['passwordAgain'] = $passwordAgain;
         $_SESSION['codice'] = $codice;
         $_SESSION['codice_scadenza'] = time() + 600;
-        $_SESSION['tentativi'] = 3;
-        $_SESSION['reinvii'] = 1;
+        $_SESSION['reinviiRimasti'] = 3;
+        $_SESSION['tentativiRimasti'] = 3;
         redirect('confermaRegistrazione.php');
     } else {
         flash('error', 'Errore nell\'invio dell\'email');

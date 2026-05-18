@@ -130,7 +130,7 @@ if ($isAdminLibrarian) {
                                 </div>
                                 <a href='libro/libro.php?id=<?php echo $book['id']; ?>'>
                                     <div class='right-column'>
-                                        <h3><?php echo e($book['Nome']); ?></h3>
+                                        <h3 class="text-break"><?php echo e($book['Nome']); ?></h3>
                                         <div class='info-release'>
                                             <span><?php echo e($book['Autore']); ?></span>
                                             <span><?php echo e($book['CasaEditrice']); ?></span>
@@ -138,7 +138,7 @@ if ($isAdminLibrarian) {
                                             <span><?php echo e($book['ISBN']); ?></span>
                                             <span><?php echo e($book['Genere']); ?></span>
                                         </div>
-                                        <p class='desc'>
+                                        <p class='desc text-break'>
                                             <?php echo e($book['Descrizione']); ?>
                                         </p>
                                     </div>
