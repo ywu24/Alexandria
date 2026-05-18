@@ -474,7 +474,7 @@ class BookingService
             return [
                 'success' => true,
                 'late' => $late,
-                'message' => $late ? 'ok prestito terminato con ritardo. 10 punti sottratti!' : 'ok prestito terminato con successo!',
+                'message' => $late ? 'Prestito terminato con ritardo, 10 punti sottratti' : 'Prestito terminato con successo',
             ];
         } catch (PDOException $e) {
             $this->pdo->rollBack();

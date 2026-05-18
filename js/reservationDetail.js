@@ -7,7 +7,10 @@
     window.apriDettaglioPrenotazione = async function (id) {
         document.querySelectorAll('[id^="dettaglio-content-"]').forEach(function (el) {
             el.classList.add('d-none');
+            el.style.display = '';
             el.innerHTML = '';
+            var ph = document.getElementById('placeholder-' + el.id.replace('dettaglio-content-', ''));
+            if (ph) ph.style.display = '';
         });
 
         var targetDiv = document.getElementById('dettaglio-content-' + id);
@@ -15,7 +18,11 @@
 
         try {
             targetDiv.classList.remove('d-none');
+            targetDiv.style.display = 'block';
             targetDiv.innerHTML = '<p class="text-muted small">Caricamento...</p>';
+
+            var ph = document.getElementById('placeholder-' + id);
+            if (ph) ph.style.display = 'none';
 
             var currentPath = window.location.pathname;
             var apiPath = '';
@@ -113,7 +120,10 @@
         var targetDiv = document.getElementById('dettaglio-content-' + id);
         if (targetDiv) {
             targetDiv.classList.add('d-none');
+            targetDiv.style.display = '';
             targetDiv.innerHTML = '';
         }
+        var ph = document.getElementById('placeholder-' + id);
+        if (ph) ph.style.display = '';
     };
 })();

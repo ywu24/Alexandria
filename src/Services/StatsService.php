@@ -41,14 +41,14 @@ class StatsService
     }
 
     /**
-     * Get number of currently borrowed books
+     * Get number of total borrowed books (both active and finished)
      *
      * @return int
      */
     public function getBooksBorrowed(): int
     {
         return (int) $this->pdo->query(
-            "SELECT COUNT(*) FROM Prenotazione WHERE InizioPrestito IS NOT NULL AND FinePrestito IS NULL"
+            "SELECT COUNT(*) FROM Prenotazione WHERE InizioPrestito IS NOT NULL"
         )->fetchColumn();
     }
 
