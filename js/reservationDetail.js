@@ -229,6 +229,37 @@
                         console.error('Refresh card error:', e);
                     }
                 }
+                try {
+                    // aggiorna statistiche
+                    var refreshStats = await fetch(apiPath + 'booking-stats.php');
+                        if (refreshStats.ok) {
+                            
+                            statsData = await refreshStats.json();
+                            var stats = document.getElementById('statsTotale');
+                            if (stats) {
+                                stats.textContent = statsData.totale || '0';
+                            }
+                            stats = document.getElementById('statsPrenotati');
+                            if (stats) {
+                                stats.textContent = statsData.prenotati || '0';
+                            }
+                            stats = document.getElementById('statsInPrestito');
+                            if (stats) {
+                                stats.textContent = statsData.in_prestito || '0';
+                            }
+                            stats = document.getElementById('statsInRitardo');
+                            if (stats) {
+                                stats.textContent = statsData.in_ritardo || '0';
+                            }
+                            stats = document.getElementById('statsTerminati');
+                            if (stats) {
+                                stats.textContent = statsData.terminati || '0';
+                            }
+                            
+                        }
+                } catch (e) {
+                    console.error('Refresh stats error:', e)
+                }
             } else {
                 showToast("Errore dal server: " + result.message, 'error');
             }

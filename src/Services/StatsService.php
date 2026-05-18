@@ -121,4 +121,30 @@ class StatsService
             'prenotati' => (int) ($p_prenotati['prenotati'] ?? 0),
         ];
     }
+
+    /**
+     * Get global booking statistics for admin dashboard
+     *
+     * @return array ['totale', 'prenotati', 'in_prestito', 'in_ritardo', 'terminati']
+     */
+    public function getGlobalBookingStats(): array
+    {
+        $sql = "SELECT 
+            COUNT(*) as totale,
+            SUM(CASE WHEN InizioPrestito IS NULL THEN 1 ELSE 0 END) as prenotati,
+            SUM(CASE WHEN InizioPrestito IS NOT NULL AND FinePrestito IS NULL AND NOW() <= FineAttesa THEN 1 ELSE 0 END) as in_prestito,
+            SUM(CASE WHEN InizioPrestito IS NOT NULL AND FinePrestito IS NULL AND NOW() > FineAttesa THEN 1 ELSE 0 END) as in_ritardo,
+            SUM(CASE WHEN FinePrestito IS NOT NULL THEN 1 ELSE 0 END) as terminati
+        FROM Prenotazione";
+        
+        $result = $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+        
+        return [
+            'totale' => (int) ($result['totale'] ?? 0),
+            'prenotati' => (int) ($result['prenotati'] ?? 0),
+            'in_prestito' => (int) ($result['in_prestito'] ?? 0),
+            'in_ritardo' => (int) ($result['in_ritardo'] ?? 0),
+            'terminati' => (int) ($result['terminati'] ?? 0),
+        ];
+    }
 }

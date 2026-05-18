@@ -24,7 +24,7 @@ if (isset($_POST['logout'])) {
     </a>
 
     <form method="get" action="<?php echo $root; ?>/lista/lista.php" class="search-form">
-        <input type="search" name="search" placeholder="Search books, authors..." class="search-input">
+        <input type="search" name="search" placeholder="Cerca libri, autori, editori..." class="search-input">
         <button type="submit" name="search_btn" class="search-button">
             <svg width="20" height="20" aria-hidden="true">
                 <use href="<?php echo $root; ?>/img/icons.svg#search"></use>

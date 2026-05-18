@@ -302,6 +302,7 @@
   border: none;
   cursor: pointer;
   outline: none;
+  color: inherit;
 }
 
 .nav1 form .logout {
