@@ -514,11 +514,11 @@ class BookingService
             $idUtente = $user ? (int) $user['id'] : 0;
 
             // Get booking details for email
-            $query = $this->pdo->prepare("SELECT Prenotazione.idCopia, Opera.ISBN, Opera.Nome as Titolo, InizioPrenotazione, FinePrenotazione
-                                          FROM Prenotazione, Opera, copiaLibro
-                                          WHERE Prenotazione.idCopia = copiaLibro.idCopia
-                                          AND copiaLibro.ISBN = Opera.ISBN
-                                          AND idPrenotazione = :id");
+            $query = $this->pdo->prepare("SELECT Prenotazione.idCopia, Prenotazione.Email, Opera.ISBN, Opera.Nome as Titolo, InizioPrenotazione, FinePrenotazione
+                                           FROM Prenotazione, Opera, copiaLibro
+                                           WHERE Prenotazione.idCopia = copiaLibro.idCopia
+                                           AND copiaLibro.ISBN = Opera.ISBN
+                                           AND idPrenotazione = :id");
             $query->bindParam(':id', $bookingId, PDO::PARAM_INT);
             $query->execute();
             $bookingData = $query->fetch(PDO::FETCH_ASSOC);
