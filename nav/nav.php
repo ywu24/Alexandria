@@ -24,8 +24,8 @@ if (isset($_POST['logout'])) {
     </a>
 
     <form method="get" action="<?php echo $root; ?>/lista/lista.php" class="search-form">
-        <input type="search" name="search" placeholder="Search...">
-        <button type="submit" name="search_btn">
+        <input type="search" name="search" placeholder="Search books, authors..." class="search-input">
+        <button type="submit" name="search_btn" class="search-button">
             <svg width="20" height="20" aria-hidden="true">
                 <use href="<?php echo $root; ?>/img/icons.svg#search"></use>
             </svg>
@@ -42,52 +42,56 @@ if ($isLoggedIn) {
     $utente = $userService->getByEmail($email);
 ?>
 
-    <ul>
+    <ul class="nav-icons">
         <li class="li-icon">
-            <a href="<?php echo $root; ?>/lista/lista.php">
+            <a href="<?php echo $root; ?>/lista/lista.php" class="nav-icon-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#library"/></svg>
             </a>
         </li>
         <?php if ($utenza == 1 || $utenza == 2): ?>
         <li class="li-icon">
-            <a href="<?php echo $root; ?>/dashboard/dashboard.php">
+            <a href="<?php echo $root; ?>/dashboard/dashboard.php" class="nav-icon-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#dashboard"/></svg>
             </a>
         </li>
         <?php endif; ?>
         <li class="li-icon acc">
-            <a href="#"></a>
-            <svg class="icon" onclick="toggleMenu()"><use href="<?php echo $root; ?>/img/icons.svg#account"/></svg>
+            <a href="#" class="nav-icon-link"></a>
+            <svg class="icon" onclick="toggleMenu()"><use href="<?php echo $root; ?>/img/icons.svg#dropdown-menu"/></svg>
         </li>
     </ul>
 
     <div class="sub-menu-wrap" id="subMenu">
         <div class="sub-menu">
             <div class="user-info">
-                <img src="<?php echo $root; ?>/img/users/<?php echo $utente['propic'] ?? 'userDashFavicon.svg'; ?>">
-                <h3 style="font-size: 1.2rem;"><?php echo ($utente['Nome'] ?? '') . ' ' . ($utente['Cognome'] ?? ''); ?></h3>
-                <h4>Punti: <?php echo $utente['punteggio'] ?? 0; ?></h4>
+                <img src="<?php echo $root; ?>/img/users/<?php echo $utente['propic'] ?? 'userDashFavicon.svg'; ?>" class="user-avatar">
+                <div class="user-details">
+                    <h3 class="user-name"><?php echo ($utente['Nome'] ?? '') . ' ' . ($utente['Cognome'] ?? ''); ?></h3>
+                    <h4 class="user-points">Punti: <?php echo $utente['punteggio'] ?? 0; ?></h4>
+                </div>
             </div>
             
+            <a href="<?php echo $root; ?>/edit_profile/edit_profile.php" class="sub-menu-link">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#account"/></svg>
+                <p>Il Mio Account</p>
+                <span>&gt;</span>
+            </a>
+
             <?php if ($utenza == 3 || $utenza == 4): ?>
             <a href="<?php echo $root; ?>/prenotazione/prenotazione.php" class="sub-menu-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#booking"/></svg>
-                <p>Prenotazioni</p>
+                <p>I Miei Prestiti</p>
                 <span>&gt;</span>
             </a>
             <?php endif; ?>
-
+            
             <a href="<?php echo $root; ?>/lista/lista.php" class="sub-menu-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#library"/></svg>
-                <p>Lista Libri</p>
+                <p>Catalogo</p>
                 <span>&gt;</span>
             </a>
 
-            <a href="<?php echo $root; ?>/edit_profile/edit_profile.php" class="sub-menu-link">
-                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#edit-profile"/></svg>
-                <p>Edit Profile</p>
-                <span>&gt;</span>
-            </a>
+            
 
             <?php if ($utenza == 1 || $utenza == 2): ?>
             <a href="<?php echo $root; ?>/dashboard/dashboard.php" class="sub-menu-link">
@@ -128,14 +132,14 @@ if ($isLoggedIn) {
 
 <?php } else { ?>
 
-    <ul>
+    <ul class="nav-icons">
         <li class="li-icon">
-            <a href="<?php echo $root; ?>/lista/lista.php">
+            <a href="<?php echo $root; ?>/lista/lista.php" class="nav-icon-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#library"/></svg>
             </a>
         </li>
         <li>
-            <svg class="icon" onclick="toggleMenu()"><use href="<?php echo $root; ?>/img/icons.svg#account"/></svg>
+            <svg class="icon" onclick="toggleMenu()"><use href="<?php echo $root; ?>/img/icons.svg#dropdown-menu"/></svg>
         </li>
     </ul>
 
