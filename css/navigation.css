@@ -394,6 +394,61 @@ p.logoutform {
   left: 2.9vw;
 }
 
+.badgeN {
+    background-color: #dc3545; /* Rosso Bootstrap */
+    color: #ffffff !important; /* Forza il testo sempre bianco */
+    font-size: 11px;           /* Leggermente più leggibile */
+    font-weight: 700;
+    padding: 2px 6px;          /* Spazio interno dinamico per gestire + cifre */
+    border-radius: 50rem;      /* Pillola perfetta che si adatta al contenuto */
+    min-width: 18px;           /* Dimensione minima per garantire la forma tonda con 1 cifra */
+    height: 18px;
+    
+    /* Centratura perfetta del testo */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: baseline;
+    
+    /* Effetto transizione soft per quando compare */
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Posizionamento specifico per il badge della navbar (fuori dal menu) */
+.nav-icon-link {
+    position: relative; /* Mantiene il riferimento per il badge */
+    display: inline-flex;
+    align-items: center;
+}
+
+/* NOTA: Corretto ID aggiungendo la 'N' come richiesto */
+#notifiche-badgeN {
+    position: absolute;
+    top: -4px;
+    right: -6px;
+    box-shadow: 0 0 0 2px var(--nav-bg-color, #ffffff); /* Bordino di stacco pulito */
+    z-index: 10;
+}
+
+/* Posizionamento specifico per il badge DENTRO il sottomenu */
+.sub-menu-icon-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* NOTA: Corretto ID aggiungendo la 'N' come richiesto */
+#notifiche-badgeN-dropdown {
+    position: absolute;
+    top: -4px;   
+    right: -6px; 
+    box-shadow: 0 0 0 2px var(--submenu-bg-color, #ffffff); /* Stacca dallo sfondo del menu */
+    z-index: 10;
+}
+
 /* ============================================
    MOBILE RESPONSIVE
    ============================================ */

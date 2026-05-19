@@ -16,7 +16,7 @@ use Alexandria\Services\NotificationService;
 $bookService = new BookService($pdo);
 $reviewService = new ReviewService($pdo);
 $bookingService = new BookingService($pdo);
-$notificationService = new NotificationService();
+$notificationService = new NotificationService($pdo);
 
 $root = '..';
 
@@ -57,6 +57,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prenota']) && $canBoo
     $success = false;
     $error_msg = '';
 
+    // --- INIZIALIZZAZIONE VARIABILI DI SUPPORTO PER NOTIFICHE ---
+    // Recuperiamo l'ID numerico dell'utente corrente a partire dalla sessione
+    $stmtUid = $pdo->prepare("SELECT id FROM Utente WHERE Email = ?");
+    $stmtUid->execute([$email]);
+    $current_user_id = $stmtUid->fetchColumn();
+
+    // Recuperiamo tutti gli ID dei bibliotecari (Utenza = 2)
+    $stmtBiblio = $pdo->prepare("SELECT id FROM Utente WHERE Utenza = 2");
+    $stmtBiblio->execute();
+    $librarian_ids = $stmtBiblio->fetchAll(PDO::FETCH_COLUMN);
+
     if ($isPremium) {
         $nPrenotazioni = (int) ($_POST['sliderino'] ?? 1);
         try {
@@ -70,6 +81,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prenota']) && $canBoo
                     date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')),
                     $result['count']
                 );
+                // 2. Notifica In-App per l'utente loggato
+                if ($current_user_id) {
+                    $notificationService->creaNotifica(
+                        $current_user_id,
+                        'Prenotazione Effettuata',
+                        "Hai prenotato con successo " . $result['count'] . " copie del libro: " . $book['Nome'],
+                        'prenotazione/prenotazione.php'
+                    );
+                }
+
+                // 3. Notifica In-App per i bibliotecari
+                foreach ($librarian_ids as $biblio_id) {
+                    $notificationService->creaNotifica(
+                        (int)$biblio_id,
+                        'Nuova Prenotazione Premium',
+                        "L'utente Premium $email ha prenotato " . $result['count'] . " copie del libro: " . $book['Nome'],
+                        'prenotazione/prenotazione.php'
+                    );
+                }
+
                 $success = true;
             } else {
                 $error_msg = $result['message'];
@@ -91,6 +122,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prenota']) && $canBoo
                         null,
                         $result['copyId'] ?? null
                     );
+
+                    // 2. Notifica In-App per l'utente loggato
+                    if ($current_user_id) {
+                        $notificationService->creaNotifica(
+                            $current_user_id,
+                            'Prenotazione Effettuata',
+                            "Hai prenotato con successo il libro: " . $book['Nome'],
+                            'prenotazione/prenotazione.php'
+                        );
+                    }
+
+                    // 3. Notifica In-App per i bibliotecari
+                    foreach ($librarian_ids as $biblio_id) {
+                        $notificationService->creaNotifica(
+                            (int)$biblio_id,
+                            'Nuova Prenotazione Standard',
+                            "L'utente Standard $email ha prenotato il libro: " . $book['Nome'],
+                            'prenotazione/prenotazione.php'
+                        );
+                    }
+
                     $success = true;
                 } else {
                     $error_msg = $result['message'];

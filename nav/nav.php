@@ -55,6 +55,14 @@ if ($isLoggedIn) {
             </a>
         </li>
         <?php endif; ?>
+
+        <li class="li-icon">
+            <a href="<?php echo $root; ?>/notifiche/notification.php" class="nav-icon-link option-notification">
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#notification"/></svg>
+                <span class="badgeN" id="notifiche-badgeN">0</span>
+            </a>
+        </li>
+
         <li class="li-icon acc">
             <a href="#" class="nav-icon-link"></a>
             <svg class="icon" onclick="toggleMenu()"><use href="<?php echo $root; ?>/img/icons.svg#dropdown-menu"/></svg>
@@ -73,6 +81,15 @@ if ($isLoggedIn) {
                 </div>
             </div>
             
+            <a href="<?php echo $root; ?>/notifiche/notification.php" class="sub-menu-link">
+                <div class="sub-menu-icon-wrapper" style="position: relative; display: inline-flex;">
+                    <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#notification"/></svg>
+                    <span class="badgeN" id="notifiche-badgeN-dropdown">0</span>
+                </div>
+                <p>Notifiche</p>
+                <span>&gt;</span>
+            </a>
+
             <a href="<?php echo $root; ?>/edit_profile/edit_profile.php" class="sub-menu-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#account"/></svg>
                 <p>Il Mio Account</p>
@@ -92,8 +109,6 @@ if ($isLoggedIn) {
                 <p>Catalogo</p>
                 <span>&gt;</span>
             </a>
-
-            
 
             <?php if ($utenza == 1 || $utenza == 2): ?>
             <a href="<?php echo $root; ?>/dashboard/dashboard.php" class="sub-menu-link">
@@ -171,6 +186,9 @@ if ($isLoggedIn) {
 </nav>
 
 <?php } ?>
-
+<script>
+    // Trasformiamo la variabile $root di PHP nella ROOT_URL di JavaScript
+    const ROOT_URL = "<?php echo $root; ?>";
+</script>
 <script src="<?php echo $root; ?>/js/theme.js"></script>
 <script src="<?php echo $root; ?>/js/navigation.js"></script>
