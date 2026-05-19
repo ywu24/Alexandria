@@ -36,12 +36,15 @@ if ($authService->isAdmin() && isset($_GET['id'])) {
 
     try {
         if ($userService->adminDelete($emailToDelete, $adminEmail)) {
-            redirect('dashboardUtenti.php?rimosso=1');
+            flash('success', 'Utente eliminato con successo');
+            redirect('dashboardUtenti.php');
         } else {
-            redirect('dashboardUtenti.php?errore=2');
+            flash('error', 'Errore durante l\'eliminazione dell\'utente');
+            redirect('dashboardUtenti.php');
         }
     } catch (RuntimeException $e) {
-        redirect('dashboardUtenti.php?errore=1');
+        flash('error', 'Errore durante l\'eliminazione dell\'utente: ' . $e->getMessage());
+        redirect('dashboardUtenti.php');
     }
 }
 

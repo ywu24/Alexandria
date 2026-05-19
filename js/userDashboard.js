@@ -50,11 +50,11 @@
 
                     if (user.role_id == 3 || user.role_id == 4) {
                         mainHtml += '\
-                                <a class="btn btn-primary btn-sm" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>';
+                                <a class="btn btn-primary btn-sm mb-1" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>';
                     }
                     mainHtml += '\
                                 <a class="btn btn-primary btn-sm" href="modificaUtente.php?id=' + user.id + '">Modifica</a>\
-                                <a class="btn btn-danger btn-sm" href="eliminaUtente.php?id=' + encodeURIComponent(user.email) + '">Elimina</a>\
+                                <button class="btn btn-danger btn-sm elimina-utente" data-email="' + encodeURIComponent(user.email) + '">Elimina</button>\
                             </div>\
                         </td>';
                 } else {
@@ -98,7 +98,7 @@
                     }
                     azioniHtml += '\
                             <a class="btn btn-primary w-100" href="modificaUtente.php?id=' + user.id + '">Modifica</a>\
-                            <a class="btn btn-danger w-100" href="eliminaUtente.php?id=' + user.email + '">Elimina</a>\
+                            <button class="btn btn-danger w-100 elimina-utente" data-email="' + user.email + '">Elimina</button>\
                         </div>';
                 } else {
                     azioniHtml = '\
@@ -177,8 +177,21 @@
         document.querySelectorAll(".sort_btn").forEach(function (btn) {
             btn.addEventListener("click", function () {
                 document.getElementById("sort_type").value = this.dataset.sort;
-                caricaUtenti(false);
+         caricaUtenti(false);
             });
+        });
+
+        document.addEventListener('click', async function (e) {
+            var target = e.target;
+            if (target.classList.contains('elimina-utente') || target.closest('.elimina-utente')) {
+                var btn = target.classList.contains('elimina-utente') ? target : target.closest('.elimina-utente');
+                var email = btn.dataset.email;
+                var confirmed = await showConfirm('Sei sicuro di voler eliminare questo utente?');
+                if (confirmed) {
+                    window.location.href = 'eliminaUtente.php?id=' + email;
+                }
+            }
+        
         });
 
         var btnAltro = document.getElementById("loadMoreBtn");

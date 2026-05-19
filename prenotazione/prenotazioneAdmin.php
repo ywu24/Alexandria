@@ -29,7 +29,7 @@ $stats = $statsService->getGlobalBookingStats();
 <head>
     <?php render_head('Alexandria - Gestione Prenotazioni',
         ['css/pages/user-detail.css', 'css/pages/footer.css'],
-        ['js/reservationDetail.js', 'js/adminReservation.js'],
+        ['js/modalUtils.js', 'js/reservationDetail.js', 'js/adminReservation.js'],
         '..'
     ); ?>
 </head>

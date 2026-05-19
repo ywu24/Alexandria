@@ -16,6 +16,7 @@ $root = '..';
 
 // Validate book ID
 if (!isset($_GET['id'])) {
+    flash('error', 'ID del libro mancante');
     redirect('../lista/lista.php');
 }
 $idOpera = (int) $_GET['id'];
@@ -23,6 +24,7 @@ $idOpera = (int) $_GET['id'];
 // Handle review submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['messaggio'], $_POST['voto'])) {
     if (!isset($_SESSION['email'])) {
+        flash('error', 'Devi aver fatto l\'accesso per lasciare una recensione');
         redirect('../auth/login.php');
     }
 
@@ -33,8 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['mes
 
     try {
         $reviewService->create($user_email, $idOpera, $titolo, $messaggio, $voto);
-        flash('success', 'Recensione inviata con successo!');
-        $_SESSION['punti_guadagnati'] = true;
+        flash('success', 'Recensione inviata con successo, hai guadagnato 5 punti!');
     } catch (Exception $e) {
         flash('error', $e->getMessage());
     }
@@ -61,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titolo'], $_POST['mes
     <?php require_once('../nav/nav.php'); ?>
   </div>
 
-  <div id="messages" class="container mt-3 text-center" data-punti-guadagnati="<?php echo isset($_SESSION['punti_guadagnati']) ? '1' : '0'; unset($_SESSION['punti_guadagnati']); ?>">
-    <?php render_messages(); ?>
-  </div>
+  <div id="messages">
+        <?php render_messages(); ?>
+    </div>
 
   <div class="centered-form">
     <div class="form-container mt-4 mb-5 p-4 shadow rounded" style="max-width: 600px; margin: 0 auto;">

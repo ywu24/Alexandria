@@ -29,7 +29,7 @@ $root = '../..';
 <head>
     <?php render_head('Dashboard Segnalazioni - Alexandria\'s Library',
         ['css/pages/dashboard.css', 'css/pages/footer.css', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'],
-        [],
+        ['js/modalUtils.js'],
         '../..'
     ); ?>
     <link rel="icon" type="image/svg+xml" href="../../img/segnDashFavicon.svg">

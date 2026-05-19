@@ -25,7 +25,7 @@ $root = '../..';
 <head>
     <?php render_head('Dashboard Libri',
         ['css/pages/dashboard.css', 'css/pages/footer.css'],
-        ['js/utils.js', 'js/updateCopies.js'],
+        ['js/utils.js', 'js/modalUtils.js', 'js/updateCopies.js'],
         '../..'
     ); ?>
     <link rel="icon" type="image/svg+xml" href="../../img/bookDashFavicon.svg">
