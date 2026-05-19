@@ -145,7 +145,8 @@
             var row = target.closest("tr");
             var input = row.querySelector("input[type='number']");
             var isbn = row.dataset.isbn;
-            if (!confirm("Aggiornare le copie?")) return;
+            var confirmed = await showConfirm("Aggiornare le copie?");
+            if (!confirmed) return;
 
             var fd = new FormData();
             fd.append("isbn", isbn);
@@ -153,7 +154,7 @@
 
             var res = await fetch("updateCopie.php", { method: "POST", body: fd });
             var txt = await res.text();
-            if (txt.includes("ok")) showMessage("Aggiornato!");
+            if (txt.includes("ok")) showToast("Aggiornato!", "success");
         }
 
         if (target.classList.contains('btn-espandi')) {
@@ -180,16 +181,19 @@
 
         if (target.classList.contains("elimina")) {
             var row = target.closest("tr");
-            if (!confirm("Sei sicuro di voler eliminare l'intera opera e tutte le sue copie?")) return;
+            var confirmed = await showConfirm("Sei sicuro di voler eliminare l'intera opera e tutte le sue copie?");
+            if (!confirmed) return;
             var fd = new FormData();
             fd.append("isbn", row.dataset.isbn);
             var res = await fetch("eliminaLibro.php", { method: "POST", body: fd });
-            var txt = await res.text();
-            if (txt.includes("ok")) {
+            var result = await res.json();
+            if (result.success) {
                 row.remove();
                 var detailsRow = document.getElementById('row-details-' + row.dataset.isbn);
                 if (detailsRow) detailsRow.remove();
-                showMessage("Opera eliminata correttamente");
+                showToast(result.message, "success");
+            } else {
+                showToast(result.message, "error");
             }
         }
 
@@ -198,7 +202,8 @@
             var row = btn.closest("tr");
             var idCopia = row.dataset.id;
 
-            if (!confirm("Vuoi eliminare definitivamente la copia #" + idCopia + "?")) return;
+            var confirmed = await showConfirm("Vuoi eliminare definitivamente la copia #" + idCopia + "?");
+            if (!confirmed) return;
 
             var fd = new FormData();
             fd.append("id", idCopia);
@@ -207,8 +212,8 @@
                 var res = await fetch("elimina_copia.php", { method: "POST", body: fd });
                 var result = await res.text();
 
-                if (result.includes("ok")) {
-                    showMessage(result.slice(2));
+                 if (result.includes("ok")) {
+                     showToast(result.slice(2), "success");
                     var rigaDettaglio = btn.closest('tr.bg-light') || btn.closest('td').closest('tr');
                     var rigaPrincipale = rigaDettaglio.previousElementSibling;
                     var btnEspandi = rigaPrincipale.querySelector('.btn-espandi');
@@ -218,10 +223,10 @@
                         btnEspandi.click();
                     }
                 } else {
-                    showMessage(result, "errore");
+                     showToast(result, "error");
                 }
             } catch (error) {
-                showMessage("Errore di connessione", "errore");
+                     showToast("Errore di connessione", "error");
             }
         }
 
@@ -258,7 +263,7 @@
             var disabledAttr = isDisponibile ? '' : 'disabled';
             var deleteAction = isDisponibile
                 ? ''
-                : 'onclick="showMessage(\'Impossibile eliminare una copia in prestito!\', \'errore\')"';
+                : 'onclick="showToast(\'Impossibile eliminare una copia in prestito!\', \'error\')"';
 
             html += '\
                 <tr data-id="' + copia.id + '">\

@@ -27,7 +27,9 @@ $isbn = $_POST['isbn'];
 
 try {
     $bookService->delete($isbn);
-    echo "okLibro con isbn $isbn eliminato con successo!";
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true, 'message' => "Libro con isbn $isbn eliminato con successo!"]);
 } catch (RuntimeException $e) {
-    echo "Errore nell'eliminazione del libro con isbn $isbn, " . $e->getMessage();
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => "Errore nell'eliminazione del libro con isbn $isbn, " . $e->getMessage()]);
 }

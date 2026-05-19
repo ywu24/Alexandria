@@ -39,7 +39,7 @@ $root = '../..';
 <head>
     <?php render_head('Dettaglio Segnalazione - Alexandria\'s Library',
         ['css/pages/forms.css', 'css/pages/footer.css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'],
-        [],
+        ['js/modalUtils.js'],
         '../..'
     ); ?>
 </head>
@@ -92,11 +92,10 @@ $root = '../..';
                             </a>
                         </div>
                         <div class="col-md-6 mb-2">
-                            <a href="eliminaSegnalazione.php?id=<?php echo (int) $report['idSegnalazione']; ?>"
-                               class="btn btn-danger btn-block shadow-none"
-                               onclick="return confirm('Sei sicuro di voler eliminare questa segnalazione?')">
-                               <i class="fas fa-trash-alt mr-2"></i> Elimina Pratica
-                            </a>
+                             <button class="btn btn-danger btn-block shadow-none elimina-segnalazione"
+                                     data-id="<?php echo (int) $report['idSegnalazione']; ?>">
+                                <i class="fas fa-trash-alt mr-2"></i> Elimina Pratica
+                             </button>
                         </div>
                     </div>
                 </div>
@@ -106,7 +105,20 @@ $root = '../..';
     </div>
 <?php endif; ?>
 
-</div>
-<?php require_once('../../nav/footer.php'); ?>
-</body>
-</html>
+ </div>
+ <script>
+     document.addEventListener('click', async function (e) {
+         var target = e.target;
+         if (target.classList.contains('elimina-segnalazione') || target.closest('.elimina-segnalazione')) {
+             var btn = target.classList.contains('elimina-segnalazione') ? target : target.closest('.elimina-segnalazione');
+             var id = btn.dataset.id;
+             var confirmed = await showConfirm('Sei sicuro di voler eliminare questa segnalazione?');
+             if (confirmed) {
+                 window.location.href = 'eliminaSegnalazione.php?id=' + id;
+             }
+         }
+     });
+ </script>
+ <?php require_once('../../nav/footer.php'); ?>
+ </body>
+ </html>
