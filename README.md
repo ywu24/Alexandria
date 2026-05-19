@@ -1,4 +1,19 @@
 # Alexandria
+<div>
+  <a href="https://github.com/ywu24">
+    <img src="https://github.com/ywu24.png" width="40" height="40" style="border-radius:50%" alt="Yi Hao Wu"/>
+  </a>
+  &nbsp;
+  <a href="https://github.com/Marcoding04">
+    <img src="https://github.com/Marcoding04.png" width="40" height="40" style="border-radius:50%" alt="Marco Mezzanotte"/>
+  </a>
+  &nbsp;
+  <a href="https://github.com/Pix36">
+    <img src="https://github.com/Pix36.png" width="40" height="40" style="border-radius:50%" alt="Luca Pitti"/>
+  </a>
+  <br/>
+  <sub>Built by <b>Yi Hao Wu</b> · <b>Marco Mezzanotte</b> · <b>Luca Pitti</b></sub>
+</div>
 
 ## 📚 Digital Library Management System
 
@@ -92,6 +107,9 @@ This project is released under the **MIT** license.
 
 ## 📧 Contact
 
-For questions or suggestions, contact us at [wu.2106064@studenti.uniroma1.it], [email2], [email3].
+For questions or suggestions, contact us at:
+- **Yi Hao Wu** — [wu.2106064@studenti.uniroma1.it](mailto:wu.2106064@studenti.uniroma1.it)
+- **Marco Mezzanotte** — [email2](mailto:email2)
+- **Luca Pitti** — [email3](mailto:email3)
 
 ---
