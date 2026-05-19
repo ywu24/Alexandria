@@ -50,7 +50,7 @@
 
                     if (user.role_id == 3 || user.role_id == 4) {
                         mainHtml += '\
-                                <a class="btn btn-primary btn-sm" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>';
+                                <a class="btn btn-primary btn-sm mb-1" href="dettaglioUtente.php?id=' + user.id + '">Prenotazioni</a>';
                     }
                     mainHtml += '\
                                 <a class="btn btn-primary btn-sm" href="modificaUtente.php?id=' + user.id + '">Modifica</a>\
@@ -180,7 +180,7 @@
          caricaUtenti(false);
             });
         });
-        
+
         document.addEventListener('click', async function (e) {
             var target = e.target;
             if (target.classList.contains('elimina-utente') || target.closest('.elimina-utente')) {
