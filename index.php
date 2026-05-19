@@ -287,7 +287,7 @@ if ($isAdminLibrarian) {
             </div>
             <div class="genres-grid">
                 <?php foreach ($genres as $genre): ?>
-                    <a href="lista/lista.php?genere=<?php echo urlencode($genre['Genere']); ?>" class="genre-card">
+                    <a href="lista/lista.php?genere_btn=<?php echo urlencode($genre['Genere']); ?>" class="genre-card">
                         <svg class="genre-icon"><use href="img/icons.svg#genre"/></svg>
                         <h4 class="genre-name"><?php echo e($genre['Genere']); ?></h4>
                         <span class="genre-count"><?php echo $genre['count']; ?> libri</span>

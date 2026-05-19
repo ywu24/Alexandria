@@ -67,7 +67,9 @@ if ($isLoggedIn) {
                 <img src="<?php echo $root; ?>/img/users/<?php echo $utente['propic'] ?? 'userDashFavicon.svg'; ?>" class="user-avatar">
                 <div class="user-details">
                     <h3 class="user-name"><?php echo ($utente['Nome'] ?? '') . ' ' . ($utente['Cognome'] ?? ''); ?></h3>
+                    <?php if ($utenza == 3 || $utenza == 4): ?>
                     <h4 class="user-points">Punti: <?php echo $utente['punteggio'] ?? 0; ?></h4>
+                    <?php endif; ?>
                 </div>
             </div>
             

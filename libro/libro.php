@@ -179,7 +179,7 @@ $reviews = $reviewService->getForBook($book_id, 5, 0);
                         <?php endif; ?>
                     </div>
                     <div class="desc">
-                        <p class="truncdesc"><?php echo e($book['Descrizione']); ?></p>
+                        <p class="truncdesc text-break"><?php echo e($book['Descrizione']); ?></p>
                     </div>
                     <?php if ($canShowButton): ?>
                         <div class="div-button">
