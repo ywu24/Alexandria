@@ -82,10 +82,8 @@ if ($isLoggedIn) {
             </div>
             
             <a href="<?php echo $root; ?>/notifiche/notification.php" class="sub-menu-link">
-                <div class="sub-menu-icon-wrapper" style="position: relative; display: inline-flex;">
-                    <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#notification"/></svg>
-                    <span class="badgeN" id="notifiche-badgeN-dropdown">0</span>
-                </div>
+                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#notification"/></svg>
+                <span class="badgeN" id="notifiche-badgeN-dropdown">0</span>
                 <p>Notifiche</p>
                 <span>&gt;</span>
             </a>
