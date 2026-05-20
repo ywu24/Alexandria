@@ -9,7 +9,7 @@
     <div class="footer-contact">
       <h4>Contatti</h4>
       <p><a href="mailto:wu.2106064@studenti.uniroma1.it">wu.2106064@studenti.uniroma1.it</a></p>
-      <p><a href="mailto:#">[Email 2]</a></p>
+      <p><a href="mailto: mezzanotte.2150101@studenti.uniroma1.it">mezzanotte.2150101@studenti.uniroma1.it</a></p>
       <p><a href="mailto:pitti.2127200@studenti.uniroma1.it">pitti.2127200@studenti.uniroma1.it</a></p>
     </div>
 
