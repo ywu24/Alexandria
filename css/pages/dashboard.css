@@ -279,6 +279,11 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   padding: 2px 5px;
 }
+
+.input-copie:focus {
+  color: var(--color-text);
+}
+
 .table-responsive a,
 .btn_addlibro {
   text-decoration: none;
