@@ -68,6 +68,7 @@ Alexandria is a comprehensive web-based library management system designed to st
 - **`libro/`**: Book info page
 - **`lista/`**: Books catalog page
 - **`nav/`**: Navbar
+- **`notifiche/`**: Notification page
 - **`prenotazione/`**: User reservation page, Admin reservation management page.
 - **`recensione/`**: Page for writing reviews
 - **`segnalazione/`**: Page for writing reports
