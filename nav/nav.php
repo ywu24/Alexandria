@@ -57,7 +57,7 @@ if ($isLoggedIn) {
         <?php endif; ?>
 
         <li class="li-icon">
-            <a href="<?php echo $root; ?>/notifiche/notification.php" class="nav-icon-link option-notification">
+            <a href="<?php echo $root; ?>/notifiche/notification.php" class="nav-icon-link">
                 <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#notification"/></svg>
                 <span class="badgeN" id="notifiche-badgeN">0</span>
             </a>
@@ -82,8 +82,12 @@ if ($isLoggedIn) {
             </div>
             
             <a href="<?php echo $root; ?>/notifiche/notification.php" class="sub-menu-link">
-                <svg class="icon"><use href="<?php echo $root; ?>/img/icons.svg#notification"/></svg>
-                <span class="badgeN" id="notifiche-badgeN-dropdown">0</span>
+                <span class="sub-menu-icon-wrapper">
+                    <svg class="icon">
+                        <use href="<?php echo $root; ?>/img/icons.svg#notification"/>
+                    </svg>
+                    <span class="badgeN" id="notifiche-badgeN-dropdown">0</span>
+                </span>
                 <p>Notifiche</p>
                 <span>&gt;</span>
             </a>

@@ -397,12 +397,17 @@ p.logoutform {
 .badgeN {
     background-color: #dc3545; /* Rosso Bootstrap */
     color: #ffffff !important; /* Forza il testo sempre bianco */
-    font-size: 11px;           /* Leggermente più leggibile */
-    font-weight: 700;
-    padding: 2px 6px;          /* Spazio interno dinamico per gestire + cifre */
-    border-radius: 50rem;      /* Pillola perfetta che si adatta al contenuto */
-    min-width: 18px;           /* Dimensione minima per garantire la forma tonda con 1 cifra */
-    height: 18px;
+    font-size: 11px !important;           /* Leggermente più leggibile */
+    font-weight: 700 !important;
+    
+    /* BLINDA LA FORMA TONDA PER ENTRAMBI */
+    box-sizing: border-box;    /* Impedisce al browser di calcolare il padding all'esterno */
+    width: 18px;               /* Forza la larghezza identica all'altezza */
+    min-width: 18px;           
+    height: 18px;              
+    padding: 0;                /* Elimina il padding laterale che creava la pillola */
+    border-radius: 50%;        /* Cerchio matematicamente perfetto */
+    flex-shrink: 0;            /* Impedisce a Flexbox di schiacciare il cerchio */
     
     /* Centratura perfetta del testo */
     display: inline-flex;
@@ -424,7 +429,7 @@ p.logoutform {
     align-items: center;
 }
 
-/* NOTA: Corretto ID aggiungendo la 'N' come richiesto */
+/* NOTA: Corretto ID */
 #notifiche-badgeN {
     position: absolute;
     top: -4px;
@@ -440,7 +445,7 @@ p.logoutform {
     align-items: center;
 }
 
-/* NOTA: Corretto ID aggiungendo la 'N' come richiesto */
+/* NOTA: Corretto ID */
 #notifiche-badgeN-dropdown {
     position: absolute;
     top: -4px;   
