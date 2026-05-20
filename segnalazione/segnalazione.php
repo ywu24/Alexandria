@@ -12,7 +12,7 @@ use Alexandria\Services\ReportService;
 use Alexandria\Services\NotificationService;
 
 $reportService = new ReportService($pdo);
-$notificationService = new NotificationService();
+$notificationService = new NotificationService($pdo);
 
 $root = '..';
 
@@ -36,6 +36,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['segnalazione'])) {
             $messaggio,
             $result['imgSegn']
         );
+
+        // Recuperiamo l'ID numerico dell'utente corrente a partire dalla sessione
+        $stmtUid = $pdo->prepare("SELECT id FROM Utente WHERE Email = ?");
+        $stmtUid->execute([$user_email]);
+        $current_user_id = $stmtUid->fetchColumn();
+
+        // Recuperiamo tutti gli ID dei bibliotecari (Utenza = 2)
+        $stmtBiblio = $pdo->prepare("SELECT id FROM Utente WHERE Utenza = 2");
+        $stmtBiblio->execute();
+        $librarian_ids = $stmtBiblio->fetchAll(PDO::FETCH_COLUMN);
+
+
+        // 2. Notifica In-App per l'utente loggato
+        $notificationService->creaNotifica(
+            $current_user_id,
+            'Segnalazione Inviata ' . $oggetto,
+            "Hai inviato con successo una segnalazione: " . $messaggio,
+            'segnalazione/segnalazione.php'
+        );
+
+        // 3. Notifica In-App per i bibliotecari
+        foreach ($librarian_ids as $biblio_id) {
+            $notificationService->creaNotifica(
+                (int)$biblio_id,
+                'Segnalazione Ricevuta ' . $oggetto,
+                "Hai ricevuto una segnalazione: " . $messaggio,
+                'dashboard/dashboardSegnalazioni/dashboardSegnalazioni.php'
+            );
+        }
 
         flash('success', 'Segnalazione' . ($result['imgSegn'] ? ' e screenshot' : '') . ' inviata con successo');
         redirect('segnalazione.php');

@@ -320,17 +320,50 @@ class UserService
     }
 
     /**
-     * Add points to a user's score
+     * AGGIORNATO: Modifica il punteggio di un utente (aggiunge o toglie)
+     * e gestisce matematicamente i limiti di massimo, minimo e il blocco.
      *
-     * @param string $email User email
-     * @param int $points Points to add
-     * @return bool
+     * @param string $email Email dell'utente
+     * @param int $points Punti da variare
+     * @return bool True se l'operazione è andata a buon fine
      */
     public function addPoints(string $email, int $points): bool
     {
-        $query = $this->pdo->prepare('UPDATE Utente SET punteggio = punteggio + :points WHERE Email = :email');
-        $query->bindParam(':points', $points, PDO::PARAM_INT);
-        $query->bindParam(':email', $email);
-        return $query->execute();
+        $MAX_PUNTI = 100;
+        $MIN_PUNTI = 0;
+
+        // 1. Recupera l'utente per conoscere il punteggio attuale
+        $user = $this->getByEmail($email);
+        if (!$user) {
+            return false;
+        }
+
+        // 2. Calcola il nuovo punteggio potenziale
+        $nuovoPunteggio = (int)$user['punteggio'] + $points;
+
+        // 3. Applica i limiti di sicurezza (Cap)
+        if ($nuovoPunteggio > $MAX_PUNTI) {
+            $nuovoPunteggio = $MAX_PUNTI;
+        } elseif ($nuovoPunteggio < $MIN_PUNTI) {
+            $nuovoPunteggio = $MIN_PUNTI;
+        }
+
+        // 4. Determina lo stato di blocco (se arriva a 0 l'account si blocca, se risale si sblocca)
+        $bloccato = ($nuovoPunteggio <= $MIN_PUNTI) ? 1 : 0;
+
+        // 5. Applica le modifiche nel DB
+        $query = $this->pdo->prepare('
+            UPDATE Utente 
+            SET punteggio = :punteggio, account_bloccato = :bloccato 
+            WHERE Email = :email
+        ');
+        
+        return $query->execute([
+            ':punteggio' => $nuovoPunteggio,
+            ':bloccato'  => $bloccato,
+            ':email'     => $email
+        ]);
     }
+
+    
 }
