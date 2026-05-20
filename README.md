@@ -109,7 +109,7 @@ This project is released under the **MIT** license.
 
 For questions or suggestions, contact us at:
 - **Yi Hao Wu** — [wu.2106064@studenti.uniroma1.it](mailto:wu.2106064@studenti.uniroma1.it)
-- **Marco Mezzanotte** — [email2](mailto:email2)
-- **Luca Pitti** — [email3](mailto:email3)
+- **Marco Mezzanotte** — [mezzanotte.2150101@studenti.uniroma1.it](mailto:mezzanotte.2150101@studenti.uniroma1.it)
+- **Luca Pitti** — [pitti.2127200@studenti.uniroma1.it](mailto:pitti.2127200@studenti.uniroma1.it)
 
 ---
