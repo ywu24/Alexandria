@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prenota']) && $canBoo
                     date('d-m-Y', strtotime('+' . $giorniPrenotazione . ' days')),
                     $result['count']
                 );
-                // 2. Notifica In-App per l'utente loggato
+                // 2. Notifica In-App per l'utente loggato 
                 if ($current_user_id) {
                     $notificationService->creaNotifica(
                         $current_user_id,
