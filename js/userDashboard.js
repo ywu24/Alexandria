@@ -1,3 +1,16 @@
+/**
+ * Gestione dinamica della tabella utenti con filtraggio, ordinamento e paginazione ("Carica Altro").
+ * 
+ * FUNZIONALITÀ PRINCIPALI:
+ * 1. Recupero Dati Asincrono: La funzione caricaUtenti() interroga un'API PHP (users.php) inviando
+ *    i parametri di ricerca, ordinamento e un offset calcolato dinamicamente per la paginazione.
+ * 2. Rendering Dinamico & Permessi: Genera via software le righe della tabella (<tr>). Mostra pulsanti 
+ *    di Modifica/Eliminazione solo se l'utente loggato è un amministratore (USER_TYPE == 1).
+ * 3. Approccio Mobile-First: Per ogni utente crea una seconda riga nascosta (mobile-details-row) 
+ *    che si mostra solo su schermi piccoli cliccando sul pulsante "Info".
+ * 4. Inizializzazione: Al caricamento della pagina (DOMContentLoaded), attiva i listener per i click 
+ *    sui pulsanti di ordinamento, la ricerca (anche tramite tasto Invio) e la cancellazione con conferma.
+ */
 (function () {
     async function caricaUtenti(append) {
         if (append === void 0) { append = false; }

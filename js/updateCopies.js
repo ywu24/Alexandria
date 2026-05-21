@@ -1,3 +1,18 @@
+/**
+ * Gestione dinamica del Catalogo Libri tramite API.
+ * 
+ * FUNZIONALITÀ PRINCIPALI:
+ * 1. Caricamento e Paginazione: Carica i libri a blocchi di 10 con supporto al "Carica altro",
+ *    gestendo filtri di ricerca (searchInput) e ordinamento (sort_btn).
+ * 2. Interfaccia Mobile: Genera una riga di dettaglio per mostrare i dati nascosti sui piccoli schermi.
+ * 3. Gestione Copie Totali: Consente l'aggiornamento rapido del numero di copie direttamente dalla tabella.
+ * 4. Dettaglio Copie Singole: Espande una sotto-tabella con lo stato di ogni singola copia (Disponibile/In Prestito).
+ * 5. Eliminazione: Permette di eliminare l'intero libro (se ha 0 copie) o le singole copie (se non sono in prestito).
+ * 
+ * STRUTTURA: Racchiuso in una IIFE (funzione anonima auto-eseguibile) per isolare lo scope ed evitare conflitti globali.
+ * Utilizza la Event Delegation (ascolto dei click sul 'document') per gestire gli elementi creati dinamicamente.
+ */
+
 (function () {
     var currentSort = 'Nome';
     var currentOffset = 0;
