@@ -56,7 +56,7 @@
                         <td class="col-nascondi">' + libro.publisher + '</td>\
                         <td class="col-nascondi">\
                             <div class="copie-cell-wrapper">\
-                                <input type="number" value="' + libro.copies + '" class="form-control form-control-sm d-inline-block w-auto input-copie">\
+                                <input type="number" min=0 max=50 value="' + libro.copies + '" class="form-control form-control-sm d-inline-block w-auto input-copie">\
                                 <button class="btn btn-outline-info btn-sm save">Salva</button>\
                             </div>\
                         </td>\
