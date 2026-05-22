@@ -162,20 +162,38 @@
             var isbn = row.dataset.isbn;
             var confirmed = await showConfirm("Aggiornare le copie?");
             if (!confirmed) return;
-
+            if (input.value < 0) {
+                showToast("Impossibile selezionare un numero negativo di libri!", "error");
+                return;
+            }
             var fd = new FormData();
             fd.append("isbn", isbn);
             fd.append("copie", input.value);
-            
+
 
             var res = await fetch("updateCopie.php", { method: "POST", body: fd });
             var txt = await res.text();
             if (txt.includes("ok")) showToast("Aggiornato!", "success");
+            if (txt.includes("WARNING")) showToast("Eliminati solo libri non in prestito!", "warning");
             var espandere = row.getElementsByClassName('btn-espandi');
             console.log(espandere);
             espandere[0].click();
             espandere[0].click();
+            //aggiorniamo l'input con il numero di copieeffettivamente presente dopo averlo aggiornato
+            var detailsRow = row.nextElementSibling;
+            if (detailsRow && detailsRow.id === "row-details-" + isbn) {
+                // Contiamo i tag <tr> dentro il tbody della sottotabella delle copie
+                // Usiamo un piccolo setTimeout di 100ms per dare il tempo al sistema di fare il "Caricamento in corso..."
+                setTimeout(function () {
+                    // Cerca solo le righe che hanno l'attributo data-id (le copie effettive)
+                    var righeCopie = detailsRow.querySelectorAll("tbody tr[data-id]");
 
+                    if (righeCopie.length > 0) {
+                        input.value = righeCopie.length;
+                        console.log("Copie reali contate:", righeCopie.length);
+                    }
+                }, 50);
+            }
         }
 
         if (target.classList.contains('btn-espandi')) {
@@ -202,7 +220,7 @@
 
         if (target.classList.contains("elimina")) {
             var row = target.closest("tr");
-            var confirmed = await showConfirm("Sei sicuro di voler eliminare l'intera opera e tutte le sue copie?");
+            var confirmed = await showConfirm("Sei sicuro di voler eliminare l'intera opera?");
             if (!confirmed) return;
             var fd = new FormData();
             fd.append("isbn", row.dataset.isbn);
@@ -233,8 +251,8 @@
                 var res = await fetch("elimina_copia.php", { method: "POST", body: fd });
                 var result = await res.text();
 
-                 if (result.includes("ok")) {
-                     showToast(result.slice(2), "success");
+                if (result.includes("ok")) {
+                    showToast(result.slice(2), "success");
                     var rigaDettaglio = btn.closest('tr.bg-light') || btn.closest('td').closest('tr');
                     var rigaPrincipale = rigaDettaglio.previousElementSibling;
                     var btnEspandi = rigaPrincipale.querySelector('.btn-espandi');
@@ -243,11 +261,17 @@
                         btnEspandi.click();
                         btnEspandi.click();
                     }
+                    if (rigaPrincipale) {
+                        var inputCopie = rigaPrincipale.querySelector('.input-copie');
+                        if (inputCopie && inputCopie.value > 0) {
+                            inputCopie.value--;
+                        }
+                    }
                 } else {
-                     showToast(result, "error");
+                    showToast(result, "error");
                 }
             } catch (error) {
-                     showToast("Errore di connessione", "error");
+                showToast("Errore di connessione", "error");
             }
         }
 

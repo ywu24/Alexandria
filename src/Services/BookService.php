@@ -370,23 +370,34 @@ class BookService
      * @param string $isbn Book ISBN
      * @return bool True on success
      */
-    public function delete(string $isbn): bool
+public function delete(string $isbn): bool
     {
-        $this->pdo->beginTransaction();
         try {
-            // Delete copies first
-            $q1 = $this->pdo->prepare("DELETE FROM copiaLibro WHERE ISBN = :isbn");
-            $q1->execute([':isbn' => $isbn]);
+            // 1. Controlla se esistono copie associate all'ISBN
+            $checkQuery = $this->pdo->prepare("SELECT COUNT(*) FROM copiaLibro WHERE ISBN = :isbn");
+            $checkQuery->execute([':isbn' => $isbn]);
+            $numeroCopie = (int)$checkQuery->fetchColumn();
 
-            // Then delete the book
-            $q2 = $this->pdo->prepare("DELETE FROM Opera WHERE ISBN = :isbn");
-            $q2->execute([':isbn' => $isbn]);
+            if ($numeroCopie > 0) {
+                throw new RuntimeException("Prima devi eliminare tutte le copie");
+            }
+
+            // 2. Se non ci sono copie, procede con l'eliminazione del libro
+            $this->pdo->beginTransaction();
+
+            $q = $this->pdo->prepare("DELETE FROM Opera WHERE ISBN = :isbn");
+            $q->execute([':isbn' => $isbn]);
 
             $this->pdo->commit();
             return true;
         } catch (PDOException $e) {
-            $this->pdo->rollBack();
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
             throw new RuntimeException('Errore durante l\'eliminazione: ' . $e->getMessage());
+        } catch (RuntimeException $e) {
+            // Rilancia l'eccezione del controllo copie senza catturarla come errore PDO
+            throw $e;
         }
     }
 
