@@ -166,10 +166,16 @@
             var fd = new FormData();
             fd.append("isbn", isbn);
             fd.append("copie", input.value);
+            
 
             var res = await fetch("updateCopie.php", { method: "POST", body: fd });
             var txt = await res.text();
             if (txt.includes("ok")) showToast("Aggiornato!", "success");
+            var espandere = row.getElementsByClassName('btn-espandi');
+            console.log(espandere);
+            espandere[0].click();
+            espandere[0].click();
+
         }
 
         if (target.classList.contains('btn-espandi')) {
