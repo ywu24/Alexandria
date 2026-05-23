@@ -1,4 +1,5 @@
 # Alexandria
+[![Live Demo](https://img.shields.io/badge/demo-live-green)](https://yihaowu.dev/Alexandria)
 <div>
   <a href="https://github.com/ywu24">
     <img src="https://github.com/ywu24.png" width="40" height="40" style="border-radius:50%" alt="Yi Hao Wu"/>
@@ -18,6 +19,14 @@
 ## 📚 Digital Library Management System
 
 Alexandria is a comprehensive web-based library management system designed to streamline the management of books, users, loans, and reservations. It provides intuitive features for both administrators and end-users with a modern interface.
+
+## 🌐 Live Demo
+A live demo of Alexandria is available here: [https://yihaowu.dev/Alexandria](https://yihaowu.dev/Alexandria)
+
+> Demo credentials:
+>  - `librarian@example.com` / `password123`
+>  - `user@example.com` / `password123`
+
 
 ## 🔧 Requirements and Installation
 
