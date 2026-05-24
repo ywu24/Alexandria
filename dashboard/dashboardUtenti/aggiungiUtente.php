@@ -57,7 +57,7 @@ $root = '../..';
 
                             <div class="form-group">
                                 <label for="email">Email / Nome utente</label>
-                                <input type="text" name="email" id="email" class="form-control" required>
+                                <input type="text" name="email" id="email" class="form-control" autocomplete="off" required>
                             </div>
 
                             <div class="row">
@@ -72,7 +72,7 @@ $root = '../..';
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label for="password">Password</label>
-                                    <input type="password" name="password" id="password" class="form-control" required>
+                                    <input type="password" name="password" id="password" class="form-control" autocomplete="new-password" required>
                                 </div>
                             </div>
 
