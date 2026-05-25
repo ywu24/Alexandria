@@ -7,6 +7,21 @@
  * @file Generic pagination helper
  */
 
+/*
+ Gestore generico e centralizzato della paginazione per l'applicazione.
+ * Fornisce gli strumenti per suddividere i set di dati massivi del database in blocchi navigabili,
+ * ottimizzando le performance del server e l'esperienza utente.
+ * * Come funziona il codice:
+ * 1. Riceve una query di conteggio e i relativi parametri per determinare il volume totale dei record.
+ * 2. Intercetta il parametro globale $_GET['page'], lo sanitizza tramite espressioni regolari per
+ * prevenire input malevoli o incoerenti, e lo normalizza entro i limiti minimi (1) e massimi (lastPage).
+ * 3. Calcola matematicamente l'OFFSET per la query SQL di selezione dei dati effettivi.
+ * 4. Mantiene lo stato dei filtri attivi (es. ricerche o generi) concatenando i parametri URL correnti.
+ * 5. Genera dinamicamente una barra di navigazione HTML (struttura a scorrimento con un raggio di 4 pagine).
+ * 6. Offre una funzione alternativa (pagination_meta) per esporre lo stato della paginazione 
+ * sotto forma di array di metadati puri, ideale per risposte AJAX o API in formato JSON.
+ */
+
 /**
  * Calculate pagination controls and LIMIT/OFFSET clause
  *

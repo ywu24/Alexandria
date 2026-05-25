@@ -6,6 +6,19 @@
  * @file Book catalog page with search, filters, and pagination
  */
 
+/** 
+ * Pagina principale del catalogo dei libri della Biblioteca di Alexandria.
+ * * Il file gestisce l'intero ciclo di vita della visualizzazione del catalogo:
+ * 1. Cattura e sanitizzazione dei parametri GET per ricerca testuale, filtro per genere e ordinamento.
+ * 2. Costruzione dinamica delle query di conteggio (COUNT) basate sui filtri attivi per 
+ * calcolare il totale dei risultati.
+ * 3. Inizializzazione della paginazione tramite la funzione helper `paginate()`.
+ * 4. Interrogazione del database tramite `BookService->search()` per ottenere i record della pagina corrente.
+ * 5. Rendering del layout HTML (incluso header, sidebar dei filtri, lista delle card dei libri 
+ * e footer) gestendo anche il feedback visivo in caso di errori o ricerche a vuoto.
+ */
+
+
 require_once __DIR__ . '/../src/bootstrap.php';
 
 use Alexandria\Services\BookService;

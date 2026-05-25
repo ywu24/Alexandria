@@ -12,7 +12,7 @@ use Alexandria\Services\AuthService;
 use Alexandria\Services\NotificationService;
 
 $authService = new AuthService($pdo);
-$notificationService = new NotificationService();
+$notificationService = new NotificationService($pdo);
 
 $root = '..';
 
