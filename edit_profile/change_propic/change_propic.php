@@ -29,7 +29,7 @@ if (isset($_POST['propicIns'])) {
 
     // Estrae l'estensione del file
     $file_ext = explode('.', $file_name);
-    $file_ext = strtolower(end($file_ext));
+    $file_ext = strtolower(end($file_ext)); ######VULNERABILITA'
 
     // Crea un nome univoco per il file
     $file_name_new = uniqid() . '.' . $file_ext;
@@ -61,7 +61,21 @@ if (isset($_POST['propicIns'])) {
         redirect('../edit_profile.php');
     }
     $propic = $file_name_new;
-
+    $old_propic = null;
+    try {
+        $select_sql = "SELECT propic FROM `Utente` WHERE `Email` = :email";
+        $select_query = $pdo->prepare($select_sql);
+        $select_query->bindParam(':email', $email);
+        $select_query->execute();
+        $user_row = $select_query->fetch(PDO::FETCH_ASSOC);
+        if ($user_row) {
+            $old_propic = $user_row['propic'];
+        }
+        $select_query->closeCursor();
+    } catch (PDOException $e) {
+        // Se fallisce il recupero, registriamo l'errore ma non blocchiamo l'upload
+        $old_propic = null; 
+    }
     $sql = "UPDATE `Utente` SET propic = :propic WHERE `Utente`.`Email` = :email";
     try {
         $query = $pdo->prepare($sql);
@@ -69,6 +83,16 @@ if (isset($_POST['propicIns'])) {
         $query->bindParam(':email', $email);
         $query->execute();
         $query->closeCursor();
+        if (!empty($old_propic)) {
+            $old_file_path = '../../img/users/' . $old_propic;
+            
+            // Controlli di sicurezza: 
+            // 1. Il file deve esistere sul server
+            
+            if (file_exists($old_file_path) ) {
+                unlink($old_file_path); // Cancella fisicamente il file
+            }
+        }
         flash('success', "Immagine cambiata con successo.");
         redirect('../edit_profile.php');
     } catch (PDOException $e) {
