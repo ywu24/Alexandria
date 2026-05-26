@@ -63,6 +63,31 @@ CREATE TABLE IF NOT EXISTS `Utente` (
   KEY `Utenza` (`Utenza`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
+-- Questi due eventi non possono funzionare in localhost quindi non sono implementati
+-- In quanto basati su un fattore temporale, In un server funzionerebbero
+
+-- Evento per rimozione notifiche più vecchie di un mese
+CREATE EVENT pulizia_giornaliera
+ON SCHEDULE EVERY 1 DAY
+STARTS '2026-05-23 00:00:00' -- Per impostare quando farlo partire
+DO
+  DELETE FROM notifiche WHERE data_creazione < NOW() - INTERVAL 1 MONTH;
+
+
+-- Evento per eliminare le prenotazioni che non sono mai state confermate
+SET GLOBAL event_scheduler = ON;
+CREATE EVENT IF NOT EXISTS `pulisci_prenotazioni_scadute`
+ON SCHEDULE EVERY 1 DAY
+STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 1 DAY)
+DO
+  DELETE FROM Prenotazione 
+  WHERE InizioPrestito IS NULL 
+  AND FinePrenotazione < CURDATE();
+
+--
+
+
 -- Trigger per aggiornare lo stato di un utente premium
 DELIMITER //
 CREATE TRIGGER aggiorna_stato_premium
