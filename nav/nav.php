@@ -72,7 +72,7 @@ if ($isLoggedIn) {
     <div class="sub-menu-wrap" id="subMenu">
         <div class="sub-menu">
             <div class="user-info">
-                <img src="<?php echo $root; ?>/img/users/<?php echo $utente['propic'] ?? 'userDashFavicon.svg'; ?>" class="user-avatar">
+                <img src="<?php echo $root; ?>/img/users/<?php echo e($utente['propic']) ?? 'userDashFavicon.svg'; ?>" class="user-avatar">
                 <div class="user-details">
                     <h3 class="user-name"><?php echo ($utente['Nome'] ?? '') . ' ' . ($utente['Cognome'] ?? ''); ?></h3>
                     <?php if ($utenza == 3 || $utenza == 4): ?>
